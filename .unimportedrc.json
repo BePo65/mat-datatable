@@ -1,0 +1,40 @@
+{
+  "entry": [
+    "projects/mat-datatable-lib/src/public-api.ts",
+    "projects/mat-datatable-demo/src/main.ts"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts",
+    "coverage/**",
+    "dist/**",
+    "**/karma.conf.js",
+    "**/cypress.config.ts"
+  ],
+  "ignoreUnimported": [
+    "projects/mat-datatable-demo/src/main.ts",
+    "projects/mat-datatable-demo/cypress/e2e/app.e2e.cy.ts",
+    "projects/mat-datatable-lib/cypress/ct/mat-datatable.cy.ts",
+    "projects/mat-datatable-lib/src/public-api.ts",
+    "tools/npm-scripts/readme-updater.js",
+    "projects/mat-datatable-demo/cypress/support/commands.ts",
+    "projects/mat-datatable-demo/cypress/support/component.ts",
+    "projects/mat-datatable-demo/cypress/support/e2e.ts",
+    "projects/mat-datatable-lib/cypress/support/commands.ts",
+    "projects/mat-datatable-lib/cypress/support/component.ts",
+    "projects/mat-datatable-lib/cypress/support/e2e.ts",
+    "projects/mat-datatable-lib/src/lib/mat-datatable.module.ts"
+  ],
+  "ignoreUnused": [
+    "material-icons",
+    "roboto-fontface"
+  ],
+  "ignoreUnresolved": [
+    "mat-datatable"
+  ]
+}

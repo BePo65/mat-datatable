@@ -88,6 +88,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "projects/mat-datatable-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/mat-datatable-demo/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/mat-datatable-demo/src/favicon.ico",
@@ -98,6 +99,16 @@
               "projects/mat-datatable-demo/src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/mat-datatable-demo/**/*.ts",
+              "projects/mat-datatable-demo/**/*.json",
+              "projects/mat-datatable-demo/**/*.html"
+            ]
           }
         }
       }
@@ -127,9 +138,20 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/mat-datatable-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/mat-datatable-lib/karma.conf.js",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/mat-datatable-lib/**/*.ts",
+              "projects/mat-datatable-lib/**/*.json",
+              "projects/mat-datatable-lib/**/*.html"
             ]
           }
         }

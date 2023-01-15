@@ -1,18 +1,42 @@
 {
   "name": "mat-datatable",
   "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+  "description": "A component for Angular using Angular Material that implements a table as a simplified replacement for ngx-datatable. The project contains a library component and a demo project.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BePo65/mat-datatable.git"
   },
-  "private": true,
+  "author": "Bernhard Pottler",
+  "license": "MIT",
+  "scripts": {
+    "lint": "npm run lint:root && npm run lint:lib && npm run lint:demo",
+    "lint:root": "eslint --report-unused-disable-directives --config=./.eslintrc.root.json .",
+    "lint:lib": "eslint --report-unused-disable-directives \"projects/mat-datatable-lib\"",
+    "lint:demo": "eslint --report-unused-disable-directives \"projects/mat-datatable-demo\"",
+    "lint:scss": "npx stylelint \"**/*.scss\"",
+    "lint:commits": "commitlint --from 81ad0b8fb70526 --to HEAD --verbose",
+    "test": "npm run test:lib -- --watch=false && npm run test:demo -- --watch=false",
+    "test:lib": "ng test mat-datatable-lib",
+    "test:demo": "ng test mat-datatable-demo",
+    "test:lib:coverage:ui": "set BROWSERSLIST_IGNORE_OLD_DATA=1 && ng test mat-datatable --code-coverage --watch=false && node tools/open-coverage.mjs",
+    "build": "npm run build:lib && npm run build:demo",
+    "build:lib": "ng build mat-datatable-lib",
+    "build:demo": "ng build mat-datatable-demo --delete-output-path --configuration production",
+    "build:ghpages": "del-cli ghpages && cpy \"dist/mat-datatable-demo/**\" ghpages",
+    "start": "ng serve --open",
+    "start:dev": "ng build mat-datatable-lib --watch",
+    "unimported": "npx unimported",
+    "deprecated": "npx check-is-deprecated -f ./package.json",
+    "init-changelog": "standard-version -i CHANGELOG.md --same-file --prerelease pre --first-release",
+    "release": "standard-version -i CHANGELOG.md --same-file",
+    "e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"npm run cypress:demo:run:e2e\"",
+    "ct": "npm run cypress:lib:run:ct",
+    "cypress:demo:open": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress open --project=projects/mat-datatable-demo\"",
+    "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\"",
+    "cypress:lib:open": "cypress open --project=projects/mat-datatable-lib",
+    "cypress:lib:run:ct": "cypress run --project=projects/mat-datatable-lib --component"
+  },
+  "private": false,
   "dependencies": {
     "@angular/animations": "^15.1.0",
     "@angular/cdk": "^15.1.0",
@@ -62,6 +86,40 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "ng-packagr": "^15.1.1",
     "standard-version": "^9.5.0",
+    "start-server-and-test": "^1.15.2",
+    "stylelint": "^14.16.1",
+    "stylelint-config-recommended-scss": "^8.0.0",
+    "stylelint-config-standard": "^29.0.0",
     "typescript": "~4.9.4"
+  },
+  "standard-version": {
+    "packageFiles": [
+      {
+        "filename": "package.json",
+        "type": "json"
+      }
+    ],
+    "bumpFiles": [
+      {
+        "filename": "package.json",
+        "type": "json"
+      },
+      {
+        "filename": "projects/mat-datatable-lib/package.json",
+        "type": "json"
+      },
+      {
+        "filename": "projects/mat-datatable-lib/testing/package.json",
+        "type": "json"
+      },
+      {
+        "filename": "README.md",
+        "updater": "tools/npm-scripts/readme-updater.js"
+      },
+      {
+        "filename": "projects/mat-datatable-lib/README.md",
+        "updater": "tools/npm-scripts/readme-updater.js"
+      }
+    ]
   }
 }

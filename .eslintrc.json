@@ -1,0 +1,177 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "plugins": [
+        "@typescript-eslint",
+        "prefer-arrow",
+        "import",
+        "jsdoc",
+        "jasmine"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:jsdoc/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "tsconfig.json",
+        "ecmaVersion": 2021,
+        "sourceType": "module"
+      },
+      "settings": {
+        "import/parsers": {
+          "@typescript-eslint/parser": [".ts"]
+        },
+        "import/resolver": {
+          "node": true,
+          "typescript": {
+            "project": [
+              "./tsconfig.json"
+            ]
+          }
+        }
+      },
+      "rules": {
+        "@typescript-eslint/quotes": [
+          "error",
+          "single"
+        ],
+        "@typescript-eslint/unbound-method": [
+          "error",
+          {
+            "ignoreStatic": true
+          }
+        ],
+        "comma-dangle": "error",
+        "import/order": [
+          "error", {
+            "groups": [
+              ["builtin", "external"],
+              "parent",
+              "sibling",
+              "internal"
+            ],
+            "pathGroups": [
+              {
+                "pattern": "@lib/**",
+                "group": "parent",
+                "position": "before"
+              },
+              {
+                "pattern": "@env/**",
+                "group": "parent",
+                "position": "after"
+              },
+              {
+                "pattern": "@config/**",
+                "group": "sibling",
+                "position": "before"
+              },
+              {
+                "pattern": "@shared/**",
+                "group": "sibling",
+                "position": "after"
+              },
+              {
+                "pattern": "@app/**",
+                "group": "internal",
+                "position": "before"
+              }
+            ],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "newlines-between": "always"
+          }
+        ],
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-returns-type": [
+          "off",
+          {"contexts": [
+            "any"
+            ]
+          }
+        ],
+        "no-multiple-empty-lines": [
+          "error",
+          {
+            "max": 1,
+            "maxBOF": 1,
+            "maxEOF": 1
+          }
+        ],
+        "no-trailing-spaces": "warn",
+        "prefer-arrow/prefer-arrow-functions": [
+          "warn",
+          {
+            "disallowPrototype": true,
+            "singleReturnOnly": false,
+            "classPropertiesAllowed": false
+          }
+        ],
+        "semi": ["error", "always"]
+      }
+    },
+    {
+      "files": [
+        "*.spec.ts"
+      ],
+      "env":{
+        "jasmine": true
+      },
+      "plugins": [
+        "jasmine"
+      ],
+      "extends": [
+        "plugin:jasmine/recommended"
+      ],
+      "rules": {
+        "jasmine/missing-expect": "warn"
+      }
+    },
+    {
+      "files": [
+        "*.json"
+      ],
+      "extends": [
+        "plugin:json/recommended"
+      ],
+      "rules": {
+        "json/*": [
+          "error",
+          {
+            "allowComments": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}

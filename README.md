@@ -107,6 +107,12 @@ Don't forget to give the project a star! Thanks again!
 ### Changelog
 The project uses 'standard-version' to create the changelog. To enable this system, commit messages are linted before commits are executed by git.
 
+To enable this system you have to run the following scripts in your local repository home directory:
+```
+npx husky install
+npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
+```
+
 **The structure of commit messages is**:
 ```
   <header>

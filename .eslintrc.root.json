@@ -1,0 +1,18 @@
+{
+  "extends": "./.eslintrc.json",
+  "ignorePatterns": [
+    "!**/*",
+    ".angular/**",
+    "dist/**",
+    "coverage/**",
+    "projects/**",
+    "node_modules/**"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.json"
+      ]
+    }
+  ]
+}
