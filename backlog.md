@@ -1,1 +1,2 @@
-* add local copy of roboto font
+* add lib to demo
+* copy README to lib project
