@@ -2,7 +2,7 @@
 
 # MatDatatable
 
-A simple replacement for the ngx-datatable package using Angular Material.
+A simple data table with virtual scrolling using Angular Material.
 
 ![Version](https://img.shields.io/badge/version-15.0.0-blue.svg?cacheSeconds=2592000)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]
@@ -40,11 +40,14 @@ A simple replacement for the ngx-datatable package using Angular Material.
 
 ![Screenshot](assets/screenshot.jpg "Screenshot of the demo page")
 
-This project creates a angular material table to be used as a replacement of the ngx-datatable project, as that project is still on angular v12 and an update to angular 15 is not in sight.
+This project creates a angular material table to be used as a replacement of ngx-datatable in one of my projects, as that project is still on angular v12 and an update to angular 15 is not in sight.
 
 Only a minimal set of the functionality of ngx-datatable is implemented.
 
-The api of this project tries to be as compatible as possible, but there will be breaking changes.
+The table implements virtual scrolling.
+
+The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web).
+Bith fonts are part of the project and not fetched via https.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
