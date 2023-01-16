@@ -1,9 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Fonts for material
+@use "roboto-fontface/css/roboto/sass/roboto-fontface" with (
+  $roboto-font-path: "~roboto-fontface/fonts"
+);
+@use "material-icons/iconfont/material-icons";
+
 html,
 body { height: 100%; }
 
 body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
 }

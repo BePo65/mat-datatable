@@ -34,6 +34,6 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.content span')?.textContent).toContain('mat-datatable-demo app is running!');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Mat-Datatable-Demo');
   });
 });

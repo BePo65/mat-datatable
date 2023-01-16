@@ -10,6 +10,6 @@ import { Component } from '@angular/core';
   styles: [
   ]
 })
-export class MatDatatableLibComponent {
+export class MatDatatableComponent {
 
 }
