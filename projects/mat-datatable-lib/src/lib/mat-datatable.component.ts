@@ -2,13 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'mat-datatable',
-  template: `
-    <p>
-      mat-datatable works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './mat-datatable.component.html',
+  styleUrls: ['./mat-datatable.component.scss']
 })
 export class MatDatatableComponent {
 

@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { MatDatatableModule } from 'projects/mat-datatable-lib/src/public-api';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -16,6 +18,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatDatatableModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule
