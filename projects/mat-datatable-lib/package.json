@@ -1,10 +1,10 @@
 {
-  "name": "mat-datatable-lib",
+  "name": "@bepo65/mat-datatable",
   "version": "0.0.0",
   "description": "A component for Angular using Angular Material that implements a table as a simplified replacement for ngx-datatable. The project contains a library component and a demo project.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BePo65/mat-image-overlay.git"
+    "url": "https://github.com/BePo65/mat-datatable.git"
   },
   "license": "MIT",
   "peerDependencies": {
