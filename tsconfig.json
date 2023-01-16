@@ -21,7 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "./dist/out-tsc",
     "paths": {
-      "mat-datatable-lib": [
+      "mat-datatable": [
         "dist/mat-datatable-lib"
       ]
     },

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-mat-datatable-lib',
+  selector: 'mat-datatable',
   template: `
     <p>
-      mat-datatable-lib works!
+      mat-datatable works!
     </p>
   `,
   styles: [

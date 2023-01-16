@@ -33,7 +33,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "lib",
+            "prefix": "mat",
             "style": "camelCase"
           }
         ],
@@ -41,7 +41,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lib",
+            "prefix": "mat",
             "style": "kebab-case"
           }
         ]

@@ -117,7 +117,7 @@
       "projectType": "library",
       "root": "projects/mat-datatable-lib",
       "sourceRoot": "projects/mat-datatable-lib/src",
-      "prefix": "lib",
+      "prefix": "mat",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

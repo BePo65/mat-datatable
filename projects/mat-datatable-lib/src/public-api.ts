@@ -1,5 +1,5 @@
 /*
- * Public API Surface of mat-datatable-lib
+ * Public API Surface of mat-datatable
  */
 
 export * from './lib/mat-datatable.service';
