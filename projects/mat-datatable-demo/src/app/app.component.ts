@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { DemoTableDataSource, DemoTableItem } from '../datasource/demo-table-datasource';
 
-import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/mat-datatable-datasource.interface';
+import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
 
 @Component({
   selector: 'app-root',

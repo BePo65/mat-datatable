@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/mat-datatable-datasource.interface';
+import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
 
 // TODO: Replace this with your own data model type
 export interface DemoTableItem {

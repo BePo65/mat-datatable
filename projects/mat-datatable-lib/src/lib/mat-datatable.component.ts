@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
-import { MatDatatableDataSource } from '../interfaces/mat-datatable-datasource.interface';
+import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 
 @Component({
   selector: 'mat-datatable',
@@ -13,6 +13,7 @@ import { MatDatatableDataSource } from '../interfaces/mat-datatable-datasource.i
 export class MatDatatableComponent implements AfterViewInit {
   // TODO how to make this component generic (independent from datasource structure)?
   @Input() dataSource: MatDatatableDataSource<unknown> | undefined;
+  @Input() columnDefinitions: object[] = [];
   @Input() displayedColumns: string[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
