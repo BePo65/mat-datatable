@@ -12,9 +12,11 @@ import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interface
 export class AppComponent {
   title = 'mat-datatable-demo';
 
-  datasource: MatDatatableDataSource<DemoTableItem> | undefined;
+  dataSource: MatDatatableDataSource<DemoTableItem> | undefined;
+  displayedColumns: string[] = [];
 
   constructor() {
-    this.datasource = new DemoTableDataSource();
+    this.dataSource = new DemoTableDataSource();
+    this.displayedColumns = ['id', 'name'];
   }
 }
