@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { MatDatatableComponent } from './mat-datatable.component';
 
@@ -10,6 +11,7 @@ import { MatDatatableComponent } from './mat-datatable.component';
     MatDatatableComponent
   ],
   imports: [
+    BrowserModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule
