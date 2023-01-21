@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -18,10 +15,7 @@ import { MatDatatableModule } from 'projects/mat-datatable-lib/src/public-api';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatDatatableModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule
+    MatDatatableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
