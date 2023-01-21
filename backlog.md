@@ -1,3 +1,8 @@
+* mock larger dataSource
+* sticky columns
+* column content alignment
+* add row click handler
+* add marker for current / selected row
 * change table to filling parent and replace paginator with scrolling
 * define first version of api
 * add virtual scroller
