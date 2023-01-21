@@ -8,4 +8,5 @@ export interface MatColumnDefinition<TRowData> {
   columnId: string;
   header: string | ((element: TRowData) => string);
   cell: (element: TRowData) => string;
+  width?: string; // e.g. '8em'
 }

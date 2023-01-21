@@ -23,7 +23,8 @@ export class AppComponent {
       {
         columnId: 'id',
         header: 'ID',
-        cell: (row: DemoTableItem) => row.id.toString()
+        cell: (row: DemoTableItem) => row.id.toString(),
+        width: '5em'
       },
       {
         columnId: 'name',
