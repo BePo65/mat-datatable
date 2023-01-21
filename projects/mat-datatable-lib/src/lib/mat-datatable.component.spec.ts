@@ -6,9 +6,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatDatatableComponent } from './mat-datatable.component';
 
+interface TestTableItem {
+  name: string;
+  id: number;
+}
+
 describe('MatDatatableComponent', () => {
-  let component: MatDatatableComponent;
-  let fixture: ComponentFixture<MatDatatableComponent>;
+  let component: MatDatatableComponent<TestTableItem>;
+  let fixture: ComponentFixture<MatDatatableComponent<TestTableItem>>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
@@ -24,7 +29,7 @@ describe('MatDatatableComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MatDatatableComponent);
+    fixture = TestBed.createComponent(MatDatatableComponent<TestTableItem>);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -6,22 +6,28 @@ import { MatTable } from '@angular/material/table';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 
+/**
+ * Datatable component based on Angular Material.
+ *
+ * @class MatDatatableComponent
+ * @implements {AfterViewInit}
+ * @template TRowData - type / interface definition for data of a single row
+ */
 @Component({
   selector: 'mat-datatable',
   templateUrl: './mat-datatable.component.html',
   styleUrls: ['./mat-datatable.component.scss']
 })
-export class MatDatatableComponent implements AfterViewInit {
-  // TODO how to make this component generic (independent from datasource structure)?
-  @Input() dataSource: MatDatatableDataSource<unknown> | undefined;
-  @Input() columnDefinitions: MatColumnDefinition[] = [];
+export class MatDatatableComponent<TRowData> implements AfterViewInit {
+  @Input() dataSource?: MatDatatableDataSource<TRowData>;
+  @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<unknown>;
+  @ViewChild(MatTable) table!: MatTable<TRowData>;
 
   constructor() {
-    // HACK do we need some initialization?
+    // no initialization needed
   }
 
   ngAfterViewInit(): void {

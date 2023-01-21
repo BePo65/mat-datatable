@@ -13,9 +13,9 @@ import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interface
 export class AppComponent {
   title = 'mat-datatable-demo';
 
-  dataSource: MatDatatableDataSource<DemoTableItem> | undefined;
-  columnDefinitions: MatColumnDefinition[] = [];
-  displayedColumns: string[] = [];
+  dataSource: MatDatatableDataSource<DemoTableItem>;
+  columnDefinitions: MatColumnDefinition<DemoTableItem>[];
+  displayedColumns: string[];
 
   constructor() {
     this.dataSource = new DemoTableDataSource();
