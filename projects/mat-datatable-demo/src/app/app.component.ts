@@ -17,21 +17,48 @@ export class AppComponent {
   columnDefinitions: MatColumnDefinition<DemoTableItem>[];
   displayedColumns: string[];
 
+  private currentLocale = 'en-US';
+
   constructor() {
+    this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
     this.dataSource = new DemoTableDataSource();
     this.columnDefinitions = [
       {
         columnId: 'id',
         header: 'ID',
-        cell: (row: DemoTableItem) => row.id.toString(),
+        cell: (row: DemoTableItem) => row.userId.toString(),
         width: '5em'
       },
       {
-        columnId: 'name',
-        header: 'Name',
-        cell: (row: DemoTableItem) => row.name
+        columnId: 'firstName',
+        header: 'First Name',
+        cell: (row: DemoTableItem) => row.firstName,
+        width: '10em'
+      },
+      {
+        columnId: 'lastName',
+        header: 'Last Name',
+        cell: (row: DemoTableItem) => row.lastName,
+        width: '10em'
+      },
+      {
+        columnId: 'email',
+        header: 'EMail',
+        cell: (row: DemoTableItem) => row.email,
+        width: '20em'
+      },
+      {
+        columnId: 'birthdate',
+        header: 'Birthday',
+        cell: (row: DemoTableItem) => row.birthdate.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
+        width: '8em'
+      },
+      {
+        columnId: 'description',
+        header: 'Description',
+        cell: (row: DemoTableItem) => row.description
       }
     ];
-    this.displayedColumns = ['id', 'name'];
+    this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];
   }
 }

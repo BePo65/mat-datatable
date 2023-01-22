@@ -1,37 +1,23 @@
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import EXAMPLE_DATA from './demo-table.mock-data';
+
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
 
-// TODO: Replace this with your own data model type
+/**
+ * Structure of the demo data
+ *
+ * @interface DemoTableItem
+ */
 export interface DemoTableItem {
-  name: string;
-  id: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  birthdate: Date;
+  description: string;
 }
-
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: DemoTableItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'}
-];
 
 /**
  * Data source for the DemoTable view. This class should
@@ -102,8 +88,12 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort?.direction === 'asc';
       switch (this.sort?.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'id': return compare(+a.userId, +b.userId, isAsc);
+        case 'firstName': return compare(a.firstName, b.firstName, isAsc);
+        case 'lastName': return compare(a.lastName, b.lastName, isAsc);
+        case 'email': return compare(a.email, b.email, isAsc);
+        case 'birthdate': return compare(+a.birthdate.valueOf(), +b.birthdate.valueOf(), isAsc);
+        case 'description': return compare(a.description, b.description, isAsc);
         default: return 0;
       }
     });
@@ -115,7 +105,7 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
  *
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
- * @param isAsc - is this an ascii comparision
+ * @param isAsc - is this an ascending comparison
  * @returns comparision result
  */
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
