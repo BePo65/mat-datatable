@@ -39,12 +39,12 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
     }
   }
 
-  protected columnFormat(colWidthDefinition?: string): Record<string, string> | undefined {
+  protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
-    if (colWidthDefinition !== undefined) {
+    if (columnDefinition.width !== undefined) {
       result = {
-        'width': colWidthDefinition,
-        'max-width': colWidthDefinition,
+        'width': columnDefinition.width,
+        'max-width': columnDefinition.width,
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
         'overflow':'hidden'
