@@ -10,4 +10,5 @@ export interface MatColumnDefinition<TRowData> {
   cell: (element: TRowData) => string;
   width?: string; // e.g. '8em'
   tooltip?: ((element: TRowData) => string);
+  isMailtoLink?: boolean;
 }
