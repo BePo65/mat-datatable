@@ -1,4 +1,3 @@
-* make title attribute a columnDefinition element
 * add sorting (single column)
 * sticky columns
 * column content alignment

@@ -45,7 +45,8 @@ export class AppComponent {
         columnId: 'email',
         header: 'EMail',
         cell: (row: DemoTableItem) => row.email,
-        width: '20em'
+        width: '20em',
+        tooltip: (row: DemoTableItem) => row.email
       },
       {
         columnId: 'birthdate',
@@ -56,7 +57,8 @@ export class AppComponent {
       {
         columnId: 'description',
         header: 'Description',
-        cell: (row: DemoTableItem) => row.description
+        cell: (row: DemoTableItem) => row.description,
+        tooltip: (row: DemoTableItem) => row.description
       }
     ];
     this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];
