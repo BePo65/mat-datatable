@@ -38,4 +38,18 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
       this.table.dataSource = this.dataSource;
     }
   }
+
+  protected columnFormat(colWidthDefinition?: string): Record<string, string> | undefined {
+    let result: Record<string, string> | undefined;
+    if (colWidthDefinition !== undefined) {
+      result = {
+        'width': colWidthDefinition,
+        'max-width': colWidthDefinition,
+        'text-overflow': 'ellipsis',
+        'white-space': 'nowrap',
+        'overflow':'hidden'
+      };
+    }
+    return result;
+  }
 }
