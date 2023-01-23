@@ -1,4 +1,4 @@
-* add sorting (single column)
+* make sortable a columnDefinition parameter
 * sticky columns
 * column content alignment
 * add row click handler
