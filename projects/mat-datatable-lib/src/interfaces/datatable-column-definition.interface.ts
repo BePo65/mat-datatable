@@ -12,4 +12,5 @@ export interface MatColumnDefinition<TRowData> {
   tooltip?: ((element: TRowData) => string);
   showAsMailtoLink?: boolean;
   showAsSingleLine?: boolean;
+  isSortable?: boolean;
 }

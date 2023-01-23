@@ -33,13 +33,15 @@ export class AppComponent {
         columnId: 'firstName',
         header: 'First Name',
         cell: (row: DemoTableItem) => row.firstName,
-        width: '10em'
+        width: '10em',
+        isSortable: true
       },
       {
         columnId: 'lastName',
         header: 'Last Name',
         cell: (row: DemoTableItem) => row.lastName,
-        width: '10em'
+        width: '10em',
+        isSortable: true
       },
       {
         columnId: 'email',
@@ -53,7 +55,8 @@ export class AppComponent {
         columnId: 'birthdate',
         header: 'Birthday',
         cell: (row: DemoTableItem) => row.birthdate.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
-        width: '8em'
+        width: '8em',
+        isSortable: true
       },
       {
         columnId: 'description',
