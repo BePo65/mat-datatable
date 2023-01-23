@@ -1,11 +1,11 @@
-* make sortable a columnDefinition parameter
-* sticky columns
+* show initial sort (in headers)
+* add method to set (initial) sort
+* add sorting (multi column)
 * column content alignment
 * add row click handler
-* variable column width
 * add marker for current / selected row
-* add sorting (multi column)
+* variable column width
 * change table to filling parent and replace paginator with scrolling
-* define first version of api
 * add virtual scroller
+* define first version of api
 * update README (API) and copy it to lib project
