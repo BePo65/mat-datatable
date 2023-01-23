@@ -59,7 +59,8 @@ export class AppComponent {
         columnId: 'description',
         header: 'Description',
         cell: (row: DemoTableItem) => row.description,
-        tooltip: (row: DemoTableItem) => row.description
+        tooltip: (row: DemoTableItem) => row.description,
+        showAsSingleLine: true
       }
     ];
     this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];

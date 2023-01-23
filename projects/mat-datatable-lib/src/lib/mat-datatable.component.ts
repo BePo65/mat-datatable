@@ -32,7 +32,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.dataSource) {
-      // we need a base class with fields sort and paginator
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.table.dataSource = this.dataSource;
@@ -50,6 +49,16 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
         'overflow':'hidden'
       };
     }
+
+    if (columnDefinition.showAsSingleLine) {
+      const singleLineResult = {
+        'text-overflow': 'ellipsis',
+        'white-space': 'nowrap',
+        'overflow':'hidden'
+      };
+      result = Object.assign({}, result, singleLineResult);
+    }
+
     return result;
   }
 }

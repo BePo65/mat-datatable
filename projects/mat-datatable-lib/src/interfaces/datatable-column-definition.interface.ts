@@ -11,4 +11,5 @@ export interface MatColumnDefinition<TRowData> {
   width?: string; // e.g. '8em'
   tooltip?: ((element: TRowData) => string);
   isMailtoLink?: boolean;
+  showAsSingleLine?: boolean;
 }
