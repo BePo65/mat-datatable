@@ -47,7 +47,7 @@ export class AppComponent {
         cell: (row: DemoTableItem) => row.email,
         width: '20em',
         tooltip: (row: DemoTableItem) => row.email,
-        isMailtoLink: true
+        showAsMailtoLink: true
       },
       {
         columnId: 'birthdate',
