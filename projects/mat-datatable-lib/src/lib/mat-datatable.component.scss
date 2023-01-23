@@ -2,3 +2,8 @@
   table-layout: fixed;
   width: 100%;
 }
+
+.mat-paginator-sticky {
+  bottom: 0;
+  position: sticky;
+}
