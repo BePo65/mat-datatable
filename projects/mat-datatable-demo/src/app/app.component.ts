@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { DemoTableDataSource, DemoTableItem } from '../datasource/demo-table-datasource';
+import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
+import { DemoTableItem } from '../datasource/demo-table-item.interface';
 
 import { MatColumnDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';

@@ -1,23 +1,10 @@
 import { Observable, of as observableOf, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import EXAMPLE_DATA from './demo-table.mock-data';
+import { DemoTableItem } from './demo-table-item.interface';
+import EXAMPLE_DATA from './demo-table.mock.data';
 
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
-
-/**
- * Structure of the demo data
- *
- * @interface DemoTableItem
- */
-export interface DemoTableItem {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  birthdate: Date;
-  description: string;
-}
 
 /**
  * Data source for the DemoTable view. This class should
