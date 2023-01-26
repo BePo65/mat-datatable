@@ -1,4 +1,4 @@
-<table mat-table class="full-width-table" matSort aria-label="Elements">
+<table mat-table class="full-width-table" matSort (matSortChange)="announceSortChange($event)">
   <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
     <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.isSortable" [ngStyle]="columnFormat(column)">
       {{column.header}}
@@ -18,6 +18,5 @@
     [pageSize]="10"
     [pageSizeOptions]="[5, 10, 20]"
     [showFirstLastButtons]="true"
-    aria-label="Select page"
     class="mat-paginator-sticky">
 </mat-paginator>
