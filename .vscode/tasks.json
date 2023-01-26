@@ -37,6 +37,26 @@
           }
         }
       }
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "isBackground": true,
+      "label": "npm: start:debug",
+      "detail": "ng serve",
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation complete"
+          }
+        }
+      }
     }
   ]
 }
