@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
 
 import { MatColumnDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
+import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-sort-definition.interface';
+import { MatDatatableComponent } from 'projects/mat-datatable-lib/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,8 @@ import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interface
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
+
   title = 'mat-datatable-demo';
 
   dataSource: MatDatatableDataSource<DemoTableItem>;
@@ -68,5 +72,23 @@ export class AppComponent {
       }
     ];
     this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];
+  }
+
+  // HACK for testing programatically sorting
+  protected onSortFirstNameAsc() {
+    const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'asc'} ];
+    this.table.setSort(newSort);
+  }
+  protected onSortFirstNameDesc() {
+    const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'desc'} ];
+    this.table.setSort(newSort);
+  }
+  protected onSortBirthday() {
+    const newSort: MatSortDefinition[] = [{ columnId:'birthdate', direction:'asc'} ];
+    this.table.setSort(newSort);
+  }
+  protected onResetSort() {
+    const newSort: MatSortDefinition[] = [{ columnId:'', direction:'asc'} ];
+    this.table.setSort(newSort);
   }
 }

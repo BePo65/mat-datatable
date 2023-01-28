@@ -1,4 +1,4 @@
-<table mat-table class="full-width-table" matSort (matSortChange)="announceSortChange($event)">
+<table mat-table class="full-width-table" matSort (matSortChange)="onSortChanged($event)">
   <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
     <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.isSortable" [ngStyle]="columnFormat(column)">
       {{column.header}}

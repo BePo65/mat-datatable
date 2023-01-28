@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort  } from '@angular/material/sort';
+import { MatSort, MatSortable, Sort  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
@@ -28,26 +28,30 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<TRowData>;
 
   constructor(private cdr: ChangeDetectorRef) {
-    // no initialization needed
   }
 
   ngAfterViewInit(): void {
     if (this.dataSource) {
-      this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.table.dataSource = this.dataSource;
-      const currentSort = this.initialSort();
-      this.setSort(currentSort);
-      this.cdr.detectChanges();
+      const currentSort = this.sortFromDatasource();
+      if (currentSort.length > 0) {
+        this.setSort(currentSort);
+        this.cdr.detectChanges();
+      }
     }
   }
 
-  // TODO rename function; refactor sorting as function of datasource
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      console.log(`Sorted for column ${sortState.active} ${sortState.direction}ending`);
-    } else {
-      console.log('Sorting cleared');
+  onSortChanged(sortState: Sort) {
+    if (this.dataSource !== undefined) {
+      // TODO sort by more than 1 column
+      const newSort: MatSortDefinition[] = [
+        {
+          columnId: sortState.active,
+          direction: sortState.direction
+        }
+      ];
+      this.dataSource.setSort(newSort);
     }
   }
 
@@ -55,25 +59,40 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
    * Sets the sorting of the table.
    * Emits an event to update the datasource.
    *
-   * @param currentSort - definition of the sorting
+   * @param newSort - definition of the new sorting
    */
-  setSort(currentSort: MatSortDefinition[]) {
-    if (currentSort.length > 0) {
+  setSort(newSort: MatSortDefinition[]) {
+    const noSort: MatSortable = {
+      id: '',
+      start: '',
+      disableClear: false
+    };
+
+    if (newSort.length > 0) {
       // TODO sort by more than 1 column
+      // HACK Cannot set sorting direction, but only start of direction cycle.
+      // Calling 'sort' with the same id, multiple times will cycle direction
+      // beginning with direction given in the first call, no matter what
+      // direction is given afterwards.
+      // Negative effect: data is fetched twice!
+      this.sort.sort(noSort);
       this.sort.sort({
-        id: currentSort[0].columnId,
-        start: currentSort[0].direction,
+        id: newSort[0].columnId,
+        start: newSort[0].direction,
         disableClear: false
       });
+    } else {
+      this.sort.sort(noSort);
     }
-    // TODO what to do, if array is empty? Clear soring display?!
   }
 
-  // TODO get the current sorting definition from the datasource
-  private initialSort(): MatSortDefinition[] {
-    return [
-      { columnId: 'id', direction: 'asc' }
-    ];
+  /**
+   * Gets the current sorting definition from the datasource
+   *
+   * @returns current sorting definition or an empty array (no sorting)
+   */
+  private sortFromDatasource(): MatSortDefinition[] {
+    return this.dataSource?.getSort() || [];
   }
 
   protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {

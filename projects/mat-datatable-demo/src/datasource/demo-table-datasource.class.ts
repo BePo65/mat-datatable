@@ -1,10 +1,11 @@
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { Observable, of as observableOf, merge, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { DemoTableItem } from './demo-table-item.interface';
 import EXAMPLE_DATA from './demo-table.mock.data';
 
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
+import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-sort-definition.interface';
 
 /**
  * Data source for the DemoTable view. This class should
@@ -12,10 +13,17 @@ import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interface
  * (including sorting, pagination, and filtering).
  */
 export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
+  private currentSortingDefinition: MatSortDefinition[] = [];
+  private sortChanged = new Subject<void>();
+
+  private readonly defaultSortingDefinition: MatSortDefinition[] = [
+    { columnId: 'id', direction: 'asc' }
+  ];
 
   constructor() {
     super();
     this.data = EXAMPLE_DATA;
+    this.currentSortingDefinition = this.defaultSortingDefinition;
   }
 
   /**
@@ -25,15 +33,15 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<DemoTableItem[]> {
-    if (this.paginator && this.sort) {
+    if (this.paginator) {
       // Combine everything that affects the rendered data into one update
       // stream for the data-table to consume.
-      return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange)
+      return merge(observableOf(this.data), this.paginator.page, this.sortChanged)
         .pipe(map(() => {
-          return this.getPagedData(this.getSortedData([...this.data ]));
+          return this.getPagedData(this.getSortedData());
         }));
     } else {
-      throw Error('Please set the paginator and sort on the data source before connecting.');
+      throw Error('Please set the paginator on the data source before connecting.');
     }
   }
 
@@ -43,6 +51,41 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect(): void {}
+
+  /**
+   * Gets the sorting definition from the datasource.
+   *
+   * @returns fields and directions that the datasource uses for sorting
+   */
+  getSort(): MatSortDefinition[] {
+    return this.currentSortingDefinition;
+  }
+
+  /**
+   * Sort data according to sortDefinition.
+   *
+   * @param sortDefinition - fields and direction that should be used for sorting
+   */
+  setSort(sortDefinition: MatSortDefinition[]): void {
+    if (!this.areSortDefinitionsEqual(this.currentSortingDefinition, sortDefinition)) {
+      this.currentSortingDefinition = sortDefinition;
+      this.data = this.getSortedData();
+      this.sortChanged.next();
+    }
+  }
+
+  /**
+   * Compare 2 sort definitions.
+   *
+   * @param a - 1st sort definition
+   * @param b - 2nd sort definition
+   * @returns true= both definitions are equal
+   */
+  private areSortDefinitionsEqual(a: MatSortDefinition[], b: MatSortDefinition[]): boolean {
+    return a.length === b.length &&
+    a.every((element, index) => (element.columnId === b[index].columnId) &&
+      element.direction === b[index].direction);
+  }
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
@@ -60,21 +103,23 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
     }
   }
 
+  // TODO request sorted data from server
   /**
-   * Sort the data (client-side). If you're using server-side sorting,
-   * this would be replaced by requesting the appropriate data from the server.
+   * Get sorted the data.
    *
-   * @param data - input data to be sorted
-   * @returns data for the mat-datatable
+   * @returns data sorted according to this.currentSortingDefinition
    */
-  private getSortedData(data: DemoTableItem[]): DemoTableItem[] {
-    if (!this.sort || !this.sort.active || this.sort.direction === '') {
-      return data;
+  private getSortedData(): DemoTableItem[] {
+    const baseData = [ ...EXAMPLE_DATA ];
+    if (!this.currentSortingDefinition || this.currentSortingDefinition.length === 0) {
+      return baseData;
     }
 
-    return data.sort((a, b) => {
-      const isAsc = this.sort?.direction === 'asc';
-      switch (this.sort?.active) {
+    const fieldName = this.currentSortingDefinition[0].columnId;
+    const direction = this.currentSortingDefinition[0].direction;
+    return baseData.sort((a, b) => {
+      const isAsc = direction === 'asc';
+      switch (fieldName) {
         case 'id': return compare(+a.userId, +b.userId, isAsc);
         case 'firstName': return compare(a.firstName, b.firstName, isAsc);
         case 'lastName': return compare(a.lastName, b.lastName, isAsc);
