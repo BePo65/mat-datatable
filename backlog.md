@@ -1,4 +1,3 @@
-* add row click handler
 * add marker for current / selected row
 * add sorting (multi column)
 * column content alignment

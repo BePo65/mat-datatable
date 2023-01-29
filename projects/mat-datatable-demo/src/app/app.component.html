@@ -11,6 +11,7 @@
     [dataSource]="dataSource"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
+    (rowClick)="onRowClick($event)"
   >loading...</mat-datatable>
 </div>
 <router-outlet></router-outlet>

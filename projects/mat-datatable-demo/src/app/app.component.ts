@@ -74,6 +74,10 @@ export class AppComponent {
     this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];
   }
 
+  protected onRowClick($event: DemoTableItem) {
+    window.alert(`row clicked; id=${$event.userId}`);
+  }
+
   // HACK for testing programatically sorting
   protected onSortFirstNameAsc() {
     const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'asc'} ];

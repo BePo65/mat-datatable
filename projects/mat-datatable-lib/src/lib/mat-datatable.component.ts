@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable, Sort  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -23,6 +23,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
   @Input() dataSource?: MatDatatableDataSource<TRowData>;
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
+  @Output() rowClick = new EventEmitter<TRowData>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
@@ -39,19 +40,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
         this.setSort(currentSort);
         this.cdr.detectChanges();
       }
-    }
-  }
-
-  onSortChanged(sortState: Sort) {
-    if (this.dataSource !== undefined) {
-      // TODO sort by more than 1 column
-      const newSort: MatSortDefinition[] = [
-        {
-          columnId: sortState.active,
-          direction: sortState.direction
-        }
-      ];
-      this.dataSource.setSort(newSort);
     }
   }
 
@@ -83,6 +71,23 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
       });
     } else {
       this.sort.sort(noSort);
+    }
+  }
+
+  protected onRowClick(row: TRowData) {
+    this.rowClick.emit(row);
+  }
+
+  protected onSortChanged(sortState: Sort) {
+    if (this.dataSource !== undefined) {
+      // TODO sort by more than 1 column
+      const newSort: MatSortDefinition[] = [
+        {
+          columnId: sortState.active,
+          direction: sortState.direction
+        }
+      ];
+      this.dataSource.setSort(newSort);
     }
   }
 
