@@ -1,15 +1,9 @@
 <h1 class="page-title">Mat-Datatable-Demo</h1>
-<div class="sort-button">
-  <button (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
-</div>
-<div class="sort-button">
-  <button (click)="onSortFirstNameDesc()">Sort by firstNamedesc</button>
-</div>
-<div class="sort-button">
-  <button (click)="onSortBirthday()">Sort by birthday</button>
-</div>
-<div class="sort-button">
-  <button (click)="onResetSort()">Reset sort</button>
+<div class="sort-button-container">
+  <button class="sort-button" (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
+  <button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstNamedesc</button>
+  <button class="sort-button" (click)="onSortBirthday()">Sort by birthday</button>
+  <button class="sort-button" (click)="onResetSort()">Reset sort</button>
 </div>
 <div class="content-table mat-elevation-z8">
   <mat-datatable
