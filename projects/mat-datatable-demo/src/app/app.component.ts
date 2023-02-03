@@ -18,9 +18,10 @@ export class AppComponent {
 
   title = 'mat-datatable-demo';
 
-  dataSource: MatDatatableDataSource<DemoTableItem>;
-  columnDefinitions: MatColumnDefinition<DemoTableItem>[];
-  displayedColumns: string[];
+  protected dataSource: MatDatatableDataSource<DemoTableItem>;
+  protected columnDefinitions: MatColumnDefinition<DemoTableItem>[];
+  protected displayedColumns: string[];
+  protected selectedRowsAsString = '-';
 
   private currentLocale = 'en-US';
 
@@ -75,6 +76,7 @@ export class AppComponent {
   }
 
   protected onRowClick($event: DemoTableItem) {
+    this.selectedRowsAsString = this.selectedRowsToString();
     window.alert(`row clicked; id=${$event.userId}`);
   }
 
@@ -94,5 +96,25 @@ export class AppComponent {
   protected onResetSort() {
     const newSort: MatSortDefinition[] = [{ columnId:'', direction:'asc'} ];
     this.table.setSort(newSort);
+  }
+
+  // HACK for testing programatically setting selected rows
+  protected onClearSelection() {
+    this.table.selectedRows = [];
+    this.selectedRowsAsString = '-';
+  }
+  protected onSetSelection() {
+    this.table.selectedRows = [ this.dataSource.data[1], this.dataSource.data[3], this.dataSource.data[88] ];
+    this.selectedRowsAsString = this.selectedRowsToString();
+  }
+  protected selectedRowsToString(): string {
+    if (this.table !== undefined) {
+      return this.table.selectedRows
+        .map(row => row.userId)
+        .sort((a: number, b: number) => a - b )
+        .join('; ');
+    } else {
+      return '-';
+    }
   }
 }

@@ -10,7 +10,9 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></tr>
+  <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
+    [ngClass]="{ 'selected-row': currentSelectedRows.includes(row) }"
+    (click)="onRowClick(row)"></tr>
 </table>
 <mat-paginator #paginator
     [length]="dataSource?.data?.length || 0"

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable, Sort  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -6,6 +6,8 @@ import { MatTable } from '@angular/material/table';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
+
+export type RowSelectionType = 'none' | 'single' | 'multi';
 
 /**
  * Datatable component based on Angular Material.
@@ -19,14 +21,17 @@ import { MatSortDefinition } from '../interfaces/datatable-sort-definition.inter
   templateUrl: './mat-datatable.component.html',
   styleUrls: ['./mat-datatable.component.scss']
 })
-export class MatDatatableComponent<TRowData> implements AfterViewInit {
+export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy {
   @Input() dataSource?: MatDatatableDataSource<TRowData>;
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
+  @Input() rowSelectionMode: RowSelectionType = 'none';
   @Output() rowClick = new EventEmitter<TRowData>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
+
+  protected currentSelectedRows: TRowData[] = [];
 
   constructor(private cdr: ChangeDetectorRef) {
   }
@@ -40,6 +45,34 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
         this.setSort(currentSort);
         this.cdr.detectChanges();
       }
+    }
+  }
+
+  ngOnDestroy(): void {
+    // clear row references
+    this.currentSelectedRows = [];
+  }
+
+  get selectedRows(): TRowData[] {
+    return this.currentSelectedRows;
+  }
+  set selectedRows(newSelection: TRowData[]) {
+    if (Array.isArray(newSelection)) {
+      if (newSelection.length === 0) {
+        this.currentSelectedRows = newSelection;
+        return;
+      }
+
+      switch (this.rowSelectionMode) {
+        case 'multi':
+          this.currentSelectedRows = newSelection;
+          break;
+        case 'single':
+          this.currentSelectedRows = [ newSelection[0] ];
+          break;
+        }
+    } else {
+      throw new Error('\'newSelection\' must be an array.');
     }
   }
 
@@ -75,7 +108,30 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit {
   }
 
   protected onRowClick(row: TRowData) {
-    this.rowClick.emit(row);
+    if (this.rowSelectionMode !== 'none') {
+      if (!this.currentSelectedRows.includes(row)) {
+        switch (this.rowSelectionMode) {
+          case 'single':
+            this.currentSelectedRows = [ row ];
+            break;
+          case 'multi':
+            this.currentSelectedRows.push(row);
+            break;
+        }
+        setTimeout(() => this.rowClick.emit(row), 0);
+      } else {
+        switch (this.rowSelectionMode) {
+          case 'single':
+            this.currentSelectedRows = [ ];
+            break;
+          case 'multi':
+            this.currentSelectedRows = this.currentSelectedRows.filter(e => e !== row);
+            break;
+        }
+      }
+    } else {
+      this.rowClick.emit(row);
+    }
   }
 
   protected onSortChanged(sortState: Sort) {

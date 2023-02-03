@@ -2,5 +2,13 @@
   "extends": [
     "stylelint-config-standard",
     "stylelint-config-recommended-scss"
-    ]
+    ],
+    "rules": {
+      "value-keyword-case": [
+        "lower",
+        {
+          "ignoreKeywords": [ "/A\\d00/" ]
+        }
+      ]
+    }
 }

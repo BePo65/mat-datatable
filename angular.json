@@ -30,7 +30,6 @@
               "projects/mat-datatable-demo/src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/mat-datatable-demo/src/styles.scss"
             ],
             "scripts": []
@@ -95,7 +94,6 @@
               "projects/mat-datatable-demo/src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/mat-datatable-demo/src/styles.scss"
             ],
             "scripts": []

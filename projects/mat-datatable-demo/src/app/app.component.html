@@ -1,9 +1,9 @@
 <h1 class="page-title">Mat-Datatable-Demo</h1>
 <div class="sort-button-container">
-  <button class="sort-button" (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
-  <button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstNamedesc</button>
-  <button class="sort-button" (click)="onSortBirthday()">Sort by birthday</button>
-  <button class="sort-button" (click)="onResetSort()">Reset sort</button>
+  <button mat-button class="sort-button" (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
+  <button mat-button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstNamedesc</button>
+  <button mat-button class="sort-button" (click)="onSortBirthday()">Sort by birthday</button>
+  <button mat-button class="sort-button" (click)="onResetSort()">Reset sort</button>
 </div>
 <div class="content-table mat-elevation-z8">
   <mat-datatable
@@ -11,7 +11,15 @@
     [dataSource]="dataSource"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
+    rowSelectionMode="multi"
     (rowClick)="onRowClick($event)"
   >loading...</mat-datatable>
+</div>
+<div class="selected-rows">
+  <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
+</div>
+<div class="selection-button-container">
+  <button mat-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
+  <button mat-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
 </div>
 <router-outlet></router-outlet>
