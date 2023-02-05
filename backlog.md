@@ -1,8 +1,12 @@
-* add marker for current / selected row
-* add sorting (multi column)
+* add "activated" as row attribute (with set / get)
 * column content alignment
+* add sorting (multi column)
 * variable column width
 * change table to filling parent and replace paginator with scrolling
 * add virtual scroller
-* define first version of api
+* add test harness for lib
+* add tests
+* add cypress tests
+* add all exported elements to public-api.ts
+* add documentation for api toreadme
 * update README (API) and copy it to lib project
