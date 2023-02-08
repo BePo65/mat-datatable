@@ -9,12 +9,14 @@
 }
 
 .sort-button-container,
-.selection-button-container {
+.selection-button-container,
+.activation-button-container {
   margin: 0 0 0.75em 1em;
 }
 
 .sort-button,
-.selection-button {
+.selection-button,
+.activation-button {
   margin: 0 1em 0 0;
 }
 
@@ -22,6 +24,11 @@
   margin: 1em 0 0.75em 1em;
 }
 
-.selected-rows-label {
+.activated-row {
+  margin: 1.5em 0 0.75em 1em;
+}
+
+.selected-rows-label,
+.activated-row-label {
   margin: 0 0.25em 0 0;
 }

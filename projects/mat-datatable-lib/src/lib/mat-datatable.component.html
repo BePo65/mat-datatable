@@ -11,7 +11,10 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
-    [ngClass]="{ 'selected-row': currentSelectedRows.includes(row) }"
+    [ngClass]="{
+      'selected-row': currentSelectedRows.includes(row),
+      'activated-row': currentActivatedRow === row
+    }"
     (click)="onRowClick(row)"></tr>
 </table>
 <mat-paginator #paginator

@@ -22,6 +22,7 @@ export class AppComponent {
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[];
   protected displayedColumns: string[];
   protected selectedRowsAsString = '-';
+  protected activatedRowAsString = '-';
 
   private currentLocale = 'en-US';
 
@@ -112,7 +113,24 @@ export class AppComponent {
       return this.table.selectedRows
         .map(row => row.userId)
         .sort((a: number, b: number) => a - b )
-        .join('; ');
+        .join('; ') || '-';
+    } else {
+      return '-';
+    }
+  }
+
+  // HACK for testing programatically setting activated rows
+  protected onClearActivated() {
+    this.table.activatedRow = undefined;
+    this.activatedRowAsString = '-';
+  }
+  protected onSetActivated() {
+    this.table.activatedRow = this.dataSource.data[3];
+    this.activatedRowAsString = this.selectedRowsToString();
+  }
+  protected activatedRowToString(): string {
+    if (this.table !== undefined) {
+      return this.table.activatedRow?.userId.toString() || '-';
     } else {
       return '-';
     }

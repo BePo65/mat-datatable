@@ -31,6 +31,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
 
+  protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -51,6 +52,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     // clear row references
     this.currentSelectedRows = [];
+  }
+
+  get activatedRow(): TRowData | undefined {
+    return this.currentActivatedRow;
+  }
+  set activatedRow(newActiveRow: TRowData | undefined) {
+    this.currentActivatedRow = newActiveRow;
   }
 
   get selectedRows(): TRowData[] {
@@ -107,6 +115,30 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     }
   }
 
+  protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
+    let result: Record<string, string> | undefined;
+    if (columnDefinition.width !== undefined) {
+      result = {
+        'width': columnDefinition.width,
+        'max-width': columnDefinition.width,
+        'text-overflow': 'ellipsis',
+        'white-space': 'nowrap',
+        'overflow':'hidden'
+      };
+    }
+
+    if (columnDefinition.showAsSingleLine) {
+      const singleLineResult = {
+        'text-overflow': 'ellipsis',
+        'white-space': 'nowrap',
+        'overflow':'hidden'
+      };
+      result = Object.assign({}, result, singleLineResult);
+    }
+
+    return result;
+  }
+
   protected onRowClick(row: TRowData) {
     if (this.rowSelectionMode !== 'none') {
       if (!this.currentSelectedRows.includes(row)) {
@@ -154,29 +186,5 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
    */
   private sortFromDatasource(): MatSortDefinition[] {
     return this.dataSource?.getSort() || [];
-  }
-
-  protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
-    let result: Record<string, string> | undefined;
-    if (columnDefinition.width !== undefined) {
-      result = {
-        'width': columnDefinition.width,
-        'max-width': columnDefinition.width,
-        'text-overflow': 'ellipsis',
-        'white-space': 'nowrap',
-        'overflow':'hidden'
-      };
-    }
-
-    if (columnDefinition.showAsSingleLine) {
-      const singleLineResult = {
-        'text-overflow': 'ellipsis',
-        'white-space': 'nowrap',
-        'overflow':'hidden'
-      };
-      result = Object.assign({}, result, singleLineResult);
-    }
-
-    return result;
   }
 }

@@ -7,11 +7,16 @@
 
   $row-fill-color-hover: rgba(0 0 0 / 4%) !default;
   $selected-row-fill-color: mat.get-color-from-palette($primary-palette, default, 4%) !default;
-  $selected-row-fill-color-hover: mat.get-color-from-palette($primary-palette, default, 12%) !default;
+  $activated-row-fill-color: mat.get-color-from-palette($primary-palette, default, 12%) !default;
 
   .mat-mdc-table .mat-mdc-row.selected-row,
   .mat-mdc-table .mat-mdc-row.mat-datatable-row.selected-row:hover {
     background-color: $selected-row-fill-color;
+  }
+
+  .mat-mdc-table .mat-mdc-row.activated-row,
+  .mat-mdc-table .mat-mdc-row.mat-datatable-row.activated-row:hover {
+    background-color: $activated-row-fill-color;
   }
 
   .mat-mdc-table .mat-mdc-row.mat-datatable-row:hover {

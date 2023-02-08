@@ -1,4 +1,3 @@
-* add "activated" as row attribute (with set / get)
 * column content alignment
 * add sorting (multi column)
 * variable column width
