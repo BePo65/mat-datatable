@@ -115,6 +115,21 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     }
   }
 
+  protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
+    const result: Record<string, string> = {
+      'text-overflow': 'ellipsis',
+      'white-space': 'nowrap',
+      'overflow': 'hidden'
+    };
+
+    if (columnDefinition.width !== undefined) {
+      result['width'] = columnDefinition.width;
+      result['max-width'] = columnDefinition.width;
+    }
+
+    return result;
+  }
+
   protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
