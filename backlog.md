@@ -1,4 +1,4 @@
-* column content alignment
+* modify demo to use combo box for selection type (single, multi, none)
 * add sorting (multi column)
 * variable column width
 * change table to filling parent and replace paginator with scrolling

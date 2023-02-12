@@ -31,27 +31,18 @@ export class MatDatatableHeaderAlignDirective implements AfterViewInit{
     }
 
     if (indexOfHeaderContainerChild >= 0) {
-      const alignmentClass = this.alignmentToClassname(this.matHeaderAlignment);
-      if (!classesOfChild.includes(alignmentClass)) {
-        this.renderer.addClass(childNodes[indexOfHeaderContainerChild], alignmentClass);
+      switch (this.matHeaderAlignment) {
+        case 'left':
+          this.renderer.setStyle(childNodes[indexOfHeaderContainerChild], 'justify-content', 'left');
+          break;
+        case 'center':
+          this.renderer.setStyle(childNodes[indexOfHeaderContainerChild], 'justify-content', 'center');
+          this.renderer.setStyle(childNodes[indexOfHeaderContainerChild], 'margin-right', '-18px');
+          break;
+        case 'right':
+          this.renderer.setStyle(childNodes[indexOfHeaderContainerChild], 'justify-content', 'right');
+          break;
       }
     }
-  }
-
-  private alignmentToClassname(alignment: ColumnAlignmentType | undefined) {
-    let alignmentClass = '';
-    switch (alignment) {
-      case 'left':
-        alignmentClass = 'mat-header-align-left';
-        break;
-      case 'center':
-        alignmentClass = 'mat-header-align-center';
-        break;
-      case 'right':
-        alignmentClass = 'mat-header-align-right';
-        break;
-    }
-
-    return alignmentClass;
   }
 }
