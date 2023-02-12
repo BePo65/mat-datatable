@@ -1,6 +1,11 @@
 <table mat-table class="full-width-table" matSort (matSortChange)="onSortChanged($event)">
   <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.isSortable" [ngStyle]="headerFormat(column)">
+    <th mat-header-cell *matHeaderCellDef
+      mat-sort-header
+      [arrowPosition]="sortArrowPosition(column)"
+      [disabled]="!column.isSortable"
+      [ngStyle]="headerFormat(column)"
+      [ngClass]="{ 'mat-header-align-center': column.headerAlignment === 'center' }">
       {{column.header}}
     </th>
     <td mat-cell *matCellDef="let row" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">

@@ -1,3 +1,5 @@
+export type ColumnAlignmentType = 'left' | 'center' | 'right';
+
 /**
  * Interface for the definition of a single table column
  *
@@ -9,6 +11,8 @@ export interface MatColumnDefinition<TRowData> {
   header: string;
   cell: (element: TRowData) => string;
   width?: string; // e.g. '8em'
+  headerAlignment?: ColumnAlignmentType;
+  cellAlignment?: ColumnAlignmentType;
   tooltip?: ((element: TRowData) => string);
   showAsMailtoLink?: boolean;
   showAsSingleLine?: boolean;

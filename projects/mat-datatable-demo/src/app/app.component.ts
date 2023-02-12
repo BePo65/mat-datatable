@@ -34,6 +34,8 @@ export class AppComponent {
         columnId: 'id',
         header: 'ID',
         cell: (row: DemoTableItem) => row.userId.toString(),
+        headerAlignment: 'right',
+        cellAlignment: 'right',
         width: '5em'
       },
       {
@@ -47,6 +49,8 @@ export class AppComponent {
         columnId: 'lastName',
         header: 'Last Name',
         cell: (row: DemoTableItem) => row.lastName,
+        headerAlignment: 'right',
+        cellAlignment: 'right',
         width: '10em',
         isSortable: true
       },
@@ -62,6 +66,8 @@ export class AppComponent {
         columnId: 'birthdate',
         header: 'Birthday',
         cell: (row: DemoTableItem) => row.birthdate.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
+        headerAlignment: 'center',
+        cellAlignment: 'center',
         width: '8em',
         isSortable: true
       },

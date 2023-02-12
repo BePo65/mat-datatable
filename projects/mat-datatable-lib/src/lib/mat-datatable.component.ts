@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortable, Sort  } from '@angular/material/sort';
+import { MatSort, MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
@@ -116,15 +116,12 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   }
 
   protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
-    const result: Record<string, string> = {
-      'text-overflow': 'ellipsis',
-      'white-space': 'nowrap',
-      'overflow': 'hidden'
-    };
-
+    let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
-      result['width'] = columnDefinition.width;
-      result['max-width'] = columnDefinition.width;
+      result = {
+        'width': columnDefinition.width,
+        'max-width': columnDefinition.width
+      };
     }
 
     return result;
@@ -151,7 +148,27 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
       result = Object.assign({}, result, singleLineResult);
     }
 
+    if (columnDefinition.cellAlignment !== undefined) {
+      const alignmentResult: Record<string, string> = {};
+      switch (columnDefinition.cellAlignment) {
+        case 'left':
+          alignmentResult['text-align'] = 'start';
+          break;
+        case 'center':
+          alignmentResult['text-align'] = 'center';
+          break;
+        case 'right':
+          alignmentResult['text-align'] = 'end';
+          break;
+      }
+      result = Object.assign({}, result, alignmentResult);
+    }
+
     return result;
+  }
+
+  protected sortArrowPosition(columnDefinition: MatColumnDefinition<TRowData>): SortHeaderArrowPosition {
+    return columnDefinition.headerAlignment === 'right' ? 'before' : 'after';
   }
 
   protected onRowClick(row: TRowData) {
