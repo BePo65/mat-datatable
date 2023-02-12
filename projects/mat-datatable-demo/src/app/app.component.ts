@@ -6,7 +6,7 @@ import { DemoTableItem } from '../datasource/demo-table-item.interface';
 import { MatColumnDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
 import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-sort-definition.interface';
-import { MatDatatableComponent } from 'projects/mat-datatable-lib/src/public-api';
+import { MatDatatableComponent, RowSelectionType } from 'projects/mat-datatable-lib/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,7 @@ export class AppComponent {
   protected dataSource: MatDatatableDataSource<DemoTableItem>;
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[];
   protected displayedColumns: string[];
+  protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
 

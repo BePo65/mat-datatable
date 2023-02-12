@@ -11,7 +11,7 @@
     [dataSource]="dataSource"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
-    rowSelectionMode="multi"
+    [rowSelectionMode]="currentSelectionMode"
     (rowClick)="onRowClick($event)"
   >loading...</mat-datatable>
 </div>
@@ -19,14 +19,22 @@
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
 <div class="selection-button-container">
-  <button mat-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
-  <button mat-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
+  <mat-label class="mode-selection-label">Selection mode</mat-label>
+  <mat-form-field appearance="fill" class="mode-selection">
+    <mat-select [(value)]="currentSelectionMode">
+      <mat-option value="none">none</mat-option>
+      <mat-option value="single">single</mat-option>
+      <mat-option value="multi">multi</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
+  <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
 </div>
 <div class="activated-row">
   <span class="activated-row-label">Active row:</span><span>{{activatedRowAsString}}</span>
 </div>
 <div class="activation-button-container">
-  <button mat-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
-  <button mat-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
+  <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
+  <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
 </div>
 <router-outlet></router-outlet>

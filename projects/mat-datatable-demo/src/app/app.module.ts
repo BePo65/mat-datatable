@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -15,6 +18,9 @@ import { MatDatatableModule } from 'projects/mat-datatable-lib/src/public-api';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
     MatDatatableModule
   ],
   providers: [],
