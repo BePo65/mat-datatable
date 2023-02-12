@@ -42,6 +42,8 @@ export class AppComponent {
         columnId: 'firstName',
         header: 'First Name',
         cell: (row: DemoTableItem) => row.firstName,
+        headerAlignment: 'left',
+        cellAlignment: 'left',
         width: '10em',
         isSortable: true
       },

@@ -6,18 +6,17 @@
   width: 100%;
 }
 
-// TODO geht nicht, da SCSS daraus einen zellspezifischen Stil macht
-// (z.B. .mat-sort-header-container[_ngcontent-bhm-c144])
-// margin-right adjusts space reserved for sorting indicator
-.mat-mdc-table .mat-mdc-header-cell.mat-header-align-center .mat-sort-header-container {
+.mat-header-align-left {
+  justify-content: left;
+}
+
+.mat-header-align-center {
   justify-content: center;
   margin-right: -18px;
 }
 
-// HACK solves problem with style defined above
-::ng-deep .mat-header-align-center .mat-sort-header-container {
-  justify-content: center;
-  margin-right: -18px;
+.mat-header-align-right {
+  justify-content: right;
 }
 
 .mat-paginator-sticky {
