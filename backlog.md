@@ -1,5 +1,4 @@
 * add sorting (multi column)
-* change table to filling parent and replace paginator with scrolling
 * add virtual scroller
 * add test harness for lib
 * add tests
