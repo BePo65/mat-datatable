@@ -46,7 +46,8 @@ export class AppComponent {
         headerAlignment: 'left',
         cellAlignment: 'left',
         width: '10em',
-        isSortable: true
+        sortable: true,
+        resizable: true
       },
       {
         columnId: 'lastName',
@@ -55,7 +56,7 @@ export class AppComponent {
         headerAlignment: 'right',
         cellAlignment: 'right',
         width: '10em',
-        isSortable: true
+        sortable: true
       },
       {
         columnId: 'email',
@@ -63,7 +64,8 @@ export class AppComponent {
         cell: (row: DemoTableItem) => row.email,
         width: '20em',
         tooltip: (row: DemoTableItem) => row.email,
-        showAsMailtoLink: true
+        showAsMailtoLink: true,
+        resizable: true
       },
       {
         columnId: 'birthdate',
@@ -72,7 +74,8 @@ export class AppComponent {
         headerAlignment: 'center',
         cellAlignment: 'center',
         width: '8em',
-        isSortable: true
+        sortable: true,
+        resizable: false
       },
       {
         columnId: 'description',
