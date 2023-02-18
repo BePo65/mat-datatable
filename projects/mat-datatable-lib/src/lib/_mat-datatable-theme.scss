@@ -4,11 +4,14 @@
 @mixin color($theme) {
   $color-config: mat.get-color-config($theme);
   $primary-palette: map.get($color-config, "primary");
+  $foreground: map.get($theme, foreground);
   $background: map.get($theme, background);
 
   $row-fill-color-hover: mat.get-color-from-palette($background, background) !default;
   $row-fill-color-selected: mat.get-color-from-palette($primary-palette, default, 4%) !default;
   $row-fill-color-activated: mat.get-color-from-palette($primary-palette, default, 12%) !default;
+  $column-resizer-color: mat.get-color-from-palette($background, background) !default;
+  $column-resizer-color-hover: mat.get-color-from-palette($foreground, divider) !default;
 
   .mat-mdc-table .mat-mdc-row.selected-row,
   .mat-mdc-table .mat-mdc-row.mat-datatable-row.selected-row:hover {
@@ -23,6 +26,15 @@
   .mat-mdc-table .mat-mdc-row.mat-datatable-row:hover {
     background-color: $row-fill-color-hover;
   }
+
+  .mat-datatable .mat-datatable-header-cell .resize-holder {
+    background: $column-resizer-color;
+
+    &:hover,
+    &:active {
+      background: $column-resizer-color-hover;
+    }
+  }
 }
 
 @mixin theme($theme) {
@@ -30,5 +42,23 @@
 
   @if $color-config {
     @include color($theme);
+  }
+}
+
+.mat-datatable {
+  &.resizing {
+    user-select: none;
+  }
+
+  .mat-datatable-header-cell {
+    & .resize-holder {
+      bottom: 0;
+      cursor: col-resize;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: background 0.3s;
+      width: 2px;
+    }
   }
 }

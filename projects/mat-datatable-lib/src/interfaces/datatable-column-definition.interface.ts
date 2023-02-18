@@ -17,4 +17,5 @@ export interface MatColumnDefinition<TRowData> {
   showAsMailtoLink?: boolean;
   showAsSingleLine?: boolean;
   sortable?: boolean;
+  resizable?: boolean;
 }

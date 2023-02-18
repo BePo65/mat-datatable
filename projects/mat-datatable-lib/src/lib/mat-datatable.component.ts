@@ -120,7 +120,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     if (columnDefinition.width !== undefined) {
       result = {
         'width': columnDefinition.width,
-        'max-width': columnDefinition.width
       };
     }
 
@@ -131,8 +130,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
       result = {
-        'width': columnDefinition.width,
-        'max-width': columnDefinition.width,
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
         'overflow':'hidden'
