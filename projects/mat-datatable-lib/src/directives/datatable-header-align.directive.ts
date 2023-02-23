@@ -6,7 +6,7 @@ import { ColumnAlignmentType } from '../interfaces/datatable-column-definition.i
   selector: '[matHeaderAlignment]'
 })
 export class MatDatatableHeaderAlignDirective implements AfterViewInit{
-  @Input() matHeaderAlignment:ColumnAlignmentType | undefined;
+  @Input() matHeaderAlignment: ColumnAlignmentType | undefined;
 
   constructor(private el: ElementRef<HTMLElement>, private renderer: Renderer2) { }
 
