@@ -4,8 +4,7 @@ import { Directive, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } fr
   selector: '[matResizable]'
 })
 export class MatDatatableResizableDirective implements OnInit, OnDestroy {
-  @Input() matResizable?: boolean;
-  @Input() index?: number;
+  @Input() matResizable = true;
 
   private startX!: number;
   private startWidth!: number;
@@ -25,7 +24,7 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.matResizable === true || this.matResizable === undefined) {
+    if (this.matResizable === true) {
       const row = this.renderer.parentNode(this.column) as HTMLElement;
       const thead = this.renderer.parentNode(row) as HTMLElement;
       this.table = this.renderer.parentNode(thead) as HTMLElement;
