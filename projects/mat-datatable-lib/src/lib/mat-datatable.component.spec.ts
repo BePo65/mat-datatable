@@ -34,7 +34,7 @@ describe('MatDatatableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should compile', () => {
+  it('should create an instance', () => {
     expect(component).toBeTruthy();
   });
 });

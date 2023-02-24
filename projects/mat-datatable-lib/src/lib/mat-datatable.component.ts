@@ -119,7 +119,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
       result = {
-        'width': columnDefinition.width,
+        'width': columnDefinition.width
       };
     }
 
