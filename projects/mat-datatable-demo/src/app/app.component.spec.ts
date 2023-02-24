@@ -1,4 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -15,6 +18,9 @@ describe('AppComponent', () => {
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
         MatDatatableModule
       ]
     }).compileComponents();
