@@ -1,8 +1,9 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
+import { MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
+import { MatMultiSort } from '../directives/datatable-sort/mat-multi-sort.directive';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
@@ -28,7 +29,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Output() rowClick = new EventEmitter<TRowData>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatMultiSort) sort!: MatMultiSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
 
   protected currentActivatedRow: TRowData | undefined;
