@@ -22,7 +22,7 @@ import {
 
 import { MatMultiSort } from './mat-multi-sort.directive';
 
-export interface CanDisable {
+interface CanDisable {
   /** Whether the component is disabled. */
   disabled: boolean;
 }
