@@ -1,24 +1,18 @@
 /* eslint-disable @angular-eslint/directive-class-suffix */
 
-import { Directive, OnChanges, OnInit } from '@angular/core';
+import { Directive } from '@angular/core';
 import { MatSort, MatSortable, SortDirection } from '@angular/material/sort';
 
 export type SortDirectionAscDesc = Omit<SortDirection, ''>;
 
+/** Container for MatSortables to manage the sort state and provide default sort parameters. */
 @Directive({
   selector: '[matMultiSort]',
   exportAs: 'matMultiSort'
 })
-export class MatMultiSort extends MatSort implements OnInit, OnChanges {
-
-  // HACK start = 'asc' as 'asc' | 'desc';
-
+export class MatMultiSort extends MatSort {
   actives: string[] = [];
   directions: SortDirection[] = [];
-
-  override ngOnInit(): void {
-    super.ngOnInit();
-  }
 
   override sort(sortable: MatSortable): void {
     this.updateMultipleSorts(sortable);
