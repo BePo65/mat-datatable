@@ -8,6 +8,6 @@ export interface DemoTableItem {
   firstName: string;
   lastName: string;
   email: string;
-  birthdate: Date;
+  birthday: Date;
   description: string;
 }

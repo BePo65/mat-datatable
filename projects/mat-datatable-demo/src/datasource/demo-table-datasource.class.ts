@@ -124,7 +124,7 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
         case 'firstName': return compare(a.firstName, b.firstName, isAsc);
         case 'lastName': return compare(a.lastName, b.lastName, isAsc);
         case 'email': return compare(a.email, b.email, isAsc);
-        case 'birthdate': return compare(+a.birthdate.valueOf(), +b.birthdate.valueOf(), isAsc);
+        case 'birthday': return compare(+a.birthday.valueOf(), +b.birthday.valueOf(), isAsc);
         case 'description': return compare(a.description, b.description, isAsc);
         default: return 0;
       }

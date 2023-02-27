@@ -68,9 +68,9 @@ export class AppComponent {
         resizable: true
       },
       {
-        columnId: 'birthdate',
+        columnId: 'birthday',
         header: 'Birthday',
-        cell: (row: DemoTableItem) => row.birthdate.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
+        cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
         headerAlignment: 'center',
         cellAlignment: 'center',
         width: '8em',
@@ -85,7 +85,7 @@ export class AppComponent {
         showAsSingleLine: true
       }
     ];
-    this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthdate', 'description'];
+    this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
   }
 
   protected onRowClick($event: DemoTableItem) {
@@ -93,7 +93,7 @@ export class AppComponent {
     window.alert(`row clicked; id=${$event.userId}`);
   }
 
-  // HACK for testing programatically sorting
+  // HACK for testing programmatically sorting
   protected onSortFirstNameAsc() {
     const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'asc'} ];
     this.table.setSort(newSort);
@@ -103,7 +103,7 @@ export class AppComponent {
     this.table.setSort(newSort);
   }
   protected onSortBirthday() {
-    const newSort: MatSortDefinition[] = [{ columnId:'birthdate', direction:'asc'} ];
+    const newSort: MatSortDefinition[] = [{ columnId:'birthday', direction:'asc'} ];
     this.table.setSort(newSort);
   }
   protected onResetSort() {
@@ -111,7 +111,7 @@ export class AppComponent {
     this.table.setSort(newSort);
   }
 
-  // HACK for testing programatically setting selected rows
+  // HACK for testing programmatically setting selected rows
   protected onClearSelection() {
     this.table.selectedRows = [];
     this.selectedRowsAsString = '-';
@@ -131,7 +131,7 @@ export class AppComponent {
     }
   }
 
-  // HACK for testing programatically setting activated rows
+  // HACK for testing programmatically setting activated rows
   protected onClearActivated() {
     this.table.activatedRow = undefined;
     this.activatedRowAsString = '-';
