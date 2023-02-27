@@ -3,10 +3,13 @@ import { Component, ViewChild } from '@angular/core';
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
 
-import { MatColumnDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-column-definition.interface';
-import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
-import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-sort-definition.interface';
-import { MatDatatableComponent, RowSelectionType } from 'projects/mat-datatable-lib/src/public-api';
+import {
+  MatColumnDefinition,
+  MatDatatableComponent,
+  MatDatatableDataSource,
+  MatSortDefinition,
+  RowSelectionType
+} from 'projects/mat-datatable-lib/src/public-api';
 
 @Component({
   selector: 'app-root',
