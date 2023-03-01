@@ -28,7 +28,7 @@ interface CanDisable {
 }
 
 /** Column definition associated with a `MatSortHeader`. */
-interface C2MatSortHeaderColumnDef {
+interface MatSortHeaderColumnDef {
   name: string;
 }
 
@@ -44,6 +44,7 @@ interface C2MatSortHeaderColumnDef {
     '(keydown)': '_handleKeydown($event)',
     '(mouseenter)': '_setIndicatorHintVisible(true)',
     '(mouseleave)': '_setIndicatorHintVisible(false)',
+    '[attr.aria-sort]': '_getAriaSortAttribute()',
     '[class.mat-sort-header-disabled]': '_isDisabled()'
   },
   encapsulation: ViewEncapsulation.None,
@@ -67,13 +68,11 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
     changeDetectorRef: ChangeDetectorRef,
     @Optional() public override _sort: MatMultiSort,
     @Inject('MAT_SORT_HEADER_COLUMN_DEF')
-    @Optional()
-    public override _columnDef: C2MatSortHeaderColumnDef,
+    @Optional() public override _columnDef: MatSortHeaderColumnDef,
     _focusMonitor: FocusMonitor,
     _elementRef: ElementRef<HTMLElement>,
     @Optional() _ariaDescriber?: AriaDescriber | null,
-    @Optional()
-    @Inject(MAT_SORT_DEFAULT_OPTIONS)
+    @Optional() @Inject(MAT_SORT_DEFAULT_OPTIONS)
     defaultOptions?: MatSortDefaultOptions) {
     super(
       _intl,
@@ -84,40 +83,32 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
       _elementRef,
       _ariaDescriber,
       defaultOptions
-      );
+    );
   }
 
-  // TODO @HostListener('longpress', ['true'])
-  __setIndicatorHintVisible(visible: string | boolean) {
-    super._setIndicatorHintVisible(visible as boolean);
-  }
-
-  override _handleClick() {
-    super._handleClick();
-  }
-
-  override disabled!: boolean;
-
+  // Whether this MatSortHeader is currently sorted in either ascending or descending order.
   override _isSorted() {
     return this._sort.actives.findIndex(activeId => activeId === this.id) > -1;
   }
 
+  /**
+   * Updates the direction the arrow should be pointing. If it is not sorted, the arrow should be
+   * facing the start direction. Otherwise if it is sorted, the arrow should point in the currently
+   * active sorted direction. The reason this is updated through a function is because the direction
+   * should only be changed at specific times - when deactivated but the hint is displayed and when
+   * the sort is active and the direction changes. Otherwise the arrow's direction should linger
+   * in cases such as the sort becoming deactivated but we want to animate the arrow away while
+   * preserving its direction, even though the next sort direction is actually different and should
+   * only be changed once the arrow displays again (hint or activation).
+   */
   override _updateArrowDirection() {
+    // HACK base implementation:
+    // this._arrowDirection = this._isSorted() ? this._sort.direction : this.start || this._sort.start;
     super._arrowDirection = this.getSortDirection();
-  }
-
-  override _isDisabled() {
-    return this._sort.disabled || this.disabled;
-  }
-
-  override _renderArrow() {
-    return !this._isDisabled() || this._isSorted();
   }
 
   getSortDirection(): SortDirection {
     const i = this._sort.actives.findIndex(activeIds => activeIds === this.id);
-    const direction = this._sort.directions[i];
-    return this._isSorted() ? direction : (this.start || this._sort.start);
+    return this._isSorted() ? this._sort.directions[i] : (this.start || this._sort.start);
   }
-
 }
