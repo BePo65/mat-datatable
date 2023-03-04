@@ -3,10 +3,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
+// TODO get imports from the public-api file
 import { MatMultiSort } from '../directives/datatable-sort/mat-multi-sort.directive';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
-import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
+import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
 
@@ -28,6 +29,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Output() rowClick = new EventEmitter<TRowData>();
+  @Output() sortChange = new EventEmitter<MatSortDefinitionPos[]>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatMultiSort) sort!: MatMultiSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
@@ -92,27 +94,21 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
    * @param newSort - definition of the new sorting
    */
   setSort(newSort: MatSortDefinition[]) {
-    const noSort: MatSortable = {
-      id: '',
-      start: '',
-      disableClear: false
-    };
-
     if (newSort.length > 0) {
-      // TODO sort by more than 1 column
+      // TODO need 'setMultiSort' in directive
       // HACK Cannot set sorting direction, but only start of direction cycle.
       // Calling 'sort' with the same id, multiple times will cycle direction
       // beginning with direction given in the first call, no matter what
       // direction is given afterwards.
       // Negative effect: data is fetched twice!
-      this.sort.sort(noSort);
       this.sort.sort({
         id: newSort[0].columnId,
         start: newSort[0].direction,
         disableClear: false
       });
     } else {
-      this.sort.sort(noSort);
+      // TODO need 'clearMultiSort' in directive
+      // this.sort.sort(noSort);
     }
   }
 
@@ -197,15 +193,24 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   }
 
   protected onSortChanged(sortState: Sort) {
+    // if (this.dataSource !== undefined) {
+    //   const newSort: MatSortDefinition[] = [
+    //     {
+    //       columnId: sortState.active,
+    //       direction: sortState.direction
+    //     }
+    //   ];
+
+    //   this.dataSource.setSort(newSort);
+    // }
+    console.log(`onSortChanged with data: ${JSON.stringify(sortState)}`);
+  }
+
+  protected onMultiSortChanged(sortStates: Sort[]) {
     if (this.dataSource !== undefined) {
-      // TODO sort by more than 1 column
-      const newSort: MatSortDefinition[] = [
-        {
-          columnId: sortState.active,
-          direction: sortState.direction
-        }
-      ];
-      this.dataSource.setSort(newSort);
+      this.dataSource.setSort(this.matSortDefinitionFromSortArray(sortStates));
+      console.log(`lib > onMultiSortChanged with data: ${JSON.stringify(sortStates)}`);
+      this.sortChange.emit(this.matSortDefinitionPosFromSortArray(sortStates));
     }
   }
 
@@ -216,5 +221,30 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
    */
   private sortFromDatasource(): MatSortDefinition[] {
     return this.dataSource?.getSort() || [];
+  }
+
+  private matSortDefinitionFromSortArray(sorts: Sort[]): MatSortDefinition[] {
+    const result: MatSortDefinition[] = [];
+    for (let i = 0; i < sorts.length; i++) {
+      const element: MatSortDefinition = {
+        columnId: sorts[i].active,
+        direction: sorts[i].direction
+      };
+      result.push(element);
+    }
+    return result;
+  }
+
+  private matSortDefinitionPosFromSortArray(sorts: Sort[]): MatSortDefinitionPos[] {
+    const result: MatSortDefinitionPos[] = [];
+    for (let i = 0; i < sorts.length; i++) {
+      const element: MatSortDefinitionPos = {
+        columnId: sorts[i].active,
+        direction: sorts[i].direction,
+        position: i + 1
+      };
+      result.push(element);
+    }
+    return result;
   }
 }

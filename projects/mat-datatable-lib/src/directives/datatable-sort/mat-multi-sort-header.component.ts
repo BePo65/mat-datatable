@@ -39,13 +39,7 @@ interface MatSortHeaderColumnDef {
   templateUrl: './mat-multi-sort-header.component.html',
   styleUrls: ['./mat-multi-sort-header.component.scss'],
   host: {
-    'class': 'mat-sort-header',
-    '(click)': '_handleClick()',
-    '(keydown)': '_handleKeydown($event)',
-    '(mouseenter)': '_setIndicatorHintVisible(true)',
-    '(mouseleave)': '_setIndicatorHintVisible(false)',
-    '[attr.aria-sort]': '_getAriaSortAttribute()',
-    '[class.mat-sort-header-disabled]': '_isDisabled()'
+    'class': 'mat-multi-sort-header'
   },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -86,9 +80,9 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
     );
   }
 
-  // Whether this MatSortHeader is currently sorted in either ascending or descending order.
+  // Whether this MatMultiSortHeader is currently sorted in either ascending or descending order.
   override _isSorted() {
-    return this._sort.actives.findIndex(activeId => activeId === this.id) > -1;
+    return this._sort.sortDefinitions.findIndex(sort => sort.active === this.id) > -1;
   }
 
   /**
@@ -108,7 +102,7 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
   }
 
   getSortDirection(): SortDirection {
-    const i = this._sort.actives.findIndex(activeIds => activeIds === this.id);
-    return this._isSorted() ? this._sort.directions[i] : (this.start || this._sort.start);
+    const i = this._sort.sortDefinitions.findIndex(sort => sort.active === this.id);
+    return this._isSorted() ? this._sort.sortDefinitions[i].direction : (this.start || this._sort.start);
   }
 }

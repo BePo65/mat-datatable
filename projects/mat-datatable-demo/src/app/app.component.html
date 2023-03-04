@@ -1,7 +1,7 @@
 <h1 class="page-title">Mat-Datatable-Demo</h1>
 <div class="sort-button-container">
   <button mat-button class="sort-button" (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
-  <button mat-button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstNamedesc</button>
+  <button mat-button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstName desc</button>
   <button mat-button class="sort-button" (click)="onSortBirthday()">Sort by birthday</button>
   <button mat-button class="sort-button" (click)="onResetSort()">Reset sort</button>
 </div>
@@ -13,6 +13,7 @@
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
     (rowClick)="onRowClick($event)"
+    (sortChange)="onSortChanged($event)"
   >loading...</mat-datatable>
 </div>
 <div class="selected-rows">

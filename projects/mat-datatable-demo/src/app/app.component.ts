@@ -1,4 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
+// TODO export from mat-datatable-lib/src/public-api
+import { Sort } from '@angular/material/sort';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
@@ -8,6 +10,7 @@ import {
   MatDatatableComponent,
   MatDatatableDataSource,
   MatSortDefinition,
+  MatSortDefinitionPos,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src/public-api';
 
@@ -94,6 +97,12 @@ export class AppComponent {
   protected onRowClick($event: DemoTableItem) {
     this.selectedRowsAsString = this.selectedRowsToString();
     window.alert(`row clicked; id=${$event.userId}`);
+  }
+
+  protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+    console.group('demo > onSortChanged');
+    console.log(currentSorts);
+    console.groupEnd();
   }
 
   // HACK for testing programmatically sorting
