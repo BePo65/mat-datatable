@@ -291,8 +291,24 @@ export default [
     'userId': 37,
     'firstName': 'Deborah',
     'lastName': 'Abbott',
-    'email': 'Teresa.Ruecker@gmail.com',
+    'email': 'Deborah.Abbott@gmail.com',
     'birthday': new Date('2003-06-18T22:38:30.281Z'),
+    'description': 'Modi ullam assumenda magni quisquam consequuntur quis perferendis culpa.'
+  },
+  {
+    'userId': 101,
+    'firstName': 'Anna',
+    'lastName': 'Abbott',
+    'email': 'Anna.Abbott1@gmail.com',
+    'birthday': new Date('2013-04-23T22:38:30.281Z'),
+    'description': 'Modi ullam assumenda magni quisquam consequuntur quis perferendis culpa.'
+  },
+  {
+    'userId': 102,
+    'firstName': 'Anna',
+    'lastName': 'Abbott',
+    'email': 'Anna.Abbott2@gmail.com',
+    'birthday': new Date('2002-11-02T22:38:30.281Z'),
     'description': 'Modi ullam assumenda magni quisquam consequuntur quis perferendis culpa.'
   },
   {
