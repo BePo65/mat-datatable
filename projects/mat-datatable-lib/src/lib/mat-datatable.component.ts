@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+// TODO get imports from the public-api file of mat-multi-sort.directive
 import { MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
@@ -95,7 +96,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
    */
   setSort(newSort: MatSortDefinition[]) {
     if (newSort.length > 0) {
-      // TODO need 'setMultiSort' in directive
+      // TODO get 'disableClear' from multi-sort directive
       // HACK Cannot set sorting direction, but only start of direction cycle.
       // Calling 'sort' with the same id, multiple times will cycle direction
       // beginning with direction given in the first call, no matter what
@@ -110,6 +111,20 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
       // TODO need 'clearMultiSort' in directive
       // this.sort.sort(noSort);
     }
+  }
+
+  setAllSorts(matSortDefinitions: MatSortDefinition[]): void {
+    const sortables: MatSortable[]= [];
+    for (let i = 0; i < matSortDefinitions.length; i++) {
+      // TODO get 'disableClear' from multi-sort directive
+      const sortEntry = {
+        id: matSortDefinitions[i].columnId,
+        start: matSortDefinitions[i].direction,
+        disableClear: false
+      };
+      sortables.push(sortEntry);
+    }
+    this.sort.setAllSorts(sortables);
   }
 
   protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
@@ -165,7 +180,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     return columnDefinition.headerAlignment === 'right' ? 'before' : 'after';
   }
 
-  protected onRowClick(row: TRowData) {
+  protected onRowClicked(row: TRowData) {
     if (this.rowSelectionMode !== 'none') {
       if (!this.currentSelectedRows.includes(row)) {
         switch (this.rowSelectionMode) {
@@ -192,24 +207,9 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     }
   }
 
-  protected onSortChanged(sortState: Sort) {
-    // if (this.dataSource !== undefined) {
-    //   const newSort: MatSortDefinition[] = [
-    //     {
-    //       columnId: sortState.active,
-    //       direction: sortState.direction
-    //     }
-    //   ];
-
-    //   this.dataSource.setSort(newSort);
-    // }
-    console.log(`onSortChanged with data: ${JSON.stringify(sortState)}`);
-  }
-
   protected onMultiSortChanged(sortStates: Sort[]) {
     if (this.dataSource !== undefined) {
       this.dataSource.setSort(this.matSortDefinitionFromSortArray(sortStates));
-      console.log(`lib > onMultiSortChanged with data: ${JSON.stringify(sortStates)}`);
       this.sortChange.emit(this.matSortDefinitionPosFromSortArray(sortStates));
     }
   }

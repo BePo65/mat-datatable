@@ -147,7 +147,6 @@ export class AppComponent {
   }
   protected onClearSort() {
     this.table.setAllSorts([]);
-    // this.table.removeAllSorts();
   }
 
   // HACK for testing programmatically setting selected rows

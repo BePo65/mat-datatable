@@ -37,8 +37,7 @@ export class MatMultiSort extends MatSort {
   }
   set sortDefinitions(sorts: Sort[]) {
     this._sortDefinitions = sorts;
-    // TODO emit multiSortChange?
-    console.log('>>> set sortDefinitions');
+    this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
   }
   private _sortDefinitions: Sort[] = [];
 
@@ -51,13 +50,26 @@ export class MatMultiSort extends MatSort {
     super(__defaultOptions);
   }
 
-  // TODO need 'setMultiSort' in directive
-  // TODO need 'clearMultiSort' in directive
   // Add / remove a single sort definition
   override sort(sortable: MatSortable): void {
     this.updateSortDefinitions(sortable);
-    this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
     super.sort(sortable);
+  }
+
+  // TODO not working; arrows don't display the correct sorting
+  // Add multiple sort definitions.
+  setAllSorts(sortables: MatSortable[]): void {
+    const newSortDefinitions: Sort[] = [];
+    for (let i = 0; i < sortables.length; i++) {
+      super.sort(sortables[i]);
+      const sortDefinition: Sort = {
+        active: sortables[i].id,
+        direction: sortables[i].start
+      };
+      newSortDefinitions.push(sortDefinition);
+    }
+
+    this.sortDefinitions = newSortDefinitions;
   }
 
   updateSortDefinitions(sortable: MatSortable): void {
@@ -70,10 +82,8 @@ export class MatMultiSort extends MatSort {
       };
       if (newSort.direction !== '') {
         this.sortDefinitions.splice(sortIndex, 1, newSort);
-        console.log(`>>> updateSortDefinitions - updated Sort '${JSON.stringify(newSort)}'`);
       } else {
         this.sortDefinitions.splice(sortIndex, 1);
-        console.log(`>>> updateSortDefinitions - removed Sort '${JSON.stringify(newSort)}'`);
       }
     } else {
       const newSort: Sort = {
@@ -81,7 +91,6 @@ export class MatMultiSort extends MatSort {
         direction: sortable.start ? sortable.start : this.start
       };
       this.sortDefinitions.push(newSort);
-      console.log(`>>> updateSortDefinitions - new Sort '${JSON.stringify(newSort)}'`);
     }
   }
 
