@@ -1,6 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-// TODO export from mat-datatable-lib/src/public-api
-import { Sort } from '@angular/material/sort';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
@@ -100,27 +98,56 @@ export class AppComponent {
   }
 
   protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+    // TODO display sorting definition
     console.group('demo > onSortChanged');
     console.log(currentSorts);
     console.groupEnd();
   }
 
   // HACK for testing programmatically sorting
-  protected onSortFirstNameAsc() {
-    const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'asc'} ];
-    this.table.setSort(newSort);
+  protected onSortId() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'id', direction:'asc'}
+    ];
+    this.table.setAllSorts(newSort);
   }
-  protected onSortFirstNameDesc() {
-    const newSort: MatSortDefinition[] = [{ columnId:'firstName', direction:'desc'} ];
-    this.table.setSort(newSort);
+  protected onSortLastNameFirstNameBirthday() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'lastName', direction:'asc'},
+      { columnId:'firstName', direction:'asc'},
+      { columnId:'birthday', direction:'asc'}
+    ];
+    this.table.setAllSorts(newSort);
   }
-  protected onSortBirthday() {
-    const newSort: MatSortDefinition[] = [{ columnId:'birthday', direction:'asc'} ];
-    this.table.setSort(newSort);
+  protected onSortLastNameBirthdayAsc() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'lastName', direction:'asc'},
+      { columnId:'birthday', direction:'asc'}
+    ];
+    this.table.setAllSorts(newSort);
   }
-  protected onResetSort() {
-    const newSort: MatSortDefinition[] = [{ columnId:'', direction:'asc'} ];
-    this.table.setSort(newSort);
+  protected onSortLastNameBirthdayDesc() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'lastName', direction:'asc'},
+      { columnId:'birthday', direction:'desc'}
+    ];
+    this.table.setAllSorts(newSort);
+  }
+  protected onSortBirthdayAsc() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'birthday', direction:'asc'}
+    ];
+    this.table.setAllSorts(newSort);
+  }
+  protected onSortBirthdayDesc() {
+    const newSort: MatSortDefinition[] = [
+      { columnId:'birthday', direction:'asc'}
+    ];
+    this.table.setAllSorts(newSort);
+  }
+  protected onClearSort() {
+    this.table.setAllSorts([]);
+    // this.table.removeAllSorts();
   }
 
   // HACK for testing programmatically setting selected rows

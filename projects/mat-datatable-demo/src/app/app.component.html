@@ -1,10 +1,4 @@
 <h1 class="page-title">Mat-Datatable-Demo</h1>
-<div class="sort-button-container">
-  <button mat-button class="sort-button" (click)="onSortFirstNameAsc()">Sort by firstName asc</button>
-  <button mat-button class="sort-button" (click)="onSortFirstNameDesc()">Sort by firstName desc</button>
-  <button mat-button class="sort-button" (click)="onSortBirthday()">Sort by birthday</button>
-  <button mat-button class="sort-button" (click)="onResetSort()">Reset sort</button>
-</div>
 <div class="content-table mat-elevation-z8">
   <mat-datatable
     #datatable
@@ -15,6 +9,25 @@
     (rowClick)="onRowClick($event)"
     (sortChange)="onSortChanged($event)"
   >loading...</mat-datatable>
+</div>
+<div class="current-sort">
+  <span class="current-sort-label">Current sort:</span><span>????</span>
+</div>
+<div class="sort-button-container">
+  <button mat-raised-button class="sort-button" (click)="onSortId()">Sort by ID</button>
+  <button mat-raised-button class="sort-button" (click)="onSortLastNameFirstNameBirthday()">Sort by lastName, firstName, birthday</button>
+  <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayAsc()">Sort by lastName, birthday</button>
+  <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayDesc()">Sort by lastName, birthday desc</button>
+  <button mat-raised-button class="sort-button" (click)="onSortBirthdayAsc()">Sort by birthday</button>
+  <button mat-raised-button class="sort-button" (click)="onSortBirthdayDesc()">Sort by birthday desc</button>
+  <button mat-raised-button class="sort-button" (click)="onClearSort()">Remove all sorts</button>
+</div>
+<div class="activated-row">
+  <span class="activated-row-label">Active row:</span><span>{{activatedRowAsString}}</span>
+</div>
+<div class="activation-button-container">
+  <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
+  <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
 </div>
 <div class="selected-rows">
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
@@ -30,12 +43,5 @@
   </mat-form-field>
   <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
   <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
-</div>
-<div class="activated-row">
-  <span class="activated-row-label">Active row:</span><span>{{activatedRowAsString}}</span>
-</div>
-<div class="activation-button-container">
-  <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
-  <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
 </div>
 <router-outlet></router-outlet>
