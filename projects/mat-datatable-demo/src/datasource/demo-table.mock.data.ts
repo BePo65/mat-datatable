@@ -8,6 +8,14 @@ export default [
     'description': 'Provident numquam possimus harum maxime repellat repellat optio quas.'
   },
   {
+    'userId': 103,
+    'firstName': 'Rashawn',
+    'lastName': 'Irvin',
+    'email': 'IrvinR@gmail.com',
+    'birthday': new Date('2000-11-21T16:55:38.655Z'),
+    'description': 'Provident numquam possimus harum maxime repellat repellat optio quas.'
+  },
+  {
     'userId': 2,
     'firstName': 'Jesse',
     'lastName': 'Littel',
