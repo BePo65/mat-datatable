@@ -96,8 +96,6 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
    * only be changed once the arrow displays again (hint or activation).
    */
   override _updateArrowDirection() {
-    // HACK base implementation:
-    // this._arrowDirection = this._isSorted() ? this._sort.direction : this.start || this._sort.start;
     super._arrowDirection = this.getSortDirection();
   }
 
