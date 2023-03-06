@@ -141,7 +141,7 @@ export class AppComponent {
   }
   protected onSortBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'birthday', direction:'asc'}
+      { columnId:'birthday', direction:'desc'}
     ];
     this.table.setAllSorts(newSort);
   }
