@@ -76,6 +76,9 @@ export class MatMultiSort extends MatSort {
     }
 
     this.sortDefinitions = newSortDefinitions;
+
+    // Trigger sortChange to update arrows in header
+    this.sortChange.emit({active: '', direction: ''});
   }
 
   updateSortDefinitions(sortable: MatSortable): void {
