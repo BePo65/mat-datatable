@@ -13,17 +13,17 @@ import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/dat
  * (including sorting, pagination, and filtering).
  */
 export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
-  private currentSortingDefinition: MatSortDefinition[] = [];
+  private currentSortingDefinitions: MatSortDefinition[] = [];
   private sortChanged = new Subject<void>();
 
-  private readonly defaultSortingDefinition: MatSortDefinition[] = [
+  private readonly defaultSortingDefinitions: MatSortDefinition[] = [
     { columnId: 'id', direction: 'asc' }
   ];
 
   constructor() {
     super();
     this.data = EXAMPLE_DATA;
-    this.currentSortingDefinition = this.defaultSortingDefinition;
+    this.currentSortingDefinitions = this.defaultSortingDefinitions;
   }
 
   /**
@@ -58,7 +58,7 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
    * @returns fields and directions that the datasource uses for sorting
    */
   getSort(): MatSortDefinition[] {
-    return this.currentSortingDefinition;
+    return this.currentSortingDefinitions;
   }
 
   /**
@@ -67,8 +67,8 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
    * @param sortDefinition - fields and direction that should be used for sorting
    */
   setSort(sortDefinition: MatSortDefinition[]): void {
-    if (!this.areSortDefinitionsEqual(this.currentSortingDefinition, sortDefinition)) {
-      this.currentSortingDefinition = sortDefinition;
+    if (!this.areSortDefinitionsEqual(this.currentSortingDefinitions, sortDefinition)) {
+      this.currentSortingDefinitions = sortDefinition;
       this.data = this.getSortedData();
       this.sortChanged.next();
     }
@@ -107,27 +107,44 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
   /**
    * Get sorted the data.
    *
-   * @returns data sorted according to this.currentSortingDefinition
+   * @returns data sorted according to this.currentSortingDefinitions[]
    */
   private getSortedData(): DemoTableItem[] {
     const baseData = [ ...EXAMPLE_DATA ];
-    if (!this.currentSortingDefinition || this.currentSortingDefinition.length === 0) {
+    if (!this.currentSortingDefinitions || this.currentSortingDefinitions.length === 0) {
       return baseData;
     }
 
-    const fieldName = this.currentSortingDefinition[0].columnId;
-    const direction = this.currentSortingDefinition[0].direction;
     return baseData.sort((a, b) => {
-      const isAsc = direction === 'asc';
-      switch (fieldName) {
-        case 'id': return compare(+a.userId, +b.userId, isAsc);
-        case 'firstName': return compare(a.firstName, b.firstName, isAsc);
-        case 'lastName': return compare(a.lastName, b.lastName, isAsc);
-        case 'email': return compare(a.email, b.email, isAsc);
-        case 'birthday': return compare(+a.birthday.valueOf(), +b.birthday.valueOf(), isAsc);
-        case 'description': return compare(a.description, b.description, isAsc);
-        default: return 0;
+      let result = 0;
+      for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
+        const fieldName = this.currentSortingDefinitions[i].columnId;
+        const isAsc = (this.currentSortingDefinitions[i].direction === 'asc');
+        let valueA: string | number = '';
+        let valueB: string | number = '';
+        switch (fieldName) {
+          case 'id':
+            valueA = +a.userId;
+            valueB = +b.userId;
+            break;
+          case 'birthday':
+            valueA = +a[fieldName as keyof DemoTableItem].valueOf();
+            valueB = +b[fieldName as keyof DemoTableItem].valueOf();
+            break;
+          case 'firstName':
+          case 'lastName':
+          case 'email':
+          case 'description':
+            valueA = a[fieldName as keyof DemoTableItem] as string;
+            valueB = b[fieldName as keyof DemoTableItem] as string;
+            break;
+        }
+        result = compare(valueA, valueB, isAsc);
+        if (result !== 0) {
+          break;
+        }
       }
+      return result;
     });
   }
 }
@@ -138,9 +155,9 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
  * @param isAsc - is this an ascending comparison
- * @returns comparision result
+ * @returns comparison result
  */
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 function compare(a: string | number, b: string | number, isAsc: boolean): number {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
 }
