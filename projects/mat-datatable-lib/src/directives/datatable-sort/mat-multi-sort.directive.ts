@@ -60,14 +60,14 @@ export class MatMultiSort extends MatSort {
   override sort(sortable: MatSortable): void {
     this.updateSortDefinitions(sortable);
     this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
+
+    // Trigger sortChange to update arrows in header
+    this.sortChange.emit({active: '', direction: ''});
   }
 
-  // TODO not working; arrows don't display the correct sorting
-  // Add multiple sort definitions.
   setAllSorts(sortables: MatSortable[]): void {
     const newSortDefinitions: Sort[] = [];
     for (let i = 0; i < sortables.length; i++) {
-      super.sort(sortables[i]);
       const sortDefinition: Sort = {
         active: sortables[i].id,
         direction: sortables[i].start
