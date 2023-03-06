@@ -50,10 +50,16 @@ export class MatMultiSort extends MatSort {
     super(__defaultOptions);
   }
 
-  // Add / remove a single sort definition
+  /**
+   * Add / remove a single sort definition.
+   * This overwrite is necessary to handle the sorts added by
+   * clicking on a column header.
+   *
+   * @param sortable - sort definition to add / remove
+   */
   override sort(sortable: MatSortable): void {
     this.updateSortDefinitions(sortable);
-    super.sort(sortable);
+    this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
   }
 
   // TODO not working; arrows don't display the correct sorting
