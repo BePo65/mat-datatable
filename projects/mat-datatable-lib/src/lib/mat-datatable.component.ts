@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component, EventEmitter,
   Input,
   OnDestroy,
@@ -48,18 +47,11 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
-  }
-
   ngAfterViewInit(): void {
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.table.dataSource = this.dataSource;
-      const currentSort = this.sortFromDatasource();
-      if (currentSort.length > 0) {
-        this.setSort(currentSort);
-        this.cdr.detectChanges();
-      }
+      this.setAllSorts(this.sortFromDatasource());
     }
   }
 
@@ -95,31 +87,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
         }
     } else {
       throw new Error('\'newSelection\' must be an array.');
-    }
-  }
-
-  /**
-   * Sets the sorting of the table.
-   * Emits an event to update the datasource.
-   *
-   * @param newSort - definition of the new sorting
-   */
-  setSort(newSort: MatSortDefinition[]) {
-    if (newSort.length > 0) {
-      // TODO get 'disableClear' from multi-sort directive
-      // HACK Cannot set sorting direction, but only start of direction cycle.
-      // Calling 'sort' with the same id, multiple times will cycle direction
-      // beginning with direction given in the first call, no matter what
-      // direction is given afterwards.
-      // Negative effect: data is fetched twice!
-      this.sort.sort({
-        id: newSort[0].columnId,
-        start: newSort[0].direction,
-        disableClear: false
-      });
-    } else {
-      // TODO need 'clearMultiSort' in directive
-      // this.sort.sort(noSort);
     }
   }
 
