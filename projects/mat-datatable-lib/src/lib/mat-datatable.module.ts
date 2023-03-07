@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { MatDatatableHeaderAlignDirective } from '../directives/datatable-header-align.directive';
 import { MatDatatableResizableDirective } from '../directives/datatable-resizable.directive';
-import { MatMultiSortModule } from '../directives/datatable-sort/mat-multi-sort.module';
+import { MatMultiSortModule } from '../directives/datatable-sort';
 
 import { MatDatatableComponent } from './mat-datatable.component';
 

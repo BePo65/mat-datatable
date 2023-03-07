@@ -10,7 +10,7 @@ import {
   MatSortDefinition,
   MatSortDefinitionPos,
   RowSelectionType
-} from 'projects/mat-datatable-lib/src/public-api';
+} from 'projects/mat-datatable-lib/src';
 
 @Component({
   selector: 'app-root',

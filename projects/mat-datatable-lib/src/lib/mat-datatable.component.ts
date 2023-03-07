@@ -1,11 +1,21 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-// TODO get imports from the public-api file of mat-multi-sort.directive
-import { MatSortable, Sort, SortHeaderArrowPosition  } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
-// TODO get imports from the public-api file
-import { MatMultiSort } from '../directives/datatable-sort/mat-multi-sort.directive';
+import {
+  MatMultiSort,
+  MatSortable,
+  Sort,
+  SortHeaderArrowPosition
+} from '../directives/datatable-sort';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
