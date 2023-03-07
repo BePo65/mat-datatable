@@ -93,11 +93,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   setAllSorts(matSortDefinitions: MatSortDefinition[]): void {
     const sortables: MatSortable[]= [];
     for (let i = 0; i < matSortDefinitions.length; i++) {
-      // TODO get 'disableClear' from multi-sort directive
       const sortEntry = {
         id: matSortDefinitions[i].columnId,
         start: matSortDefinitions[i].direction,
-        disableClear: false
+        disableClear: this.sort.disableClear
       };
       sortables.push(sortEntry);
     }
