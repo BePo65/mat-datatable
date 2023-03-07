@@ -28,8 +28,8 @@ describe('MatResizableDirective', () => {
     expect(directive).toBeDefined();
   });
 
-  it('should have 3 headers with directive', () => {
-    expect(directiveElements.length).toBe(3);
+  it('should have 4 headers with directive', () => {
+    expect(directiveElements.length).toBe(4);
   });
 
   it('should make 1st column with directive to be resizable', () => {
@@ -53,6 +53,15 @@ describe('MatResizableDirective', () => {
 
     expect(alignmentChild.contains('resize-holder')).toBeTruthy();
   });
+
+  it('should make 4th column with directive to be resizable', () => {
+    expect(directiveElements[3].children.length).toBe(2);
+
+    const resizerElement = directiveElements[2].children[1].nativeElement as HTMLElement;
+    const alignmentChild = resizerElement.classList;
+
+    expect(alignmentChild.contains('resize-holder')).toBeTruthy();
+  });
 });
 
 @Component({
@@ -68,6 +77,9 @@ describe('MatResizableDirective', () => {
         <div class="mat-sort-header-container">not resizable header</div>
       </th>
       <th id="resizableDefault" class="mat-sort-header" [matResizable]>
+        <div class="mat-sort-header-container">not resizable header</div>
+      </th>
+      <th id="resizableDefault" class="mat-sort-header" matResizable>
         <div class="mat-sort-header-container">not resizable header</div>
       </th>
     </tr>

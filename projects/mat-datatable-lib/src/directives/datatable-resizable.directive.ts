@@ -1,10 +1,16 @@
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directive, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[matResizable]'
 })
 export class MatDatatableResizableDirective implements OnInit, OnDestroy {
-  @Input() matResizable = true;
+  @Input()
+  get matResizable() { return this._matResizable; }
+  set matResizable(value: BooleanInput) {
+    this._matResizable = coerceBooleanProperty(value);
+  }
+  private _matResizable = true;
 
   private startX!: number;
   private startWidth!: number;
@@ -48,7 +54,7 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
 
     this.ngZone.runOutsideAngular(() => {
       this.unlistenMouseMove = this.renderer.listen('document', 'mousemove', ($event: MouseEvent) => {
-        // Resising with primary mouse button pressed
+        // Resizing with primary mouse button pressed
         if (this.resizing && $event.buttons & 1) {
           const width = this.startWidth + ($event.pageX - this.startX);
           this.renderer.setStyle(this.column, 'width', `${width}px`);

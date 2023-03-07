@@ -6,7 +6,7 @@
       [ngStyle]="headerFormat(column)"
       [arrowPosition]="sortArrowPosition(column)"
       [matHeaderAlignment]="column.headerAlignment"
-      [matResizable]="column.resizable || false">
+      [matResizable]="column.resizable">
       {{column.header}}
     </th>
     <td mat-cell class="mat-datatable-cell" *matCellDef="let row" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">
