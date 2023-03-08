@@ -20,7 +20,7 @@ import {
 export class AppComponent {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
 
-  title = 'mat-datatable-demo';
+  title = 'Mat-Datatable-Demo';
 
   protected dataSource: MatDatatableDataSource<DemoTableItem>;
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[];
