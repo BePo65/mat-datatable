@@ -104,7 +104,7 @@ export class AppComponent {
     console.groupEnd();
   }
 
-  // HACK for testing programmatically sorting
+  // Demo to show sorting by code
   protected onSortId() {
     const newSort: MatSortDefinition[] = [
       { columnId:'id', direction:'asc'}
@@ -149,7 +149,7 @@ export class AppComponent {
     this.table.setAllSorts([]);
   }
 
-  // HACK for testing programmatically setting selected rows
+  // Demo to show setting selected rows by code
   protected onClearSelection() {
     this.table.selectedRows = [];
     this.selectedRowsAsString = '-';
@@ -169,7 +169,7 @@ export class AppComponent {
     }
   }
 
-  // HACK for testing programmatically setting activated rows
+  // Demo to show setting activated rows by code
   protected onClearActivated() {
     this.table.activatedRow = undefined;
     this.activatedRowAsString = '-';
