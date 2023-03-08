@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -49,15 +48,11 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
 
- constructor(private cdr: ChangeDetectorRef) {
- }
-
   ngAfterViewInit(): void {
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.table.dataSource = this.dataSource;
-      this.setAllSorts(this.sortFromDatasource());
-      this.cdr.detectChanges();
+      setTimeout(() => this.setAllSorts(this.sortFromDatasource()));
     }
   }
 
