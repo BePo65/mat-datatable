@@ -1,5 +1,6 @@
-* add sorting (multi column)
 * display current sorting order with chips
+* add tests for multi-sort
+* add directives to public-api of mat-datatable
 * add virtual scroller
 * add test harness for lib
 * add tests
