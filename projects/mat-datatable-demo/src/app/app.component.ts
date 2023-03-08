@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
@@ -23,73 +24,75 @@ export class AppComponent {
   title = 'Mat-Datatable-Demo';
 
   protected dataSource: MatDatatableDataSource<DemoTableItem>;
-  protected columnDefinitions: MatColumnDefinition<DemoTableItem>[];
-  protected displayedColumns: string[];
+  protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
+    {
+      columnId: 'id',
+      header: 'ID',
+      cell: (row: DemoTableItem) => row.userId.toString(),
+      headerAlignment: 'right',
+      cellAlignment: 'right',
+      width: '5em'
+    },
+    {
+      columnId: 'firstName',
+      header: 'First Name',
+      cell: (row: DemoTableItem) => row.firstName,
+      headerAlignment: 'left',
+      cellAlignment: 'left',
+      width: '10em',
+      sortable: true,
+      resizable: true
+    },
+    {
+      columnId: 'lastName',
+      header: 'Last Name',
+      cell: (row: DemoTableItem) => row.lastName,
+      headerAlignment: 'right',
+      cellAlignment: 'right',
+      width: '10em',
+      sortable: true
+    },
+    {
+      columnId: 'email',
+      header: 'EMail',
+      cell: (row: DemoTableItem) => row.email,
+      width: '20em',
+      tooltip: (row: DemoTableItem) => row.email,
+      showAsMailtoLink: true,
+      resizable: true
+    },
+    {
+      columnId: 'birthday',
+      header: 'Birthday',
+      cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
+      headerAlignment: 'center',
+      cellAlignment: 'center',
+      width: '8em',
+      sortable: true,
+      resizable: false
+    },
+    {
+      columnId: 'description',
+      header: 'Description',
+      cell: (row: DemoTableItem) => row.description,
+      tooltip: (row: DemoTableItem) => row.description,
+      showAsSingleLine: true
+    }
+  ];
+  protected displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
+  protected currentSorts: MatSortDefinitionPos[] = [];
+  protected currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
 
   private currentLocale = 'en-US';
+  private headers: Record<string, string> = {};
 
   constructor() {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
     this.dataSource = new DemoTableDataSource();
-    this.columnDefinitions = [
-      {
-        columnId: 'id',
-        header: 'ID',
-        cell: (row: DemoTableItem) => row.userId.toString(),
-        headerAlignment: 'right',
-        cellAlignment: 'right',
-        width: '5em'
-      },
-      {
-        columnId: 'firstName',
-        header: 'First Name',
-        cell: (row: DemoTableItem) => row.firstName,
-        headerAlignment: 'left',
-        cellAlignment: 'left',
-        width: '10em',
-        sortable: true,
-        resizable: true
-      },
-      {
-        columnId: 'lastName',
-        header: 'Last Name',
-        cell: (row: DemoTableItem) => row.lastName,
-        headerAlignment: 'right',
-        cellAlignment: 'right',
-        width: '10em',
-        sortable: true
-      },
-      {
-        columnId: 'email',
-        header: 'EMail',
-        cell: (row: DemoTableItem) => row.email,
-        width: '20em',
-        tooltip: (row: DemoTableItem) => row.email,
-        showAsMailtoLink: true,
-        resizable: true
-      },
-      {
-        columnId: 'birthday',
-        header: 'Birthday',
-        cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
-        headerAlignment: 'center',
-        cellAlignment: 'center',
-        width: '8em',
-        sortable: true,
-        resizable: false
-      },
-      {
-        columnId: 'description',
-        header: 'Description',
-        cell: (row: DemoTableItem) => row.description,
-        tooltip: (row: DemoTableItem) => row.description,
-        showAsSingleLine: true
-      }
-    ];
-    this.displayedColumns = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
+    this.headersTextFromColumnDefinitions();
   }
 
   protected onRowClick($event: DemoTableItem) {
@@ -98,10 +101,17 @@ export class AppComponent {
   }
 
   protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
-    // TODO display sorting definition
-    console.group('demo > onSortChanged');
-    console.log(currentSorts);
-    console.groupEnd();
+    this.currentSorts = currentSorts;
+    this.currentSorts$.next(currentSorts);
+  }
+
+  protected headerFromColumnId(columnId: string): string {
+    return this.headers[columnId];
+  }
+
+  protected removeFilter(columnId: string): void {
+    const newSort = this.currentSorts.filter(sort => sort.columnId !== columnId);
+    this.table.setAllSorts(newSort);
   }
 
   // Demo to show sorting by code
@@ -183,6 +193,16 @@ export class AppComponent {
       return this.table.activatedRow?.userId.toString() || '-';
     } else {
       return '-';
+    }
+  }
+
+  /**
+   * Create list of column headers.
+   * Used to display current sorting definition as chips.
+   */
+  private headersTextFromColumnDefinitions() {
+    for (let i = 0; i < this.columnDefinitions.length; i++) {
+      this.headers[this.columnDefinitions[i].columnId] = this.columnDefinitions[i].header;
     }
   }
 }

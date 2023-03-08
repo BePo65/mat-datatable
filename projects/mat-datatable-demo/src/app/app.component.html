@@ -11,7 +11,17 @@
   >loading...</mat-datatable>
 </div>
 <div class="current-sort">
-  <span class="current-sort-label">Current sort:</span><span>????</span>
+  <span class="current-sort-label">Current sort:</span>
+  <span>
+    <mat-chip-listbox aria-label="Current sorting definition">
+      <mat-chip *ngFor="let sort of currentSorts$ | async" (removed)="removeFilter(sort.columnId)">
+        {{headerFromColumnId(sort.columnId)}}, {{sort.direction}}
+        <button matChipRemove [attr.aria-label]="'remove ' + headerFromColumnId(sort.columnId)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-listbox>
+  </span>
 </div>
 <div class="sort-button-container">
   <button mat-raised-button class="sort-button" (click)="onSortId()">Sort by ID</button>
