@@ -25,7 +25,10 @@
   </div>
 
   <!-- Disable animations while a current animation is running -->
-  <div class="mat-sort-header-arrow"
+  <div [matMultiSortBadge]="sortingPosition"
+       [matMultiSortBadgeArrowDirection]="_arrowDirection"
+       [matMultiSortBadgePosition]="arrowPosition"
+       class="mat-sort-header-arrow"
        *ngIf="_renderArrow()"
        [@arrowOpacity]="_getArrowViewState()"
        [@arrowPosition]="_getArrowViewState()"

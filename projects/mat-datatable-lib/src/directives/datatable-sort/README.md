@@ -1,6 +1,7 @@
 # Datatable Sort
 
-This component is a clone of the [Angular Material Sort-Header](https://material.angular.io/components/sort/api) component, extended by the capability to sort for multiple columns at the same time.
+This component is a clone of the [Angular Material Sort-Header](https://material.angular.io/components/sort/api) component, extended by the capability to sort for multiple columns at the same time.  
+A modified version of the [Angular Material Badge](https://material.angular.io/components/badge/api) directive is used to display the ordering of the sorts in the column header.
 
 ![Version](https://img.shields.io/badge/version-0.0.0-blue.svg?cacheSeconds=2592000)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]
@@ -8,7 +9,7 @@ This component is a clone of the [Angular Material Sort-Header](https://material
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)
 
 ## Licenses
-**Angular Material Sort-Header** uses this license:
+**Angular Material Sort-Header** and **Angular Material Badge** use this license:
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.

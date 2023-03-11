@@ -1,6 +1,8 @@
 <table mat-table class="full-width-table mat-datatable" matMultiSort (matMultiSortChange)="onMultiSortChanged($event)">
   <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
-    <th mat-header-cell class="mat-datatable-header-cell" *matHeaderCellDef
+    <th mat-header-cell
+      class="mat-datatable-header-cell"
+      *matHeaderCellDef
       mat-multi-sort-header
       [disabled]="!column.sortable"
       [ngStyle]="headerFormat(column)"

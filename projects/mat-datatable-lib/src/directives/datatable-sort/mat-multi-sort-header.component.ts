@@ -2,12 +2,14 @@
 
 import { AriaDescriber, FocusMonitor } from '@angular/cdk/a11y';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
   Input,
+  OnDestroy,
   Optional,
   ViewEncapsulation
 } from '@angular/core';
@@ -17,8 +19,10 @@ import {
   MatSortHeader,
   MatSortHeaderIntl,
   MAT_SORT_DEFAULT_OPTIONS,
+  Sort,
   SortDirection
 } from '@angular/material/sort';
+import {SubscriptionLike as ISubscription } from 'rxjs';
 
 import { MatMultiSort } from './mat-multi-sort.directive';
 
@@ -54,8 +58,12 @@ interface MatSortHeaderColumnDef {
     matSortAnimations.allowChildren
   ]
 })
-export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDisable {
+export class MatMultiSortHeaderComponent extends MatSortHeader implements AfterViewInit, CanDisable, OnDestroy {
   @Input('mat-multi-sort-header') override id!: string;
+
+  sortingPosition = '0';
+
+  private sortingChangedSubscription!: ISubscription;
 
   constructor(
     public override _intl: MatSortHeaderIntl,
@@ -78,6 +86,25 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements CanDis
       _ariaDescriber,
       defaultOptions
     );
+  }
+
+  override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.sortingChangedSubscription = this._sort.multiSortChange.subscribe((sorts: Sort[]) => {
+      const sortIndex = sorts.findIndex(sort => sort.active === this.id);
+      if (sortIndex >= 0) {
+        this.sortingPosition = (sortIndex + 1).toString();
+      } else {
+        this.sortingPosition = '';
+      }
+    });
+  }
+
+  override ngOnDestroy(): void {
+    if (this.sortingChangedSubscription) {
+      this.sortingChangedSubscription.unsubscribe();
+    }
+    super.ngOnDestroy();
   }
 
   // Whether this MatMultiSortHeader is currently sorted in either ascending or descending order.

@@ -1,0 +1,210 @@
+/* stylelint-disable scss/at-if-no-null */
+/* stylelint-disable block-no-empty */
+/* stylelint-disable rule-empty-line-before */
+/* stylelint-disable at-rule-empty-line-before */
+/* stylelint-disable declaration-empty-line-before */
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable no-descending-specificity */
+
+// This contains all of the styles for the badge
+// rather than just the color/theme because of
+// no style sheet support for directives.
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:math';
+@use '@angular/cdk';
+@use '@angular/material' as mat;
+
+// TODO can we import only the required parts of "@angular/material"
+// @use "@angular/material/theming";
+// @use "@angular/material/typography";
+// @use "@angular/material/typography-utils";
+
+// @use '@angular/material/core/theming/theming';
+// @use '@angular/material/core/typography/typography';
+// @use '@angular/material/core/typography/typography-utils';
+
+$font-size: 14px;
+$font-weight: 400;
+// default-size is the base for width, height and positioning of the badge
+$default-size: 16px !default;
+$_badge-structure-emitted: false !default;
+
+// Mixin for building offset given different sizes
+@mixin _badge-size($size) {
+  // This mixin isn't used in the context of a theme so we can disable the ampersand check.
+  .mat-multi-sort-badge-content {
+    width: $size;
+    height: $size;
+    line-height: $size;
+  }
+
+  &.mat-multi-sort-badge-above {
+    .mat-multi-sort-badge-content {
+      top: math.div(-$size, 2);
+    }
+  }
+
+  &.mat-multi-sort-badge-below {
+    .mat-multi-sort-badge-content {
+      bottom: math.div(-$size, 2);
+    }
+  }
+
+  &.mat-multi-sort-badge-before {
+    .mat-multi-sort-badge-content {
+      left: math.div(-$size, 2);
+    }
+  }
+
+  [dir='rtl'] &.mat-multi-sort-badge-before {
+    .mat-multi-sort-badge-content {
+      left: auto;
+      right: math.div(-$size, 2);
+    }
+  }
+
+  &.mat-multi-sort-badge-after {
+    .mat-multi-sort-badge-content {
+      right: math.div(-$size, 2);
+    }
+  }
+
+  [dir='rtl'] &.mat-multi-sort-badge-after {
+    .mat-multi-sort-badge-content {
+      right: auto;
+      left: math.div(-$size, 2);
+    }
+  }
+}
+
+// Structural styles for the badge. They have to be included as a part of the theme,
+// because the badge is a directive and we have no other way of attaching styles to it.
+@mixin _badge-structure {
+  .mat-multi-sort-badge {
+    position: relative;
+    @include _badge-size($default-size);
+  }
+
+  // The badge should make sure its host is overflow visible so that the badge content
+  // can be rendered outside of the element. Some components such as <mat-icon> explicitly
+  // style `overflow: hidden` so this requires extra specificity so that it does not
+  // depend on style load order.
+  .mat-multi-sort-badge.mat-multi-sort-badge {
+    overflow: visible;
+  }
+
+  .mat-multi-sort-badge-hidden {
+    .mat-multi-sort-badge-content {
+      display: none;
+    }
+  }
+
+  .mat-multi-sort-badge-content {
+    position: absolute;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    transition: transform 200ms ease-in-out;
+    transform: scale(0.6);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+
+  .ng-animate-disabled .mat-multi-sort-badge-content,
+  .mat-multi-sort-badge-content._mat-animation-noopable {
+    transition: none;
+  }
+
+  // The active class is added after the element is added
+  // so it can animate scale to default
+  .mat-multi-sort-badge-content.mat-multi-sort-badge-active {
+    // Scale to `none` instead of `1` to avoid blurry text in some browsers.
+    transform: none;
+  }
+}
+
+@mixin color($config-or-theme) {
+  $config: mat.get-color-config($config-or-theme);
+  $primary: map.get($config, primary);
+  $background: map.get($config, background);
+  $foreground: map.get($config, foreground);
+
+  .mat-multi-sort-badge-content {
+    color: mat.get-color-from-palette($background, text);
+    background: transparent;
+
+    @include cdk.high-contrast(active, off) {
+      outline: solid 1px;
+      border-radius: 0;
+    }
+  }
+
+  // TODO test 'disabled' color scheme
+  .mat-multi-sort-badge-disabled {
+    .mat-multi-sort-badge-content {
+      $app-background: mat.get-color-from-palette($background, 'background');
+      $badge-color: mat.get-color-from-palette($foreground, disabled-button);
+
+      // The disabled color usually has some kind of opacity, but because the badge is overlayed
+      // on top of something else, it won't look good if it's opaque. If it is a color *type*,
+      // we convert it into a solid color by taking the opacity from the rgba value and using
+      // the value to determine the percentage of the background to put into foreground when
+      // mixing the colors together.
+      @if (meta.type-of($badge-color) == color and meta.type-of($app-background) == color) {
+        $badge-opacity: opacity($badge-color);
+        background: color.mix($app-background, rgba($badge-color, 1), (1 - $badge-opacity) * 100%);
+      }
+      @else {
+        background: $badge-color;
+      }
+
+      color: mat.get-color-from-palette($foreground, disabled-text);
+    }
+  }
+}
+
+@mixin typography($config-or-theme) {
+  $config: mat.get-typography-config($config-or-theme);
+  .mat-multi-sort-badge-content {
+    font-weight: $font-weight;
+    // Set the font size to 75% of the original.
+    font-size: $font-size * 0.75;
+    font-family: mat.font-family($config);
+  }
+}
+
+@mixin density($config-or-theme) {}
+
+@mixin theme($theme) {
+  @include mat.private-check-duplicate-theme-styles($theme, 'mat-multi-sort-badge') {
+    $color: mat.get-color-config($theme);
+    $density: mat.get-density-config($theme);
+    $typography: mat.get-typography-config($theme);
+
+    // Try to reduce the number of times that the structural styles are emitted.
+    @if not $_badge-structure-emitted {
+      @include _badge-structure;
+
+      // Only flip the flag if the mixin is included at the top level. Otherwise the first
+      // inclusion might be inside of a theme class which will exclude the structural styles
+      // from all other themes.
+      @if not & {
+        $_badge-structure-emitted: true !global;
+      }
+    }
+
+    @if $color != null {
+      @include color($color);
+    }
+    @if $density != null {
+      @include density($density);
+    }
+    @if $typography != null {
+      @include typography($typography);
+    }
+  }
+}
