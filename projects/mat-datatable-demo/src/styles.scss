@@ -1,11 +1,5 @@
 @use '@angular/material' as mat;
-
-// TODO can we import only the required parts of '@angular/material'
-// @use '@angular/material/core/typography/typography.import';
-
 @use '../../mat-datatable-lib/src/lib/mat-datatable-theme' as mat-datatable;
-// TODO can we include this theme in mat-datatable library theme?
-@use '../../mat-datatable-lib/src/directives/datatable-sort/mat-multi-sort-badge-theme' as mat-datatable-badge;
 
 // Fonts for material
 @use 'roboto-fontface/css/roboto/sass/roboto-fontface' with (
@@ -35,7 +29,6 @@ $theme: mat.define-light-theme(
 // custom themable components.
 @include mat.all-component-themes($theme);
 @include mat-datatable.theme($theme);
-@include mat-datatable-badge.theme($theme);
 
 // Global styles
 body {

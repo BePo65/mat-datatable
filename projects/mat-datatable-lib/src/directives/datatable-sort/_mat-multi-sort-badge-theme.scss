@@ -2,7 +2,6 @@
 /* stylelint-disable block-no-empty */
 /* stylelint-disable rule-empty-line-before */
 /* stylelint-disable at-rule-empty-line-before */
-/* stylelint-disable declaration-empty-line-before */
 /* stylelint-disable selector-class-pattern */
 /* stylelint-disable no-descending-specificity */
 
@@ -15,15 +14,6 @@
 @use 'sass:math';
 @use '@angular/cdk';
 @use '@angular/material' as mat;
-
-// TODO can we import only the required parts of "@angular/material"
-// @use "@angular/material/theming";
-// @use "@angular/material/typography";
-// @use "@angular/material/typography-utils";
-
-// @use '@angular/material/core/theming/theming';
-// @use '@angular/material/core/typography/typography';
-// @use '@angular/material/core/typography/typography-utils';
 
 $font-size: 14px;
 $font-weight: 400;
@@ -134,8 +124,8 @@ $_badge-structure-emitted: false !default;
   $foreground: map.get($config, foreground);
 
   .mat-multi-sort-badge-content {
-    color: mat.get-color-from-palette($background, text);
     background: transparent;
+    color: mat.get-color-from-palette($foreground, text);
 
     @include cdk.high-contrast(active, off) {
       outline: solid 1px;
@@ -143,25 +133,9 @@ $_badge-structure-emitted: false !default;
     }
   }
 
-  // TODO test 'disabled' color scheme
   .mat-multi-sort-badge-disabled {
     .mat-multi-sort-badge-content {
-      $app-background: mat.get-color-from-palette($background, 'background');
-      $badge-color: mat.get-color-from-palette($foreground, disabled-button);
-
-      // The disabled color usually has some kind of opacity, but because the badge is overlayed
-      // on top of something else, it won't look good if it's opaque. If it is a color *type*,
-      // we convert it into a solid color by taking the opacity from the rgba value and using
-      // the value to determine the percentage of the background to put into foreground when
-      // mixing the colors together.
-      @if (meta.type-of($badge-color) == color and meta.type-of($app-background) == color) {
-        $badge-opacity: opacity($badge-color);
-        background: color.mix($app-background, rgba($badge-color, 1), (1 - $badge-opacity) * 100%);
-      }
-      @else {
-        background: $badge-color;
-      }
-
+      background: transparent;
       color: mat.get-color-from-palette($foreground, disabled-text);
     }
   }

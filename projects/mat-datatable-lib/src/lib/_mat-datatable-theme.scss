@@ -1,68 +1,18 @@
-/* stylelint-disable block-no-empty */
-
 @use "sass:map";
 @use "@angular/material" as mat;
+@use './mat-datatable-theme.import' as mat-datatable-core;
+@use '../directives/datatable-sort/mat-multi-sort-badge-theme' as mat-datatable-badge;
 
-@mixin color($config-or-theme) {
-  $config: mat.get-color-config($config-or-theme);
-  $primary-palette: map.get($config, "primary");
-  $foreground: map.get($config, foreground);
-  $background: map.get($config, background);
+@mixin theme($theme-or-color-config) {
+  $dedupe-key: 'mat-datatable-theme';
 
-  $row-fill-color-hover: mat.get-color-from-palette($background, background) !default;
-  $row-fill-color-selected: mat.get-color-from-palette($primary-palette, default, 4%) !default;
-  $row-fill-color-activated: mat.get-color-from-palette($primary-palette, default, 12%) !default;
-  $column-resizer-color: mat.get-color-from-palette($background, background) !default;
-  $column-resizer-color-hover: mat.get-color-from-palette($foreground, divider) !default;
-
-  .mat-mdc-table .mat-mdc-row.selected-row,
-  .mat-mdc-table .mat-mdc-row.mat-datatable-row.selected-row:hover {
-    background-color: $row-fill-color-selected;
-  }
-
-  .mat-mdc-table .mat-mdc-row.activated-row,
-  .mat-mdc-table .mat-mdc-row.mat-datatable-row.activated-row:hover {
-    background-color: $row-fill-color-activated;
-  }
-
-  .mat-mdc-table .mat-mdc-row.mat-datatable-row:hover {
-    background-color: $row-fill-color-hover;
-  }
-
-  .mat-datatable .mat-datatable-header-cell .resize-holder {
-    background: $column-resizer-color;
-
-    &:hover,
-    &:active {
-      background: $column-resizer-color-hover;
-    }
+  @include mat.private-check-duplicate-theme-styles($theme-or-color-config, $dedupe-key) {
+    @include mat-datatable-core.theme($theme-or-color-config);
+    @include mat-datatable-badge.theme($theme-or-color-config);
   }
 }
 
-@mixin typography($config-or-theme) {}
-
-@mixin density($config-or-theme) {}
-
-@mixin theme($theme) {
-  @include mat.private-check-duplicate-theme-styles($theme, 'mat-datatable') {
-    $color: mat.get-color-config($theme);
-    $density: mat.get-density-config($theme);
-    $typography: mat.get-typography-config($theme);
-
-    @if $color {
-      @include color($color);
-    }
-
-    @if $density {
-      @include density($density);
-    }
-
-    @if $typography {
-      @include typography($typography);
-    }
-  }
-}
-
+// TODO check if we can somehow import these global styles
 .mat-datatable {
   &.resizing {
     user-select: none;
