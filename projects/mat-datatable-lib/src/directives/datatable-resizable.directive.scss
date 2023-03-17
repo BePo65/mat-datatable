@@ -1,0 +1,25 @@
+// Styles required for datatable-resizable directive
+
+:host(.resizing) {
+  user-select: none;
+}
+
+/* As the directive dynamically adds a span element with a
+   class 'resize-holder' to  the mat-datatable-header-cell,
+   we need a global css class definition. To enable the import
+   of this scss file in the mat-datatable component, we use the
+   deprecated '::ng-deep' here.
+   If '::ng-deep' will be dropped from angular, the directive e.g.
+   could be modified to add style definitions instead of a class
+   to the span element.
+*/
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+:host ::ng-deep .mat-datatable-header-cell .resize-holder {
+  bottom: 0;
+  cursor: col-resize;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: background 0.3s;
+  width: 2px;
+}

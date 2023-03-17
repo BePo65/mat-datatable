@@ -1,32 +1,13 @@
 @use "sass:map";
 @use "@angular/material" as mat;
-@use './mat-datatable-theme.import' as mat-datatable-core;
+@use './mat-datatable-table-theme' as mat-datatable-table;
 @use '../directives/datatable-sort/mat-multi-sort-badge-theme' as mat-datatable-badge;
 
 @mixin theme($theme-or-color-config) {
   $dedupe-key: 'mat-datatable-theme';
 
   @include mat.private-check-duplicate-theme-styles($theme-or-color-config, $dedupe-key) {
-    @include mat-datatable-core.theme($theme-or-color-config);
+    @include mat-datatable-table.theme($theme-or-color-config);
     @include mat-datatable-badge.theme($theme-or-color-config);
-  }
-}
-
-// TODO check if we can somehow import these global styles
-.mat-datatable {
-  &.resizing {
-    user-select: none;
-  }
-
-  .mat-datatable-header-cell {
-    & .resize-holder {
-      bottom: 0;
-      cursor: col-resize;
-      position: absolute;
-      right: 0;
-      top: 0;
-      transition: background 0.3s;
-      width: 2px;
-    }
   }
 }

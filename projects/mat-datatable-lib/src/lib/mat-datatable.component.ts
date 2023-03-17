@@ -32,7 +32,10 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
 @Component({
   selector: 'mat-datatable',
   templateUrl: './mat-datatable.component.html',
-  styleUrls: ['./mat-datatable.component.scss']
+  styleUrls: [
+    './mat-datatable.component.scss',
+    '../directives/datatable-resizable.directive.scss'
+  ]
 })
 export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy {
   @Input() dataSource?: MatDatatableDataSource<TRowData>;
