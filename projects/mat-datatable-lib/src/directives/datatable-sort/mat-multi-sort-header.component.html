@@ -25,16 +25,15 @@
   </div>
 
   <!-- Disable animations while a current animation is running -->
-  <div [matMultiSortBadge]="sortingPosition"
-       [matMultiSortBadgeArrowDirection]="_arrowDirection"
-       [matMultiSortBadgePosition]="arrowPosition"
-       class="mat-sort-header-arrow"
-       *ngIf="_renderArrow()"
-       [@arrowOpacity]="_getArrowViewState()"
-       [@arrowPosition]="_getArrowViewState()"
-       [@allowChildren]="_getArrowDirectionState()"
-       (@arrowPosition.start)="_disableViewStateAnimation = true"
-       (@arrowPosition.done)="_disableViewStateAnimation = false">
+  <div class="mat-sort-header-arrow" *ngIf="_renderArrow()"
+    [@arrowOpacity]="_getArrowViewState()"
+    [@arrowPosition]="_getArrowViewState()"
+    [@allowChildren]="_getArrowDirectionState()"
+    (@arrowPosition.start)="_disableViewStateAnimation = true"
+    (@arrowPosition.done)="_disableViewStateAnimation = false"
+    [matMultiSortBadge]="sortingPosition"
+    [matMultiSortBadgeArrowDirection]="_arrowDirection"
+    [matMultiSortBadgePosition]="arrowPosition">
     <div class="mat-sort-header-stem"></div>
     <div class="mat-sort-header-indicator" [@indicator]="_getArrowDirectionState()">
       <div class="mat-sort-header-pointer-left" [@leftPointer]="_getArrowDirectionState()"></div>
