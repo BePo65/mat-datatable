@@ -1,4 +1,4 @@
-* display current sorting order with chips
+* add tests for badge directive
 * add tests for multi-sort
 * add directives to public-api of mat-datatable
 * add virtual scroller

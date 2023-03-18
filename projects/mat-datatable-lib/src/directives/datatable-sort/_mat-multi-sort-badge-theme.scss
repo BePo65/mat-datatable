@@ -33,12 +33,14 @@ $_badge-structure-emitted: false !default;
   &.mat-multi-sort-badge-above {
     .mat-multi-sort-badge-content {
       top: math.div(-$size, 2);
+      transition: top 200ms ease-in-out;
     }
   }
 
   &.mat-multi-sort-badge-below {
     .mat-multi-sort-badge-content {
-      bottom: math.div(-$size, 2);
+      top: math.div($size, 4);
+      transition: top 200ms ease-in-out;
     }
   }
 
