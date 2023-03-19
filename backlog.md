@@ -1,6 +1,6 @@
-* add tests for badge directive
 * add tests for multi-sort
-* add directives to public-api of mat-datatable
+* do we need an index.ts and a public-api.ts for the datatable-sort directory?
+* add directives to public-api of mat-datatable - do we need all exports or only some?
 * add virtual scroller
 * add test harness for lib
 * add tests
