@@ -7,19 +7,18 @@ import { MatMultiSortHeaderComponent} from './mat-multi-sort-header.component';
 import { MatMultiSort } from './mat-multi-sort.directive';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    MatSortModule
+  ],
+  exports: [
+    MatMultiSortHeaderComponent,
+    MatMultiSort
+  ],
   declarations: [
     MatMultiSortHeaderComponent,
     MatMultiSortBadgeDirective,
     MatMultiSort
-  ],
-  exports: [
-    MatMultiSortHeaderComponent,
-    MatMultiSortBadgeDirective,
-    MatMultiSort
-  ],
-  imports: [
-    CommonModule,
-    MatSortModule
   ]
 })
 export class MatMultiSortModule {
