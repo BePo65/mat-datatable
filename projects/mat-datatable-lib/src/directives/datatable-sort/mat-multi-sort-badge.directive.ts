@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/directive-class-suffix */
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 /* eslint-disable @angular-eslint/no-input-rename */
 /* eslint-disable @angular-eslint/no-inputs-metadata-property */
@@ -42,7 +41,7 @@ const BADGE_CONTENT_CLASS = 'mat-multi-sort-badge-content';
     '[class.mat-multi-sort-badge-disabled]': 'disabled'
   }
 })
-export class MatMultiSortBadge implements OnInit, OnDestroy {
+export class MatMultiSortBadgeDirective implements OnInit, OnDestroy {
   /**
    * Sorting order defining the vertical position the badge should reside.
    */

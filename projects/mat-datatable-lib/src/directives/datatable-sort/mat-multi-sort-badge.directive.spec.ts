@@ -5,9 +5,9 @@ import {Component, DebugElement, ViewEncapsulation, ViewChild} from '@angular/co
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
-import { MatMultiSortBadge } from './mat-multi-sort-badge.directive';
+import { MatMultiSortBadgeDirective } from './mat-multi-sort-badge.directive';
 
-describe('MatMultiSortBadge', () => {
+describe('MatMultiSortBadgeDirective', () => {
   let fixture: ComponentFixture<BadgeTestApp>;
   let testComponent: BadgeTestApp;
   let badgeHostNativeElement: HTMLElement;
@@ -17,13 +17,13 @@ describe('MatMultiSortBadge', () => {
     fixture = TestBed.configureTestingModule({
       declarations: [
         BadgeTestApp,
-        MatMultiSortBadge
+        MatMultiSortBadgeDirective
       ]
     }).createComponent(BadgeTestApp);
     testComponent = fixture.debugElement.componentInstance as BadgeTestApp;
     fixture.detectChanges(); // initial binding
 
-    badgeHostDebugElement = fixture.debugElement.query(By.directive(MatMultiSortBadge))!;
+    badgeHostDebugElement = fixture.debugElement.query(By.directive(MatMultiSortBadgeDirective))!;
     badgeHostNativeElement = badgeHostDebugElement.nativeElement as HTMLElement;
   });
 
@@ -193,7 +193,7 @@ describe('MatMultiSortBadge', () => {
   `
 })
 class BadgeTestApp {
-  @ViewChild(MatMultiSortBadge) badgeInstance!: MatMultiSortBadge;
+  @ViewChild(MatMultiSortBadgeDirective) badgeInstance!: MatMultiSortBadgeDirective;
   badgeContent: string | number | undefined | null = '1';
   badgeDirection = 'asc';
   badgePosition = 'after';
