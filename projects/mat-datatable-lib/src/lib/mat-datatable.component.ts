@@ -12,7 +12,6 @@ import { MatTable } from '@angular/material/table';
 
 import {
   MatMultiSort,
-  MatSortable,
   Sort,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
@@ -55,7 +54,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.table.dataSource = this.dataSource;
-      setTimeout(() => this.setAllSorts(this.sortFromDatasource()));
+      setTimeout(() => this.setSorts(this.sortFromDatasource()));
     }
   }
 
@@ -94,17 +93,16 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     }
   }
 
-  setAllSorts(matSortDefinitions: MatSortDefinition[]): void {
-    const sortables: MatSortable[]= [];
+  setSorts(matSortDefinitions: MatSortDefinition[]): void {
+    const sortables: Sort[]= [];
     for (let i = 0; i < matSortDefinitions.length; i++) {
       const sortEntry = {
-        id: matSortDefinitions[i].columnId,
-        start: matSortDefinitions[i].direction,
-        disableClear: this.sort.disableClear
+        active: matSortDefinitions[i].columnId,
+        direction: matSortDefinitions[i].direction
       };
       sortables.push(sortEntry);
     }
-    this.sort.setAllSorts(sortables);
+    this.sort.sortDefinitions = sortables;
   }
 
   protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {

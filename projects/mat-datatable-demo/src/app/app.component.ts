@@ -111,7 +111,7 @@ export class AppComponent {
 
   protected removeFilter(columnId: string): void {
     const newSort = this.currentSorts.filter(sort => sort.columnId !== columnId);
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
 
   // Demo to show sorting by code
@@ -119,7 +119,7 @@ export class AppComponent {
     const newSort: MatSortDefinition[] = [
       { columnId:'id', direction:'asc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onSortLastNameFirstNameBirthday() {
     const newSort: MatSortDefinition[] = [
@@ -127,36 +127,36 @@ export class AppComponent {
       { columnId:'firstName', direction:'asc'},
       { columnId:'birthday', direction:'asc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onSortLastNameBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'lastName', direction:'asc'},
       { columnId:'birthday', direction:'asc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onSortLastNameBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'lastName', direction:'asc'},
       { columnId:'birthday', direction:'desc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onSortBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'birthday', direction:'asc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onSortBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'birthday', direction:'desc'}
     ];
-    this.table.setAllSorts(newSort);
+    this.table.setSorts(newSort);
   }
   protected onClearSort() {
-    this.table.setAllSorts([]);
+    this.table.setSorts([]);
   }
 
   // Demo to show setting selected rows by code
