@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +20,7 @@ describe('AppComponent', () => {
         BrowserAnimationsModule,
         RouterTestingModule,
         MatButtonModule,
+        MatChipsModule,
         MatFormFieldModule,
         MatSelectModule,
         MatDatatableModule
@@ -33,11 +35,11 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have as title \'mat-datatable-demo\'', () => {
+  it('should have as title \'Mat-Datatable-Demo\'', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
-    expect(app.title).toEqual('mat-datatable-demo');
+    expect(app.title).toEqual('Mat-Datatable-Demo');
   });
 
   it('should render title', () => {
