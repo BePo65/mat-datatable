@@ -8,7 +8,8 @@ import {
   Inject,
   Input,
   Optional,
-  Output
+  Output,
+  isDevMode
 } from '@angular/core';
 import {
   MatSort,
@@ -18,6 +19,8 @@ import {
   Sort,
   SortDirection
 } from '@angular/material/sort';
+
+import { getMultiSortDuplicateSortableIdError, getMultiSortHeaderMissingIdError } from './mat-multi-sort-errors';
 
 export type SortDirectionAscDesc = Omit<SortDirection, ''>;
 
@@ -51,6 +54,26 @@ export class MatMultiSort extends MatSort {
     @Optional() @Inject(MAT_SORT_DEFAULT_OPTIONS) private __defaultOptions?: MatSortDefaultOptions
   ) {
     super(__defaultOptions);
+  }
+
+  /**
+   * Register function to be used by the contained MatSortables. Adds the MatSortable to the
+   * collection of MatSortables.
+   *
+   * @param sortable - sort definition to be added to the list of registered columns
+   */
+  override register(sortable: MatSortable): void {
+    if (isDevMode()) {
+      if (!sortable.id) {
+        throw getMultiSortHeaderMissingIdError();
+      }
+
+      if (this.sortables.has(sortable.id)) {
+        throw getMultiSortDuplicateSortableIdError(sortable.id);
+      }
+    }
+
+    this.sortables.set(sortable.id, sortable);
   }
 
   /**

@@ -48,7 +48,7 @@ export class MatMultiSortBadgeDirective implements OnInit, OnDestroy {
   @Input('matMultiSortBadgeArrowDirection') sortOrder: SortDirectionAscDesc = 'asc';
 
   /**
-   * Horizontal position the badge should reside.
+   * Horizontal position the badge should reside relative to the arrow.
    */
   @Input('matMultiSortBadgePosition') position: MatBadgePosition = 'after';
 
@@ -106,7 +106,11 @@ export class MatMultiSortBadgeDirective implements OnInit, OnDestroy {
 
   /** Whether the badge is after the host or not */
   isAfter(): boolean {
-    return this.position.indexOf('before') === -1;
+    let positionAfter = true;
+    if (typeof this.position === 'string') {
+      positionAfter = this.position.indexOf('before') === -1;
+    }
+    return positionAfter;
   }
 
   /**

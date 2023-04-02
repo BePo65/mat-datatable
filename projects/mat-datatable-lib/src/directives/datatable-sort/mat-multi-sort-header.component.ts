@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/component-class-suffix */
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 
 import { AriaDescriber, FocusMonitor } from '@angular/cdk/a11y';
@@ -11,7 +12,8 @@ import {
   Input,
   OnDestroy,
   Optional,
-  ViewEncapsulation
+  ViewEncapsulation,
+  isDevMode
 } from '@angular/core';
 import {
   matSortAnimations,
@@ -24,6 +26,7 @@ import {
 } from '@angular/material/sort';
 import {SubscriptionLike as ISubscription } from 'rxjs';
 
+import { getMultiSortHeaderNotContainedWithinMultiSortError } from './mat-multi-sort-errors';
 import { MatMultiSort } from './mat-multi-sort.directive';
 
 interface CanDisable {
@@ -58,7 +61,7 @@ interface MatSortHeaderColumnDef {
     matSortAnimations.allowChildren
   ]
 })
-export class MatMultiSortHeaderComponent extends MatSortHeader implements AfterViewInit, CanDisable, OnDestroy {
+export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, CanDisable, OnDestroy {
   @Input('mat-multi-sort-header') override id!: string;
 
   sortingPosition = '0';
@@ -76,7 +79,11 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements AfterV
     @Optional() _ariaDescriber?: AriaDescriber | null,
     @Optional() @Inject(MAT_SORT_DEFAULT_OPTIONS)
     defaultOptions?: MatSortDefaultOptions) {
-    super(
+      if (!_sort && isDevMode()) {
+        throw getMultiSortHeaderNotContainedWithinMultiSortError();
+      }
+
+      super(
       _intl,
       changeDetectorRef,
       _sort,
@@ -123,10 +130,27 @@ export class MatMultiSortHeaderComponent extends MatSortHeader implements AfterV
    * only be changed once the arrow displays again (hint or activation).
    */
   override _updateArrowDirection() {
-    super._arrowDirection = this.getSortDirection();
+    super._arrowDirection = this._getSortDirection();
   }
 
-  getSortDirection(): SortDirection {
+  /**
+   * Gets the aria-sort attribute that should be applied to this sort header. If this header
+   * is not sorted, returns null so that the attribute is removed from the host element. Aria spec
+   * says that the aria-sort property should only be present on one header at a time, so removing
+   * ensures this is true.
+   *
+   * @returns string ('ascending' | 'descending') to be used as aria-sort content
+   */
+  override _getAriaSortAttribute() {
+    if (!this._isSorted()) {
+      return 'none';
+    }
+
+    const sortingDefinition = this._sort.sortDefinitions.find(sort => sort.active === this.id);
+    return sortingDefinition?.direction == 'asc' ? 'ascending' : 'descending';
+  }
+
+  _getSortDirection(): SortDirection {
     const i = this._sort.sortDefinitions.findIndex(sort => sort.active === this.id);
     return this._isSorted() ? this._sort.sortDefinitions[i].direction : (this.start || this._sort.start);
   }
