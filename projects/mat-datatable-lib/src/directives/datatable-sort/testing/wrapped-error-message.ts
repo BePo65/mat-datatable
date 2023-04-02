@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/check-values */
 /* eslint-disable jsdoc/require-param */
 /* eslint-disable jsdoc/require-returns */
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
