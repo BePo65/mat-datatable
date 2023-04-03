@@ -655,6 +655,23 @@ describe('MatMultiSorDirective', () => {
       expect(containerA?.classList.contains('mat-multi-sort-badge-before')).toBeTruthy();
       expect(containerB?.classList.contains('mat-multi-sort-badge-before')).toBeTruthy();
     });
+
+    it('should render sorting position badge in proper position based on arrow direction', () => {
+      const badgeB = (fixture.nativeElement as HTMLElement).querySelector('#defaultB .mat-multi-sort-badge');
+
+        // Sort the header to set it to the ascending state
+      component.matMultiSort.sortDefinitions = [{ active:'defaultB', direction:'asc' }];
+      fixture.detectChanges();
+
+      expect(component.defaultB._arrowDirection).toBe('asc');
+      expect(badgeB?.classList.contains('mat-multi-sort-badge-below')).toBeTruthy();
+
+      component.matMultiSort.sortDefinitions = [{ active:'defaultB', direction:'desc' }];
+      fixture.detectChanges();
+
+      expect(component.defaultB._arrowDirection).toBe('desc');
+      expect(badgeB?.classList.contains('mat-multi-sort-badge-above')).toBeTruthy();
+    });
   });
 
   describe('with default options', () => {
