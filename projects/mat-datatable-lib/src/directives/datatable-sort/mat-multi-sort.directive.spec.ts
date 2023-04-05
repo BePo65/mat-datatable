@@ -21,8 +21,8 @@ import {
   Sort,
   SortDirection
 } from './public-api';
-import { dispatchMouseEvent } from './testing/fake-events/dispatch-events';
-import { createFakeEvent, createMouseEvent } from './testing/fake-events/event-objects';
+import { dispatchMouseEvent } from './testbed/fake-events/dispatch-events';
+import { createFakeEvent, createMouseEvent } from './testbed/fake-events/event-objects';
 import { wrappedErrorMessage } from './testing/wrapped-error-message';
 
 describe('MatMultiSorDirective', () => {
