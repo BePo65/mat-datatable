@@ -201,6 +201,12 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     return this.dataSource?.getSort() || [];
   }
 
+  /**
+   * Convert an array of type Sort[] to an array of type MatSortDefinition[].
+   *
+   * @param sorts - sorting definition to convert
+   * @returns sorting definition as array of type MatSortDefinition
+   */
   private matSortDefinitionFromSortArray(sorts: Sort[]): MatSortDefinition[] {
     const result: MatSortDefinition[] = [];
     for (let i = 0; i < sorts.length; i++) {
@@ -213,6 +219,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     return result;
   }
 
+  /**
+   * Convert an array of type Sort[] to an array of type MatSortDefinitionPos[].
+   * MatSortDefinitionPos contains also the position of each sort definition.
+   *
+   * @param sorts - sorting definition to convert
+   * @returns sorting definition as array of type MatSortDefinitionPos
+   */
   private matSortDefinitionPosFromSortArray(sorts: Sort[]): MatSortDefinitionPos[] {
     const result: MatSortDefinitionPos[] = [];
     for (let i = 0; i < sorts.length; i++) {
