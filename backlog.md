@@ -1,5 +1,5 @@
-* add index.ts and public-api.ts to the mat-datatable directory?
-* add directives to public-api of mat-datatable - do we need all exports or only some?
+* update public-api of mat-datatable - directives, testing ...
+* add test harnesses for al relevant parts of mat-datatable
 * add virtual scroller
 * add test harness for lib
 * add tests
