@@ -2,17 +2,18 @@
 
 import { HarnessLoader, parallel } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatMultiSortModule, Sort } from '../public-api';
+import { MatMultiSort, MatMultiSortModule, Sort } from '../public-api';
 
 import { MatMultiSortHarness } from './mat-multi-sort-harness';
 
 describe('MatSortHarness', () => {
   let fixture: ComponentFixture<SortHarnessTest>;
   let loader: HarnessLoader;
+  let component: SortHarnessTest;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,27 +28,28 @@ describe('MatSortHarness', () => {
 
     fixture = TestBed.createComponent(SortHarnessTest);
     fixture.detectChanges();
+    component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
   it('should load harness for mat-multi-sort', async () => {
     const sorts = await loader.getAllHarnesses(MatMultiSortHarness);
 
-    expect(sorts.length).toBe(1);
+    expect(sorts).toHaveSize(1);
   });
 
   it('should load the harnesses for all the headers in a mat-multi-sort', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    expect(headers.length).toBe(5);
+    expect(headers).toHaveSize(5);
   });
 
   it('should be able to filter headers by their label text', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders({label: 'Carbs'});
 
-    expect(headers.length).toBe(1);
+    expect(headers).toHaveSize(1);
     expect(await headers[0].getLabel()).toBe('Carbs');
   });
 
@@ -56,21 +58,99 @@ describe('MatSortHarness', () => {
     const headers = await sort.getSortHeaders({label: /^C/});
     const labels = await parallel(() => headers.map(header => header.getLabel()));
 
-    expect(headers.length).toBe(2);
+    expect(headers).toHaveSize(2);
     expect(labels).toEqual(['Calories', 'Carbs']);
   });
 
-  it('should be able to filter headers by their sorted state', async () => {
+  it('should be able to filter headers by their sorted state for 1 sorted column', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     let headers = await sort.getSortHeaders({sortDirection: ''});
 
-    expect(headers.length).toBe(5);
+    expect(headers).toHaveSize(5);
 
     await headers[0].click();
 
     headers = await sort.getSortHeaders({sortDirection: 'asc'});
 
-    expect(headers.length).toBe(1);
+    expect(headers).toHaveSize(1);
+  });
+
+  it('should be able to filter headers by their sorted state for multiple sorted columns', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    let headers = await sort.getSortHeaders({sortDirection: ''});
+
+    expect(headers).toHaveSize(5);
+
+    const sortDefinitions: Sort[] = [
+      { active:'protein', direction:'desc' },
+      { active:'calories', direction:'asc' },
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    headers = await sort.getSortHeaders({sortDirection: 'asc'});
+
+    expect(headers).toHaveSize(2);
+  });
+
+  it('should be able to filter headers by their sorted state for multiple columns', async () => {
+    const matMultiSort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await matMultiSort.getSortHeaders({sortDirection: ''});
+
+    const sortDefinitions: Sort[] = [
+      { active:'protein', direction:'desc' },
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    const activeHeaders = await matMultiSort.getActiveHeaders();
+    const activeIds = await parallel(() => activeHeaders.map(header => header.getId()));
+    const activeLabels = await parallel(() => activeHeaders.map(header => header.getLabel()));
+    const activeSortDirections = await parallel(() => activeHeaders.map(header => header.getSortDirection()));
+    const activeSortPositions = await parallel(() => activeHeaders.map(header => header.getSortPosition()));
+
+    expect(headers).toHaveSize(5);
+
+    expect(activeHeaders).toBeTruthy();
+    expect(activeHeaders).toHaveSize(2);
+    expect(activeIds).toHaveSize(2);
+    expect(activeLabels).toHaveSize(2);
+    expect(activeSortDirections).toHaveSize(2);
+    expect(activeSortPositions).toHaveSize(2);
+
+    // activeHeaders, activeIds etc are sorted by column number not sorting order.
+    expect(await activeHeaders[0].isActive()).toBeTruthy();
+    expect(activeIds[0]).toBe('name');
+    expect(activeLabels[0]).toBe('Dessert');
+    expect(activeSortDirections[0]).toBe('asc');
+    expect(activeSortPositions[0]).toBe(2);
+
+    expect(await activeHeaders[1].isActive()).toBeTruthy();
+    expect(activeIds[1]).toBe('protein');
+    expect(activeLabels[1]).toBe('Protein');
+    expect(activeSortDirections[1]).toBe('desc');
+    expect(activeSortPositions[1]).toBe(1);
+  });
+
+  it('should be able to get header by the sorting position', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const sortDefinitions: Sort[] = [
+      { active:'protein', direction:'desc' },
+      { active:'calories', direction:'asc' },
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    const headers = await sort.getSortHeaders({sortPosition: 3});
+
+    expect(headers).toHaveSize(1);
+    expect(await headers[0].getId()).toBe('name');
+    expect(await headers[0].getLabel()).toBe('Dessert');
+    expect(await headers[0].getSortDirection()).toBe('asc');
+    expect(await headers[0].getSortPosition()).toBe(3);
   });
 
   it('should be able to get the label of a header', async () => {
@@ -119,21 +199,62 @@ describe('MatSortHarness', () => {
     expect(await secondHeader.getSortDirection()).toBe('desc');
   });
 
-  it('should get the active header', async () => {
+  it('should get the active header for 1 sorted column', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const fifthHeader = (await sort.getSortHeaders())[4];
+    let activeHeaders = await sort.getActiveHeaders();
 
-    expect(await sort.getActiveHeader()).toBeNull();
+    expect(activeHeaders).toBeTruthy();
+    expect(activeHeaders).toHaveSize(0);
 
     await fifthHeader.click();
 
-    const activeHeader = await sort.getActiveHeader();
+    activeHeaders = await sort.getActiveHeaders();
 
-    expect(activeHeader).toBeTruthy();
-    expect(await activeHeader?.getLabel()).toBe('Protein');
+    expect(activeHeaders).toBeTruthy();
+    expect(activeHeaders).toHaveSize(1);
+    expect(await activeHeaders[0].getLabel()).toBe('Protein');
   });
 
-  // TODO add tests for badge
+  it('should get the active headers for multiple sorted columns', async () => {
+    const matMultiSort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await matMultiSort.getSortHeaders({sortDirection: ''});
+
+    const sortDefinitions: Sort[] = [
+      { active:'protein', direction:'desc' },
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    const activeHeaders = await matMultiSort.getActiveHeaders();
+    const activeIds = await parallel(() => activeHeaders.map(header => header.getId()));
+    const activeLabels = await parallel(() => activeHeaders.map(header => header.getLabel()));
+    const activeSortDirections = await parallel(() => activeHeaders.map(header => header.getSortDirection()));
+    const activeSortPositions = await parallel(() => activeHeaders.map(header => header.getSortPosition()));
+
+    expect(headers).toHaveSize(5);
+
+    expect(activeHeaders).toBeTruthy();
+    expect(activeHeaders).toHaveSize(2);
+    expect(activeIds).toHaveSize(2);
+    expect(activeLabels).toHaveSize(2);
+    expect(activeSortDirections).toHaveSize(2);
+    expect(activeSortPositions).toHaveSize(2);
+
+    // activeHeaders, activeIds etc are sorted by column number not sorting order.
+    expect(await activeHeaders[0].isActive()).toBeTruthy();
+    expect(activeIds[0]).toBe('name');
+    expect(activeLabels[0]).toBe('Dessert');
+    expect(activeSortDirections[0]).toBe('asc');
+    expect(activeSortPositions[0]).toBe(2);
+
+    expect(await activeHeaders[1].isActive()).toBeTruthy();
+    expect(activeIds[1]).toBe('protein');
+    expect(activeLabels[1]).toBe('Protein');
+    expect(activeSortDirections[1]).toBe('desc');
+    expect(activeSortPositions[1]).toBe(1);
+  });
 });
 
 type Dessert = {
@@ -146,7 +267,7 @@ type Dessert = {
 
 @Component({
   template: `
-    <table matMultiSort (matSortChange)="sortData($event)">
+    <table matMultiSort (matMultiSortChange)="multiSortData($event)">
       <tr>
         <th mat-multi-sort-header="name">Dessert</th>
         <th mat-multi-sort-header="calories">Calories</th>
@@ -167,7 +288,10 @@ type Dessert = {
 })
 class SortHarnessTest {
   disableThirdHeader = false;
-  desserts:Dessert[] = [
+
+  @ViewChild(MatMultiSort) matMultiSort!: MatMultiSort;
+
+  desserts: Dessert[] = [
     { name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4 },
     { name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4 },
     { name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6 },
@@ -177,18 +301,39 @@ class SortHarnessTest {
 
   sortedData = this.desserts.slice();
 
-  // TODO change for using MatMultiSort (even in component template event)
-  sortData(sort: Sort) {
+  multiSortData(sorts: Sort[]) {
     const data = this.desserts.slice();
 
-    if (!sort.active || sort.direction === '') {
+    if (sorts.length === 0) {
       this.sortedData = data;
     } else {
       this.sortedData = data.sort((a, b) => {
-        const aValue = a[sort.active as keyof Dessert];
-        const bValue = b[sort.active as keyof Dessert];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+        let result = 0;
+        for (let i = 0; i < sorts.length; i++) {
+          const fieldName = sorts[i].active;
+          const isAsc = (sorts[i].direction === 'asc');
+          const valueA = a[fieldName as keyof Dessert];
+          const valueB = b[fieldName as keyof Dessert];
+          result = compare(valueA, valueB, isAsc);
+          if (result !== 0) {
+            break;
+          }
+        }
+        return result;
       });
     }
   }
+}
+
+/**
+ * Simple sort comparator for string | number values.
+ *
+ * @param a - 1st parameter to compare
+ * @param b - 2nd parameter to compare
+ * @param isAsc - is this an ascending comparison
+ * @returns comparison result
+ */
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+function compare(a: string | number, b: string | number, isAsc: boolean): number {
+  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
 }

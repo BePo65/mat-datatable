@@ -6,5 +6,7 @@ export interface MultiSortHarnessFilters extends BaseHarnessFilters {}
 
 export interface MultiSortHeaderHarnessFilters extends BaseHarnessFilters {
   label?: string | RegExp;
+  id?: string | RegExp;
   sortDirection?: SortDirection;
+  sortPosition?: number;
 }

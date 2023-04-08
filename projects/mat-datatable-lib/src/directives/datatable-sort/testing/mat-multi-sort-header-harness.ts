@@ -7,6 +7,7 @@ import { MultiSortHeaderHarnessFilters } from './mat-multi-sort-harness-filters'
 export class MatMultiSortHeaderHarness extends ComponentHarness {
   static hostSelector = '.mat-multi-sort-header';
   private _containerContent = this.locatorFor('.mat-sort-header-content');
+  private _badgeContent = this.locatorFor('.mat-multi-sort-badge-content');
 
   /**
    * Gets a `HarnessPredicate` that can be used to
@@ -20,14 +21,31 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
       .addOption('label', options.label, (harness, label) =>
         HarnessPredicate.stringMatches(harness.getLabel(), label)
       )
+      .addOption('id', options.id, (harness, id) =>
+        HarnessPredicate.stringMatches(harness.getId(), id)
+      )
       .addOption('sortDirection', options.sortDirection, (harness, sortDirection) => {
         return HarnessPredicate.stringMatches(harness.getSortDirection(), sortDirection);
+      })
+      .addOption('sortPosition', options.sortPosition, (harness, sortPosition) => {
+        return numberMatches(harness.getSortPosition(), sortPosition);
       });
   }
 
   /** Gets the label of the sort header. */
   async getLabel(): Promise<string> {
     return (await this._containerContent()).text();
+  }
+
+  /** Gets the id of the sort header. */
+  async getId(): Promise<string> {
+    const host = await this.host();
+    const id = await host.getAttribute('mat-multi-sort-header');
+    if(id !== null) {
+      return id;
+    } else {
+      return '';
+    }
   }
 
   /** Gets the sorting direction of the header. */
@@ -42,6 +60,11 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
     }
 
     return '';
+  }
+
+  /** Gets the sorting position of the header. */
+  async getSortPosition(): Promise<number> {
+    return Number(await ((await this._badgeContent()).text()));
   }
 
   /** Gets whether the sort header is currently being sorted by. */
@@ -59,3 +82,25 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
     return (await this.host()).click();
   }
 }
+
+  /**
+   * Checks if the specified nullable number value matches the given value.
+   *
+   * @param value The nullable number value to check, or a Promise resolving to the
+   *   nullable number value.
+   * @param pattern The number the value is expected to match. If `pattern` is `null`,
+   *   the value is expected to be `null`.
+   * @returns Whether the value matches the pattern.
+   */
+  const numberMatches= async (
+    value: number | null | Promise<number | null>,
+    pattern: number | null
+  ): Promise<boolean> => {
+    value = await value;
+    if (pattern === null) {
+      return value === null;
+    } else if (value === null) {
+      return false;
+    }
+    return value === pattern;
+  };

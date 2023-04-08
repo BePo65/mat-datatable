@@ -26,14 +26,16 @@ export class MatMultiSortHarness extends ComponentHarness {
     return this.locatorForAll(MatMultiSortHeaderHarness.with(filter))();
   }
 
-  /** Gets the selected header in the `mat-multi-sort`. */
-  async getActiveHeader(): Promise<MatMultiSortHeaderHarness | null> {
+  /** Gets the selected headers in the `mat-multi-sort` sorted by column number. */
+  async getActiveHeaders(): Promise<MatMultiSortHeaderHarness[]> {
+    const result: MatMultiSortHeaderHarness[] = [];
     const headers = await this.getSortHeaders();
     for (let i = 0; i < headers.length; i++) {
       if (await headers[i].isActive()) {
-        return headers[i];
+        result.push(headers[i]);
       }
     }
-    return null;
+
+    return result;
   }
 }
