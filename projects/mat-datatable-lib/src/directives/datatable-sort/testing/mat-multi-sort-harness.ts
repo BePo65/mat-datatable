@@ -20,7 +20,7 @@ export class MatMultiSortHarness extends ComponentHarness {
   /**
    * Gets all of the sort headers in the `mat-multi-sort`.
    *
-   * @param filter - filter to select the sut
+   * @param filter - filter to select the sut.
    */
   async getSortHeaders(filter: MultiSortHeaderHarnessFilters = {}): Promise<MatMultiSortHeaderHarness[]> {
     return this.locatorForAll(MatMultiSortHeaderHarness.with(filter))();
