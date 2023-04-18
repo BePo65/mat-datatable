@@ -353,17 +353,10 @@ describe('MatDatatableComponent', () => {
         {active: 'weight', direction: 'asc'}
       ];
 
-      // TODO add Regex as type of sortDirection
-      headers1 = await sorts[0].getSortHeaders({sortDirection: 'asc'});
-      headers2 = await sorts[1].getSortHeaders({sortDirection: 'asc'});
+      headers1 = await sorts[0].getSortHeaders({sortDirection: /(asc|desc)/});
+      headers2 = await sorts[1].getSortHeaders({sortDirection: /(asc|desc)/});
 
-      expect(headers1).toHaveSize(1);
-      expect(headers2).toHaveSize(0);
-
-      headers1 = await sorts[0].getSortHeaders({sortDirection: 'desc'});
-      headers2 = await sorts[1].getSortHeaders({sortDirection: 'desc'});
-
-      expect(headers1).toHaveSize(1);
+      expect(headers1).toHaveSize(2);
       expect(headers2).toHaveSize(0);
 
       headers1 = await sorts[0].getSortHeaders({sortDirection: ''});
