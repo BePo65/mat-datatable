@@ -64,7 +64,16 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
 
   /** Gets the sorting position of the header. */
   async getSortPosition(): Promise<number> {
-    return Number(await ((await this._badgeContent()).text()));
+    let result = Number.NaN;
+    try {
+      const position = await ((await this._badgeContent()).text());
+      if (position.length !== 0) {
+        result = Number(position);
+      }
+    } catch (err) {
+      result = Number.NaN;
+    }
+    return result;
   }
 
   /** Gets whether the sort header is currently being sorted by. */
