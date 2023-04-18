@@ -62,7 +62,10 @@ export abstract class _MatRowHarnessBase<
 }
 
 /** Harness for interacting with a mat-datatable row. */
-export class MatRowHarness extends _MatRowHarnessBase<typeof MatCellHarness, MatCellHarness> {
+export class MatRowHarness extends _MatRowHarnessBase<
+  typeof MatCellHarness,
+  MatCellHarness
+> {
   /** The selector for the host element of a `MatRowHarness` instance. */
   static hostSelector = '.mat-mdc-row';
   protected _cellHarness = MatCellHarness;

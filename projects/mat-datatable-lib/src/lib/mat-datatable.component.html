@@ -23,7 +23,8 @@
       'selected-row': currentSelectedRows.includes(row),
       'activated-row': currentActivatedRow === row
     }"
-    (click)="onRowClicked(row)"></tr>
+    (click)="onRowClicked(row)">
+  </tr>
 </table>
 <mat-paginator #paginator
     [length]="dataSource?.data?.length || 0"
