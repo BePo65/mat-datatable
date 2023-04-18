@@ -1,9 +1,7 @@
-/* eslint-disable @angular-eslint/component-class-suffix */
-
 import { HarnessLoader, parallel } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatMultiSort, MatMultiSortModule, Sort } from '../public-api';
@@ -11,22 +9,24 @@ import { MatMultiSort, MatMultiSortModule, Sort } from '../public-api';
 import { MatMultiSortHarness } from './mat-multi-sort-harness';
 
 describe('MatSortHarness', () => {
-  let fixture: ComponentFixture<SortHarnessTest>;
+  let fixture: ComponentFixture<SortHarnessTestComponent>;
   let loader: HarnessLoader;
-  let component: SortHarnessTest;
+  let component: SortHarnessTestComponent;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
       imports: [
         MatMultiSortModule,
         NoopAnimationsModule
       ],
       declarations: [
-        SortHarnessTest
+        SortHarnessTestComponent
       ]
     }).compileComponents();
+  }));
 
-    fixture = TestBed.createComponent(SortHarnessTest);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SortHarnessTestComponent);
     fixture.detectChanges();
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
@@ -255,6 +255,96 @@ describe('MatSortHarness', () => {
     expect(activeSortDirections[1]).toBe('desc');
     expect(activeSortPositions[1]).toBe(1);
   });
+
+  it('should get the label of a sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[0].getLabel()).toBe('Dessert');
+  });
+
+  it('should get the label of a non sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[1].getLabel()).toBe('Calories');
+  });
+
+  it('should get the sorting direction of a sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'calories', direction:'desc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[1].getSortDirection()).toBe('desc');
+  });
+
+  it('should get the sorting direction of a non sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[1].getSortDirection()).toBe('');
+  });
+
+  it('should get the sorting position of a sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'desc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[0].getSortPosition()).toBe(1);
+  });
+
+  it('should get the sorting position of a non sorted header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+
+    expect(headers).toHaveSize(5);
+
+    expect(await headers[1].getSortPosition()).toBeNaN();
+  });
 });
 
 type Dessert = {
@@ -286,7 +376,7 @@ type Dessert = {
     </table>
   `
 })
-class SortHarnessTest {
+class SortHarnessTestComponent {
   disableThirdHeader = false;
 
   @ViewChild(MatMultiSort) matMultiSort!: MatMultiSort;
