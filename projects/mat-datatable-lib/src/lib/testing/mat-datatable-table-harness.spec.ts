@@ -3,9 +3,9 @@
 import { HarnessLoader, parallel } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable, of as observableOf, merge, map, Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, merge, Observable, of as observableOf, Subject  } from 'rxjs';
 
 import {
   MatColumnDefinition,
@@ -16,14 +16,15 @@ import {
   RowSelectionType
 } from '../../public-api';
 
-import { MatDatatableHarness } from './table-harness';
+import { MatHeaderRowHarness } from './mat-datatable-row-harness';
+import { MatDatatableHarness } from './mat-datatable-table-harness';
 
 describe('MatDatatableHarness', () => {
   let fixture: ComponentFixture<TableHarnessTest>;
   let loader: HarnessLoader;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
       imports: [
         MatDatatableModule,
         NoopAnimationsModule
@@ -31,8 +32,11 @@ describe('MatDatatableHarness', () => {
       declarations: [
         TableHarnessTest
       ]
-    }).compileComponents();
+    })
+    .compileComponents();
+  }));
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(TableHarnessTest);
     fixture.detectChanges();
     loader = TestbedHarnessEnvironment.loader(fixture);
@@ -53,16 +57,27 @@ describe('MatDatatableHarness', () => {
     expect(rows.length).toBe(10);
   });
 
+  it('should get cells inside a header row', async () => {
+    const header = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await header.getCellTextByIndex();
+
+    expect(headerContent.length).toEqual(4);
+    expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+  });
+
   it('should get cells inside a row', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
     const headerRows = await table.getHeaderRows();
     const rows = await table.getRows();
-    const headerCells = (await parallel(() => headerRows.map(row => row.getCells()))).map(
-      row => row.length
-    );
+
+    const headerCells = await parallel(() => headerRows.map(row => row.getCellTextByIndex()));
+
+    expect(headerCells.length).toEqual(1);
+    expect(headerCells[0].length).toEqual(4);
+    expect(headerCells[0]).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+
     const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
 
-    expect(headerCells).toEqual([4]);
     expect(cells).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
   });
 
