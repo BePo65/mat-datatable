@@ -345,6 +345,51 @@ describe('MatSortHarness', () => {
 
     expect(await headers[1].getSortPosition()).toBeNaN();
   });
+
+  it('should get the sortingData for 1 header', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+    const headers = await sort.getSortHeaders();
+    const sortDefinitions: Sort[] = [
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+    const sortData = await headers[0].getAllSortData();
+
+    expect(sortData).toEqual({
+      id: 'name',
+      label: 'Dessert',
+      sortDirection: 'asc',
+      sortPosition: 1
+    });
+  });
+
+  it('should get the sortingData for all headers', async () => {
+    const sort = await loader.getHarness(MatMultiSortHarness);
+
+    const sortDefinitions: Sort[] = [
+      { active:'protein', direction:'desc' },
+      { active:'name', direction:'asc' }
+    ];
+    component.matMultiSort.sortDefinitions = sortDefinitions;
+    fixture.detectChanges();
+    const sortData = await sort.getActiveSortData();
+
+    expect(sortData).toEqual([
+      {
+        id: 'protein',
+        label: 'Protein',
+        sortDirection: 'desc',
+        sortPosition: 1
+      },
+      {
+        id: 'name',
+        label: 'Dessert',
+        sortDirection: 'asc',
+        sortPosition: 2
+      }
+    ]);
+  });
 });
 
 type Dessert = {

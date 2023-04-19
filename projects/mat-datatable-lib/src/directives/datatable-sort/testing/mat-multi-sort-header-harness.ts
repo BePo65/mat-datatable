@@ -1,7 +1,21 @@
-import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
+import { ComponentHarness, HarnessPredicate, TestElement } from '@angular/cdk/testing';
 import { SortDirection } from '@angular/material/sort';
 
 import { MultiSortHeaderHarnessFilters } from './mat-multi-sort-harness-filters';
+
+/**
+ * Interface for the definition of the sorting of 1 table column
+ *
+ * @interface MatSortDefinition
+ * @param columnId - The id (name) of the column used for sorting.
+ * @param direction - The current sorting direction (e.g. 'asc').
+ */
+export interface MatMultiSortHeaderHarnessSortDefinition {
+  id: string;
+  label: string;
+  sortDirection: SortDirection;
+  sortPosition: number;
+}
 
 /** Harness for interacting with a sAngular Material multi sort header in tests. */
 export class MatMultiSortHeaderHarness extends ComponentHarness {
@@ -40,26 +54,13 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
   /** Gets the id of the sort header. */
   async getId(): Promise<string> {
     const host = await this.host();
-    const id = await host.getAttribute('mat-multi-sort-header');
-    if(id !== null) {
-      return id;
-    } else {
-      return '';
-    }
+    return await this._getId(host);
   }
 
   /** Gets the sorting direction of the header. */
   async getSortDirection(): Promise<SortDirection> {
     const host = await this.host();
-    const ariaSort = await host.getAttribute('aria-sort');
-
-    if (ariaSort === 'ascending') {
-      return 'asc';
-    } else if (ariaSort === 'descending') {
-      return 'desc';
-    }
-
-    return '';
+    return await this._getSortDirection(host);
   }
 
   /** Gets the sorting position of the header. */
@@ -72,6 +73,27 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
       }
     } catch (err) {
       result = Number.NaN;
+    }
+    return result;
+  }
+
+  // SortDirectionAscDesc
+
+  /** Gets object with id, sortDirection and sortPosition */
+  async getAllSortData(): Promise<MatMultiSortHeaderHarnessSortDefinition> {
+    const result = {
+      id: '',
+      label: '',
+      sortDirection: '',
+      sortPosition: Number.NaN
+    } as MatMultiSortHeaderHarnessSortDefinition;
+    const host = await this.host();
+    const id = await this._getId(host);
+    if (id !== '') {
+      result.id = id;
+      result.label = await (await this._containerContent()).text();
+      result.sortDirection = await this._getSortDirection(host);
+      result.sortPosition = await this.getSortPosition();
     }
     return result;
   }
@@ -89,6 +111,39 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
   /** Clicks the header to change its sorting direction. Only works if the header is enabled. */
   async click(): Promise<void> {
     return (await this.host()).click();
+  }
+
+  /**
+   * Gets the id of the sort header.
+   *
+   * @param host - TestElement to be inspected (from 'await this.host()').
+   * @returns promise that completes when id of the header is available.
+   */
+  private async _getId(host: TestElement): Promise<string> {
+    const id = await host.getAttribute('mat-multi-sort-header');
+    if (id !== null) {
+      return id;
+    } else {
+      return '';
+    }
+  }
+
+  /**
+   * Gets the sorting direction of the header.
+   *
+   * @param host - TestElement to be inspected (from 'await this.host()').
+   * @returns promise that completes when SortDirection is available.
+   */
+  private async _getSortDirection(host: TestElement): Promise<SortDirection> {
+    const ariaSort = await host.getAttribute('aria-sort');
+
+    if (ariaSort === 'ascending') {
+      return 'asc';
+    } else if (ariaSort === 'descending') {
+      return 'desc';
+    }
+
+    return '';
   }
 }
 

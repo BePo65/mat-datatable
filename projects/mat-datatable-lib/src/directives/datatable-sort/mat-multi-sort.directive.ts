@@ -22,8 +22,6 @@ import {
 
 import { getMultiSortDuplicateSortableIdError, getMultiSortHeaderMissingIdError } from './mat-multi-sort-errors';
 
-export type SortDirectionAscDesc = Omit<SortDirection, ''>;
-
 // Container for MatSortables to manage the sort state and provide default sort parameters.
 @Directive({
   selector: '[matMultiSort]',

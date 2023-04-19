@@ -16,11 +16,12 @@ import {
   Optional,
   Renderer2
 } from '@angular/core';
+import { SortDirection } from '@angular/material/sort';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 
-import { SortDirectionAscDesc } from './mat-multi-sort.directive';
-
 let nextId = 0;
+
+export type SortDirectionAscDesc = Omit<SortDirection, ''>;
 
 /** Allowed horizontal position options for matBadgePositionH */
 export type MatBadgePosition = 'before' | 'after';
