@@ -1,7 +1,7 @@
 import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 
 import { MultiSortHarnessFilters, MultiSortHeaderHarnessFilters } from './mat-multi-sort-harness-filters';
-import { MatMultiSortHeaderHarness, MatMultiSortHeaderHarnessSortDefinition } from './mat-multi-sort-header-harness';
+import { MatMultiSortHeaderHarness, DomSortingDefinition } from './mat-multi-sort-header-harness';
 
 /** Harness for interacting with a standard `mat-sort` in tests. */
 export class MatMultiSortHarness extends ComponentHarness {
@@ -40,14 +40,14 @@ export class MatMultiSortHarness extends ComponentHarness {
   }
 
   /** Gets sortData from all active headers sorted by sort position. */
-  async getActiveSortData(): Promise<MatMultiSortHeaderHarnessSortDefinition[]> {
-    const result: MatMultiSortHeaderHarnessSortDefinition[] = [];
+  async getActiveSortData(): Promise<DomSortingDefinition[]> {
+    const result: DomSortingDefinition[] = [];
     const headers = await this.getActiveHeaders();
     for (let i = 0; i < headers.length; i++) {
       result.push(await headers[i].getAllSortData());
     }
     const sortedResult = result.sort(
-      (a:MatMultiSortHeaderHarnessSortDefinition, b:MatMultiSortHeaderHarnessSortDefinition) => {
+      (a:DomSortingDefinition, b:DomSortingDefinition) => {
         return a.sortPosition - b.sortPosition;
       }
     );

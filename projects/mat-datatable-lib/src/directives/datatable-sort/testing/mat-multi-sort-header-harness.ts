@@ -6,11 +6,10 @@ import { MultiSortHeaderHarnessFilters } from './mat-multi-sort-harness-filters'
 /**
  * Interface for the definition of the sorting of 1 table column
  *
- * @interface MatSortDefinition
  * @param columnId - The id (name) of the column used for sorting.
  * @param direction - The current sorting direction (e.g. 'asc').
  */
-export interface MatMultiSortHeaderHarnessSortDefinition {
+export interface DomSortingDefinition {
   id: string;
   label: string;
   sortDirection: SortDirection;
@@ -77,16 +76,14 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
     return result;
   }
 
-  // SortDirectionAscDesc
-
   /** Gets object with id, sortDirection and sortPosition */
-  async getAllSortData(): Promise<MatMultiSortHeaderHarnessSortDefinition> {
+  async getAllSortData(): Promise<DomSortingDefinition> {
     const result = {
       id: '',
       label: '',
       sortDirection: '',
       sortPosition: Number.NaN
-    } as MatMultiSortHeaderHarnessSortDefinition;
+    } as DomSortingDefinition;
     const host = await this.host();
     const id = await this._getId(host);
     if (id !== '') {
