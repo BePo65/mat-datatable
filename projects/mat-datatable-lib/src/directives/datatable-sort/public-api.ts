@@ -2,13 +2,8 @@
  * Public API Surface of mat-multi-sort
  */
 
-// TODO do we need all these exports?
 export {
-  ArrowViewState,
-  ArrowViewStateTransition,
-  matSortAnimations,
   MatSortable,
-  MatSortHeaderIntl,
   Sort,
   SortDirection,
   SortHeaderArrowPosition
