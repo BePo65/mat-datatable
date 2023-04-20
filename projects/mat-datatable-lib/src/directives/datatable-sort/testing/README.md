@@ -28,6 +28,13 @@ Harness for interacting with a `mat-multi-sort` element in tests.
 
 | | |
 |---|---|
+| `async getActiveSortData` | Gets the sorting data for all headers used for sorting in the 'mat-multi-sort'. |
+| **Returns** |
+| Promise\<DomSortingDefinition[]> | Sorting data of all headers used for sorting. |
+| | |
+
+| | |
+|---|---|
 | `async getSortHeaders` | Gets the headers used for sorting in the 'mat-multi-sort' reduced by the given 'filter'. |
 | **Parameters** |
 | filter: MultiSortHeaderHarnessFilters = {} | |
@@ -73,6 +80,20 @@ Harness for interacting with a `mat-multi-sort header` element in tests.
 
 | | |
 |---|---|
+| `async getAllSortData` | Gets an object with the sorting data of the header. |
+| **Returns** |
+| Promise\<MatMultiSortHeaderHarnessSortDefinition> | The sorting data of the header. |
+| | |
+
+| | |
+|---|---|
+| `async getId` | Gets the id of the sort header. |
+| **Returns** |
+| Promise\<string> | The id of the sort header. |
+| | |
+
+| | |
+|---|---|
 | `async getLabel` | Gets the label of the sort header. |
 | **Returns** |
 | Promise\<string> | The label of the sort header. |
@@ -83,6 +104,13 @@ Harness for interacting with a `mat-multi-sort header` element in tests.
 | `async getSortDirection` | Gets the sorting direction of the header. |
 | **Returns** |
 | Promise\<SortDirection> | The sorting direction of the header. |
+| | |
+
+| | |
+|---|---|
+| `async getSortPosition` | Gets the sorting position of the header. |
+| **Returns** |
+| Promise\<SortDirection> | The sorting position of the header (1..n). |
 | | |
 
 | | |
@@ -134,6 +162,18 @@ Harness for interacting with a `mat-multi-sort header` element in tests.
 |---|---|
 | `label: string \| RegExp` | Label of the header. |
 | `id: string \| RegExp` | ID of the header element. |
+| `sortDirection: SortDirection` | Sort direction of the header. |
+| `sortPosition: number` | Sort position of the header (1..n). |
+| | |
+
+### **DomSortingDefinition**
+
+#### **Properties**
+
+| | |
+|---|---|
+| `id: string` | ID of the header element. |
+| `label: string` | Label of the header. |
 | `sortDirection: SortDirection` | Sort direction of the header. |
 | `sortPosition: number` | Sort position of the header (1..n). |
 | | |
