@@ -2,6 +2,7 @@
  * Public API Surface of mat-multi-sort
  */
 
+// TODO do we need all these exports?
 export {
   ArrowViewState,
   ArrowViewStateTransition,
