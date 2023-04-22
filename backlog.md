@@ -1,5 +1,4 @@
-* update public-api of mat-datatable - directives, testing ...
-* add test harnesses for al relevant parts of mat-datatable
+* set pageSize in paginator
 * add virtual scroller
 * add test harness for lib
 * add tests
