@@ -4,23 +4,19 @@ import { CollectionViewer } from '@angular/cdk/collections';
 import { CdkTableModule, DataSource } from '@angular/cdk/table';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MAT_SORT_DEFAULT_OPTIONS } from '@angular/material/sort';
+import { MAT_SORT_DEFAULT_OPTIONS ,
+  Sort,
+  SortDirection
+} from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, map } from 'rxjs';
 
+import { getMultiSortDuplicateSortableIdError, getMultiSortHeaderMissingIdError, getMultiSortHeaderNotContainedWithinMultiSortError, getSortInvalidDirectionError } from './mat-multi-sort-errors';
 import { MatMultiSortHeader } from './mat-multi-sort-header.component';
 import { MatMultiSort } from './mat-multi-sort.directive';
 import { MatMultiSortModule } from './mat-multi-sort.module';
-import {
-  getMultiSortDuplicateSortableIdError,
-  getMultiSortHeaderMissingIdError,
-  getMultiSortHeaderNotContainedWithinMultiSortError,
-  getSortInvalidDirectionError,
-  Sort,
-  SortDirection
-} from './public-api';
 import { dispatchMouseEvent } from './testbed/fake-events/dispatch-events';
 import { createFakeEvent, createMouseEvent } from './testbed/fake-events/event-objects';
 import { wrappedErrorMessage } from './testing/wrapped-error-message';

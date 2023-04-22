@@ -7,14 +7,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, map, merge, Observable, of as observableOf, Subject  } from 'rxjs';
 
-import {
-  MatColumnDefinition,
-  MatDatatableDataSource,
-  MatDatatableModule,
-  MatSortDefinition,
-  MatSortDefinitionPos,
-  RowSelectionType
-} from '../../public-api';
+import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
+import { MatDatatableDataSource } from '../../interfaces/datatable-datasource.class';
+import { MatSortDefinition, MatSortDefinitionPos } from '../../interfaces/datatable-sort-definition.interface';
+import { RowSelectionType } from '../mat-datatable.component';
+import { MatDatatableModule } from '../mat-datatable.module';
 
 import { MatHeaderRowHarness } from './mat-datatable-row-harness';
 import { MatDatatableHarness } from './mat-datatable-table-harness';

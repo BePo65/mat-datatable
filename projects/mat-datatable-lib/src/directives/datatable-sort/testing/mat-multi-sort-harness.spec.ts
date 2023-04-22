@@ -4,7 +4,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatMultiSort, MatMultiSortModule, Sort } from '../public-api';
+import { MatMultiSort, MatMultiSortModule, Sort } from '../';
 
 import { MatMultiSortHarness } from './mat-multi-sort-harness';
 

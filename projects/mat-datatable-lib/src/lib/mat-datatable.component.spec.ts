@@ -12,17 +12,14 @@ import {
   Subject
 } from 'rxjs';
 
-import {
-  MatColumnDefinition,
-  MatDatatableComponent,
-  MatDatatableDataSource,
-  MatDatatableModule,
-  MatSortDefinition,
-  MatSortDefinitionPos,
-  RowSelectionType
-} from '../public-api';
+import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
+import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
+import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
+import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
 
-import { MatDatatableHarness, MatHeaderRowHarness, MatMultiSortHarness } from './testing';
+import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
+import { MatDatatableModule } from './mat-datatable.module';
+import { MatDatatableHarness, MatHeaderRowHarness } from './testing';
 
 // TODO how to set the paginator pageSize?
 
