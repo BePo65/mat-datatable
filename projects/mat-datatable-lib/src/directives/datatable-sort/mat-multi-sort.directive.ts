@@ -20,7 +20,10 @@ import {
   SortDirection
 } from '@angular/material/sort';
 
-import { getMultiSortDuplicateSortableIdError, getMultiSortHeaderMissingIdError } from './mat-multi-sort-errors';
+import {
+  getMultiSortDuplicateSortableIdError,
+  getMultiSortHeaderMissingIdError
+} from './mat-multi-sort-errors';
 
 // Container for MatSortables to manage the sort state and provide default sort parameters.
 @Directive({
