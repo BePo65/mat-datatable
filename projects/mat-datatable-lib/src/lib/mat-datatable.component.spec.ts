@@ -551,7 +551,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
   /**
    * Connect this data source to the mat-datatable. The table will only update when
    * the returned stream emits new items.
-   *
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<DatatableTestRow[]> {
@@ -576,7 +575,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
 
   /**
    * Gets the sorting definition from the datasource.
-   *
    * @returns fields and directions that the datasource uses for sorting
    */
   getSort(): MatSortDefinition[] {
@@ -585,7 +583,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
 
   /**
    * Sort data according to sortDefinition.
-   *
    * @param sortDefinition - fields and direction that should be used for sorting
    */
   setSort(sortDefinition: MatSortDefinition[]): void {
@@ -598,7 +595,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
 
   /**
    * Compare 2 sort definitions.
-   *
    * @param a - 1st sort definition
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
@@ -612,7 +608,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
-   *
    * @param data - input data to be paginated
    * @returns data for the mat-datatable
    */
@@ -650,7 +645,6 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
 
 /**
  * Simple sort comparator for string | number values.
- *
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
  * @param isAsc - is this an ascending comparison

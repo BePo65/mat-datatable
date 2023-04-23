@@ -23,7 +23,6 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
 
 /**
  * Datatable component based on Angular Material.
- *
  * @class MatDatatableComponent
  * @implements {AfterViewInit}
  * @template TRowData - type / interface definition for data of a single row
@@ -194,7 +193,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
 
   /**
    * Gets the current sorting definition from the datasource
-   *
    * @returns current sorting definition or an empty array (no sorting)
    */
   private sortFromDatasource(): MatSortDefinition[] {
@@ -203,7 +201,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
 
   /**
    * Convert an array of type Sort[] to an array of type MatSortDefinition[].
-   *
    * @param sorts - sorting definition to convert
    * @returns sorting definition as array of type MatSortDefinition
    */
@@ -222,7 +219,6 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   /**
    * Convert an array of type Sort[] to an array of type MatSortDefinitionPos[].
    * MatSortDefinitionPos contains also the position of each sort definition.
-   *
    * @param sorts - sorting definition to convert
    * @returns sorting definition as array of type MatSortDefinitionPos
    */

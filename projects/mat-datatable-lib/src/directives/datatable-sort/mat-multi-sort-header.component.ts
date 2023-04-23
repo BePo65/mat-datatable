@@ -138,7 +138,6 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
    * is not sorted, returns null so that the attribute is removed from the host element. Aria spec
    * says that the aria-sort property should only be present on one header at a time, so removing
    * ensures this is true.
-   *
    * @returns string ('ascending' | 'descending') to be used as aria-sort content
    */
   override _getAriaSortAttribute() {

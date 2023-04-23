@@ -9,7 +9,6 @@ export abstract class MatDatatableDataSource<T> extends DataSource<T> {
 
   /**
    * Gets the sorting definition from the datasource.
-   *
    * @abstract
    * @returns fields and directions that the datasource uses for sorting
    */
@@ -17,7 +16,6 @@ export abstract class MatDatatableDataSource<T> extends DataSource<T> {
 
   /**
    * Sets the sorting definition from the datasource and sort data.
-   *
    * @abstract
    * @param sortDefinition - fields and directions that should be used for sorting
    */

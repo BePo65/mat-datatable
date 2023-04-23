@@ -3,19 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable jsdoc/check-tag-names */
-/* eslint-disable jsdoc/check-values */
-/* eslint-disable jsdoc/newline-after-description */
 /* eslint-disable jsdoc/require-param */
 /* eslint-disable jsdoc/require-returns */
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 import { ModifierKeys } from '@angular/cdk/testing';
 
@@ -81,7 +71,6 @@ export function createMouseEvent(
  *
  * For example, if pointer events for a multi-touch interaction are created, the non-primary
  * pointer touches would need to be represented by non-primary pointer events.
- *
  * @docs-private
  */
 export function createPointerEvent(

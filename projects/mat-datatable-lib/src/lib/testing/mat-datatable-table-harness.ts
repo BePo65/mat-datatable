@@ -44,8 +44,8 @@ export abstract class _MatDatatableHarnessBase<
 
   /**
    * Gets all of the header rows in a mat-datatable.
-   *
-   * @param filter - filter to select the sut.
+   * @param filter - filter to select the sut (default; all rows).
+   * @returns an array of all header rows matching the given filter.
    */
   async getHeaderRows(filter: RowHarnessFilters = {}): Promise<HeaderRow[]> {
     return this.locatorForAll(this._headerRowHarness.with(filter))();
@@ -53,20 +53,26 @@ export abstract class _MatDatatableHarnessBase<
 
   /**
    * Gets all of the regular data rows in a mat-datatable.
-   *
-   * @param filter - filter to select the sut.
+   * @param filter - filter to select the sut (default; all rows).
+   * @returns an array of all data rows matching the given filter.
    */
   async getRows(filter: RowHarnessFilters = {}): Promise<Row[]> {
     return this.locatorForAll(this._rowHarness.with(filter))();
   }
 
-  /** Gets the text inside the entire mat-datatable organized by rows. */
+  /**
+   * Gets the text inside the entire mat-datatable organized by rows.
+   * @returns an array of arrays of the content of all data rows.
+   */
   async getCellTextByIndex(): Promise<string[][]> {
     const rows = await this.getRows();
     return parallel(() => rows.map(row => row.getCellTextByIndex()));
   }
 
-  /** Gets the text inside the entire mat-datatable organized by columns. */
+  /**
+   * Gets the text inside the entire mat-datatable organized by columns.
+   * @returns an object with all columns with headerText and array of data values.
+   */
   async getCellTextByColumnName(): Promise<MatDatatableHarnessColumnsText> {
     const [headerRows, dataRows] = await parallel(() => [
       this.getHeaderRows(),
@@ -113,8 +119,7 @@ export class MatDatatableHarness extends _MatDatatableHarnessBase<
   /**
    * Gets a `HarnessPredicate` that can be used to search for a mat-datatable
    * with specific attributes.
-   *
-   * @param options - Options for narrowing the search
+   * @param options - Options for narrowing the search.
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with<T extends MatDatatableHarness>(
@@ -127,10 +132,9 @@ export class MatDatatableHarness extends _MatDatatableHarnessBase<
 
 /**
  * Extracts the text of cells only under a particular column.
- *
- * @param rowsData - array with text extracted from a mat-datatable row organized by columns.
- * @param column - name of the column to get the texts from.
- * @returns array of selected cell texts.
+ * @param rowsData - Array with text extracted from a mat-datatable row organized by columns.
+ * @param column - Name of the column to get the texts from.
+ * @returns an array of selected cell texts.
  */
 const getCellTextsByColumn = (rowsData: MatRowHarnessColumnsText[], column: string): string[] => {
   const columnTexts: string[] = [];

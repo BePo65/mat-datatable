@@ -871,7 +871,6 @@ class SimpleMatMultiSortApp {
    * Checks expectations for each sort header's view state and arrow direction states. Receives a
    * map that is keyed by each sort header's ID and contains the expectation for that header's
    * states.
-   *
    * @param viewStates - Map with ViewStates to be tested
    */
   expectViewAndDirectionStates(

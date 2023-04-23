@@ -30,8 +30,8 @@ export abstract class _MatRowHarnessBase<
 
   /**
    * Gets a list of `MatCellHarness` for all cells in the row.
-   *
-   * @param filter - filter to select the sut.
+   * @param filter - filter to select the sut (default; all cells).
+   * @returns an array of arrays of the content of all data rows.
    */
   async getCells(filter: CellHarnessFilters = {}): Promise<Cell[]> {
     return this.locatorForAll(this._cellHarness.with(filter))();
@@ -39,15 +39,18 @@ export abstract class _MatRowHarnessBase<
 
   /**
    * Gets the text of the cells in the row.
-   *
-   * @param filter - filter to select the sut.
+   * @param filter - filter to select the returned cells (default; all cells).
+   * @returns an array of the content of the selected header cells.
    */
   async getCellTextByIndex(filter: CellHarnessFilters = {}): Promise<string[]> {
     const cells = await this.getCells(filter);
     return parallel(() => cells.map(cell => cell.getText()));
   }
 
-  /** Gets the text inside the row organized by columns. */
+  /**
+   * Gets the text inside the row organized by columns.
+   * @returns an array of the content of the selected row cells.
+   */
   async getCellTextByColumnName(): Promise<MatRowHarnessColumnsText> {
     const output: MatRowHarnessColumnsText = {};
     const cells = await this.getCells();
@@ -72,8 +75,7 @@ export class MatRowHarness extends _MatRowHarnessBase<
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table row with specific attributes.
-   *
-   * @param options Options for narrowing the search
+   * @param options - Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with<T extends MatRowHarness>(
@@ -96,8 +98,7 @@ export class MatHeaderRowHarness extends _MatRowHarnessBase<
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header row with specific
    * attributes.
-   *
-   * @param options Options for narrowing the search
+   * @param options - Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with<T extends MatHeaderRowHarness>(

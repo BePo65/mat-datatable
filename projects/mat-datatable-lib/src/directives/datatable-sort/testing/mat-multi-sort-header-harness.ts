@@ -5,7 +5,6 @@ import { MultiSortHeaderHarnessFilters } from './mat-multi-sort-harness-filters'
 
 /**
  * Interface for the definition of the sorting of 1 table column
- *
  * @param columnId - The id (name) of the column used for sorting.
  * @param direction - The current sorting direction (e.g. 'asc').
  */
@@ -25,8 +24,7 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
   /**
    * Gets a `HarnessPredicate` that can be used to
    * search for a sort header with specific attributes.
-   *
-   * @param options - filter for identifying the sut
+   * @param options - Options for narrowing the search.
    * @returns predicate for identifying the sut
    */
   static with(options: MultiSortHeaderHarnessFilters = {}): HarnessPredicate<MatMultiSortHeaderHarness> {
@@ -45,24 +43,36 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
       });
   }
 
-  /** Gets the label of the sort header. */
+  /**
+   * Gets the label of the sort header.
+   * @returns the label of the sort header.
+   */
   async getLabel(): Promise<string> {
     return (await this._containerContent()).text();
   }
 
-  /** Gets the id of the sort header. */
+  /**
+   * Gets the id of the sort header.
+   * @returns the id of the sort header.
+   */
   async getId(): Promise<string> {
     const host = await this.host();
     return await this._getId(host);
   }
 
-  /** Gets the sorting direction of the header. */
+  /**
+   * Gets the sorting direction of the header.
+   * @returns the sorting direction of the sort header.
+   */
   async getSortDirection(): Promise<SortDirection> {
     const host = await this.host();
     return await this._getSortDirection(host);
   }
 
-  /** Gets the sorting position of the header. */
+  /**
+   * Gets the sorting position of the header.
+   * @returns the sorting position of the sort header.
+   */
   async getSortPosition(): Promise<number> {
     let result = Number.NaN;
     try {
@@ -76,7 +86,10 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
     return result;
   }
 
-  /** Gets object with id, sortDirection and sortPosition */
+  /**
+   * Gets object with id, sortDirection and sortPosition
+   * @returns an object with all information about the sort header.
+   */
   async getAllSortData(): Promise<DomSortingDefinition> {
     const result = {
       id: '',
@@ -95,24 +108,33 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
     return result;
   }
 
-  /** Gets whether the sort header is currently being sorted by. */
+  /**
+   * Gets whether the sort header is currently being sorted by.
+   * @returns true if the sort header is used for sorting.
+   */
   async isActive(): Promise<boolean> {
     return !!(await this.getSortDirection());
   }
 
-  /** Whether the sort header is disabled. */
+  /**
+   * Whether the sort header is disabled.
+   * @returns true if the sort header is disabled.
+   */
   async isDisabled(): Promise<boolean> {
     return (await this.host()).hasClass('mat-sort-header-disabled');
   }
 
-  /** Clicks the header to change its sorting direction. Only works if the header is enabled. */
+  /**
+   * Clicks the header to change its sorting direction.
+   * Only works if the header is enabled.
+   * @returns promise that completes after clicking the header.
+   */
   async click(): Promise<void> {
     return (await this.host()).click();
   }
 
   /**
    * Gets the id of the sort header.
-   *
    * @param host - TestElement to be inspected (from 'await this.host()').
    * @returns promise that completes when id of the header is available.
    */
@@ -127,7 +149,6 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
 
   /**
    * Gets the sorting direction of the header.
-   *
    * @param host - TestElement to be inspected (from 'await this.host()').
    * @returns promise that completes when SortDirection is available.
    */
@@ -146,7 +167,6 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
 
   /**
    * Checks if the specified nullable number value matches the given value.
-   *
    * @param value The nullable number value to check, or a Promise resolving to the
    *   nullable number value.
    * @param pattern The number the value is expected to match. If `pattern` is `null`,

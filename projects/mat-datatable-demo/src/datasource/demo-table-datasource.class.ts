@@ -29,7 +29,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
   /**
    * Connect this data source to the table. The table will only update when
    * the returned stream emits new items.
-   *
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<DemoTableItem[]> {
@@ -54,7 +53,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
 
   /**
    * Gets the sorting definition from the datasource.
-   *
    * @returns fields and directions that the datasource uses for sorting
    */
   getSort(): MatSortDefinition[] {
@@ -63,7 +61,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
 
   /**
    * Sort data according to sortDefinition.
-   *
    * @param sortDefinition - fields and direction that should be used for sorting
    */
   setSort(sortDefinition: MatSortDefinition[]): void {
@@ -76,7 +73,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
 
   /**
    * Compare 2 sort definitions.
-   *
    * @param a - 1st sort definition
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
@@ -90,7 +86,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
-   *
    * @param data - input data to be paginated
    * @returns data for the mat-datatable
    */
@@ -106,7 +101,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
   // TODO request sorted data from server
   /**
    * Get sorted the data.
-   *
    * @returns data sorted according to this.currentSortingDefinitions[]
    */
   private getSortedData(): DemoTableItem[] {
@@ -151,7 +145,6 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
 
 /**
  * Simple sort comparator for example ID/Name columns (for client-side sorting).
- *
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
  * @param isAsc - is this an ascending comparison

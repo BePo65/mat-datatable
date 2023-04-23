@@ -7,12 +7,18 @@ import {
 import { CellHarnessFilters } from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
-  /** Gets the cell's text. */
+  /**
+   * Gets the cell's text.
+   * @returns the text of the cell.
+   */
   async getText(): Promise<string> {
     return (await this.host()).text();
   }
 
-  /** Gets the name of the column that the cell belongs to. */
+  /**
+   * Gets the name of the column that the cell belongs to.
+   * @returns the name of the column of the cell.
+   */
   async getColumnName(): Promise<string> {
     const host = await this.host();
     const classAttribute = await host.getAttribute('class');
@@ -53,8 +59,7 @@ export class MatCellHarness extends _MatCellHarnessBase {
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table cell with specific attributes.
-   *
-   * @param options Options for narrowing the search
+   * @param options - Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with(options: CellHarnessFilters = {}): HarnessPredicate<MatCellHarness> {
@@ -70,8 +75,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header cell with specific
    * attributes.
-   *
-   * @param options Options for narrowing the search
+   * @param options  -Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with(options: CellHarnessFilters = {}): HarnessPredicate<MatHeaderCellHarness> {

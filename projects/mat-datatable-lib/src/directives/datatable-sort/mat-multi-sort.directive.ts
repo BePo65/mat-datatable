@@ -60,7 +60,6 @@ export class MatMultiSort extends MatSort {
   /**
    * Register function to be used by the contained MatSortables. Adds the MatSortable to the
    * collection of MatSortables.
-   *
    * @param sortable - sort definition to be added to the list of registered columns
    */
   override register(sortable: MatSortable): void {
@@ -81,7 +80,6 @@ export class MatMultiSort extends MatSort {
    * Add / remove a single sort definition.
    * This overwrite is necessary to handle the sorts added by
    * clicking on a column header.
-   *
    * @param sortable - sort definition to add / remove
    */
   override sort(sortable: MatSortable): void {

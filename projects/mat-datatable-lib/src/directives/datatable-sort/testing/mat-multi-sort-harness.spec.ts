@@ -462,7 +462,6 @@ class SortHarnessTestComponent {
 
 /**
  * Simple sort comparator for string | number values.
- *
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
  * @param isAsc - is this an ascending comparison

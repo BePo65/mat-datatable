@@ -9,8 +9,7 @@ export class MatMultiSortHarness extends ComponentHarness {
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a `mat-sort` with specific attributes.
-   *
-   * @param options Options for narrowing the search.
+   * @param options - Options for narrowing the search.
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with(options: MultiSortHarnessFilters = {}): HarnessPredicate<MatMultiSortHarness> {
@@ -19,14 +18,17 @@ export class MatMultiSortHarness extends ComponentHarness {
 
   /**
    * Gets all of the sort headers in the `mat-multi-sort`.
-   *
-   * @param filter - filter to select the sut.
+   * @param filter - filter to select the sut (default; all headers).
+   * @returns an array of the selected sort header harnesses.
    */
   async getSortHeaders(filter: MultiSortHeaderHarnessFilters = {}): Promise<MatMultiSortHeaderHarness[]> {
     return this.locatorForAll(MatMultiSortHeaderHarness.with(filter))();
   }
 
-  /** Gets the selected headers in the `mat-multi-sort` sorted by column number. */
+  /**
+   * Gets the selected headers in the `mat-multi-sort` sorted by column number.
+   * @returns an array of sort header harnesses for all columns used for sorting.
+   */
   async getActiveHeaders(): Promise<MatMultiSortHeaderHarness[]> {
     const result: MatMultiSortHeaderHarness[] = [];
     const headers = await this.getSortHeaders();
@@ -39,7 +41,10 @@ export class MatMultiSortHarness extends ComponentHarness {
     return result;
   }
 
-  /** Gets sortData from all active headers sorted by sort position. */
+  /**
+   * Gets sortData from all active headers sorted by sort position.
+   * @returns an array of sort definitions for all active sort headers.
+   */
   async getActiveSortData(): Promise<DomSortingDefinition[]> {
     const result: DomSortingDefinition[] = [];
     const headers = await this.getActiveHeaders();
