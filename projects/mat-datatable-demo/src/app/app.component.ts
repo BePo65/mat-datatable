@@ -109,7 +109,11 @@ export class AppComponent {
     return this.headers[columnId];
   }
 
-  protected removeFilter(columnId: string): void {
+  /**
+   * Remove sorting for given column
+   * @param columnId - ID of column to be removed from sorting
+   */
+  protected removeSort(columnId: string): void {
     const newSort = this.currentSorts.filter(sort => sort.columnId !== columnId);
     this.table.setSorts(newSort);
   }
