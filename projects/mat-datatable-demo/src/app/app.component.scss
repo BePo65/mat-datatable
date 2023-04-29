@@ -16,26 +16,42 @@
   margin: 0 1em 0 0;
 }
 
-.sort-button-container,
-.selection-button-container,
-.activation-button-container {
-  margin: 0 0 0.75em 1em;
-}
-
-.sort-button,
-.activation-button,
-.selection-button {
-  margin: 0 1em 1em 0;
-}
-
-.current-sort,
 .activated-row,
+.current-sort,
 .selected-rows {
   margin: 2em 0 0.75em 1em;
 }
 
-.current-sort-label,
-.activated-row-label,
-.selected-rows-label {
+.current-sort-label {
   margin: 0 0.25em 0 0;
+}
+
+.sort-button-container {
+  margin: 0 0 0.75em 1em;
+}
+
+.selection-button,
+.sort-button {
+  margin: 0 1em 1em 0;
+}
+
+.selection-button {
+  margin: 0.5em 1em 1em 0;
+}
+
+.activation-button-container,
+.page-size-button-container,
+.selection-button-container {
+  margin: 0 0 0.75em;
+}
+
+.activation-button,
+.page-size-button {
+  margin: 0 1em 0 0;
+}
+
+.activated-row-label,
+.page-size-row-label,
+.selected-rows-label  {
+  margin: 0 0.25em 0 1em;
 }

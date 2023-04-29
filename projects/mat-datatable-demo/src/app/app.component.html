@@ -33,25 +33,26 @@
   <button mat-raised-button class="sort-button" (click)="onClearSort()">Remove all sorts</button>
 </div>
 <div class="activated-row">
+  <span class="activation-button-container">
+    <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
+    <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
+  </span>
   <span class="activated-row-label">Active row:</span><span>{{activatedRowAsString}}</span>
 </div>
-<div class="activation-button-container">
-  <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
-  <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
-</div>
 <div class="selected-rows">
+  <span class="selection-button-container">
+    <mat-label class="mode-selection-label">Selection mode</mat-label>
+    <mat-form-field appearance="fill" class="mode-selection">
+      <mat-select [(value)]="currentSelectionMode">
+        <mat-option value="none">none</mat-option>
+        <mat-option value="single">single</mat-option>
+        <mat-option value="multi">multi</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
+    <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
+  </span>
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
-<div class="selection-button-container">
-  <mat-label class="mode-selection-label">Selection mode</mat-label>
-  <mat-form-field appearance="fill" class="mode-selection">
-    <mat-select [(value)]="currentSelectionMode">
-      <mat-option value="none">none</mat-option>
-      <mat-option value="single">single</mat-option>
-      <mat-option value="multi">multi</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
-  <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
 </div>
 <router-outlet></router-outlet>
