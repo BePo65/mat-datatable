@@ -7,12 +7,5 @@
     "coverage/**",
     "projects/**",
     "node_modules/**"
-  ],
-  "overrides": [
-    {
-      "files": [
-        "*.json"
-      ]
-    }
   ]
 }

@@ -31,11 +31,6 @@
     },
     {
       "files": [
-        "*.spec.ts"
-      ]
-    },
-    {
-      "files": [
         "cypress.config.ts"
       ],
       "parser": "@typescript-eslint/parser",
@@ -97,17 +92,6 @@
         ],
         "semi": ["error", "always"]
       }
-    },
-    {
-      "files": [
-        "*.json"
-      ]
-    },
-    {
-      "files": [
-        "*.html"
-      ],
-      "rules": {}
     }
   ]
 }
