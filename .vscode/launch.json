@@ -3,11 +3,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
+      "name": "Launch localhost on Chrome",
       "type": "chrome",
       "request": "launch",
-      "preLaunchTask": "npm: start:debug",
-      "url": "http://localhost:4200/"
+      "sourceMaps": true,
+      // "preLaunchTask": "npm: start:debug",
+      "url": "http://127.0.0.1:4200/"
     },
     {
       "name": "ng test",

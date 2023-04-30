@@ -24,7 +24,7 @@
     "build:demo": "ng build mat-datatable-demo --delete-output-path --configuration production",
     "build:ghpages": "del-cli ghpages && cpy \"dist/mat-datatable-demo/**\" ghpages",
     "start": "ng serve --open",
-    "start:debug": "ng serve",
+    "start:debug": "ng serve --host=127.0.0.1",
     "unimported": "npx unimported",
     "deprecated": "npx check-is-deprecated -f ./package.json",
     "init-changelog": "standard-version -i CHANGELOG.md --same-file --prerelease pre --first-release",
