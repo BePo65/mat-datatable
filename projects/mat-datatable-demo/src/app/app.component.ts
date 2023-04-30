@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
@@ -18,7 +18,7 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
 
   title = 'Mat-Datatable-Demo';
@@ -85,6 +85,8 @@ export class AppComponent {
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
+  protected currentPageSize = new BehaviorSubject('');
+  protected currentPageSize$: Observable<string> = this.currentPageSize.asObservable();
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
@@ -93,6 +95,10 @@ export class AppComponent {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
     this.dataSource = new DemoTableDataSource();
     this.headersTextFromColumnDefinitions();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.currentPageSizeChanged());
   }
 
   protected onRowClick($event: DemoTableItem) {
@@ -190,13 +196,31 @@ export class AppComponent {
   }
   protected onSetActivated() {
     this.table.activatedRow = this.dataSource.data[3];
-    this.activatedRowAsString = this.selectedRowsToString();
+    this.activatedRowAsString = this.activatedRowToString();
   }
   protected activatedRowToString(): string {
     if (this.table !== undefined) {
       return this.table.activatedRow?.userId.toString() || '-';
     } else {
       return '-';
+    }
+  }
+
+  // Demo to show / change pageSize of datasource
+  protected onTogglePageSize() {
+    if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
+      const oldPageSize = this.table.dataSource.paginator.pageSize;
+      const newPageSize = oldPageSize === 10 ? 20 : 10;
+      this.table.dataSource.paginator.pageSize = +newPageSize;
+      this.table.dataSource.paginator._changePageSize(+newPageSize);
+      this.currentPageSizeChanged();
+    } else {
+      window.alert('datasource and/or paginator are undefined');
+    }
+  }
+  private currentPageSizeChanged() {
+    if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
+      this.currentPageSize.next(this.table.dataSource?.paginator?.pageSize.toString());
     }
   }
 

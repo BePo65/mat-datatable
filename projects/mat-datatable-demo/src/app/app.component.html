@@ -54,5 +54,10 @@
   </span>
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
+<div class="page-size-row">
+  <span class="page-size-button-container">
+    <button  mat-raised-button class="page-size-button" (click)="onTogglePageSize()">Toggle pageSize</button>
+  </span>
+  <span class="page-size-row-label">Page size:</span><span>{{currentPageSize$ | async}}</span>
 </div>
 <router-outlet></router-outlet>

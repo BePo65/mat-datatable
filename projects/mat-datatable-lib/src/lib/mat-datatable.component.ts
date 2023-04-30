@@ -168,7 +168,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
             this.currentSelectedRows.push(row);
             break;
         }
-        setTimeout(() => this.rowClick.emit(row), 0);
+        this.rowClick.emit(row);
       } else {
         switch (this.rowSelectionMode) {
           case 'single':
@@ -178,6 +178,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
             this.currentSelectedRows = this.currentSelectedRows.filter(e => e !== row);
             break;
         }
+        this.rowClick.emit(row);
       }
     } else {
       this.rowClick.emit(row);

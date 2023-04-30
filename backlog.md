@@ -1,4 +1,3 @@
-* set pageSize in paginator
 * add virtual scroller
 * add test harness for lib
 * add tests
