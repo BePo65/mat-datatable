@@ -98,6 +98,7 @@ export class DemoTableDataSource extends MatDatatableDataSource<DemoTableItem> {
     }
   }
 
+  // HACK add time delay to simulate request of sorted data from server
   // TODO request sorted data from server
   /**
    * Get sorted the data.

@@ -21,6 +21,7 @@ import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
 
+// TODO add spinner (as thin bar) while waiting for new data from server
 /**
  * Datatable component based on Angular Material.
  * @class MatDatatableComponent
