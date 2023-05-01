@@ -282,7 +282,7 @@ class TableHarnessTest {
   ];
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinitionPos[] = [];
-  protected currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 

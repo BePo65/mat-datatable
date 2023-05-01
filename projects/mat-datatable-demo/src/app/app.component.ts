@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
 import { DemoTableItem } from '../datasource/demo-table-item.interface';
@@ -81,12 +81,11 @@ export class AppComponent implements AfterViewInit {
   ];
   protected displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
   protected currentSorts: MatSortDefinitionPos[] = [];
-  protected currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
-  protected currentPageSize = new BehaviorSubject('');
-  protected currentPageSize$: Observable<string> = this.currentPageSize.asObservable();
+  protected currentPageSize$ = new BehaviorSubject('');
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
@@ -220,7 +219,7 @@ export class AppComponent implements AfterViewInit {
   }
   private currentPageSizeChanged() {
     if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
-      this.currentPageSize.next(this.table.dataSource?.paginator?.pageSize.toString());
+      this.currentPageSize$.next(this.table.dataSource?.paginator?.pageSize.toString());
     }
   }
 

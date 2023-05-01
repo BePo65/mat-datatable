@@ -447,7 +447,7 @@ class DatatableTestComponent {
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinitionPos[] = [];
-  protected currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
@@ -479,7 +479,7 @@ class DatatableEmptyTestComponent {
   protected columnDefinitions = datatableTestColumnDefinitions;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinitionPos[] = [];
-  protected currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
@@ -522,9 +522,9 @@ class DatatableDoubleTestComponent {
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinitionPos[] = [];
-  protected currentSorts1$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts1$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSorts2: MatSortDefinitionPos[] = [];
-  protected currentSorts2$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected readonly currentSorts2$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
 
   protected onSortChanged1(currentSorts: MatSortDefinitionPos[]) {
     this.currentSorts1 = currentSorts;
