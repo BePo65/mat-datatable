@@ -21,8 +21,6 @@ import { MatDatatableComponent, RowSelectionType } from './mat-datatable.compone
 import { MatDatatableModule } from './mat-datatable.module';
 import { MatDatatableHarness, MatHeaderRowHarness } from './testing';
 
-// TODO how to set the paginator pageSize?
-
 describe('MatDatatableComponent', () => {
   describe('single table', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;

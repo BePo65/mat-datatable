@@ -2,7 +2,6 @@
  * Public API Surface of mat-multi-sort
  */
 
-// TODO which one do we really need?
 export {
   Sort,
   SortHeaderArrowPosition
