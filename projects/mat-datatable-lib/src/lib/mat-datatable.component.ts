@@ -21,7 +21,6 @@ import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
 
-// TODO add spinner (as thin bar) while waiting for new data from server
 /**
  * Datatable component based on Angular Material.
  * @class MatDatatableComponent
@@ -49,6 +48,8 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
 
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
+  // TODO make this dynamic
+  protected isLoading = true;
 
   ngAfterViewInit(): void {
     if (this.dataSource) {
@@ -94,7 +95,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   }
 
   setSorts(matSortDefinitions: MatSortDefinition[]): void {
-    const sortables: Sort[]= [];
+    const sortables: Sort[] = [];
     for (let i = 0; i < matSortDefinitions.length; i++) {
       const sortEntry = {
         active: matSortDefinitions[i].columnId,

@@ -10,3 +10,9 @@
   bottom: 0;
   position: sticky;
 }
+
+.mat-datatable-loading-spinner {
+  position: sticky;
+  top: 56px; // position below header row
+  z-index: 110; // as table has z-index=100 (default)
+}
