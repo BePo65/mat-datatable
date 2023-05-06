@@ -110,10 +110,10 @@ describe('MatMultiSorDirective', () => {
         // Starting state for the view and directions - note that overrideStart is reversed to be
         // desc
         expectedStates = new Map<string, {viewState: string; arrowDirection: string}>([
-          ['defaultA', {viewState: 'asc', arrowDirection: 'asc'}],
-          ['defaultB', {viewState: 'asc', arrowDirection: 'asc'}],
-          ['overrideStart', {viewState: 'desc', arrowDirection: 'desc'}],
-          ['overrideDisableClear', {viewState: 'asc', arrowDirection: 'asc'}]
+          ['defaultA', { viewState: 'asc', arrowDirection: 'asc' }],
+          ['defaultB', { viewState: 'asc', arrowDirection: 'asc' }],
+          ['overrideStart', { viewState: 'desc', arrowDirection: 'desc' }],
+          ['overrideDisableClear', { viewState: 'asc', arrowDirection: 'asc' }]
         ]);
         component.expectViewAndDirectionStates(expectedStates);
       });
@@ -122,17 +122,17 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when mousing over headers and leaving on mouseleave', () => {
         // Mousing over the first sort should set the view state to hint (asc)
         component.dispatchMouseEvent('defaultA', 'mouseenter');
-        expectedStates.set('defaultA', {viewState: 'asc-to-hint', arrowDirection: 'asc'});
+        expectedStates.set('defaultA', { viewState: 'asc-to-hint', arrowDirection: 'asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Mousing away from the first sort should hide the arrow
         component.dispatchMouseEvent('defaultA', 'mouseleave');
-        expectedStates.set('defaultA', {viewState: 'hint-to-asc', arrowDirection: 'asc'});
+        expectedStates.set('defaultA', { viewState: 'hint-to-asc', arrowDirection: 'asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Mousing over another sort should set the view state to hint (desc)
         component.dispatchMouseEvent('overrideStart', 'mouseenter');
-        expectedStates.set('overrideStart', {viewState: 'desc-to-hint', arrowDirection: 'desc'});
+        expectedStates.set('overrideStart', { viewState: 'desc-to-hint', arrowDirection: 'desc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -140,13 +140,13 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when mousing over header and then sorting', () => {
         // Mousing over the first sort should set the view state to hint
         component.dispatchMouseEvent('defaultA', 'mouseenter');
-        expectedStates.set('defaultA', {viewState: 'asc-to-hint', arrowDirection: 'asc'});
+        expectedStates.set('defaultA', { viewState: 'asc-to-hint', arrowDirection: 'asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Clicking sort on the header should set it to be active immediately
         // (since it was already hinted)
         component.dispatchMouseEvent('defaultA', 'click');
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -154,17 +154,17 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when cycling through a default sort header', () => {
         // Sort the header to set it to the active start state
         component.sort('defaultA');
-        expectedStates.set('defaultA', {viewState: 'asc-to-active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sorting again will reverse its direction
         component.dispatchMouseEvent('defaultA', 'click');
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-desc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-desc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sorting again will remove the sort and animate away the view
         component.dispatchMouseEvent('defaultA', 'click');
-        expectedStates.set('defaultA', {viewState: 'active-to-desc', arrowDirection: 'desc'});
+        expectedStates.set('defaultA', { viewState: 'active-to-desc', arrowDirection: 'desc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -173,13 +173,13 @@ describe('MatMultiSorDirective', () => {
         // Sort the header to set it to the active start state
         component.defaultA._disableViewStateAnimation = true;
         component.sort('defaultA');
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sorting again will reverse its direction
         component.defaultA._disableViewStateAnimation = true;
         component.dispatchMouseEvent('defaultA', 'click');
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-desc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-desc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -187,13 +187,13 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when adding sort for second header', () => {
         // Sort the first header to set up
         component.sort('defaultA');
-        expectedStates.set('defaultA', {viewState: 'asc-to-active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sort the second header and verify that the first header did not change
         component.dispatchMouseEvent('defaultB', 'click');
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-asc'});
-        expectedStates.set('defaultB', {viewState: 'asc-to-active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-asc' });
+        expectedStates.set('defaultB', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -215,7 +215,7 @@ describe('MatMultiSorDirective', () => {
         component.matMultiSort.sortDefinitions = newSort1;
         fixture.detectChanges();
 
-        expectedStates.set('defaultB', {viewState: 'desc-to-active', arrowDirection: 'active-desc'});
+        expectedStates.set('defaultB', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Change sort definition
@@ -226,8 +226,8 @@ describe('MatMultiSorDirective', () => {
         component.matMultiSort.sortDefinitions = newSort2;
         fixture.detectChanges();
 
-        expectedStates.set('defaultA', {viewState: 'desc-to-active', arrowDirection: 'active-desc'});
-        expectedStates.set('defaultB', {viewState: 'active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
+        expectedStates.set('defaultB', { viewState: 'active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -240,16 +240,16 @@ describe('MatMultiSorDirective', () => {
         component.matMultiSort.sortDefinitions = newSort;
         fixture.detectChanges();
 
-        expectedStates.set('defaultA', {viewState: 'desc-to-active', arrowDirection: 'active-desc'});
-        expectedStates.set('defaultB', {viewState: 'asc-to-active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
+        expectedStates.set('defaultB', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
 
         // apply sorting definition again
         component.matMultiSort.sortDefinitions = newSort;
         fixture.detectChanges();
 
-        expectedStates.set('defaultA', {viewState: 'active', arrowDirection: 'active-desc'});
-        expectedStates.set('defaultB', {viewState: 'active', arrowDirection: 'active-asc'});
+        expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-desc' });
+        expectedStates.set('defaultB', { viewState: 'active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
 

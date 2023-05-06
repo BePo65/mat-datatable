@@ -64,7 +64,7 @@ export class AppComponent implements AfterViewInit {
     {
       columnId: 'birthday',
       header: 'Birthday',
-      cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, {dateStyle: 'medium'}),
+      cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
       headerAlignment: 'center',
       cellAlignment: 'center',
       width: '8em',
@@ -126,41 +126,41 @@ export class AppComponent implements AfterViewInit {
   // Demo to show sorting by code
   protected onSortId() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'id', direction:'asc'}
+      { columnId:'id', direction:'asc' }
     ];
     this.table.setSorts(newSort);
   }
   protected onSortLastNameFirstNameBirthday() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc'},
-      { columnId:'firstName', direction:'asc'},
-      { columnId:'birthday', direction:'asc'}
+      { columnId:'lastName', direction:'asc' },
+      { columnId:'firstName', direction:'asc' },
+      { columnId:'birthday', direction:'asc' }
     ];
     this.table.setSorts(newSort);
   }
   protected onSortLastNameBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc'},
-      { columnId:'birthday', direction:'asc'}
+      { columnId:'lastName', direction:'asc' },
+      { columnId:'birthday', direction:'asc' }
     ];
     this.table.setSorts(newSort);
   }
   protected onSortLastNameBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc'},
-      { columnId:'birthday', direction:'desc'}
+      { columnId:'lastName', direction:'asc' },
+      { columnId:'birthday', direction:'desc' }
     ];
     this.table.setSorts(newSort);
   }
   protected onSortBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'birthday', direction:'asc'}
+      { columnId:'birthday', direction:'asc' }
     ];
     this.table.setSorts(newSort);
   }
   protected onSortBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'birthday', direction:'desc'}
+      { columnId:'birthday', direction:'desc' }
     ];
     this.table.setSorts(newSort);
   }

@@ -47,7 +47,7 @@ describe('MatSortHarness', () => {
 
   it('should be able to filter headers by their label text', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
-    const headers = await sort.getSortHeaders({label: 'Carbs'});
+    const headers = await sort.getSortHeaders({ label: 'Carbs' });
 
     expect(headers).toHaveSize(1);
     expect(await headers[0].getLabel()).toBe('Carbs');
@@ -55,7 +55,7 @@ describe('MatSortHarness', () => {
 
   it('should be able to filter headers by their labels via a regex', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
-    const headers = await sort.getSortHeaders({label: /^C/});
+    const headers = await sort.getSortHeaders({ label: /^C/ });
     const labels = await parallel(() => headers.map(header => header.getLabel()));
 
     expect(headers).toHaveSize(2);
@@ -64,20 +64,20 @@ describe('MatSortHarness', () => {
 
   it('should be able to filter headers by their sorted state for 1 sorted column', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
-    let headers = await sort.getSortHeaders({sortDirection: ''});
+    let headers = await sort.getSortHeaders({ sortDirection: '' });
 
     expect(headers).toHaveSize(5);
 
     await headers[0].click();
 
-    headers = await sort.getSortHeaders({sortDirection: 'asc'});
+    headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
     expect(headers).toHaveSize(1);
   });
 
   it('should be able to filter headers by their sorted state for multiple sorted columns', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
-    let headers = await sort.getSortHeaders({sortDirection: ''});
+    let headers = await sort.getSortHeaders({ sortDirection: '' });
 
     expect(headers).toHaveSize(5);
 
@@ -89,14 +89,14 @@ describe('MatSortHarness', () => {
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
-    headers = await sort.getSortHeaders({sortDirection: 'asc'});
+    headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
     expect(headers).toHaveSize(2);
   });
 
   it('should be able to filter headers by their sorted state for multiple columns', async () => {
     const matMultiSort = await loader.getHarness(MatMultiSortHarness);
-    const headers = await matMultiSort.getSortHeaders({sortDirection: ''});
+    const headers = await matMultiSort.getSortHeaders({ sortDirection: '' });
 
     const sortDefinitions: Sort[] = [
       { active:'protein', direction:'desc' },
@@ -144,7 +144,7 @@ describe('MatSortHarness', () => {
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
-    const headers = await sort.getSortHeaders({sortPosition: 3});
+    const headers = await sort.getSortHeaders({ sortPosition: 3 });
 
     expect(headers).toHaveSize(1);
     expect(await headers[0].getId()).toBe('name');
@@ -218,7 +218,7 @@ describe('MatSortHarness', () => {
 
   it('should get the active headers for multiple sorted columns', async () => {
     const matMultiSort = await loader.getHarness(MatMultiSortHarness);
-    const headers = await matMultiSort.getSortHeaders({sortDirection: ''});
+    const headers = await matMultiSort.getSortHeaders({ sortDirection: '' });
 
     const sortDefinitions: Sort[] = [
       { active:'protein', direction:'desc' },

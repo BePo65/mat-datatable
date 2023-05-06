@@ -104,12 +104,12 @@ describe('MatDatatableComponent', () => {
 
     it('should not sort a table when clicking on a non sortable column', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      let headers = await sort.getSortHeaders({sortDirection: ''});
+      let headers = await sort.getSortHeaders({ sortDirection: '' });
 
       expect(headers).toHaveSize(4);
 
       await headers[0].click();
-      headers = await sort.getSortHeaders({sortDirection: 'asc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
       expect(headers).toHaveSize(0);
 
@@ -134,12 +134,12 @@ describe('MatDatatableComponent', () => {
 
     it('should sort a table when clicking on a sortable column', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      let headers = await sort.getSortHeaders({sortDirection: ''});
+      let headers = await sort.getSortHeaders({ sortDirection: '' });
 
       expect(headers).toHaveSize(4);
 
       await headers[1].click();
-      headers = await sort.getSortHeaders({sortDirection: 'asc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
       expect(headers).toHaveSize(1);
 
@@ -164,13 +164,13 @@ describe('MatDatatableComponent', () => {
 
     it('should extend sorting by clicking on another column', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      let headers = await sort.getSortHeaders({sortDirection: ''});
+      let headers = await sort.getSortHeaders({ sortDirection: '' });
 
       expect(headers).toHaveSize(4);
 
       await headers[1].click();
       await headers[2].click();
-      headers = await sort.getSortHeaders({sortDirection: 'asc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
       expect(headers).toHaveSize(2);
 
@@ -195,26 +195,26 @@ describe('MatDatatableComponent', () => {
 
     it('should change sorting by clicking on already sorted column', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      let headers = await sort.getSortHeaders({sortDirection: ''});
+      let headers = await sort.getSortHeaders({ sortDirection: '' });
 
       expect(headers).toHaveSize(4);
 
       await headers[1].click();
       await headers[2].click();
       await headers[1].click();
-      headers = await sort.getSortHeaders({sortDirection: 'asc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
       expect(headers).toHaveSize(1);
 
-      headers = await sort.getSortHeaders({sortDirection: 'desc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'desc' });
 
       expect(headers).toHaveSize(1);
 
       const sortDefinitions = component.matDataTable.sort.sortDefinitions;
 
       expect(sortDefinitions).toEqual([
-        {active: 'name', direction: 'desc'},
-        {active: 'weight', direction: 'asc'}
+        { active: 'name', direction: 'desc' },
+        { active: 'weight', direction: 'asc' }
       ]);
 
       const table = await loader.getHarness(MatDatatableHarness);
@@ -238,20 +238,20 @@ describe('MatDatatableComponent', () => {
 
     it('should sort table by setting the sort definitions', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      let headers = await sort.getSortHeaders({sortDirection: ''});
+      let headers = await sort.getSortHeaders({ sortDirection: '' });
 
       component.matDataTable.sort.sortDefinitions = [
-        {active: 'name', direction: 'desc'},
-        {active: 'weight', direction: 'asc'}
+        { active: 'name', direction: 'desc' },
+        { active: 'weight', direction: 'asc' }
       ];
 
       expect(headers).toHaveSize(4);
 
-      headers = await sort.getSortHeaders({sortDirection: 'asc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'asc' });
 
       expect(headers).toHaveSize(1);
 
-      headers = await sort.getSortHeaders({sortDirection: 'desc'});
+      headers = await sort.getSortHeaders({ sortDirection: 'desc' });
 
       expect(headers).toHaveSize(1);
 
@@ -277,8 +277,8 @@ describe('MatDatatableComponent', () => {
     it('should sort table by changing the sort definitions', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
       component.matDataTable.sort.sortDefinitions = [
-        {active: 'name', direction: 'desc'},
-        {active: 'weight', direction: 'asc'}
+        { active: 'name', direction: 'desc' },
+        { active: 'weight', direction: 'asc' }
       ];
       fixture.detectChanges();
       let headers = await sort.getActiveHeaders();
@@ -292,8 +292,8 @@ describe('MatDatatableComponent', () => {
       expect(await headers[1].getSortPosition()).toBe(2);
 
       component.matDataTable.sort.sortDefinitions = [
-        {active: 'weight', direction: 'asc'},
-        {active: 'name', direction: 'asc'}
+        { active: 'weight', direction: 'asc' },
+        { active: 'name', direction: 'asc' }
       ];
       fixture.detectChanges();
       headers = await sort.getActiveHeaders();
@@ -339,25 +339,25 @@ describe('MatDatatableComponent', () => {
 
       expect(sorts).toHaveSize(2);
 
-      let headers1 = await sorts[0].getSortHeaders({sortDirection: ''});
-      let headers2 = await sorts[1].getSortHeaders({sortDirection: ''});
+      let headers1 = await sorts[0].getSortHeaders({ sortDirection: '' });
+      let headers2 = await sorts[1].getSortHeaders({ sortDirection: '' });
 
       expect(headers1).toHaveSize(4);
       expect(headers2).toHaveSize(4);
 
       component.matDataTable1.sort.sortDefinitions = [
-        {active: 'name', direction: 'desc'},
-        {active: 'weight', direction: 'asc'}
+        { active: 'name', direction: 'desc' },
+        { active: 'weight', direction: 'asc' }
       ];
 
-      headers1 = await sorts[0].getSortHeaders({sortDirection: /(asc|desc)/});
-      headers2 = await sorts[1].getSortHeaders({sortDirection: /(asc|desc)/});
+      headers1 = await sorts[0].getSortHeaders({ sortDirection: /(asc|desc)/ });
+      headers2 = await sorts[1].getSortHeaders({ sortDirection: /(asc|desc)/ });
 
       expect(headers1).toHaveSize(2);
       expect(headers2).toHaveSize(0);
 
-      headers1 = await sorts[0].getSortHeaders({sortDirection: ''});
-      headers2 = await sorts[1].getSortHeaders({sortDirection: ''});
+      headers1 = await sorts[0].getSortHeaders({ sortDirection: '' });
+      headers2 = await sorts[1].getSortHeaders({ sortDirection: '' });
 
       expect(headers1).toHaveSize(2);
       expect(headers2).toHaveSize(4);
@@ -415,16 +415,16 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
 ];
 
 const datatableTestData:DatatableTestRow[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 6.1234, symbol: 'He'},
-  {position: 3, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 4, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 5, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'}
+  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+  { position: 2, name: 'Helium', weight: 6.1234, symbol: 'He' },
+  { position: 3, name: 'Helium', weight: 4.0026, symbol: 'He' },
+  { position: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+  { position: 5, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
 ];
 
 @Component({

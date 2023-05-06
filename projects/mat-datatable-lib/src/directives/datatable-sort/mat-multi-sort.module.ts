@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatSortModule } from '@angular/material/sort';
 
 import { MatMultiSortBadgeDirective } from './mat-multi-sort-badge.directive';
-import { MatMultiSortHeader} from './mat-multi-sort-header.component';
+import { MatMultiSortHeader } from './mat-multi-sort-header.component';
 import { MatMultiSort } from './mat-multi-sort.directive';
 
 @NgModule({

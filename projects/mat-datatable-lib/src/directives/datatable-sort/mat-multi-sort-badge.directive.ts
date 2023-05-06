@@ -3,8 +3,8 @@
 /* eslint-disable @angular-eslint/no-inputs-metadata-property */
 /* eslint-disable jsdoc/require-returns */
 
-import {AriaDescriber} from '@angular/cdk/a11y';
-import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
+import { AriaDescriber } from '@angular/cdk/a11y';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   Directive,
   ElementRef,

@@ -79,7 +79,7 @@ export function createPointerEvent(
   clientY = 0,
   offsetX?: number,
   offsetY?: number,
-  options: PointerEventInit = {isPrimary: true}
+  options: PointerEventInit = { isPrimary: true }
 ) {
   const event = new PointerEvent(type, {
     bubbles: true,
@@ -110,7 +110,7 @@ export function createTouchEvent(type: string, pageX = 0, pageY = 0, clientX = 0
   // We cannot use the `TouchEvent` or `Touch` because Firefox and Safari lack support.
   // TODO: From the Angular Material source: Switch to the constructor API when it is available for Firefox and Safari.
   const event = document.createEvent('UIEvent');
-  const touchDetails = {pageX, pageY, clientX, clientY, identifier: uniqueIds++};
+  const touchDetails = { pageX, pageY, clientX, clientY, identifier: uniqueIds++ };
 
   // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
   (event as any).initUIEvent(type, true, true, window, 0);
@@ -153,7 +153,7 @@ export function createKeyboardEvent(
  * @docs-private
  */
 export function createFakeEvent(type: string, bubbles = false, cancelable = true, composed = true) {
-  return new Event(type, {bubbles, cancelable, composed});
+  return new Event(type, { bubbles, cancelable, composed });
 }
 
 /**
@@ -161,5 +161,5 @@ export function createFakeEvent(type: string, bubbles = false, cancelable = true
  * are always set as configurable as that matches default readonly properties for DOM event objects.
  */
 function defineReadonlyEventProperty(event: Event, propertyName: string, value: any) {
-  Object.defineProperty(event, propertyName, {get: () => value, configurable: true});
+  Object.defineProperty(event, propertyName, { get: () => value, configurable: true });
 }

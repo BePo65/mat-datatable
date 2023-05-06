@@ -24,7 +24,7 @@ import {
   Sort,
   SortDirection
 } from '@angular/material/sort';
-import {SubscriptionLike as ISubscription } from 'rxjs';
+import { SubscriptionLike as ISubscription } from 'rxjs';
 
 import { getMultiSortHeaderNotContainedWithinMultiSortError } from './mat-multi-sort-errors';
 import { MatMultiSort } from './mat-multi-sort.directive';
