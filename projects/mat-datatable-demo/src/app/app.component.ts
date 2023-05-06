@@ -2,7 +2,8 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
-import { DemoTableItem } from '../datasource/demo-table-item.interface';
+
+import { DemoTableItem } from './shared/demo-table-item.interface';
 
 import {
   MatColumnDefinition,

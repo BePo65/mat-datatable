@@ -1,8 +1,8 @@
 import { Observable, of as observableOf, merge, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DemoTableItem } from './demo-table-item.interface';
 import EXAMPLE_DATA from './demo-table.mock.data';
+import { DemoTableItem } from '../app/shared/demo-table-item.interface';
 
 import { MatDatatableDataSource } from 'projects/mat-datatable-lib/src/interfaces/datatable-datasource.class';
 import { MatSortDefinition } from 'projects/mat-datatable-lib/src/interfaces/datatable-sort-definition.interface';
