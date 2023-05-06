@@ -2,14 +2,19 @@
  * Public API Surface of mat-multi-sort
  */
 
+// TODO which one do we really need?
 export {
-  MatSortable,
   Sort,
-  SortDirection,
   SortHeaderArrowPosition
 } from '@angular/material/sort';
 
+export { SortDirectionAscDesc } from './mat-multi-sort-badge.directive';
+
+// MatMultiSort
 export * from './mat-multi-sort.directive';
-export * from './mat-multi-sort-errors';
+
+// MatMultiSortHeader
 export * from './mat-multi-sort-header.component';
+
+// MatMultiSortModule
 export * from './mat-multi-sort.module';
