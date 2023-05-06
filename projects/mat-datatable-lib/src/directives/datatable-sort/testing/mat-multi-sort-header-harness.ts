@@ -165,23 +165,23 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
   }
 }
 
-  /**
-   * Checks if the specified nullable number value matches the given value.
-   * @param value The nullable number value to check, or a Promise resolving to the
-   *   nullable number value.
-   * @param pattern The number the value is expected to match. If `pattern` is `null`,
-   *   the value is expected to be `null`.
-   * @returns Whether the value matches the pattern.
-   */
-  const numberMatches= async (
-    value: number | null | Promise<number | null>,
-    pattern: number | null
-  ): Promise<boolean> => {
-    value = await value;
-    if (pattern === null) {
-      return value === null;
-    } else if (value === null) {
-      return false;
-    }
-    return value === pattern;
-  };
+/**
+ * Checks if the specified nullable number value matches the given value.
+ * @param value The nullable number value to check, or a Promise resolving to the
+ *   nullable number value.
+ * @param pattern The number the value is expected to match. If `pattern` is `null`,
+ *   the value is expected to be `null`.
+ * @returns Whether the value matches the pattern.
+ */
+const numberMatches= async (
+  value: number | null | Promise<number | null>,
+  pattern: number | null
+): Promise<boolean> => {
+  value = await value;
+  if (pattern === null) {
+    return value === null;
+  } else if (value === null) {
+    return false;
+  }
+  return value === pattern;
+};
