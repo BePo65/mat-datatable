@@ -1,7 +1,7 @@
 import { firstValueFrom, forkJoin, of, Subject } from 'rxjs';
 import { first, take, toArray } from 'rxjs/operators';
 
-import { Page, RequestRowsOfList, RequestSortOfList } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 
 import { PaginationDataSource } from './dataSource.class';
 
@@ -12,69 +12,68 @@ interface User {
   name: string;
 }
 
-interface UserQuery {
+interface UserFilter {
   search: string;
 }
 
-// TODO (done) ==> async / await
 describe('PaginationDatasource', () => {
   it('should query endpoint with initial parameters on connect', (done) => {
-    const sorts: RequestSortOfList<User>[] = [{ property: 'name', order: 'asc' }];
-    const query: UserQuery = { search: '' };
+    const sorts: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
+    const filter: UserFilter = { search: '' };
     const page: Page<User> = {
       content: [{ id: 1, name: 'Lorem' }],
-      totalElements: 0,
-      numberOfRows: 0,
-      pageNumber: 0
+      pageNumber: 0,
+      returnedElements: 0,
+      totalElements: 0
     };
     const spy = createSpy('endpoint').and.callFake(() => of(page));
-    const source = new PaginationDataSource<User, UserQuery>(spy, sorts, query);
+    const source = new PaginationDataSource<User, UserFilter>(spy, filter, sorts);
 
     expect(spy).not.toHaveBeenCalled();
 
     // Initialize datasource
     source.connect().subscribe((users) => {
-      expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, sorts, query);
+      expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, filter, sorts);
       expect(users).toEqual(page.content);
       done();
     });
   });
 
   it('should query endpoint with several parameters', (done) => {
-    const initialSorts: RequestSortOfList<User>[] = [{ property: 'name', order: 'asc' }];
-    const initialQuery: UserQuery = { search: '' };
+    const initialSorts: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
+    const initialFilter: UserFilter = { search: '' };
     const allPages = [
       {
         content: [{ id: 1, name: 'User[1]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 2, name: 'User[2]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 3, name: 'User[3]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 4, name: 'User[4]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 3
+        pageNumber: 3,
+        returnedElements: 1,
+        totalElements: 100
       }
     ];
     let page = 0;
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
-    const source = new PaginationDataSource<User, UserQuery>(
+    const source = new PaginationDataSource<User, UserFilter>(
       spy,
+      initialFilter,
       initialSorts,
-      initialQuery,
       1
     );
 
@@ -94,71 +93,71 @@ describe('PaginationDatasource', () => {
 
       expect(firstArgs).toEqual([
         { page: 0, numberOfRows: 1 },
-        initialSorts,
-        initialQuery
+        initialFilter,
+        initialSorts
       ]);
 
       expect(secondArgs).toEqual([
         { page: 0, numberOfRows: 1 },
-        initialSorts,
-        { search: 'lorem' }
+        { search: 'lorem' },
+        initialSorts
       ]);
 
       expect(thirdArgs).toEqual([
         { page: 0, numberOfRows: 1 },
-        [{ property: 'id', order: 'desc' }],
-        { search: 'lorem' }
+        { search: 'lorem' },
+        [{ fieldName: 'id', order: 'desc' }]
       ]);
 
       expect(fourthArgs).toEqual([
         { page: 3, numberOfRows: 1 },
-        [{ property: 'id', order: 'desc' }],
-        { search: 'lorem' }
+        { search: 'lorem' },
+        [{ fieldName: 'id', order: 'desc' }]
       ]);
       done();
     });
 
     // Calls 2 .. 4 to endpoint
-    source.queryBy({ search: 'lorem' });
-    source.sortBy([{ property: 'id', order: 'desc' }]);
+    source.filterBy({ search: 'lorem' });
+    source.sortBy([{ fieldName: 'id', order: 'desc' }]);
     source.fetch(3);
   });
 
   it('should query endpoint starting with initialPage', (done) => {
-    const initialSort: RequestSortOfList<User>[] = [{ property: 'name', order: 'asc' }];
-    const initialQuery: UserQuery = { search: '' };
+    const initialSort: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
+    const initialFilter: UserFilter = { search: '' };
     const initialPage = 2;
     const allPages = [
       {
         content: [{ id: 1, name: 'User[1]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 2, name: 'User[2]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 3, name: 'User[3]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 1
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 100
       },
       {
         content: [{ id: 4, name: 'User[4]' }],
-        totalElements: 100,
-        numberOfRows: 1,
-        pageNumber: 3
+        pageNumber: 3,
+        returnedElements: 1,
+        totalElements: 100
       }
     ];
     const spy = createSpy('endpoint').and.callFake((value: RequestRowsOfList) => of(allPages[value.page]));
-    const source = new PaginationDataSource<User, UserQuery>(
+    const source = new PaginationDataSource<User, UserFilter>(
       spy,
+      initialFilter,
       initialSort,
-      initialQuery,
       1,
       initialPage
     );
@@ -178,29 +177,29 @@ describe('PaginationDatasource', () => {
 
       expect(firstArgs).toEqual([
         { page: 2, numberOfRows: 1 },
-        initialSort,
-        initialQuery
+        initialFilter,
+        initialSort
       ]);
 
       expect(secondArgs).toEqual([
         { page: 0, numberOfRows: 1 },
-        initialSort,
-        { search: 'lorem' }
+        { search: 'lorem' },
+        initialSort
       ]);
       done();
     });
 
     // Second call to endpoint
-    source.queryBy({ search: 'lorem' });
+    source.filterBy({ search: 'lorem' });
   });
 
   it('should indicate loading', async () => {
     const sink = new Subject<Page<User>>();
     const spy = createSpy('endpoint').and.callFake(() => sink);
-    const source = new PaginationDataSource<User, UserQuery>(
+    const source = new PaginationDataSource<User, UserFilter>(
       spy,
-      [{ property: 'name', order: 'asc' }],
-      { search: '' }
+      { search: '' },
+      [{ fieldName: 'name', order: 'asc' }]
     );
     const firstLoading$ = firstValueFrom(source.loading$);
     source.connect().pipe(first()).subscribe();
@@ -209,9 +208,9 @@ describe('PaginationDatasource', () => {
     const secondLoading$ = firstValueFrom(source.loading$);
     sink.next({
       content: [{ id: 1, name: 'Lorem' }],
-      totalElements: 100,
-      numberOfRows: 1,
-      pageNumber: 1
+      pageNumber: 1,
+      returnedElements: 1,
+      totalElements: 100
     });
     sink.complete();
 
@@ -222,21 +221,21 @@ describe('PaginationDatasource', () => {
   it('should update pagesize', () => {
     const sink = new Subject<Page<User>>();
     const spy = createSpy('endpoint').and.callFake(() => sink);
-    const sort: RequestSortOfList<User>[] = [{ property: 'name', order: 'asc' }];
-    const query: UserQuery = { search: '' };
-    const source = new PaginationDataSource<User, UserQuery>(spy, sort, query);
+    const sort: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
+    const filter: UserFilter = { search: '' };
+    const source = new PaginationDataSource<User, UserFilter>(spy, filter, sort);
     const subscription = source.connect().subscribe();
 
     // Has been called with default page number
-    expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, sort, query);
+    expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, filter, sort);
 
     // Call with new page number
     source.fetch(1, 30);
-    expect(spy).toHaveBeenCalledWith({ page: 1, numberOfRows: 30 }, sort, query);
+    expect(spy).toHaveBeenCalledWith({ page: 1, numberOfRows: 30 }, filter, sort);
 
     // Call with new page number
     source.fetch(2);
-    expect(spy).toHaveBeenCalledWith({ page: 2, numberOfRows: 30 }, sort, query);
+    expect(spy).toHaveBeenCalledWith({ page: 2, numberOfRows: 30 }, filter, sort);
 
     subscription.unsubscribe();
   });

@@ -1,7 +1,7 @@
 import { BehaviorSubject, defer, Observable, Subject } from 'rxjs';
 import { switchMap, startWith, map, shareReplay, tap, finalize, combineLatestWith } from 'rxjs/operators';
 
-import { Page, RequestSortOfList, DatasourceEndpoint } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestSortDataList, DatasourceEndpoint } from '../interfaces/datasource-endpoint.interface';
 import { SimpleDataSource } from '../interfaces/simple-datasource.interface';
 
 /**
@@ -22,33 +22,33 @@ export function indicate<T>(indicator: Subject<boolean>): (source: Observable<T>
   );
 }
 
-export class PaginationDataSource<T, Q = Partial<T>> implements SimpleDataSource<T> {
+export class PaginationDataSource<T, F = Partial<T>> implements SimpleDataSource<T> {
   public loading$: Observable<boolean>;
   public page$: Observable<Page<T>>;
 
   // TODO change to type rowsRange
   private readonly pageNumber = new Subject<number>();
-  private readonly sorts: BehaviorSubject<RequestSortOfList<T>[]>;
-  private readonly filter: BehaviorSubject<Q>;
+  private readonly sorts: BehaviorSubject<RequestSortDataList<T>[]>;
+  private readonly filter: BehaviorSubject<F>;
   private readonly loading = new Subject<boolean>();
 
   constructor(
-    private endpoint: DatasourceEndpoint<T, Q>,
-    initialSorts: RequestSortOfList<T>[],
-    initialQuery: Q,
+    private endpoint: DatasourceEndpoint<T, F>,
+    initialFilter: F,
+    initialSorts: RequestSortDataList<T>[],
     public pageSize = 20, // TODO do we need this, if any request will contain the numberOfRows?
     public initialRow = 0
   ) {
     let firstCall = true;
-    this.sorts = new BehaviorSubject<RequestSortOfList<T>[]>(initialSorts);
-    this.filter = new BehaviorSubject<Q>(initialQuery);
+    this.sorts = new BehaviorSubject<RequestSortDataList<T>[]>(initialSorts);
+    this.filter = new BehaviorSubject<F>(initialFilter);
     const param$ = this.sorts.pipe(combineLatestWith(this.filter));
     this.loading$ = this.loading.asObservable();
     this.page$ = param$.pipe(
       switchMap(([sort, filter]) => this.pageNumber.pipe(
         startWith(initialRow && firstCall ? initialRow : 0),
         tap(() => firstCall = false),
-        switchMap(page => this.endpoint({ page, numberOfRows: this.pageSize }, sort, filter)
+        switchMap(page => this.endpoint({ page, numberOfRows: this.pageSize }, filter, sort)
           .pipe(indicate(this.loading))
         )
       )),
@@ -60,13 +60,14 @@ export class PaginationDataSource<T, Q = Partial<T>> implements SimpleDataSource
    * Set new sorting definition.
    * @param sorts - new sorting definition.
    */
-  sortBy(sorts: RequestSortOfList<T>[]): void {
-    this.sorts.next(structuredClone(sorts));
+  sortBy(sorts: RequestSortDataList<T>[]): void {
+    const newSort = structuredClone(sorts) as  RequestSortDataList<T>[];
+    this.sorts.next(newSort);
   }
 
-  queryBy(query: Partial<Q>): void {
+  filterBy(filter: Partial<F>): void {
     const lastQuery = this.filter.getValue();
-    const nextQuery = { ...lastQuery, ...query };
+    const nextQuery = { ...lastQuery, ...filter };
     this.filter.next(nextQuery);
   }
 
