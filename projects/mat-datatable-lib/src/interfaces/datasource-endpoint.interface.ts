@@ -7,19 +7,22 @@ export interface RequestSortOfList<T> {
   order: SortDirectionAscDesc
 }
 
+  // TODO change name to RowsRange
 export interface RequestRowsOfList {
-  startRow: number
+  // TODO rename to startRow
+  page: number
   numberOfRows: number
 }
 
 export interface Page<T> {
   content: T[]
   totalElements: number
-  size: number
-  number: number
+  // TODO rename to startRow
+  pageNumber: number
+  numberOfRows: number
 }
 
-export type PaginationEndpoint<T, Q> = (
+export type DatasourceEndpoint<T, Q> = (
   rowsRange: RequestRowsOfList,
   sorts?: RequestSortOfList<T>[],
   filters?: Q
