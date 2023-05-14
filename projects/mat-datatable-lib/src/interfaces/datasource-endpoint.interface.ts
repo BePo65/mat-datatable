@@ -8,7 +8,7 @@ export interface RequestSortDataList<T> {
 }
 
   // TODO change name to RowsRange
-export interface RequestRowsOfList {
+export interface RequestPageOfList {
   // TODO rename to startRowNumber
   page: number
   numberOfRows: number
@@ -23,7 +23,7 @@ export interface Page<T> {
 }
 
 export type DatasourceEndpoint<T, Q> = (
-  rowsRange: RequestRowsOfList,
+  rowsRange: RequestPageOfList,
   filters?: Q,
   sorts?: RequestSortDataList<T>[]
 ) => Observable<Page<T>>

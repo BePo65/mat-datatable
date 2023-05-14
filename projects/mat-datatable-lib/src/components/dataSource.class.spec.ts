@@ -1,7 +1,7 @@
 import { firstValueFrom, forkJoin, of, Subject } from 'rxjs';
 import { first, take, toArray } from 'rxjs/operators';
 
-import { Page, RequestRowsOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestPageOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 
 import { PaginationDataSource } from './dataSource.class';
 
@@ -119,7 +119,7 @@ describe('PaginationDatasource', () => {
 
     // Calls 2 .. 4 to endpoint
     source.filterBy({ search: 'lorem' });
-    source.sortBy([{ fieldName: 'id', order: 'desc' }]);
+    source.sort = ([{ fieldName: 'id', order: 'desc' }]);
     source.fetch(3);
   });
 
@@ -153,7 +153,7 @@ describe('PaginationDatasource', () => {
         totalElements: 100
       }
     ];
-    const spy = createSpy('endpoint').and.callFake((value: RequestRowsOfList) => of(allPages[value.page]));
+    const spy = createSpy('endpoint').and.callFake((value: RequestPageOfList) => of(allPages[value.page]));
     const source = new PaginationDataSource<User, UserFilter>(
       spy,
       initialFilter,
@@ -240,4 +240,7 @@ describe('PaginationDatasource', () => {
     subscription.unsubscribe();
   });
   /* eslint-enable jasmine/new-line-before-expect */
+
+  // TODO add tests for constructor without optional parameters
+  // TODO add tests for results received
 });
