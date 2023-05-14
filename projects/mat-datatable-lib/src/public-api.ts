@@ -12,9 +12,6 @@ export {
   SortDirectionAscDesc
 } from './directives/datatable-sort';
 
-// MatDatatableDataSource<T>
-export * from './interfaces/datatable-datasource.class';
-
 // MatColumnDefinition<TRowData>
 export * from './interfaces/datatable-column-definition.interface';
 

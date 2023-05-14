@@ -4,6 +4,7 @@
 
 export {
   Sort,
+  SortDirection,
   SortHeaderArrowPosition
 } from '@angular/material/sort';
 
