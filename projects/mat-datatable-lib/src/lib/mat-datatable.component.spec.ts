@@ -5,17 +5,14 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BehaviorSubject,
-  map,
-  merge,
-  Observable,
   of as observableOf,
   Subject
 } from 'rxjs';
 
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
+import { Page, RequestPageOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
-import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
-import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
+import { MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
 
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
 import { MatDatatableModule } from './mat-datatable.module';
@@ -425,10 +422,12 @@ const datatableTestData:DatatableTestRow[] = [
   { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
 ];
 
+type EmptyTestFilter = object;
+
 @Component({
   template: `
   <mat-datatable #testTable
-    [dataSource]="dataSource"
+    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
@@ -439,15 +438,20 @@ const datatableTestData:DatatableTestRow[] = [
   `
 })
 class DatatableTestComponent {
-  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow>;
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
 
-  dataSource = new DatatableTestDataSource(datatableTestData);
+  protected dataStore = new DatatableTestDataStore(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinitionPos[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
+    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  };
 
   protected onRowClick($event: DatatableTestRow) {
     this.selectedRowsAsString = $event.name;
@@ -462,7 +466,7 @@ class DatatableTestComponent {
 @Component({
   template: `
   <mat-datatable
-    [dataSource]="dataSource"
+    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
@@ -473,13 +477,18 @@ class DatatableTestComponent {
   `
 })
 class DatatableEmptyTestComponent {
-  dataSource = new DatatableTestDataSource([] as DatatableTestRow[]);
+  dataStore = new DatatableTestDataStore([] as DatatableTestRow[]);
   protected columnDefinitions = datatableTestColumnDefinitions;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinitionPos[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
+    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  };
 
   protected onRowClick($event: DatatableTestRow) {
     this.selectedRowsAsString = $event.name;
@@ -494,7 +503,7 @@ class DatatableEmptyTestComponent {
 @Component({
   template: `
   <mat-datatable #testTable1
-    [dataSource]="dataSource1"
+    [datastoreGetter]="getData1"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     (sortChange)="onSortChanged1($event)"
@@ -502,7 +511,7 @@ class DatatableEmptyTestComponent {
     No data to display.
   </mat-datatable>
   <mat-datatable #testTable2
-    [dataSource]="dataSource2"
+    [datastoreGetter]="getData2"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     (sortChange)="onSortChanged2($event)"
@@ -512,17 +521,27 @@ class DatatableEmptyTestComponent {
   `
 })
 class DatatableDoubleTestComponent {
-  @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;
-  @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow>;
+  @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
+  @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
 
-  dataSource1 = new DatatableTestDataSource(datatableTestData);
-  dataSource2 = new DatatableTestDataSource(datatableTestData);
+  dataStore1 = new DatatableTestDataStore(datatableTestData);
+  dataStore2 = new DatatableTestDataStore(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinitionPos[] = [];
   protected readonly currentSorts1$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
   protected currentSorts2: MatSortDefinitionPos[] = [];
   protected readonly currentSorts2$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData1 = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
+    return this.dataStore1.getPagedData(rowsRange, filters, sorts);
+  };
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData2 = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
+    return this.dataStore2.getPagedData(rowsRange, filters, sorts);
+  };
 
   protected onSortChanged1(currentSorts: MatSortDefinitionPos[]) {
     this.currentSorts1 = currentSorts;
@@ -534,61 +553,43 @@ class DatatableDoubleTestComponent {
   }
 }
 
-class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
-  private currentSortingDefinitions: MatSortDefinition[] = [];
+class DatatableTestDataStore<DatatableTestRow, DatatableTestFilter> {
+  private data: DatatableTestRow[];
+  private currentSortingDefinitions: RequestSortDataList<DatatableTestRow>[] = [];
   private unsortedData: DatatableTestRow[];
   private sortChanged = new Subject<void>();
 
   constructor(testData: DatatableTestRow[]) {
-    super();
     this.unsortedData = structuredClone(testData) as DatatableTestRow[];
     this.data = structuredClone(testData) as DatatableTestRow[];
     this.currentSortingDefinitions = [];
   }
 
   /**
-   * Connect this data source to the mat-datatable. The table will only update when
-   * the returned stream emits new items.
-   * @returns A stream of the items to be rendered.
+   * Paginate the data.
+   * @param rowsRange - data to be selected
+   * @param filters - optional object with the filter definition
+   * @param sorts - optional array of objects with the sorting definition
+   * @returns observable for the data for the mat-datatable
    */
-  connect(): Observable<DatatableTestRow[]> {
-    if (this.paginator) {
-      // Combine everything that affects the rendered data into one update
-      // stream for the data-table to consume.
-      return merge(observableOf(this.data), this.paginator.page, this.sortChanged)
-        .pipe(map(() => {
-          return this.getPagedData(this.getSortedData());
-        }));
-    } else {
-      throw Error('Please set the paginator on the data source before connecting.');
-    }
-  }
-
-  /**
-   *  Called when the mat-datatable is being destroyed. Use this function, to clean up
-   * any open connections or free any held resources that were set up during connect.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  disconnect(): void {}
-
-  /**
-   * Gets the sorting definition from the datasource.
-   * @returns fields and directions that the datasource uses for sorting
-   */
-  getSort(): MatSortDefinition[] {
-    return this.currentSortingDefinitions;
-  }
-
-  /**
-   * Sort data according to sortDefinition.
-   * @param sortDefinition - fields and direction that should be used for sorting
-   */
-  setSort(sortDefinition: MatSortDefinition[]): void {
-    if (!this.areSortDefinitionsEqual(this.currentSortingDefinitions, sortDefinition)) {
-      this.currentSortingDefinitions = sortDefinition;
+  getPagedData(
+    rowsRange: RequestPageOfList,
+    filters?: DatatableTestFilter,
+    sorts?: RequestSortDataList<DatatableTestRow>[]
+  )  {
+    if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
+      this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
-      this.sortChanged.next();
     }
+    const startIndex = rowsRange.page * rowsRange.numberOfRows;
+    const resultingData = this.data.splice(startIndex, rowsRange.numberOfRows);
+    const result = {
+      content: resultingData,
+      pageNumber: rowsRange.page,
+      returnedElements: resultingData.length,
+      totalElements: this.data.length
+    } as Page<DatatableTestRow>;
+    return observableOf(result);
   }
 
   /**
@@ -597,25 +598,10 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
    */
-  private areSortDefinitionsEqual(a: MatSortDefinition[], b: MatSortDefinition[]): boolean {
+  private areSortDefinitionsEqual(a: RequestSortDataList<DatatableTestRow>[], b: RequestSortDataList<DatatableTestRow>[]): boolean {
     return a.length === b.length &&
-    a.every((element, index) => (element.columnId === b[index].columnId) &&
-      element.direction === b[index].direction);
-  }
-
-  /**
-   * Paginate the data (client-side). If you're using server-side pagination,
-   * this would be replaced by requesting the appropriate data from the server.
-   * @param data - input data to be paginated
-   * @returns data for the mat-datatable
-   */
-  private getPagedData(data: DatatableTestRow[]): DatatableTestRow[] {
-    if (this.paginator) {
-      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    } else {
-      return data;
-    }
+    a.every((element, index) => (element.fieldName === b[index].fieldName) &&
+      element.order === b[index].order);
   }
 
   private getSortedData(): DatatableTestRow[] {
@@ -627,10 +613,10 @@ class DatatableTestDataSource extends MatDatatableDataSource<DatatableTestRow> {
     return baseData.sort((a, b) => {
       let result = 0;
       for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
-        const fieldName = this.currentSortingDefinitions[i].columnId;
-        const isAsc = (this.currentSortingDefinitions[i].direction === 'asc');
-        const valueA = a[fieldName as keyof DatatableTestRow];
-        const valueB = b[fieldName as keyof DatatableTestRow];
+        const fieldName = this.currentSortingDefinitions[i].fieldName;
+        const isAsc = (this.currentSortingDefinitions[i].order === 'asc');
+        const valueA = a[fieldName] as string | number;
+        const valueB = b[fieldName] as string | number;
         result = compare(valueA, valueB, isAsc);
         if (result !== 0) {
           break;

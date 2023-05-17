@@ -9,14 +9,17 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
+import { of as observableOf } from 'rxjs';
 
+import { PaginationDataSource } from '../components/dataSource.class';
 import {
   MatMultiSort,
   Sort,
+  SortDirection,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
+import { DatasourceEndpoint, Page, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
-import { MatDatatableDataSource } from '../interfaces/datatable-datasource.class';
 import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
@@ -35,25 +38,36 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
     '../directives/datatable-resizable.directive.scss'
   ]
 })
-export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy {
-  @Input() dataSource?: MatDatatableDataSource<TRowData>;
+export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewInit, OnDestroy {
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
+  @Input() datastoreGetter: DatasourceEndpoint<TRowData, TListFilter> = emptyDatastoreGetter;
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() sortChange = new EventEmitter<MatSortDefinitionPos[]>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatMultiSort) sort!: MatMultiSort;
   @ViewChild(MatTable) table!: MatTable<TRowData>;
+  @ViewChild(MatMultiSort) sort!: MatMultiSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  // field must be public to enable setting page size on demo page
+  public dataSource: PaginationDataSource<TRowData, TListFilter>;
 
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
   // TODO make this dynamic
   protected isLoading = true;
 
+  constructor() {
+    this.dataSource = new PaginationDataSource<TRowData, TListFilter>(
+      this.datastoreGetter
+    );
+  }
+
   ngAfterViewInit(): void {
+    // HACK change endpoint, as configured value is not available before this point
+    // HACK but the data is not shown!
     if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.endpoint = this.datastoreGetter;
       this.table.dataSource = this.dataSource;
       setTimeout(() => this.setSorts(this.sortFromDatasource()));
     }
@@ -189,7 +203,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
 
   protected onMultiSortChanged(sortStates: Sort[]) {
     if (this.dataSource !== undefined) {
-      this.dataSource.setSort(this.matSortDefinitionFromSortArray(sortStates));
+      this.dataSource.sort = this.requestSortDefinitionFromSortArray(sortStates);
       this.sortChange.emit(this.matSortDefinitionPosFromSortArray(sortStates));
     }
   }
@@ -199,22 +213,43 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
    * @returns current sorting definition or an empty array (no sorting)
    */
   private sortFromDatasource(): MatSortDefinition[] {
-    return this.dataSource?.getSort() || [];
+    return this.matSortArrayFromRequestSortDefinition(this.dataSource?.sort);
   }
 
   /**
-   * Convert an array of type Sort[] to an array of type MatSortDefinition[].
+   * Convert an array of type Sort[] to an array of type RequestSortDataList[]
+   * used in class PaginationDataSource.
    * @param sorts - sorting definition to convert
-   * @returns sorting definition as array of type MatSortDefinition
+   * @returns sorting definition as array of type RequestSortDataList
    */
-  private matSortDefinitionFromSortArray(sorts: Sort[]): MatSortDefinition[] {
-    const result: MatSortDefinition[] = [];
+  private requestSortDefinitionFromSortArray(sorts: Sort[]): RequestSortDataList<TRowData>[] {
+    const result: RequestSortDataList<TRowData>[] = [];
     for (let i = 0; i < sorts.length; i++) {
-      const element: MatSortDefinition = {
-        columnId: sorts[i].active,
-        direction: sorts[i].direction
+      const element: RequestSortDataList<TRowData> = {
+        fieldName: sorts[i].active as keyof TRowData,
+        order: sorts[i].direction
       };
       result.push(element);
+    }
+    return result;
+  }
+
+  /**
+   * Convert an array of type RequestSortDataList[] used in class PaginationDataSource
+   * to an array of type Sort[].
+   * @param requestSorts - sorting definition from PaginationDataSource to convert
+   * @returns sorting definition as array of type Sort
+   */
+  private matSortArrayFromRequestSortDefinition(requestSorts: RequestSortDataList<TRowData>[]): MatSortDefinition[] {
+    const result: MatSortDefinition[] = [];
+    if (requestSorts !== undefined) {
+      for (let i = 0; i < requestSorts.length; i++) {
+        const element: MatSortDefinition = {
+          columnId: requestSorts[i].fieldName as string,
+          direction: requestSorts[i].order as SortDirection
+        };
+        result.push(element);
+      }
     }
     return result;
   }
@@ -238,3 +273,17 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     return result;
   }
 }
+
+  /**
+   * Default implementation of the datastoreGetter input variable
+   * returning an observable that emits a Page with no data rows.
+   * @returns observable that emits a single empty Page
+   */
+  const emptyDatastoreGetter = <T>() => {
+    return observableOf({
+    content: [] as T[],
+    pageNumber: 0,
+    returnedElements: 0,
+    totalElements:0
+  } as Page<T>);
+};
