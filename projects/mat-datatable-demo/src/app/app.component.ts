@@ -1,18 +1,21 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { DemoTableDataSource } from '../datasource/demo-table-datasource.class';
+import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
 
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
 import {
   MatColumnDefinition,
   MatDatatableComponent,
-  MatDatatableDataSource,
   MatSortDefinition,
   MatSortDefinitionPos,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
+import { RequestPageOfList, RequestSortDataList } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
+
+// HACK filter type as a starter - replace with correct one
+type EmptyTestFilter = object;
 
 @Component({
   selector: 'app-root',
@@ -20,11 +23,12 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
+  @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem, EmptyTestFilter>;
 
   title = 'Mat-Datatable-Demo';
 
-  protected dataSource: MatDatatableDataSource<DemoTableItem>;
+  // HACK protected dataSource: MatDatatableDataSource<DemoTableItem>;
+  protected dataStore = new DemoTableDataStore<DemoTableItem, object>();
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
     {
       columnId: 'id',
@@ -93,13 +97,17 @@ export class AppComponent implements AfterViewInit {
 
   constructor() {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
-    this.dataSource = new DemoTableDataSource();
     this.headersTextFromColumnDefinitions();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => this.currentPageSizeChanged());
   }
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DemoTableItem>[]) => {
+    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  };
 
   protected onRowClick($event: DemoTableItem) {
     this.selectedRowsAsString = this.selectedRowsToString();
@@ -175,7 +183,7 @@ export class AppComponent implements AfterViewInit {
     this.selectedRowsAsString = '-';
   }
   protected onSetSelection() {
-    this.table.selectedRows = [ this.dataSource.data[1], this.dataSource.data[3], this.dataSource.data[88] ];
+    this.table.selectedRows = [ this.dataStore.getUnsortedPage(1), this.dataStore.getUnsortedPage(3), this.dataStore.getUnsortedPage(88) ];
     this.selectedRowsAsString = this.selectedRowsToString();
   }
   protected selectedRowsToString(): string {
@@ -195,7 +203,7 @@ export class AppComponent implements AfterViewInit {
     this.activatedRowAsString = '-';
   }
   protected onSetActivated() {
-    this.table.activatedRow = this.dataSource.data[3];
+    this.table.activatedRow = this.dataStore.getUnsortedPage(3);
     this.activatedRowAsString = this.activatedRowToString();
   }
   protected activatedRowToString(): string {
@@ -208,19 +216,23 @@ export class AppComponent implements AfterViewInit {
 
   // Demo to show / change pageSize of datasource
   protected onTogglePageSize() {
-    if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
-      const oldPageSize = this.table.dataSource.paginator.pageSize;
+    // TODO we do not have a paginator!
+    // if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
+    if((this.table?.dataSource !== undefined)) {
+      const oldPageSize = this.table.dataSource.pageSize;
       const newPageSize = oldPageSize === 10 ? 20 : 10;
-      this.table.dataSource.paginator.pageSize = +newPageSize;
-      this.table.dataSource.paginator._changePageSize(+newPageSize);
+      this.table.dataSource.pageSize = +newPageSize;
+      // TODO this.table.dataSource.paginator._changePageSize(+newPageSize);
       this.currentPageSizeChanged();
     } else {
       window.alert('datasource and/or paginator are undefined');
     }
   }
   private currentPageSizeChanged() {
-    if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
-      this.currentPageSize$.next(this.table.dataSource?.paginator?.pageSize.toString());
+    // TODO we do not have a paginator!
+    // if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
+    if((this.table?.dataSource !== undefined)) {
+      this.currentPageSize$.next(this.table.dataSource?.pageSize.toString());
     }
   }
 

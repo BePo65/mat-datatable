@@ -22,9 +22,12 @@ export function indicate<T>(indicator: Subject<boolean>): (source: Observable<T>
   );
 }
 
+// TODO how to change pageSize after initialization?
 export class PaginationDataSource<T, F> implements SimpleDataSource<T> {
   public loading$: Observable<boolean>;
   public page$: Observable<Page<T>>;
+  public pageSize = 20; // TODO do we need this, if any request will contain the numberOfRows?
+  public initialRow = 0; // TODO do we need this - see below?
 
   // TODO change to type rowsRange
   private readonly pageNumber = new Subject<number>();
@@ -36,9 +39,7 @@ export class PaginationDataSource<T, F> implements SimpleDataSource<T> {
     // HACK endpoint is made public to change it on ngAfterViewInit
     public endpoint: DatasourceEndpoint<T, F>,
     initialFilter: F | undefined = undefined,
-    initialSorts: RequestSortDataList<T>[] = [],
-    public pageSize = 20, // TODO do we need this, if any request will contain the numberOfRows?
-    public initialRow = 0
+    initialSorts: RequestSortDataList<T>[] = []
   ) {
     let firstCall = true;
     this.sorts = new BehaviorSubject<RequestSortDataList<T>[]>(initialSorts);
@@ -47,7 +48,8 @@ export class PaginationDataSource<T, F> implements SimpleDataSource<T> {
     this.loading$ = this.loading.asObservable();
     this.page$ = param$.pipe(
       switchMap(([sort, filter]) => this.pageNumber.pipe(
-        startWith(initialRow && firstCall ? initialRow : 0),
+        // TODO should we always start with "0"?
+        startWith(this.initialRow && firstCall ? this.initialRow : 0),
         tap(() => firstCall = false),
         switchMap(page => this.endpoint({ page, numberOfRows: this.pageSize }, filter, sort).pipe(
           indicate(this.loading)

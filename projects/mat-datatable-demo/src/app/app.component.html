@@ -1,8 +1,7 @@
 <h1 class="page-title">{{title}}</h1>
 <div class="content-table mat-elevation-z8">
-  <mat-datatable
-    #datatable
-    [dataSource]="dataSource"
+  <mat-datatable #datatable
+    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
