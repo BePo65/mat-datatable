@@ -1,4 +1,4 @@
-<mat-progress-bar *ngIf="isLoading" class="mat-datatable-loading-spinner" color="primary" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="dataSource.loading$ | async" class="mat-datatable-loading-spinner" color="primary" mode="indeterminate"></mat-progress-bar>
 <table mat-table matMultiSort class="full-width-table mat-datatable"
   [dataSource]="dataSource"
   (matMultiSortChange)="onMultiSortChanged($event)">
@@ -29,11 +29,9 @@
     (click)="onRowClicked(row)">
   </tr>
 </table>
-<mat-paginator #paginator *ngIf="dataSource.page$ | async as page"
-  [length]="page.totalElements"
-  [pageSize]="page.returnedElements"
-  [pageIndex]="page.pageNumber"
-  (page)="dataSource.fetch($event.pageIndex)"
+<mat-paginator #paginator
+  [length]="(dataSource.page$ | async)?.totalElements"
+  [pageSize]="10"
   [pageSizeOptions]="[5, 10, 20]"
   [showFirstLastButtons]="true"
   class="mat-paginator-sticky">
