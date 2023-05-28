@@ -1,11 +1,21 @@
-import { firstValueFrom, forkJoin, of, Subject } from 'rxjs';
-import { first, take, toArray } from 'rxjs/operators';
+/* eslint-disable jasmine/new-line-before-expect */
+/* eslint-disable jasmine/no-expect-in-setup-teardown */
 
-import { Page, RequestPageOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
+import { delay, of } from 'rxjs';
+import { TestScheduler } from 'rxjs/testing';
+
+import { Page, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 
 import { PaginationDataSource } from './dataSource.class';
 
 import createSpy = jasmine.createSpy;
+
+type pageRequest<T> = {
+  page?: number,
+  rows?: number,
+  sort?: RequestSortDataList<T>[],
+  filter?: UserFilter
+}
 
 interface User {
   id: number;
@@ -17,230 +27,316 @@ interface UserFilter {
 }
 
 describe('PaginationDatasource', () => {
-  it('should query endpoint with initial parameters on connect', (done) => {
-    const sorts: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
-    const filter: UserFilter = { search: '' };
-    const page: Page<User> = {
-      content: [{ id: 1, name: 'Lorem' }],
-      pageNumber: 0,
-      returnedElements: 0,
-      totalElements: 0
-    };
-    const spy = createSpy('endpoint').and.callFake(() => of(page));
-    const source = new PaginationDataSource<User, UserFilter>(spy, filter, sorts);
+  let testScheduler: TestScheduler;
 
-    expect(spy).not.toHaveBeenCalled();
-
-    // Initialize datasource
-    source.connect().subscribe((users) => {
-      expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, filter, sorts);
-      expect(users).toEqual(page.content);
-      done();
-    });
+  beforeEach(() => {
+    testScheduler = new TestScheduler((actual, expected) =>
+      expect(actual).toEqual(expected)
+    );
   });
 
-  it('should query endpoint with several parameters', (done) => {
-    const initialSorts: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
-    const initialFilter: UserFilter = { search: '' };
+  it('should return default page on connect', () => {
+    const allPages = [
+      {
+        content: [],
+        pageNumber: 0,
+        returnedElements: 0,
+        totalElements: 0
+      },
+      {
+        content: [{ id: 1, name: 'User[1]' }],
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 80
+      }
+    ] as Page<User>[];
+
+    // Start with index 1, as first element is returned as default value
+    let page = 1;
+    const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
+    const dataSource = new PaginationDataSource<User, UserFilter>(spy);
+
+      testScheduler.run((helpers) => {
+        const { expectObservable, flush } = helpers;
+        const expectedMarbles = 'i';
+        const expectedValues = {
+          i: allPages[0]
+        };
+
+        expectObservable(dataSource.page$).toBe(expectedMarbles, expectedValues);
+
+        flush();
+
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    // complete all subscriptions
+    dataSource.disconnect();
+  });
+
+  it('should get 3 pages from datasource', () => {
+    const pageRequests: pageRequest<User>[] = [
+      { page:0, rows:11, sort:undefined, filter:{ search: 'lorem' }},
+      { page:1, rows:12, sort:[{ fieldName: 'id', order: 'desc' } as RequestSortDataList<User>], filter:undefined },
+      { page:2, rows:undefined, sort:undefined, filter:undefined }
+    ];
     const allPages = [
       {
         content: [{ id: 1, name: 'User[1]' }],
         pageNumber: 1,
         returnedElements: 1,
-        totalElements: 100
+        totalElements: 80
       },
       {
         content: [{ id: 2, name: 'User[2]' }],
-        pageNumber: 1,
+        pageNumber: 2,
         returnedElements: 1,
-        totalElements: 100
+        totalElements: 90
       },
       {
         content: [{ id: 3, name: 'User[3]' }],
-        pageNumber: 1,
-        returnedElements: 1,
-        totalElements: 100
-      },
-      {
-        content: [{ id: 4, name: 'User[4]' }],
         pageNumber: 3,
         returnedElements: 1,
         totalElements: 100
       }
-    ];
+    ] as Page<User>[];
+
     let page = 0;
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
-    const source = new PaginationDataSource<User, UserFilter>(
-      spy,
-      initialFilter,
-      initialSorts,
-      1
-    );
+    const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-    // Get stream of internal state starting with state after initialization
-    const page$ = source.page$.pipe(take(4), toArray());
-    // Get stream of data starting with selected data after initialization
-    const content$ = source.connect().pipe(take(4), toArray());
-    forkJoin([content$, page$]).subscribe(([contents, pages]) => {
-      // Check initial state
-      expect(pages).toEqual(allPages);
+    testScheduler.run((helpers) => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '1-2-3-|';
+      const expectedMarbles = 'a-b-c';
+      const expectedValues = {
+        a: allPages[0],
+        b: allPages[1],
+        c: allPages[2]
+      };
 
-      // Result of first call to endpoint
-      expect(contents).toEqual(allPages.map((p) => p.content));
+      const source = cold(sourceMarbles, {
+        1: pageRequests[0],
+        2: pageRequests[1],
+        3: pageRequests[2]
+      });
 
-      const [firstArgs, secondArgs, thirdArgs, fourthArgs] =
-        spy.calls.allArgs();
+      // Use source to make dataSource emit values
+      source.subscribe(
+        request => {
+          if (request !== undefined) {
+            dataSource.loadPage(request.page, request.rows, request.sort, request.filter);
+          }
+        }
+      );
 
-      expect(firstArgs).toEqual([
-        { page: 0, numberOfRows: 1 },
-        initialFilter,
-        initialSorts
-      ]);
+      expectObservable(dataSource.page$).toBe(expectedMarbles, expectedValues);
 
-      expect(secondArgs).toEqual([
-        { page: 0, numberOfRows: 1 },
-        { search: 'lorem' },
-        initialSorts
-      ]);
+      flush();
 
-      expect(thirdArgs).toEqual([
-        { page: 0, numberOfRows: 1 },
-        { search: 'lorem' },
-        [{ fieldName: 'id', order: 'desc' }]
-      ]);
+      expect(spy).toHaveBeenCalledTimes(3);
 
-      expect(fourthArgs).toEqual([
-        { page: 3, numberOfRows: 1 },
-        { search: 'lorem' },
-        [{ fieldName: 'id', order: 'desc' }]
-      ]);
-      done();
+      // Check calling parameters
+      const defaultRows = 10;
+      const defaultSort: RequestSortDataList<User>[] = [];
+      const callingParams = spy.calls.allArgs();
+      const expectedParams = pageRequests.map(params => {
+        const reformattedParams = [];
+        reformattedParams.push({ page: params.page, numberOfRows: params.rows || defaultRows });
+        reformattedParams.push(params.sort || defaultSort);
+        reformattedParams.push(params.filter);
+        return reformattedParams;
+      });
+      expect(callingParams).toEqual(expectedParams);
     });
 
-    // Calls 2 .. 4 to endpoint
-    source.filterBy({ search: 'lorem' });
-    source.sort = ([{ fieldName: 'id', order: 'desc' }]);
-    source.fetch(3);
+    // Complete source
+    dataSource.disconnect();
   });
 
-  it('should query endpoint starting with initialPage', (done) => {
-    const initialSort: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
-    const initialFilter: UserFilter = { search: '' };
-    const initialPage = 2;
+  it('should return 3 content arrays from datasource', () => {
+    const pageRequests = [
+      { page:0, rows:11, sort:undefined, filter:{ search: 'lorem' }},
+      { page:1, rows:12, sort:[{ fieldName: 'id', order: 'desc' } as RequestSortDataList<User>], filter:undefined },
+      { page:2, rows:undefined, sort:undefined, filter:undefined }
+    ];
     const allPages = [
       {
         content: [{ id: 1, name: 'User[1]' }],
         pageNumber: 1,
         returnedElements: 1,
-        totalElements: 100
+        totalElements: 80
       },
       {
         content: [{ id: 2, name: 'User[2]' }],
-        pageNumber: 1,
+        pageNumber: 2,
         returnedElements: 1,
-        totalElements: 100
+        totalElements: 90
       },
       {
         content: [{ id: 3, name: 'User[3]' }],
-        pageNumber: 1,
-        returnedElements: 1,
-        totalElements: 100
-      },
-      {
-        content: [{ id: 4, name: 'User[4]' }],
         pageNumber: 3,
         returnedElements: 1,
         totalElements: 100
       }
+    ] as Page<User>[];
+
+    let page = 0;
+    const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
+    const dataSource = new PaginationDataSource<User, UserFilter>(spy);
+
+    testScheduler.run((helpers) => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '1-2-3-|';
+      const expectedMarbles = 'a-b-c';
+      const expectedValues = {
+        a: allPages[0].content,
+        b: allPages[1].content,
+        c: allPages[2].content
+      };
+
+      const source = cold(sourceMarbles, {
+        1: pageRequests[0],
+        2: pageRequests[1],
+        3: pageRequests[2]
+      });
+
+      // Use source to make dataSource emit values
+      source.subscribe(
+        request => {
+          if (request !== undefined) {
+            dataSource.loadPage(request.page, request.rows, request.sort, request.filter);
+          }
+        }
+      );
+
+      expectObservable(dataSource.connect()).toBe(expectedMarbles, expectedValues);
+
+      flush();
+
+      expect(spy).toHaveBeenCalledTimes(3);
+    });
+
+    // complete all subscriptions
+    dataSource.disconnect();
+  });
+
+  it('should indicate loading for 1 page', () => {
+    const pageRequests = [
+      { page:0, rows:11, sort:undefined, filter:{ search: 'lorem' }}
     ];
-    const spy = createSpy('endpoint').and.callFake((value: RequestPageOfList) => of(allPages[value.page]));
-    const source = new PaginationDataSource<User, UserFilter>(
-      spy,
-      initialFilter,
-      initialSort,
-      1,
-      initialPage
-    );
+    const allPages = [
+      {
+        content: [{ id: 1, name: 'User[1]' }],
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 80
+      }
+    ] as Page<User>[];
 
-    // Get stream of internal state starting with state after initialization
-    const page$ = source.page$.pipe(take(2), toArray());
-    // Get stream of data starting with selected data after initialization
-    const content$ = source.connect().pipe(take(2), toArray());
-    forkJoin([content$, page$]).subscribe(([contents, pages]) => {
-      // Check initial state
-      expect(pages).toEqual([allPages[2], allPages[0]]);
+    let page = 0;
+    const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]).pipe(delay(100)));
+    const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-      // Result of first call to endpoint
-      expect(contents).toEqual([allPages[2], allPages[0]].map((p) => p.content));
+    testScheduler.run((helpers) => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '1-|';
+      const expectedMarbles = 'a 99ms b';
+      const expectedValues = {
+        a: true,
+        b: false
+      };
 
-      const [firstArgs, secondArgs] = spy.calls.allArgs();
+      const source = cold(sourceMarbles, {
+        1: pageRequests[0]
+      });
 
-      expect(firstArgs).toEqual([
-        { page: 2, numberOfRows: 1 },
-        initialFilter,
-        initialSort
-      ]);
+      // Use source to make dataSource emit values
+      source.subscribe(
+        request => {
+          if (request !== undefined) {
+            dataSource.loadPage(request.page, request.rows, request.sort, request.filter);
+          }
+        }
+      );
 
-      expect(secondArgs).toEqual([
-        { page: 0, numberOfRows: 1 },
-        { search: 'lorem' },
-        initialSort
-      ]);
-      done();
+      expectObservable(dataSource.loading$).toBe(expectedMarbles, expectedValues);
+
+      flush();
+
+      expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    // Second call to endpoint
-    source.filterBy({ search: 'lorem' });
+    // Complete source
+    dataSource.disconnect();
   });
 
-  it('should indicate loading', async () => {
-    const sink = new Subject<Page<User>>();
-    const spy = createSpy('endpoint').and.callFake(() => sink);
-    const source = new PaginationDataSource<User, UserFilter>(
-      spy,
-      { search: '' },
-      [{ fieldName: 'name', order: 'asc' }]
-    );
-    const firstLoading$ = firstValueFrom(source.loading$);
-    source.connect().pipe(first()).subscribe();
+  it('should indicate loading for 3 pages', () => {
+    const pageRequests = [
+      { page:0, rows:11, sort:undefined, filter:{ search: 'lorem' }},
+      { page:1, rows:12, sort:[{ fieldName: 'id', order: 'desc' } as RequestSortDataList<User>], filter:undefined },
+      { page:2, rows:undefined, sort:undefined, filter:undefined }
+    ];
+    const allPages = [
+      {
+        content: [{ id: 1, name: 'User[1]' }],
+        pageNumber: 1,
+        returnedElements: 1,
+        totalElements: 80
+      },
+      {
+        content: [{ id: 2, name: 'User[2]' }],
+        pageNumber: 2,
+        returnedElements: 1,
+        totalElements: 90
+      },
+      {
+        content: [{ id: 3, name: 'User[3]' }],
+        pageNumber: 3,
+        returnedElements: 1,
+        totalElements: 100
+      }
+    ] as Page<User>[];
 
-    expect(await firstLoading$).toEqual(true);
-    const secondLoading$ = firstValueFrom(source.loading$);
-    sink.next({
-      content: [{ id: 1, name: 'Lorem' }],
-      pageNumber: 1,
-      returnedElements: 1,
-      totalElements: 100
+    let page = 0;
+    const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
+    const dataSource = new PaginationDataSource<User, UserFilter>(spy);
+
+    testScheduler.run((helpers) => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '1 500ms 2 500ms 3-|';
+      const expectedMarbles = 'a 500ms (bc) 497ms (de)';
+      const expectedValues = {
+        a: false,
+        b: true,
+        c: false,
+        d: true,
+        e: false
+      };
+
+      const source = cold(sourceMarbles, {
+        1: pageRequests[0],
+        2: pageRequests[1],
+        3: pageRequests[2]
+      });
+
+      // Use source to make dataSource emit values
+      source.subscribe(
+        request => {
+          if (request !== undefined) {
+            dataSource.loadPage(request.page, request.rows, request.sort, request.filter);
+          }
+        }
+      );
+
+      expectObservable(dataSource.loading$).toBe(expectedMarbles, expectedValues);
+
+      flush();
+
+      expect(spy).toHaveBeenCalledTimes(3);
     });
-    sink.complete();
 
-    expect(await secondLoading$).toEqual(false);
+    // Complete source
+    dataSource.disconnect();
   });
-
-  /* eslint-disable jasmine/new-line-before-expect */
-  it('should update pagesize', () => {
-    const sink = new Subject<Page<User>>();
-    const spy = createSpy('endpoint').and.callFake(() => sink);
-    const sort: RequestSortDataList<User>[] = [{ fieldName: 'name', order: 'asc' }];
-    const filter: UserFilter = { search: '' };
-    const source = new PaginationDataSource<User, UserFilter>(spy, filter, sort);
-    const subscription = source.connect().subscribe();
-
-    // Has been called with default page number
-    expect(spy).toHaveBeenCalledWith({ page: 0, numberOfRows: 20 }, filter, sort);
-
-    // Call with new page number
-    source.fetch(1, 30);
-    expect(spy).toHaveBeenCalledWith({ page: 1, numberOfRows: 30 }, filter, sort);
-
-    // Call with new page number
-    source.fetch(2);
-    expect(spy).toHaveBeenCalledWith({ page: 2, numberOfRows: 30 }, filter, sort);
-
-    subscription.unsubscribe();
-  });
-  /* eslint-enable jasmine/new-line-before-expect */
-
-  // TODO add tests for constructor without optional parameters
-  // TODO add tests for results received
 });

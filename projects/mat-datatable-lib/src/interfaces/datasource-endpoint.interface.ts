@@ -7,6 +7,11 @@ export interface RequestSortDataList<T> {
   order: SortDirectionAscDesc
 }
 
+// TODO define base for filter parameter and implement in tests and project
+export interface RequestFilter {
+  combine(): { [name:string]: string }
+}
+
   // TODO change name to RowsRange
 export interface RequestPageOfList {
   // TODO rename to startRowNumber
@@ -22,8 +27,9 @@ export interface Page<T> {
   totalElements: number
 }
 
+// TODO export type DatasourceEndpoint<T, Q extends RequestFilter> = (
 export type DatasourceEndpoint<T, Q> = (
   rowsRange: RequestPageOfList,
-  filters?: Q,
-  sorts?: RequestSortDataList<T>[]
+  sorts?: RequestSortDataList<T>[],
+  filters?: Q
 ) => Observable<Page<T>>
