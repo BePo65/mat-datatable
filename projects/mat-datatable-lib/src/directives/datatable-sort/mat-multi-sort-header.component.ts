@@ -24,7 +24,7 @@ import {
   Sort,
   SortDirection
 } from '@angular/material/sort';
-import { SubscriptionLike as ISubscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 import { getMultiSortHeaderNotContainedWithinMultiSortError } from './mat-multi-sort-errors';
 import { MatMultiSort } from './mat-multi-sort.directive';
@@ -66,7 +66,7 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
 
   sortingPosition = '0';
 
-  private sortingChangedSubscription!: ISubscription;
+  private readonly unsubscribe$ = new Subject<void>();
 
   constructor(
     public override _intl: MatSortHeaderIntl,
@@ -97,20 +97,23 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
 
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    this.sortingChangedSubscription = this._sort.multiSortChange.subscribe((sorts: Sort[]) => {
-      const sortIndex = sorts.findIndex(sort => sort.active === this.id);
-      if (sortIndex >= 0) {
-        this.sortingPosition = (sortIndex + 1).toString();
-      } else {
-        this.sortingPosition = '';
-      }
-    });
+    this._sort.multiSortChange
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((sorts: Sort[]) => {
+        const sortIndex = sorts.findIndex(sort => sort.active === this.id);
+        if (sortIndex >= 0) {
+          this.sortingPosition = (sortIndex + 1).toString();
+        } else {
+          this.sortingPosition = '';
+        }
+      });
   }
 
   override ngOnDestroy(): void {
-    if (this.sortingChangedSubscription) {
-      this.sortingChangedSubscription.unsubscribe();
-    }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
     super.ngOnDestroy();
   }
 
