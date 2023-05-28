@@ -1,12 +1,13 @@
 <h1 class="page-title">{{title}}</h1>
 <div class="content-table mat-elevation-z8">
   <mat-datatable #datatable
-    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
+    [datastoreGetter]="getData"
     (rowClick)="onRowClick($event)"
     (sortChange)="onSortChanged($event)"
+    (pageSizeChange)="onPageSizeChanged()"
   >loading...</mat-datatable>
 </div>
 <div class="current-sort">

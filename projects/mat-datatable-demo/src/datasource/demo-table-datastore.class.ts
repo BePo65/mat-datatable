@@ -22,21 +22,21 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
   /**
    * Paginate the data.
    * @param rowsRange - data to be selected
-   * @param filters - optional object with the filter definition
    * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional object with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
     rowsRange: RequestPageOfList,
-    filters?: DatatableFilter,
-    sorts?: RequestSortDataList<DatatableItem>[]
+    sorts?: RequestSortDataList<DatatableItem>[],
+    filters?: DatatableFilter // eslint-disable-line @typescript-eslint/no-unused-vars
   ) {
     if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
       this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
     }
     const startIndex = rowsRange.page * rowsRange.numberOfRows;
-    const resultingData = this.data.splice(startIndex, rowsRange.numberOfRows);
+    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
       pageNumber: rowsRange.page,

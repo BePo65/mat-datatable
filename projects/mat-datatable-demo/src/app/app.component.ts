@@ -27,7 +27,6 @@ export class AppComponent implements AfterViewInit {
 
   title = 'Mat-Datatable-Demo';
 
-  // HACK protected dataSource: MatDatatableDataSource<DemoTableItem>;
   protected dataStore = new DemoTableDataStore<DemoTableItem, object>();
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
     {
@@ -105,8 +104,8 @@ export class AppComponent implements AfterViewInit {
   }
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DemoTableItem>[]) => {
-    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DemoTableItem>[], filters?: object) => {
+    return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
   protected onRowClick($event: DemoTableItem) {
@@ -119,6 +118,10 @@ export class AppComponent implements AfterViewInit {
     this.currentSorts$.next(currentSorts);
   }
 
+  protected onPageSizeChanged() {
+    this.currentPageSizeChanged();
+  }
+
   protected headerFromColumnId(columnId: string): string {
     return this.headers[columnId];
   }
@@ -129,7 +132,7 @@ export class AppComponent implements AfterViewInit {
    */
   protected removeSort(columnId: string): void {
     const newSort = this.currentSorts.filter(sort => sort.columnId !== columnId);
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
 
   // Demo to show sorting by code
@@ -137,7 +140,7 @@ export class AppComponent implements AfterViewInit {
     const newSort: MatSortDefinition[] = [
       { columnId:'id', direction:'asc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameFirstNameBirthday() {
     const newSort: MatSortDefinition[] = [
@@ -145,36 +148,36 @@ export class AppComponent implements AfterViewInit {
       { columnId:'firstName', direction:'asc' },
       { columnId:'birthday', direction:'asc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'lastName', direction:'asc' },
       { columnId:'birthday', direction:'asc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'lastName', direction:'asc' },
       { columnId:'birthday', direction:'desc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'birthday', direction:'asc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
       { columnId:'birthday', direction:'desc' }
     ];
-    this.table.setSorts(newSort);
+    this.table.sortDefinitions = newSort;
   }
   protected onClearSort() {
-    this.table.setSorts([]);
+    this.table.sortDefinitions = [];
   }
 
   // Demo to show setting selected rows by code
@@ -216,24 +219,14 @@ export class AppComponent implements AfterViewInit {
 
   // Demo to show / change pageSize of datasource
   protected onTogglePageSize() {
-    // TODO we do not have a paginator!
-    // if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
-    if((this.table?.dataSource !== undefined)) {
-      const oldPageSize = this.table.dataSource.pageSize;
-      const newPageSize = oldPageSize === 10 ? 20 : 10;
-      this.table.dataSource.pageSize = +newPageSize;
-      // TODO this.table.dataSource.paginator._changePageSize(+newPageSize);
-      this.currentPageSizeChanged();
-    } else {
-      window.alert('datasource and/or paginator are undefined');
-    }
+    const oldPageSize = this.table.pageSize;
+    const newPageSize = oldPageSize === 10 ? 20 : 10;
+    this.table.pageSize = +newPageSize;
+    // TODO this.table.dataSource.paginator._changePageSize(+newPageSize);
+    this.currentPageSizeChanged();
   }
   private currentPageSizeChanged() {
-    // TODO we do not have a paginator!
-    // if((this.table?.dataSource !== undefined) && (this.table?.dataSource.paginator !== undefined)) {
-    if((this.table?.dataSource !== undefined)) {
-      this.currentPageSize$.next(this.table.dataSource?.pageSize.toString());
-    }
+      this.currentPageSize$.next(this.table.pageSize.toString());
   }
 
   /**
