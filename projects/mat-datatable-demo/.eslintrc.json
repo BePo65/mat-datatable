@@ -63,6 +63,7 @@
             "ignoreStatic": true
           }
         ],
+        "arrow-parens": ["error", "as-needed"],
         "comma-dangle": "error",
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": [

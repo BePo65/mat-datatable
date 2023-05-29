@@ -56,7 +56,7 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-      testScheduler.run((helpers) => {
+      testScheduler.run(helpers => {
         const { expectObservable, flush } = helpers;
         const expectedMarbles = 'i';
         const expectedValues = {
@@ -105,7 +105,7 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-    testScheduler.run((helpers) => {
+    testScheduler.run(helpers => {
       const { cold, expectObservable, flush } = helpers;
       const sourceMarbles = '1-2-3-|';
       const expectedMarbles = 'a-b-c';
@@ -185,7 +185,7 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-    testScheduler.run((helpers) => {
+    testScheduler.run(helpers => {
       const { cold, expectObservable, flush } = helpers;
       const sourceMarbles = '1-2-3-|';
       const expectedMarbles = 'a-b-c';
@@ -238,7 +238,7 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]).pipe(delay(100)));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-    testScheduler.run((helpers) => {
+    testScheduler.run(helpers => {
       const { cold, expectObservable, flush } = helpers;
       const sourceMarbles = '1-|';
       const expectedMarbles = 'a 99ms b';
@@ -302,7 +302,7 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-    testScheduler.run((helpers) => {
+    testScheduler.run(helpers => {
       const { cold, expectObservable, flush } = helpers;
       const sourceMarbles = '1 500ms 2 500ms 3-|';
       const expectedMarbles = 'a 500ms (bc) 497ms (de)';

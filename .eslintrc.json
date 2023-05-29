@@ -60,6 +60,7 @@
             "ignoreStatic": true
           }
         ],
+        "arrow-parens": ["error", "as-needed"],
         "comma-dangle": "error",
         "import/order": [
           "error", {
