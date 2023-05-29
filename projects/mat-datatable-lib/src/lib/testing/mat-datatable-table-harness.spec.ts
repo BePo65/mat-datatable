@@ -330,14 +330,14 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
       this.data = this.getSortedData();
     }
     const startIndex = rowsRange.page * rowsRange.numberOfRows;
-    const resultingData = this.data.splice(startIndex, rowsRange.numberOfRows);
+    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
       pageNumber: rowsRange.page,
       returnedElements: resultingData.length,
       totalElements: this.data.length
     } as Page<TableHarnessTestRow>;
-    return observableOf(result);
+    return of(result);
   }
 
   /**
