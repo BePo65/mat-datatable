@@ -18,7 +18,7 @@
     "test": "npm run test:lib -- --watch=false && npm run test:demo -- --watch=false",
     "test:lib": "ng test mat-datatable-lib",
     "test:demo": "ng test mat-datatable-demo",
-    "test:lib:coverage:ui": "set BROWSERSLIST_IGNORE_OLD_DATA=1 && ng test mat-datatable --code-coverage --watch=false && node tools/open-coverage.mjs",
+    "test:lib:coverage:ui": "set BROWSERSLIST_IGNORE_OLD_DATA=1 && ng test mat-datatable-lib --code-coverage --no-watch && node tools/open-coverage.mjs",
     "build": "npm run build:lib && npm run build:demo",
     "build:lib": "ng build mat-datatable-lib",
     "build:demo": "ng build mat-datatable-demo --delete-output-path --configuration production",
