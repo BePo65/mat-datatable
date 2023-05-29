@@ -1,4 +1,4 @@
-import { of as observableOf } from 'rxjs';
+import { delay, of } from 'rxjs';
 
 import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
 
@@ -18,7 +18,6 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
     this.currentSortingDefinitions = [];
   }
 
-  // HACK add time delay to simulate request of sorted data from server
   /**
    * Paginate the data.
    * @param rowsRange - data to be selected
@@ -43,7 +42,8 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
       returnedElements: resultingData.length,
       totalElements: this.data.length
     } as Page<DatatableItem>;
-    return observableOf(result);
+    const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
+    return of(result).pipe(delay(simulatedResponseTime));
   }
 
   /**
