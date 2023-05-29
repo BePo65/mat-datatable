@@ -1,24 +1,23 @@
-/* eslint-disable @angular-eslint/component-class-suffix */
-
 import { HarnessLoader, parallel } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { BehaviorSubject, of as observableOf  } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { Page, RequestPageOfList, RequestSortDataList } from '../../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
 import { MatSortDefinitionPos } from '../../interfaces/datatable-sort-definition.interface';
-import { RowSelectionType } from '../mat-datatable.component';
+import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
 import { MatDatatableModule } from '../mat-datatable.module';
 
 import { MatHeaderRowHarness } from './mat-datatable-row-harness';
 import { MatDatatableHarness } from './mat-datatable-table-harness';
 
 describe('MatDatatableHarness', () => {
-  let fixture: ComponentFixture<TableHarnessTest>;
+  let fixture: ComponentFixture<TableHarnessTestComponent>;
   let loader: HarnessLoader;
+  let component: TableHarnessTestComponent;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
@@ -27,15 +26,16 @@ describe('MatDatatableHarness', () => {
         NoopAnimationsModule
       ],
       declarations: [
-        TableHarnessTest
+        TableHarnessTestComponent
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableHarnessTest);
+    fixture = TestBed.createComponent(TableHarnessTestComponent);
     fixture.detectChanges();
+    component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
@@ -217,21 +217,25 @@ type TableHarnessTestRow = {
   symbol: string;
 }
 
+type EmptyTestFilter = object;
+
 @Component({
   template: `
-  <mat-datatable
-    [datastoreGetter]="getData"
+  <mat-datatable #testTable
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
+    [datastoreGetter]="getData"
     (rowClick)="onRowClick($event)"
     (sortChange)="onSortChanged($event)">
     loading...
   </mat-datatable>
   `
 })
-class TableHarnessTest {
-  dataStore = new TableHarnessTestDataStore([
+class TableHarnessTestComponent {
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow, EmptyTestFilter>;
+
+  dataStore = new TableHarnessTestDataStore<TableHarnessTestRow, EmptyTestFilter>([
     { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
     { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
     { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
@@ -288,8 +292,8 @@ class TableHarnessTest {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<TableHarnessTestRow>[]) => {
-    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<TableHarnessTestRow>[], filters?: object) => {
+    return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
   protected onRowClick($event: TableHarnessTestRow) {
@@ -316,14 +320,14 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
   /**
    * Paginate the data.
    * @param rowsRange - data to be selected
-   * @param filters - optional object with the filter definition
    * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional object with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
     rowsRange: RequestPageOfList,
-    filters?: TableHarnessTestFilter,
-    sorts?: RequestSortDataList<TableHarnessTestRow>[]
+    sorts?: RequestSortDataList<TableHarnessTestRow>[],
+    filters?: TableHarnessTestFilter // eslint-disable-line @typescript-eslint/no-unused-vars
   )  {
     if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
       this.currentSortingDefinitions = sorts;
