@@ -64,7 +64,7 @@ interface MatSortHeaderColumnDef {
 export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, CanDisable, OnDestroy {
   @Input('mat-multi-sort-header') override id!: string;
 
-  sortingPosition = '0';
+  sortingPosition = '';
 
   private readonly unsubscribe$ = new Subject<void>();
 
