@@ -445,8 +445,8 @@ class DatatableTestComponent {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
-    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DatatableTestRow>[], filters?: object) => {
+    return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
   protected onRowClick($event: DatatableTestRow) {
@@ -482,8 +482,8 @@ class DatatableEmptyTestComponent {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
-    return this.dataStore.getPagedData(rowsRange, filters, sorts);
+  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DatatableTestRow>[], filters?: object) => {
+    return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
   protected onRowClick($event: DatatableTestRow) {
@@ -530,13 +530,13 @@ class DatatableDoubleTestComponent {
   protected readonly currentSorts2$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData1 = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
-    return this.dataStore1.getPagedData(rowsRange, filters, sorts);
+  protected getData1 = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DatatableTestRow>[], filters?: object) => {
+    return this.dataStore1.getPagedData(rowsRange, sorts, filters);
   };
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData2 = (rowsRange: RequestPageOfList, filters?: object, sorts?: RequestSortDataList<DatatableTestRow>[]) => {
-    return this.dataStore2.getPagedData(rowsRange, filters, sorts);
+  protected getData2 = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DatatableTestRow>[], filters?: object) => {
+    return this.dataStore2.getPagedData(rowsRange, sorts, filters);
   };
 
   protected onSortChanged1(currentSorts: MatSortDefinitionPos[]) {
@@ -564,14 +564,14 @@ class DatatableTestDataStore<DatatableTestRow, DatatableTestFilter> {
   /**
    * Paginate the data.
    * @param rowsRange - data to be selected
-   * @param filters - optional object with the filter definition
    * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional object with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
     rowsRange: RequestPageOfList,
-    filters?: DatatableTestFilter,
-    sorts?: RequestSortDataList<DatatableTestRow>[]
+    sorts?: RequestSortDataList<DatatableTestRow>[],
+    filters?: DatatableTestFilter // eslint-disable-line @typescript-eslint/no-unused-vars
   )  {
     if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
       this.currentSortingDefinitions = sorts;
