@@ -3,11 +3,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, ViewChild } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  BehaviorSubject,
-  of as observableOf,
-  Subject
-} from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
 import { Page, RequestPageOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
@@ -582,14 +578,14 @@ class DatatableTestDataStore<DatatableTestRow, DatatableTestFilter> {
       this.data = this.getSortedData();
     }
     const startIndex = rowsRange.page * rowsRange.numberOfRows;
-    const resultingData = this.data.splice(startIndex, rowsRange.numberOfRows);
+    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
       pageNumber: rowsRange.page,
       returnedElements: resultingData.length,
       totalElements: this.data.length
     } as Page<DatatableTestRow>;
-    return observableOf(result);
+    return of(result);
   }
 
   /**
