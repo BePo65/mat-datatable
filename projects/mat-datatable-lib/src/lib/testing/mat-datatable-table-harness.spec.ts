@@ -63,6 +63,20 @@ describe('MatDatatableHarness', () => {
     expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
   });
 
+  it('should get cells inside a header row with sorted columns', async () => {
+    // TODO sort columns
+    component.matDataTable.sort.sortDefinitions = [
+      { active: 'name', direction: 'desc' },
+      { active: 'weight', direction: 'asc' }
+    ];
+
+    const header = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await header.getCellTextByIndex();
+
+    expect(headerContent.length).toEqual(4);
+    expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+  });
+
   it('should get cells inside a row', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
     const headerRows = await table.getHeaderRows();
