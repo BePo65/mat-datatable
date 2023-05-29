@@ -427,10 +427,10 @@ type EmptyTestFilter = object;
 @Component({
   template: `
   <mat-datatable #testTable
-    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
+    [datastoreGetter]="getData"
     (rowClick)="onRowClick($event)"
     (sortChange)="onSortChanged($event)">
     No data to display.
@@ -466,10 +466,10 @@ class DatatableTestComponent {
 @Component({
   template: `
   <mat-datatable
-    [datastoreGetter]="getData"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
+    [datastoreGetter]="getData"
     (rowClick)="onRowClick($event)"
     (sortChange)="onSortChanged($event)">
     No data to display.
@@ -503,17 +503,17 @@ class DatatableEmptyTestComponent {
 @Component({
   template: `
   <mat-datatable #testTable1
-    [datastoreGetter]="getData1"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
+    [datastoreGetter]="getData1"
     (sortChange)="onSortChanged1($event)"
   >
     No data to display.
   </mat-datatable>
   <mat-datatable #testTable2
-    [datastoreGetter]="getData2"
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
+    [datastoreGetter]="getData2"
     (sortChange)="onSortChanged2($event)"
   >
     No data to display.
