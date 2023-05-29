@@ -71,6 +71,15 @@ export class MatCellHarness extends _MatCellHarnessBase {
 export class MatHeaderCellHarness extends _MatCellHarnessBase {
   /** The selector for the host element of a `MatHeaderCellHarness` instance. */
   static hostSelector = '.mat-mdc-header-cell';
+  private _headerContent = this.locatorFor('.mat-sort-header-content');
+
+  /**
+   * Gets the cell's header text.
+   * @returns the header text of the cell.
+   */
+  override async getText(): Promise<string> {
+    return (await this._headerContent()).text();
+  }
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header cell with specific
