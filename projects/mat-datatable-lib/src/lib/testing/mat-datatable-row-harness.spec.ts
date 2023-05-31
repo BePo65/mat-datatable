@@ -1,4 +1,4 @@
-import { HarnessLoader, parallel } from '@angular/cdk/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
@@ -11,9 +11,9 @@ import { MatSortDefinitionPos } from '../../interfaces/datatable-sort-definition
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
 import { MatDatatableModule } from '../mat-datatable.module';
 
-import { MatDatatableHarness } from './mat-datatable-table-harness';
+import { MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
 
-describe('MatDatatableHarness', () => {
+describe('MatRowHarness', () => {
   let fixture: ComponentFixture<TableHarnessTestComponent>;
   let loader: HarnessLoader;
 
@@ -36,165 +36,152 @@ describe('MatDatatableHarness', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should load harness for a mat-datatable', async () => {
-    const tables = await loader.getAllHarnesses(MatDatatableHarness);
+  it('should get list of MatCellHarness for cells in row', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const cellsHarnesses = await rowHarness.getCells();
 
-    expect(tables.length).toBe(1);
+    // This gets always the first row of a table
+    expect(cellsHarnesses.length).toEqual(4);
+    expect(cellsHarnesses[0].constructor.name).toEqual('MatCellHarness');
+    expect(await cellsHarnesses[0].getText()).toEqual('1');
+    expect(await cellsHarnesses[1].getText()).toEqual('Hydrogen');
+    expect(await cellsHarnesses[2].getText()).toEqual('1.0079');
+    expect(await cellsHarnesses[3].getText()).toEqual('H');
   });
 
-  it('should get the different kinds of rows in the mat-datatable', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const headerRows = await table.getHeaderRows();
-    const rows = await table.getRows();
+  it('should get selected cells in row - filter by element content', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const rowCellsHarnesses = await rowHarness.getCells({ columnName: 'name' });
 
-    expect(headerRows.length).toBe(1);
-    expect(rows.length).toBe(10);
+    expect(rowCellsHarnesses.length).toEqual(1);
+    expect(rowCellsHarnesses[0].constructor.name).toEqual('MatCellHarness');
+    expect(await rowCellsHarnesses[0].getText()).toEqual('Hydrogen');
   });
 
-  it('should get cells inside a row', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const headerRows = await table.getHeaderRows();
-    const rows = await table.getRows();
+  it('should get content of cells as row', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const rowContent = await rowHarness.getCellTextByIndex();
 
-    const headerCells = await parallel(() => headerRows.map(row => row.getCellTextByIndex()));
-
-    expect(headerCells.length).toEqual(1);
-    expect(headerCells[0].length).toEqual(4);
-    expect(headerCells[0]).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
-
-    const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
-
-    expect(cells).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
+    expect(rowContent.length).toEqual(4);
+    expect(rowContent).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
   });
 
-  it('should be able to get the text of a cell', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const secondRow = (await table.getRows())[1];
-    const cells = await secondRow.getCells();
-    const cellTexts = await parallel(() => cells.map(cell => cell.getText()));
+  it('should get content of selected cells as row - filter with regex', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+  const rowContent = await rowHarness.getCellTextByIndex({ text: /H.*/ });
 
-    expect(cellTexts).toEqual(['2', 'Helium', '4.0026', 'He']);
+    expect(rowContent.length).toEqual(2);
+    expect(rowContent).toEqual(['Hydrogen', 'H']);
   });
 
-  it('should be able to get the column name of a cell', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const fifthRow = (await table.getRows())[1];
-    const cells = await fifthRow.getCells();
-    const cellColumnNames = await parallel(() => cells.map(cell => cell.getColumnName()));
+  it('should get content of selected cells as row - filter by column name', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const rowContent = await rowHarness.getCellTextByIndex({ columnName: 'name' });
 
-    expect(cellColumnNames).toEqual(['position', 'name', 'weight', 'symbol']);
+    expect(rowContent.length).toEqual(1);
+    expect(rowContent).toEqual(['Hydrogen']);
   });
 
-  it('should be able to filter cells by text', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const firstRow = (await table.getRows())[0];
-    const cells = await firstRow.getCells({ text: '1.0079' });
-    const cellTexts = await parallel(() => cells.map(cell => cell.getText()));
+  it('should get cells in row as columns', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const rowContent = await rowHarness.getCellTextByColumnName();
+    const columnNames = Object.getOwnPropertyNames(rowContent);
+    const columnValues = Object.values(rowContent);
 
-    expect(cellTexts).toEqual(['1.0079']);
+    expect(columnValues.length).toEqual(4);
+    expect(columnNames).toEqual(['position', 'name', 'weight', 'symbol']);
+    expect(columnValues).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
+  });
+});
+
+describe('MatHeaderRowHarness', () => {
+  let fixture: ComponentFixture<TableHarnessTestComponent>;
+  let loader: HarnessLoader;
+  let component: TableHarnessTestComponent;
+
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
+      imports: [
+        MatDatatableModule,
+        NoopAnimationsModule
+      ],
+      declarations: [
+        TableHarnessTestComponent
+      ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TableHarnessTestComponent);
+    fixture.detectChanges();
+    component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should be able to filter cells by column name', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const firstRow = (await table.getRows())[0];
-    const cells = await firstRow.getCells({ columnName: 'symbol' });
-    const cellTexts = await parallel(() => cells.map(cell => cell.getText()));
+  it('should get list of MatCellHarness for cells in header row', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerCellsHarnesses = await headerRowHarness.getCells();
 
-    expect(cellTexts).toEqual(['H']);
+    expect(headerCellsHarnesses.length).toEqual(4);
+    expect(headerCellsHarnesses[0].constructor.name).toEqual('MatHeaderCellHarness');
   });
 
-  it('should be able to filter cells by regex', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const firstRow = (await table.getRows())[0];
-    const cells = await firstRow.getCells({ text: /^H/ });
-    const cellTexts = await parallel(() => cells.map(cell => cell.getText()));
+  it('should get selected cells in header row - filter by element content', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerCellsHarnesses = await headerRowHarness.getCells({ columnName: 'name' });
 
-    expect(cellTexts).toEqual(['Hydrogen', 'H']);
+    expect(headerCellsHarnesses.length).toEqual(1);
+    expect(headerCellsHarnesses[0].constructor.name).toEqual('MatHeaderCellHarness');
+    expect(await headerCellsHarnesses[0].getText()).toEqual('Name');
   });
 
-  it('should be able to get the mat-datatable text organized by columns', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const text = await table.getCellTextByColumnName();
+  it('should get content of cells in header as row', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex();
 
-    expect(text).toEqual({
-      position: {
-        headerText: ['No.'],
-        text: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-      },
-      name: {
-        headerText: ['Name'],
-        text: [
-          'Hydrogen',
-          'Helium',
-          'Lithium',
-          'Beryllium',
-          'Boron',
-          'Carbon',
-          'Nitrogen',
-          'Oxygen',
-          'Fluorine',
-          'Neon'
-        ]
-      },
-      weight: {
-        headerText: ['Weight'],
-        text: [
-          '1.0079',
-          '4.0026',
-          '6.941',
-          '9.0122',
-          '10.811',
-          '12.0107',
-          '14.0067',
-          '15.9994',
-          '18.9984',
-          '20.1797'
-        ]
-      },
-      symbol: {
-        headerText: ['Symbol'],
-        text: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne']
-      }
-    });
+    expect(headerContent.length).toEqual(4);
+    expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
   });
 
-  it('should be able to get the mat-datatable text organized by rows', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const text = await table.getCellTextByIndex();
+  it('should get content of selected cells in header as row - filter with regex', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex({ text: /N.+/ });
 
-    expect(text).toEqual([
-      ['1', 'Hydrogen', '1.0079', 'H'],
-      ['2', 'Helium', '4.0026', 'He'],
-      ['3', 'Lithium', '6.941', 'Li'],
-      ['4', 'Beryllium', '9.0122', 'Be'],
-      ['5', 'Boron', '10.811', 'B'],
-      ['6', 'Carbon', '12.0107', 'C'],
-      ['7', 'Nitrogen', '14.0067', 'N'],
-      ['8', 'Oxygen', '15.9994', 'O'],
-      ['9', 'Fluorine', '18.9984', 'F'],
-      ['10', 'Neon', '20.1797', 'Ne']
-    ]);
+    expect(headerContent.length).toEqual(2);
+    expect(headerContent).toEqual(['No.', 'Name']);
   });
 
-  it('should be able to get the cell text in a row organized by index', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const rows = await table.getRows();
+  it('should get content of selected cells in header as row - filter by column name', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex({ columnName: 'name' });
 
-    expect(rows.length).toBeGreaterThan(0);
-    expect(await rows[0].getCellTextByIndex()).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
+    expect(headerContent.length).toEqual(1);
+    expect(headerContent).toEqual(['Name']);
   });
 
-  it('should be able to get the cell text in a row organized by columns', async () => {
-    const table = await loader.getHarness(MatDatatableHarness);
-    const rows = await table.getRows();
+  it('should get content of cells in header with sorted columns as row', async () => {
+    component.matDataTable.sort.sortDefinitions = [
+      { active: 'name', direction: 'desc' },
+      { active: 'weight', direction: 'asc' }
+    ];
 
-    expect(rows.length).toBeGreaterThan(0);
-    expect(await rows[0].getCellTextByColumnName()).toEqual({
-      position: '1',
-      name: 'Hydrogen',
-      weight: '1.0079',
-      symbol: 'H'
-    });
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex();
+
+    expect(headerContent.length).toEqual(4);
+    expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+  });
+
+  it('should get cells in header row as columns', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByColumnName();
+    const columnNames = Object.getOwnPropertyNames(headerContent);
+    const columnValues = Object.values(headerContent);
+
+    expect(columnValues.length).toEqual(4);
+    expect(columnNames).toEqual(['position', 'name', 'weight', 'symbol']);
+    expect(columnValues).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
   });
 });
 
