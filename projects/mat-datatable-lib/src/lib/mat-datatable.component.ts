@@ -100,6 +100,10 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     this.unsubscribe$.complete();
   }
 
+  /**
+   * Property to be used to mark a single row  (e.g. to be used to
+   * mark the "current" row, when returning from a detail view).
+   */
   get activatedRow(): TRowData | undefined {
     return this.currentActivatedRow;
   }
