@@ -84,6 +84,14 @@ export class MatRowHarness extends _MatRowHarnessBase<
   ): HarnessPredicate<T> {
     return new HarnessPredicate(this, options);
   }
+
+  /**
+   * Clicks the row.
+   * @returns promise that completes after clicking the row.
+   */
+  async click(): Promise<void> {
+    return (await this.host()).click();
+  }
 }
 
 /** Harness for interacting with a mat-datatable header row. */

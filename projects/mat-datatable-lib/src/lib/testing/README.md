@@ -165,6 +165,13 @@ Harness for interacting with a mat-datatable row.
 | | |
 
 | | |
+|---|---|
+| `async click` | Clicks the row (e.g. to select a row). |
+| **Returns** |
+| Promise\<void> | Promise that resolves when the click action completes. |
+| | |
+
+| | |
 |------|-------------|
 | `static with` | Gets a `HarnessPredicate` that can be used to search for a mat-datatable row with specific attributes. |
 | **Parameters** |
