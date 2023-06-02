@@ -9,11 +9,3 @@ export interface MatSortDefinition {
   columnId: string;
   direction: SortDirection;
 }
-
-/**
- * Interface for the definition of the sorting of 1 table column
- * @param position - The number of the column in the sorting definition (1..numberOfColumns).
- */
-export interface MatSortDefinitionPos extends MatSortDefinition {
-  position: number;
-}

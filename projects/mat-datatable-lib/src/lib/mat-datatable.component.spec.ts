@@ -8,7 +8,7 @@ import { BehaviorSubject, of, Subject } from 'rxjs';
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
 import { Page, RequestPageOfList, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
-import { MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
+import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
 import { MatDatatableModule } from './mat-datatable.module';
@@ -201,11 +201,12 @@ describe('MatDatatableComponent', () => {
 
       expect(headers).toHaveSize(1);
 
-      const sortDefinitions = component.matDataTable.sort.sortDefinitions;
+      const sortDefinitions = component.matDataTable.sortDefinitions;
 
+      expect(sortDefinitions.length).toBe(2);
       expect(sortDefinitions).toEqual([
-        { active: 'name', direction: 'desc' },
-        { active: 'weight', direction: 'asc' }
+        { columnId: 'name', direction: 'desc' },
+        { columnId: 'weight', direction: 'asc' }
       ]);
 
       const table = await loader.getHarness(MatDatatableHarness);
@@ -231,9 +232,9 @@ describe('MatDatatableComponent', () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
       let headers = await sort.getSortHeaders({ sortDirection: '' });
 
-      component.matDataTable.sort.sortDefinitions = [
-        { active: 'name', direction: 'desc' },
-        { active: 'weight', direction: 'asc' }
+      component.matDataTable.sortDefinitions = [
+        { columnId: 'name', direction: 'desc' },
+        { columnId: 'weight', direction: 'asc' }
       ];
 
       expect(headers).toHaveSize(4);
@@ -267,9 +268,9 @@ describe('MatDatatableComponent', () => {
 
     it('should sort table by changing the sort definitions', async () => {
       const sort = await loader.getHarness(MatMultiSortHarness);
-      component.matDataTable.sort.sortDefinitions = [
-        { active: 'name', direction: 'desc' },
-        { active: 'weight', direction: 'asc' }
+      component.matDataTable.sortDefinitions = [
+        { columnId: 'name', direction: 'desc' },
+        { columnId: 'weight', direction: 'asc' }
       ];
       fixture.detectChanges();
       let headers = await sort.getActiveHeaders();
@@ -282,9 +283,9 @@ describe('MatDatatableComponent', () => {
       expect(await headers[1].getSortDirection()).toBe('asc');
       expect(await headers[1].getSortPosition()).toBe(2);
 
-      component.matDataTable.sort.sortDefinitions = [
-        { active: 'weight', direction: 'asc' },
-        { active: 'name', direction: 'asc' }
+      component.matDataTable.sortDefinitions = [
+        { columnId: 'weight', direction: 'asc' },
+        { columnId: 'name', direction: 'asc' }
       ];
       fixture.detectChanges();
       headers = await sort.getActiveHeaders();
@@ -336,9 +337,9 @@ describe('MatDatatableComponent', () => {
       expect(headers1).toHaveSize(4);
       expect(headers2).toHaveSize(4);
 
-      component.matDataTable1.sort.sortDefinitions = [
-        { active: 'name', direction: 'desc' },
-        { active: 'weight', direction: 'asc' }
+      component.matDataTable1.sortDefinitions = [
+        { columnId: 'name', direction: 'desc' },
+        { columnId: 'weight', direction: 'asc' }
       ];
 
       headers1 = await sorts[0].getSortHeaders({ sortDirection: /(asc|desc)/ });
@@ -439,8 +440,8 @@ class DatatableTestComponent {
   protected dataStore = new DatatableTestDataStore(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  protected currentSorts: MatSortDefinitionPos[] = [];
-  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected currentSorts: MatSortDefinition[] = [];
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
@@ -453,7 +454,7 @@ class DatatableTestComponent {
     this.selectedRowsAsString = $event.name;
   }
 
-  protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+  protected onSortChanged(currentSorts: MatSortDefinition[]) {
     this.currentSorts = currentSorts;
     this.currentSorts$.next(currentSorts);
   }
@@ -476,8 +477,8 @@ class DatatableEmptyTestComponent {
   dataStore = new DatatableTestDataStore([] as DatatableTestRow[]);
   protected columnDefinitions = datatableTestColumnDefinitions;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  protected currentSorts: MatSortDefinitionPos[] = [];
-  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected currentSorts: MatSortDefinition[] = [];
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
@@ -490,7 +491,7 @@ class DatatableEmptyTestComponent {
     this.selectedRowsAsString = $event.name;
   }
 
-  protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+  protected onSortChanged(currentSorts: MatSortDefinition[]) {
     this.currentSorts = currentSorts;
     this.currentSorts$.next(currentSorts);
   }

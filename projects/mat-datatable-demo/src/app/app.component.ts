@@ -9,7 +9,6 @@ import {
   MatColumnDefinition,
   MatDatatableComponent,
   MatSortDefinition,
-  MatSortDefinitionPos,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
 import { RequestPageOfList, RequestSortDataList } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
@@ -84,8 +83,8 @@ export class AppComponent implements AfterViewInit {
     }
   ];
   protected displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
-  protected currentSorts: MatSortDefinitionPos[] = [];
-  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected currentSorts: MatSortDefinition[] = [];
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
@@ -113,7 +112,7 @@ export class AppComponent implements AfterViewInit {
     window.alert(`row clicked; id=${$event.userId}`);
   }
 
-  protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+  protected onSortChanged(currentSorts: MatSortDefinition[]) {
     this.currentSorts = currentSorts;
     this.currentSorts$.next(currentSorts);
   }

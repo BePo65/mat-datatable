@@ -20,7 +20,7 @@ import {
 } from '../directives/datatable-sort';
 import { DatasourceEndpoint, Page, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
-import { MatSortDefinition, MatSortDefinitionPos } from '../interfaces/datatable-sort-definition.interface';
+import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
 
@@ -44,7 +44,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Input() datastoreGetter: DatasourceEndpoint<TRowData, TListFilter> = emptyDatastoreGetter;
   @Output() rowClick = new EventEmitter<TRowData>();
-  @Output() sortChange = new EventEmitter<MatSortDefinitionPos[]>();
+  @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
   @Output() pageSizeChange = new EventEmitter<number>();
   @ViewChild(MatTable) table!: MatTable<TRowData>;
   @ViewChild(MatMultiSort) sort!: MatMultiSort;
@@ -131,7 +131,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   }
 
   get sortDefinitions(): MatSortDefinition[] {
-    return this.matSortDefinitionPosFromSortArray(this.sort.sortDefinitions);
+    return this.matSortDefinitionFromSortArray(this.sort.sortDefinitions);
   }
   set sortDefinitions(matSortDefinitions: MatSortDefinition[]) {
     const sortables: Sort[] = [];
@@ -235,7 +235,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   }
 
   protected onMultiSortChanged(sortStates: Sort[]) {
-    this.sortChange.emit(this.matSortDefinitionPosFromSortArray(sortStates));
+    this.sortChange.emit(this.matSortDefinitionFromSortArray(sortStates));
   }
 
   protected onPageSizeChange(pageSize: number) {
@@ -272,18 +272,16 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   }
 
   /**
-   * Convert an array of type Sort[] to an array of type MatSortDefinitionPos[].
-   * MatSortDefinitionPos contains also the position of each sort definition.
+   * Convert an array of type Sort[] to an array of type MatSortDefinition[].
    * @param sorts - sorting definition to convert
-   * @returns sorting definition as array of type MatSortDefinitionPos
+   * @returns sorting definition as array of type MatSortDefinition
    */
-  private matSortDefinitionPosFromSortArray(sorts: Sort[]): MatSortDefinitionPos[] {
-    const result: MatSortDefinitionPos[] = [];
+  private matSortDefinitionFromSortArray(sorts: Sort[]): MatSortDefinition[] {
+    const result: MatSortDefinition[] = [];
     for (let i = 0; i < sorts.length; i++) {
-      const element: MatSortDefinitionPos = {
+      const element: MatSortDefinition = {
         columnId: sorts[i].active,
-        direction: sorts[i].direction,
-        position: i + 1
+        direction: sorts[i].direction
       };
       result.push(element);
     }

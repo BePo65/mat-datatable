@@ -7,7 +7,7 @@ import { BehaviorSubject, of } from 'rxjs';
 
 import { Page, RequestPageOfList, RequestSortDataList } from '../../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
-import { MatSortDefinitionPos } from '../../interfaces/datatable-sort-definition.interface';
+import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
 import { MatDatatableModule } from '../mat-datatable.module';
 
@@ -274,8 +274,8 @@ class TableHarnessTestComponent {
     }
   ];
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  protected currentSorts: MatSortDefinitionPos[] = [];
-  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinitionPos[]>([]);
+  protected currentSorts: MatSortDefinition[] = [];
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
@@ -288,7 +288,7 @@ class TableHarnessTestComponent {
     this.selectedRowsAsString = $event.name;
   }
 
-  protected onSortChanged(currentSorts: MatSortDefinitionPos[]) {
+  protected onSortChanged(currentSorts: MatSortDefinition[]) {
     this.currentSorts = currentSorts;
     this.currentSorts$.next(currentSorts);
   }

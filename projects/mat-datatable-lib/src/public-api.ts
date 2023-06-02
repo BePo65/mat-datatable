@@ -15,5 +15,5 @@ export {
 // MatColumnDefinition<TRowData>
 export * from './interfaces/datatable-column-definition.interface';
 
-// MatSortDefinition, MatSortDefinitionPos
+// MatSortDefinition
 export * from './interfaces/datatable-sort-definition.interface';
