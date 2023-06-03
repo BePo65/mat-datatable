@@ -11,3 +11,7 @@
     @include mat-datatable-badge.theme($theme-or-color-config);
   }
 }
+
+.mdc-linear-progress {
+  --mdc-linear-progress-track-height: 2px;
+}

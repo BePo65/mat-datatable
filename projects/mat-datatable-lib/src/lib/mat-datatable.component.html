@@ -1,4 +1,9 @@
-<mat-progress-bar *ngIf="dataSource.loading$ | async" class="mat-datatable-loading-spinner" color="primary" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar
+  [ngClass]="{'mat-datatable-loading-hide': (dataSource.loading$ | async) === false }"
+  class="mat-datatable-loading-spinner"
+  color="primary"
+  mode="indeterminate">
+</mat-progress-bar>
 <table mat-table matMultiSort class="full-width-table mat-datatable"
   [dataSource]="dataSource"
   (matMultiSortChange)="onMultiSortChanged($event)">

@@ -13,6 +13,10 @@
 
 .mat-datatable-loading-spinner {
   position: sticky;
-  top: 56px; // position below header row
+  top: 55px; // position below header row
   z-index: 110; // as table has z-index=100 (default)
+}
+
+.mat-datatable-loading-hide {
+  visibility: hidden;
 }
