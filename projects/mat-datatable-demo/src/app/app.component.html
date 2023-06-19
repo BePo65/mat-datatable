@@ -6,6 +6,7 @@
     [rowSelectionMode]="currentSelectionMode"
     [datastoreGetter]="getData"
     (rowClick)="onRowClick($event)"
+    (rowSelectionChange)="onRowSelectionChange($event)"
     (sortChange)="onSortChanged($event)"
     (pageSizeChange)="onPageSizeChanged()"
   >loading...</mat-datatable>
@@ -55,6 +56,7 @@
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
 <div class="page-size-row">
+  <span class="page-number-label">Page:</span><span class="page-number-value">{{currentPage}}</span>
   <span class="page-size-button-container">
     <button  mat-raised-button class="page-size-button" (click)="onTogglePageSize()">Toggle pageSize</button>
     <span class="page-size-label">Page size:</span><span class="page-size-value">{{currentPageSize$ | async}}</span>

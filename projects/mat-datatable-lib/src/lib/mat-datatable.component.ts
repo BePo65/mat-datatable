@@ -44,6 +44,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Input() datastoreGetter: DatasourceEndpoint<TRowData, TListFilter> = emptyDatastoreGetter;
   @Output() rowClick = new EventEmitter<TRowData>();
+  @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
   @Output() pageSizeChange = new EventEmitter<number>();
   @ViewChild(MatTable) table!: MatTable<TRowData>;
@@ -118,6 +119,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     if (Array.isArray(newSelection)) {
       if (newSelection.length === 0) {
         this.currentSelectedRows = newSelection;
+        this.onRowSelectionChanged();
         return;
       }
 
@@ -129,6 +131,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
           this.currentSelectedRows = [ newSelection[0] ];
           break;
         }
+        this.onRowSelectionChanged();
     } else {
       throw new Error('\'newSelection\' must be an array.');
     }
@@ -232,6 +235,7 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
             break;
         }
         this.rowClick.emit(row);
+        this.onRowSelectionChanged();
       } else {
         switch (this.rowSelectionMode) {
           case 'single':
@@ -242,10 +246,15 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
             break;
         }
         this.rowClick.emit(row);
+        this.onRowSelectionChanged();
       }
     } else {
       this.rowClick.emit(row);
     }
+  }
+
+  protected onRowSelectionChanged() {
+    this.rowSelectionChange.emit(this.currentSelectedRows);
   }
 
   protected onMultiSortChanged(sortStates: Sort[]) {

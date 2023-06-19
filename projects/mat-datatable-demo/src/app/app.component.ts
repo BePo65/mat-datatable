@@ -83,6 +83,7 @@ export class AppComponent implements AfterViewInit {
     }
   ];
   protected displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
+  protected currentPage = 0;
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
@@ -104,17 +105,29 @@ export class AppComponent implements AfterViewInit {
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
   protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DemoTableItem>[], filters?: object) => {
-    return this.dataStore.getPagedData(rowsRange, sorts, filters);
+    const newPage = this.dataStore.getPagedData(rowsRange, sorts, filters);
+    this.currentPage = this.table.page + 1;
+    return newPage;
   };
 
   protected onRowClick($event: DemoTableItem) {
-    this.selectedRowsAsString = this.selectedRowsToString();
     window.alert(`row clicked; id=${$event.userId}`);
   }
 
   protected onSortChanged(currentSorts: MatSortDefinition[]) {
     this.currentSorts = currentSorts;
     this.currentSorts$.next(currentSorts);
+  }
+
+  protected onRowSelectionChange($event: DemoTableItem[]) {
+    let result = '-';
+    if ($event.length > 0) {
+      result = $event
+        .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId )
+        .map(row => row.userId)
+        .join('; ') || '-';
+    }
+    this.selectedRowsAsString = result;
   }
 
   protected onPageSizeChanged() {
@@ -182,21 +195,9 @@ export class AppComponent implements AfterViewInit {
   // Demo to show setting selected rows by code
   protected onClearSelection() {
     this.table.selectedRows = [];
-    this.selectedRowsAsString = '-';
   }
   protected onSetSelection() {
     this.table.selectedRows = [ this.dataStore.getUnsortedPage(1), this.dataStore.getUnsortedPage(3), this.dataStore.getUnsortedPage(88) ];
-    this.selectedRowsAsString = this.selectedRowsToString();
-  }
-  protected selectedRowsToString(): string {
-    if (this.table !== undefined) {
-      return this.table.selectedRows
-        .map(row => row.userId)
-        .sort((a: number, b: number) => a - b )
-        .join('; ') || '-';
-    } else {
-      return '-';
-    }
   }
 
   // Demo to show setting activated rows by code
@@ -208,7 +209,7 @@ export class AppComponent implements AfterViewInit {
     this.table.activatedRow = this.dataStore.getUnsortedPage(3);
     this.activatedRowAsString = this.activatedRowToString();
   }
-  protected activatedRowToString(): string {
+  private activatedRowToString(): string {
     if (this.table !== undefined) {
       return this.table.activatedRow?.userId.toString() || '-';
     } else {
@@ -221,7 +222,6 @@ export class AppComponent implements AfterViewInit {
     const oldPageSize = this.table.pageSize;
     const newPageSize = oldPageSize === 10 ? 20 : 10;
     this.table.pageSize = +newPageSize;
-    // TODO this.table.dataSource.paginator._changePageSize(+newPageSize);
     this.currentPageSizeChanged();
   }
   private currentPageSizeChanged() {
