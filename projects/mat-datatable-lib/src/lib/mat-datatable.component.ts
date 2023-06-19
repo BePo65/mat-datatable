@@ -154,7 +154,17 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
   }
   set pageSize(newPageSize: number) {
     this.paginator.pageSize = +newPageSize;
-    this.paginator._changePageSize(+newPageSize);
+    this.updatedDatasource();
+  }
+
+  get page(): number {
+    return this.paginator.pageIndex;
+  }
+  set page(newPage: number) {
+    if ((newPage >= 0) && (newPage < this.paginator.getNumberOfPages())) {
+      this.paginator.pageIndex = newPage;
+      this.updatedDatasource();
+    }
   }
 
   protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
@@ -244,6 +254,17 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
 
   protected onPageSizeChange(pageSize: number) {
     this.pageSizeChange.emit(pageSize);
+  }
+
+  /**
+   * Update datasource of table to reflect changed page definition.
+   */
+  private updatedDatasource() {
+    this.paginator.page.next({
+      pageIndex: this.paginator.pageIndex,
+      pageSize: this.paginator.pageSize,
+      length: this.paginator.length
+    });
   }
 
   /**

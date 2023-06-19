@@ -57,6 +57,9 @@
 <div class="page-size-row">
   <span class="page-size-button-container">
     <button  mat-raised-button class="page-size-button" (click)="onTogglePageSize()">Toggle pageSize</button>
+    <span class="page-size-label">Page size:</span><span class="page-size-value">{{currentPageSize$ | async}}</span>
+    <button  mat-raised-button class="goto-page-button" (click)="onGotoPage(0)">Gehe zu Seite 1</button>
+    <button  mat-raised-button class="goto-page-button" (click)="onGotoPage(1)">Gehe zu Seite 2</button>
+    <button  mat-raised-button class="goto-page-button" (click)="onGotoPage(3)">Gehe zu Seite 4</button>
   </span>
-  <span class="page-size-row-label">Page size:</span><span>{{currentPageSize$ | async}}</span>
 </div>

@@ -228,6 +228,10 @@ export class AppComponent implements AfterViewInit {
       this.currentPageSize$.next(this.table.pageSize.toString());
   }
 
+  protected onGotoPage(pageNumber: number) {
+    this.table.page = pageNumber;
+  }
+
   /**
    * Create list of column headers.
    * Used to display current sorting definition as chips.
