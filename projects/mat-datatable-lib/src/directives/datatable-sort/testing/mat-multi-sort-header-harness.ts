@@ -35,12 +35,12 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
       .addOption('id', options.id, (harness, id) =>
         HarnessPredicate.stringMatches(harness.getId(), id)
       )
-      .addOption('sortDirection', options.sortDirection, (harness, sortDirection) => {
-        return HarnessPredicate.stringMatches(harness.getSortDirection(), sortDirection);
-      })
-      .addOption('sortPosition', options.sortPosition, (harness, sortPosition) => {
-        return numberMatches(harness.getSortPosition(), sortPosition);
-      });
+      .addOption('sortDirection', options.sortDirection, (harness, sortDirection) =>
+        HarnessPredicate.stringMatches(harness.getSortDirection(), sortDirection)
+      )
+      .addOption('sortPosition', options.sortPosition, (harness, sortPosition) =>
+        numberMatches(harness.getSortPosition(), sortPosition)
+      );
   }
 
   /**
