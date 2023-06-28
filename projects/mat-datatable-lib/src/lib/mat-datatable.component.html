@@ -19,7 +19,7 @@
       [matResizable]="column.resizable">
       {{column.header}}
     </th>
-    <td mat-cell class="mat-datatable-cell" *matCellDef="let row" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">
+    <td mat-cell class="mat-datatable-cell" *matCellDef="let row" [ngClass]="{'mat-datatable-single-line':column.showAsSingleLine}" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">
       <span *ngIf="!column?.showAsMailtoLink; else mailToLink">{{column.cell(row)}}</span>
       <ng-template #mailToLink><a href="mailto:${column.cell(row)}">{{column.cell(row)}}</a></ng-template>
     </td>
