@@ -31,7 +31,7 @@ export abstract class _MatRowHarnessBase<
   protected abstract _cellHarness: CellType;
 
   /**
-   * Gets a list of `MatCellHarness` for all cells in the row.
+   * Gets a list of `MatRowCellHarness` for all cells in the row.
    * @param filter - filter to select the sut (default; all cells).
    * @returns an array of the selected cells.
    */

@@ -40,7 +40,7 @@ export abstract class _MatCellHarnessBase extends ContentContainerComponentHarne
 
 /** Harness for interacting with a mat-datatable cell of a row. */
 export class MatRowCellHarness extends _MatCellHarnessBase {
-  /** The selector for the host element of a `MatCellHarness` instance. */
+  /** The selector for the host element of a `MatRowCellHarness` instance. */
   static hostSelector = '.mat-mdc-cell';
 
   /**
@@ -84,6 +84,14 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
     return (await this._headerContent()).text();
   }
 
+  /**
+   * Gets the cell's column width.
+   * @returns the width of the header cell.
+   */
+  async getColumnWidth(): Promise<string> {
+    const cell = await this._headerContent();
+    return (await this._headerContent()).text();
+  }
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header cell with specific

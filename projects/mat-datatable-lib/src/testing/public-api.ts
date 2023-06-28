@@ -2,9 +2,10 @@
  * Public API Surface of mat-datatable testing harness
  */
 
-// MatCellHarness, CellHarnessFilters,
-// MatDatatableHarness, MatDatatableHarnessColumnsText, MatDatatableHarnessFilters,
-// MatHeaderCellHarness, MatHeaderRowHarness, MatRowHarness, RowHarnessFilters
+// MatDatatableHarness, MatDatatableHarnessColumnsText
+// MatHeaderRowHarness, MatRowHarness
+// MatRowCellHarness, MatHeaderCellHarness
+// CellHarnessFilters, MatDatatableHarnessFilters, RowHarnessFilters
 export * from '../lib/testing';
 
 // DomSortingDefinition, MatMultiSortHarness, MultiSortHarnessFilters,

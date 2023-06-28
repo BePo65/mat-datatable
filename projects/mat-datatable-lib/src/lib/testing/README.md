@@ -148,11 +148,11 @@ Harness for interacting with a mat-datatable row.
 
 | | |
 |------|-------------|
-| `async getCells` | Gets a list of MatCellHarness for the cells in the row. |
+| `async getCells` | Gets a list of MatRowCellHarness for the cells in the row. |
 | **Parameters** |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise\<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
+| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
 | | |
 
 | | |
@@ -208,11 +208,11 @@ Harness for interacting with a mat-datatable header row.
 
 | | |
 |------|-------------|
-| `async getCells` | Gets a list of 'MatCellHarness' for all cells in the row. |
+| `async getCells` | Gets a list of 'MatRowCellHarness' for all cells in the row. |
 | **Parameters** |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise\<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
+| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
 | | |
 
 | | |
@@ -222,15 +222,15 @@ Harness for interacting with a mat-datatable header row.
 | Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
-### **MatCellHarness**
+### **MatRowCellHarness**
 
-Harness for interacting with a mat-datatable cell.
+Harness for interacting with a mat-datatable cell in a row.
 
 #### **Properties**
 
 | | |
 |------|-------------|
-| `static hostSelector` | Used to identify the host element of a 'MatCellHarness' instance (value: '.mat-mdc-cell'). |
+| `static hostSelector` | Used to identify the host element of a 'MatRowCellHarness' instance (value: '.mat-mdc-cell'). |
 
 #### **Methods**
 
@@ -315,7 +315,7 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | options: CellHarnessFilters = {} | Options for narrowing the search. |
 | **Return** |
-| HarnessPredicate<MatCellHarness> | A `HarnessPredicate` configured with the given options. |
+| HarnessPredicate<MatRowCellHarness> | A `HarnessPredicate` configured with the given options. |
 | | |
 
 ### **MatHeaderCellHarness**

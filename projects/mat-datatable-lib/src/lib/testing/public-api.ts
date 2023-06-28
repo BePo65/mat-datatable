@@ -6,7 +6,7 @@ export { MatDatatableHarness, MatDatatableHarnessColumnsText } from './mat-datat
 
 export { MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
 
-export { MatCellHarness, MatHeaderCellHarness } from './mat-datatable-cell-harness';
+export { MatRowCellHarness, MatHeaderCellHarness } from './mat-datatable-cell-harness';
 
 // CellHarnessFilters, MatDatatableHarnessFilters, RowHarnessFilters
 export * from './mat-datatable-harness-filters';
