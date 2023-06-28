@@ -44,23 +44,22 @@ describe('MatDatatableHarness', () => {
 
   it('should get the different kinds of rows in the mat-datatable', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
-    const headerRows = await table.getHeaderRows();
+    const headerRow = await table.getHeaderRow();
     const rows = await table.getRows();
 
-    expect(headerRows.length).toBe(1);
+    expect(headerRow).toBeDefined();
     expect(rows.length).toBe(10);
   });
 
   it('should get cells inside a row', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
-    const headerRows = await table.getHeaderRows();
+    const headerRow = await table.getHeaderRow();
     const rows = await table.getRows();
 
-    const headerCells = await parallel(() => headerRows.map(row => row.getCellTextByIndex()));
+    const headerCells = await headerRow.getCellTextByIndex();
 
-    expect(headerCells.length).toEqual(1);
-    expect(headerCells[0].length).toEqual(4);
-    expect(headerCells[0]).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+    expect(headerCells.length).toEqual(4);
+    expect(headerCells).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
 
     const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
 
