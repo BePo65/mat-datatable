@@ -33,21 +33,21 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<T[]> | An array of harness instances. |
+| Promise\<T[]> | An array of harness instances. |
 | | |
 
 | | |
 |------|-------------|
 | `async getCellTextByColumnName` | Gets the text inside the entire table organized by columns. |
 | **Returns** |
-| Promise<MatDatatableHarnessColumnsText> | The text inside the entire table organized by columns. |
+| Promise\<MatDatatableHarnessColumnsText> | The text inside the entire table organized by columns. |
 | | |
 
 | | |
 |------|-------------|
 | `async getCellTextByIndex` | Gets the text inside the entire table organized by rows. |
 | **Returns** |
-| Promise<string[][]> | Array for all rows containing the content of a row as an array. |
+| Promise\<string[][]> | Array for all rows containing the content of a row as an array. |
 | | |
 
 | | |
@@ -56,7 +56,7 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | selector: string | A string used for selecting the HarnessLoader. |
 | **Returns** |
-| Promise<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
+| Promise\<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
 | | |
 
 | | |
@@ -65,7 +65,7 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<T> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
@@ -74,16 +74,14 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | query HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise\<T | null> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T \| null> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
 |------|-------------|
 | `async getHeaderRow` | Gets the header row in a mat-datatable. |
-| **Parameters** |
-| filter: RowHarnessFilters = {} | A set of criteria that can be used to filter a list of row harness instances. |
 | **Returns** |
-| Promise<HeaderRow> | The header row. |
+| Promise\<MatHeaderRowHarness> | The header row. |
 | | |
 
 | | |
@@ -92,7 +90,7 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | filter: RowHarnessFilters = {} | A set of criteria that can be used to filter a list of row harness instances. |
 | **Returns** |
-| Promise<Row[]> | A filtered list of the regular data rows. |
+| Promise\<MatRowHarness[]> | A filtered list of the regular data rows. |
 | | |
 
 | | |
@@ -101,14 +99,14 @@ Harness for interacting with a mat-datatable in tests.
 | **Parameters** |
 | query HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<boolean> | `True`, if the instances is part of the harness. |
+| Promise\<boolean> | `True`, if the instances is part of the harness. |
 | | |
 
 | | |
 |------|-------------|
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Returns** |
-| Promise<TestElement> | The 'TestElement' representing the host element of the component. |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
 | | |
@@ -136,7 +134,7 @@ Harness for interacting with a mat-datatable row.
 |------|-------------|
 | `async getCellTextByColumnName` | Gets the text inside the row organized by columns. |
   **Returns** |
-| Promise<MatRowHarnessColumnsText> | The text inside the row organized by columns. |
+| Promise\<MatRowHarnessColumnsText> | The text inside the row organized by columns. |
 | | |
 
 | | |
@@ -145,7 +143,7 @@ Harness for interacting with a mat-datatable row.
 | **Parameters**|
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise<string[]> | The text of the cells in the row. |
+| Promise\<string[]> | The text of the cells in the row. |
 | | |
 
 | | |
@@ -154,14 +152,14 @@ Harness for interacting with a mat-datatable row.
 | **Parameters** |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
+| Promise\<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
 | | |
 
 | | |
 |------|-------------|
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Returns** |
-| Promise<TestElement> | The 'TestElement' representing the host element of the component. |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
 | | |
@@ -196,7 +194,7 @@ Harness for interacting with a mat-datatable header row.
 |------|-------------|
 | `async getCellTextByColumnName` | Gets the text inside the row organized by columns. |
 | **Returns** |
-| Promise<MatRowHarnessColumnsText> | ?? |
+| Promise\<MatRowHarnessColumnsText> | ?? |
 | | |
 
 | | |
@@ -205,7 +203,7 @@ Harness for interacting with a mat-datatable header row.
 | **Parameters** |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise<string[]> | The text of the cells in the row. |
+| Promise\<string[]> | The text of the cells in the row. |
 | | |
 
 | | |
@@ -214,23 +212,14 @@ Harness for interacting with a mat-datatable header row.
 | **Parameters** |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
+| Promise\<Cell[]> | A filtered list of MatCellHarness for the cells in the row. |
 | | |
 
 | | |
 |------|-------------|
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Returns** |
-| Promise<TestElement> | The 'TestElement' representing the host element of the component. |
-| | |
-
-| | |
-|------|-------------|
-| `static with` | Gets a 'HarnessPredicate' that can be used to search for a mat-datatable header row with specific attributes. |
-| **Parameters** |
-| options: RowHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
 ### **MatCellHarness**
@@ -251,7 +240,7 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | selector: string | A string used for selecting the instances. |
 | **Returns** |
-| Promise<HarnessLoader[]> | An array of HarnessLoader instances. |
+| Promise\<HarnessLoader[]> | An array of HarnessLoader instances. |
 | | |
 
 | | |
@@ -260,7 +249,7 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | query: HarnessQuery<T> |A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<T[]> | An array of harness instances. |
+| Promise\<T[]> | An array of harness instances. |
 | | |
 
 | | |
@@ -269,14 +258,14 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | selector: string | A string used for selecting the HarnessLoader. |
 | **Returns** |
-| Promise<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
+| Promise\<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
 | | |
 
 | | |
 |------|-------------|
 | `async getColumnName` | Gets the name of the column that the cell belongs to. |
 | **Returns** |
-| Promise<string> | The name of the column that the cell belongs to. |
+| Promise\<string> | The name of the column that the cell belongs to. |
 | | |
 
 | | |
@@ -285,7 +274,7 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<T> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
@@ -294,14 +283,14 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<T \| null> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T \| null> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
 |------|-------------|
 | `async getText` | Gets the cell's text. |
 | **Returns** |
-| Promise<string> | The cell's text. |
+| Promise\<string> | The cell's text. |
 | | |
 
 | | |
@@ -310,15 +299,14 @@ Harness for interacting with a mat-datatable cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Returns** |
-| Promise<boolean> | `True`, if the instances is part of the harness. |
+| Promise\<boolean> | `True`, if the instances is part of the harness. |
 | | |
 
 | | |
 |------|-------------|
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Return** |
-| Promise<TestElement> | The 'TestElement' representing the host element of the component. |
-
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
 | | |
@@ -348,7 +336,7 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | selector: string | A string used for selecting the instances. |
 | **Return** |
-| Promise<HarnessLoader[]> | An array of HarnessLoader instances. |
+| Promise\<HarnessLoader[]> | An array of HarnessLoader instances. |
 | | |
 
 | | |
@@ -357,7 +345,7 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Return** |
-| Promise<T[]> | An array of harness instances. |
+| Promise\<T[]> | An array of harness instances. |
 | | |
 
 | | |
@@ -366,14 +354,14 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | selector: string | A string used for selecting the HarnessLoader. |
 | **Return** |
-| Promise<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
+| Promise\<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
 | | |
 
 | | |
 |------|-------------|
 | `async getColumnName` | Gets the name of the column that the header cell belongs to. |
 | **Return** |
-| Promise<string> | The name of the column that the cell belongs to. |
+| Promise\<string> | The name of the column that the cell belongs to. |
 | | |
 
 | | |
@@ -382,7 +370,7 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Return** |
-| Promise<T> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
@@ -391,14 +379,14 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Return** |
-| Promise<T \| null> | An instance of the harness corresponding to the first matching element. |
+| Promise\<T \| null> | An instance of the harness corresponding to the first matching element. |
 | | |
 
 | | |
 |------|-------------|
 | `async getText` | Gets the header cell's text. |
 | **Return** |
-| Promise<string> | The header cell's text. |
+| Promise\<string> | The header cell's text. |
 | | |
 
 | | |
@@ -407,14 +395,14 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
 | **Return** |
-| Promise<boolean> | `True`, if the instances is part of the harness. |
+| Promise\<boolean> | `True`, if the instances is part of the harness. |
 | | |
 
 | | |
 |------|-------------|
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Return** |
-| Promise<TestElement> | The 'TestElement' representing the host element of the component. |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
 | | |
 
 | | |
