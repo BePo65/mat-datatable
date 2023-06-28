@@ -15,7 +15,7 @@ import {
   RowHarnessFilters
 } from './mat-datatable-harness-filters';
 
-/** Text extracted from a table row organized by columns. */
+/** Object for the content of a table row as text organized by columns. */
 export interface MatRowHarnessColumnsText {
   [columnName: string]: string;
 }
@@ -31,7 +31,7 @@ export abstract class _MatRowHarnessBase<
   /**
    * Gets a list of `MatCellHarness` for all cells in the row.
    * @param filter - filter to select the sut (default; all cells).
-   * @returns an array of arrays of the content of all data rows.
+   * @returns an array of the selected cells.
    */
   async getCells(filter: CellHarnessFilters = {}): Promise<Cell[]> {
     return this.locatorForAll(this._cellHarness.with(filter))();
@@ -40,7 +40,7 @@ export abstract class _MatRowHarnessBase<
   /**
    * Gets the text of the cells in the row.
    * @param filter - filter to select the returned cells (default; all cells).
-   * @returns an array of the content of the selected header cells.
+   * @returns an array of the content of the selected cells.
    */
   async getCellTextByIndex(filter: CellHarnessFilters = {}): Promise<string[]> {
     const cells = await this.getCells(filter);
