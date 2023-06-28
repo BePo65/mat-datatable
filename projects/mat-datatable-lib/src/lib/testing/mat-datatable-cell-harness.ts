@@ -1,10 +1,9 @@
 import {
-  ComponentHarnessConstructor,
   ContentContainerComponentHarness,
   HarnessPredicate
 } from '@angular/cdk/testing';
 
-import { CellHarnessFilters } from './mat-datatable-harness-filters';
+import { CellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
@@ -37,23 +36,10 @@ export abstract class _MatCellHarnessBase extends ContentContainerComponentHarne
 
     throw Error('Could not determine column name of cell.');
   }
-
-  protected static _getCellPredicate<T extends MatCellHarness>(
-    type: ComponentHarnessConstructor<T>,
-    options: CellHarnessFilters
-  ): HarnessPredicate<T> {
-    return new HarnessPredicate(type, options)
-      .addOption('text', options.text, (harness, text) =>
-        HarnessPredicate.stringMatches(harness.getText(), text)
-      )
-      .addOption('columnName', options.columnName, (harness, name) =>
-        HarnessPredicate.stringMatches(harness.getColumnName(), name)
-      );
-  }
 }
 
-/** Harness for interacting with a mat-datatable cell. */
-export class MatCellHarness extends _MatCellHarnessBase {
+/** Harness for interacting with a mat-datatable cell of a row. */
+export class MatRowCellHarness extends _MatCellHarnessBase {
   /** The selector for the host element of a `MatCellHarness` instance. */
   static hostSelector = '.mat-mdc-cell';
 
@@ -62,12 +48,29 @@ export class MatCellHarness extends _MatCellHarnessBase {
    * @param options - Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
-  static with(options: CellHarnessFilters = {}): HarnessPredicate<MatCellHarness> {
-    return _MatCellHarnessBase._getCellPredicate(this, options);
+  static with(options: RowCellHarnessFilters = {}): HarnessPredicate<MatRowCellHarness> {
+    return new HarnessPredicate(MatRowCellHarness, options)
+      .addOption('text', options.text, (harness, text) =>
+        HarnessPredicate.stringMatches(harness.getText(), text)
+      )
+      .addOption('columnName', options.columnName, (harness, name) =>
+        HarnessPredicate.stringMatches(harness.getColumnName(), name)
+      )
+      .addOption('isSingleLine', options.isSingleLine, (harness, isSingleLine) =>
+        booleanMatches(harness.isSingleLine(), isSingleLine)
+      );
+  }
+
+  /**
+   * Check, if cell is defined as 'showAsSingleLine'.
+   * @returns true, if cell is shown as single line.
+   */
+  async isSingleLine(): Promise<boolean> {
+    return (await this.host()).hasClass('mat-datatable-single-line');
   }
 }
 
-/** Harness for interacting with a mat-datatable header cell. */
+/** Harness for interacting with a mat-datatable cell of a header row. */
 export class MatHeaderCellHarness extends _MatCellHarnessBase {
   /** The selector for the host element of a `MatHeaderCellHarness` instance. */
   static hostSelector = '.mat-mdc-header-cell';
@@ -81,6 +84,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
     return (await this._headerContent()).text();
   }
 
+
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header cell with specific
    * attributes.
@@ -88,6 +92,33 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
    * @returns a `HarnessPredicate` configured with the given options.
    */
   static with(options: CellHarnessFilters = {}): HarnessPredicate<MatHeaderCellHarness> {
-    return _MatCellHarnessBase._getCellPredicate(this, options);
+    return new HarnessPredicate(MatHeaderCellHarness, options)
+      .addOption('text', options.text, (harness, text) =>
+        HarnessPredicate.stringMatches(harness.getText(), text)
+      )
+      .addOption('columnName', options.columnName, (harness, name) =>
+        HarnessPredicate.stringMatches(harness.getColumnName(), name)
+      );
   }
 }
+
+/**
+ * Checks if the specified nullable boolean value matches the given value.
+ * @param value The nullable boolean value to check, or a Promise resolving to the
+ *   nullable boolean value.
+ * @param pattern The boolean the value is expected to match. If `pattern` is `null`,
+ *   the value is expected to be `null`.
+ * @returns Whether the value matches the pattern.
+ */
+const booleanMatches= async (
+  value: boolean | null | Promise<boolean | null>,
+  pattern: boolean | null
+): Promise<boolean> => {
+  value = await value;
+  if (pattern === null) {
+    return value === null;
+  } else if (value === null) {
+    return false;
+  }
+  return value === pattern;
+};

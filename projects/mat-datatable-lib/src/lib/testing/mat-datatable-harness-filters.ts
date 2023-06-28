@@ -11,6 +11,12 @@ export interface CellHarnessFilters extends BaseHarnessFilters {
   columnName?: string | RegExp;
 }
 
+/** A set of criteria that can be used to filter a list of cell harness instances of a row. */
+export interface RowCellHarnessFilters extends CellHarnessFilters {
+  /** Only find instances whose isSingleLine attribute matches the given value. */
+  isSingleLine?: boolean;
+}
+
 /** A set of criteria that can be used to filter a list of row harness instances. */
 export interface RowHarnessFilters extends BaseHarnessFilters {}
 

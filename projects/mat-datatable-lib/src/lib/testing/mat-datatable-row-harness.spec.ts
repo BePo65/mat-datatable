@@ -36,29 +36,53 @@ describe('MatRowHarness', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should get list of MatCellHarness for cells in row', async () => {
+  it('should get array of MatRowCellHarness of cells in first row', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const cellsHarnesses = await rowHarness.getCells();
 
-    // This gets always the first row of a table
+    // 'getHarness' always gets the first row of a table
     expect(cellsHarnesses.length).toEqual(4);
-    expect(cellsHarnesses[0].constructor.name).toEqual('MatCellHarness');
+    expect(cellsHarnesses[0].constructor.name).toEqual('MatRowCellHarness');
     expect(await cellsHarnesses[0].getText()).toEqual('1');
     expect(await cellsHarnesses[1].getText()).toEqual('Hydrogen');
     expect(await cellsHarnesses[2].getText()).toEqual('1.0079');
     expect(await cellsHarnesses[3].getText()).toEqual('H');
   });
 
-  it('should get selected cells in row - filter by element content', async () => {
+  it('should get array of MatRowCellHarness of cells in another row', async () => {
+    const rowHarnesses = await loader.getAllHarnesses(MatRowHarness);
+
+    expect(rowHarnesses.length).toBe(10);
+
+    const cellsHarnesses = await rowHarnesses[2].getCells();
+
+    expect(cellsHarnesses.length).toEqual(4);
+    expect(cellsHarnesses[0].constructor.name).toEqual('MatRowCellHarness');
+    expect(await cellsHarnesses[0].getText()).toEqual('3');
+    expect(await cellsHarnesses[1].getText()).toEqual('Lithium');
+    expect(await cellsHarnesses[2].getText()).toEqual('6.941');
+    expect(await cellsHarnesses[3].getText()).toEqual('Li');
+  });
+
+  it('should get array of MatRowCellHarness of selected cells in row - filter by element content', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const rowCellsHarnesses = await rowHarness.getCells({ columnName: 'name' });
 
     expect(rowCellsHarnesses.length).toEqual(1);
-    expect(rowCellsHarnesses[0].constructor.name).toEqual('MatCellHarness');
+    expect(rowCellsHarnesses[0].constructor.name).toEqual('MatRowCellHarness');
     expect(await rowCellsHarnesses[0].getText()).toEqual('Hydrogen');
   });
 
-  it('should get content of cells as row', async () => {
+  it('should get array of MatRowCellHarness of selected cells in row - filter by isSingleLine', async () => {
+    const rowHarness = await loader.getHarness(MatRowHarness);
+    const rowCellsHarnesses = await rowHarness.getCells({ isSingleLine: true });
+
+    expect(rowCellsHarnesses.length).toEqual(1);
+    expect(rowCellsHarnesses[0].constructor.name).toEqual('MatRowCellHarness');
+    expect(await rowCellsHarnesses[0].getText()).toEqual('Hydrogen');
+  });
+
+  it('should get array of content of cells in 1st row', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const rowContent = await rowHarness.getCellTextByIndex();
 
@@ -66,7 +90,7 @@ describe('MatRowHarness', () => {
     expect(rowContent).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
   });
 
-  it('should get content of selected cells as row - filter with regex', async () => {
+  it('should get array of content of selected cells in 1st row - filter with regex', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
   const rowContent = await rowHarness.getCellTextByIndex({ text: /H.*/ });
 
@@ -74,7 +98,7 @@ describe('MatRowHarness', () => {
     expect(rowContent).toEqual(['Hydrogen', 'H']);
   });
 
-  it('should get content of selected cells as row - filter by column name', async () => {
+  it('should get array of content of selected cells in 1st row - filter by column name', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const rowContent = await rowHarness.getCellTextByIndex({ columnName: 'name' });
 
@@ -82,7 +106,7 @@ describe('MatRowHarness', () => {
     expect(rowContent).toEqual(['Hydrogen']);
   });
 
-  it('should get cells in row as columns', async () => {
+  it('should get array of cells in 1st row as object', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const rowContent = await rowHarness.getCellTextByColumnName();
     const columnNames = Object.getOwnPropertyNames(rowContent);
@@ -119,7 +143,7 @@ describe('MatHeaderRowHarness', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should get list of MatCellHarness for cells in header row', async () => {
+  it('should get array of MatRowCellHarness of cells in header row', async () => {
     const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
     const headerCellsHarnesses = await headerRowHarness.getCells();
 
@@ -127,7 +151,7 @@ describe('MatHeaderRowHarness', () => {
     expect(headerCellsHarnesses[0].constructor.name).toEqual('MatHeaderCellHarness');
   });
 
-  it('should get selected cells in header row - filter by element content', async () => {
+  it('should get array of MatRowCellHarness of selected cells in header row - filter by element content', async () => {
     const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
     const headerCellsHarnesses = await headerRowHarness.getCells({ columnName: 'name' });
 
@@ -136,7 +160,7 @@ describe('MatHeaderRowHarness', () => {
     expect(await headerCellsHarnesses[0].getText()).toEqual('Name');
   });
 
-  it('should get content of cells in header as row', async () => {
+  it('should get array of content of cells in header row', async () => {
     const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
     const headerContent = await headerRowHarness.getCellTextByIndex();
 
@@ -144,23 +168,8 @@ describe('MatHeaderRowHarness', () => {
     expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
   });
 
-  it('should get content of selected cells in header as row - filter with regex', async () => {
-    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
-    const headerContent = await headerRowHarness.getCellTextByIndex({ text: /N.+/ });
-
-    expect(headerContent.length).toEqual(2);
-    expect(headerContent).toEqual(['No.', 'Name']);
-  });
-
-  it('should get content of selected cells in header as row - filter by column name', async () => {
-    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
-    const headerContent = await headerRowHarness.getCellTextByIndex({ columnName: 'name' });
-
-    expect(headerContent.length).toEqual(1);
-    expect(headerContent).toEqual(['Name']);
-  });
-
-  it('should get content of cells in header with sorted columns as row', async () => {
+  // Sorting indicator should have no impact on 'getCellTextByIndex'
+  it('should get array of content of cells in header row with sorted columns', async () => {
     component.matDataTable.sort.sortDefinitions = [
       { active: 'name', direction: 'desc' },
       { active: 'weight', direction: 'asc' }
@@ -173,7 +182,23 @@ describe('MatHeaderRowHarness', () => {
     expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
   });
 
-  it('should get cells in header row as columns', async () => {
+  it('should get array of content of selected cells in header row - filter with regex', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex({ text: /N.+/ });
+
+    expect(headerContent.length).toEqual(2);
+    expect(headerContent).toEqual(['No.', 'Name']);
+  });
+
+  it('should get array of content of selected cells in header as row - filter by column name', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerContent = await headerRowHarness.getCellTextByIndex({ columnName: 'name' });
+
+    expect(headerContent.length).toEqual(1);
+    expect(headerContent).toEqual(['Name']);
+  });
+
+  it('should get array of cells in header row as object', async () => {
     const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
     const headerContent = await headerRowHarness.getCellTextByColumnName();
     const columnNames = Object.getOwnPropertyNames(headerContent);
@@ -236,6 +261,7 @@ class TableHarnessTestComponent {
       header: 'Name',
       cell: (row: TableHarnessTestRow) => row.name,
       headerAlignment: 'left',
+      showAsSingleLine: true,
       cellAlignment: 'left',
       width: '10em',
       sortable: true,
