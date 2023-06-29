@@ -1,8 +1,7 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component, DebugElement, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, of } from 'rxjs';
 
@@ -18,7 +17,7 @@ import PAGABLE_DATA from './mocking-data/demo-table.mock.data.users';
 import { MatDatatableHarness, MatHeaderRowHarness } from './testing';
 
 describe('MatDatatableComponent', () => {
-  describe('single table', () => {
+  describe('Table creation', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
     let component: DatatableTestComponent;
@@ -91,6 +90,41 @@ describe('MatDatatableComponent', () => {
       const rows = await table.getRows();
 
       expect(rows.length).toBe(0);
+    });
+  });
+
+  describe('Table sorting', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+    let component: DatatableTestComponent;
+    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
+      const result: string[] = [];
+      result.push(entry.position.toString());
+      result.push(entry.name);
+      result.push(entry.weight.toString());
+      result.push(entry.symbol);
+      return result;
+    });
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      component = fixture.componentInstance;
+      loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
     it('should not sort a table when clicking on a non sortable column', async () => {
@@ -306,6 +340,31 @@ describe('MatDatatableComponent', () => {
 
       expect(currentSortDefinitions).toEqual(newSortDefinitions);
     });
+  });
+
+  describe('Table row activation', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let component: DatatableTestComponent;
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      component = fixture.componentInstance;
+    });
 
     it('should get/set active row of table', () => {
       expect(component.matDataTable.activatedRow).toBeUndefined();
@@ -314,6 +373,33 @@ describe('MatDatatableComponent', () => {
       component.matDataTable.activatedRow = activeRow;
 
       expect(component.matDataTable.activatedRow).toBe(activeRow);
+    });
+  });
+
+  describe('Table row selection', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+    let component: DatatableTestComponent;
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      component = fixture.componentInstance;
+      loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
     it('should not be able to select rows when rowSelectionMode=none', async () => {
@@ -427,6 +513,31 @@ describe('MatDatatableComponent', () => {
       expect(component.matDataTable.selectedRows.length).toBe(0);
       expect(component.selectedRowsAsString).toBe('-');
     });
+  });
+
+  describe('Table row cells', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      loader = TestbedHarnessEnvironment.loader(fixture);
+    });
 
     it('should check single line state of cells', async () => {
       const table = await loader.getHarness(MatDatatableHarness);
@@ -443,8 +554,33 @@ describe('MatDatatableComponent', () => {
       expect(resultNames).toEqual(['position', 'name', 'weight', 'symbol']);
       expect(resultSingleLines).toEqual([false, true, false, false]);
     });
+  });
 
-    it('should get array of MatCellHarness of selected in row - filter by isSingleLine true', async () => {
+  describe('Table row harness', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      loader = TestbedHarnessEnvironment.loader(fixture);
+    });
+
+    it('should get array of MatRowCellHarness of selected in row - filter by isSingleLine true', async () => {
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
       const testRowCells = await rows[1].getCells({ isSingleLine: true });
@@ -454,7 +590,7 @@ describe('MatDatatableComponent', () => {
       expect(await testRowCells[0].isSingleLine()).toBeTrue();
     });
 
-    it('should get array of MatCellHarness of selected in row - filter by isSingleLine false', async () => {
+    it('should get array of MatRowCellHarness of selected in row - filter by isSingleLine false', async () => {
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
       const testRowCells = await rows[1].getCells({ isSingleLine: false });
@@ -627,7 +763,7 @@ describe('MatDatatableComponent', () => {
     });
   });
 
-  describe('resize columns', () => {
+  describe('Table columns resizing', () => {
     // HACK let fixture: ComponentFixture<DatatableTestComponent>;
     // HACK let debugElement: DebugElement[];
 
