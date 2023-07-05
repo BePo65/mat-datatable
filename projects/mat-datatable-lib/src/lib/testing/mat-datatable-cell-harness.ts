@@ -3,7 +3,7 @@ import {
   HarnessPredicate
 } from '@angular/cdk/testing';
 
-import { CellHarnessFilters, HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
+import { HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
