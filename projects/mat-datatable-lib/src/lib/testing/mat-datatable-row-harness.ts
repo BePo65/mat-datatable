@@ -12,6 +12,7 @@ import {
 } from './mat-datatable-cell-harness';
 import {
   CellHarnessFilters,
+  HeaderCellHarnessFilters,
   RowCellHarnessFilters,
   RowHarnessFilters
 } from './mat-datatable-harness-filters';
@@ -31,7 +32,7 @@ export abstract class _MatRowHarnessBase<
   protected abstract _cellHarness: CellType;
 
   /**
-   * Gets a list of `MatRowCellHarness` for all cells in the row.
+   * Gets a list of `MatRowCellHarness` or 'MatHeaderCellHarness' for all cells in the row.
    * @param filter - filter to select the sut (default; all cells).
    * @returns an array of the selected cells.
    */
@@ -92,7 +93,7 @@ export class MatRowHarness extends _MatRowHarnessBase<
 
   /**
    * Clicks the row.
-   * @returns promise that completes after clicking the row.
+   * @returns promise that completes after clicking the row
    */
   async click(): Promise<void> {
     return (await this.host()).click();
@@ -103,9 +104,18 @@ export class MatRowHarness extends _MatRowHarnessBase<
 export class MatHeaderRowHarness extends _MatRowHarnessBase<
   typeof MatHeaderCellHarness,
   MatHeaderCellHarness,
-  CellHarnessFilters
+  HeaderCellHarnessFilters
 > {
   /** The selector for the host element of a `MatHeaderRowHarness` instance. */
   static hostSelector = '.mat-mdc-header-row';
   protected _cellHarness = MatHeaderCellHarness;
+
+  /**
+   * Gets a list of `MatHeaderCellHarness` for all cells in the header row.
+   * @param filter - filter to select the sut (default; all cells).
+   * @returns an array of the selected cells.
+   */
+  override async getCells(filter: HeaderCellHarnessFilters = {} as HeaderCellHarnessFilters): Promise<MatHeaderCellHarness[]> {
+    return this.locatorForAll(this._cellHarness.with(filter))();
+  }
 }

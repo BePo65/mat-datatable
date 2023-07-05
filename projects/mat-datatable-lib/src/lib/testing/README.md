@@ -210,9 +210,9 @@ Harness for interacting with a mat-datatable header row.
 |------|-------------|
 | `async getCells` | Gets a list of 'MatRowCellHarness' for all cells in the row. |
 | **Parameters** |
-| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
+| filter: HeaderCellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
 | **Returns** |
-| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
+| Promise\<MatHeaderCellHarness[]> | A filtered list of MatRowCellHarness for the cells in the header row. |
 | | |
 
 | | |
@@ -270,6 +270,13 @@ Harness for interacting with a mat-datatable cell in a row.
 
 | | |
 |------|-------------|
+| `async getColumnWidth` | Gets the cell's width in 'px' (with padding). |
+| **Returns** |
+| Promise\<number> | The cell's width. |
+| | |
+
+| | |
+|------|-------------|
 | `async getHarness` | Searches for an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader. |
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
@@ -307,6 +314,13 @@ Harness for interacting with a mat-datatable cell in a row.
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Return** |
 | Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
+| | |
+
+| | |
+|------|-------------|
+| `async isSingleLine` | Check, if the cell is defined as 'showAsSingleLine'. |
+| **Returns** |
+| Promise\<boolean> | The cell is shown as single line. |
 | | |
 
 | | |
@@ -366,6 +380,13 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 
 | | |
 |------|-------------|
+| `async getColumnWidth` | Gets the cell's width in 'px' (with padding). |
+| **Returns** |
+| Promise\<number> | The cell's width. |
+| | |
+
+| | |
+|------|-------------|
 | `async getHarness` | Searches for an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader. |
 | **Parameters** |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
@@ -403,6 +424,22 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
 | **Return** |
 | Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
+| | |
+
+| | |
+|------|-------------|
+| `async isResizable` | Check, if the cell is defined as 'resizable'. |
+| **Returns** |
+| Promise\<boolean> | The cell is resizable. |
+| | |
+
+| | |
+|------|-------------|
+| `async resize` | Resize the cell to a new width (if 'resizable'). |
+| **Parameters** |
+| newWidth: number | The new width of the cell in 'px'. |
+| **Returns** |
+| Promise\<void> | The cell got resized. |
 | | |
 
 | | |

@@ -17,6 +17,12 @@ export interface RowCellHarnessFilters extends CellHarnessFilters {
   isSingleLine?: boolean;
 }
 
+/** A set of criteria that can be used to filter a list of cell harness instances of a header row. */
+export interface HeaderCellHarnessFilters extends CellHarnessFilters {
+  /** Only find instances whose isResizable attribute matches the given value. */
+  isResizable?: boolean;
+}
+
 /** A set of criteria that can be used to filter a list of row harness instances. */
 export interface RowHarnessFilters extends BaseHarnessFilters {}
 

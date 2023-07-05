@@ -116,6 +116,17 @@ describe('MatRowHarness', () => {
     expect(columnNames).toEqual(['position', 'name', 'weight', 'symbol']);
     expect(columnValues).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
   });
+
+  it('should get width of a data cells', async () => {
+    const dataRowHarness = await loader.getHarness(MatRowHarness);
+    const rowCellsHarnesses = await dataRowHarness.getCells();
+
+    expect(rowCellsHarnesses.length).toEqual(4);
+    expect(await rowCellsHarnesses[0].getColumnWidth()).toEqual(83.3281);
+    expect(await rowCellsHarnesses[1].getColumnWidth()).toEqual(166.656);
+    expect(await rowCellsHarnesses[2].getColumnWidth()).toEqual(166.656);
+    expect(await rowCellsHarnesses[3].getColumnWidth()).toEqual(333.359);
+  });
 });
 
 describe('MatHeaderRowHarness', () => {
@@ -207,6 +218,17 @@ describe('MatHeaderRowHarness', () => {
     expect(columnValues.length).toEqual(4);
     expect(columnNames).toEqual(['position', 'name', 'weight', 'symbol']);
     expect(columnValues).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+  });
+
+  it('should get width of a header cells', async () => {
+    const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
+    const headerCellsHarnesses = await headerRowHarness.getCells();
+
+    expect(headerCellsHarnesses.length).toEqual(4);
+    expect(await headerCellsHarnesses[0].getColumnWidth()).toEqual(83.3281);
+    expect(await headerCellsHarnesses[1].getColumnWidth()).toEqual(166.656);
+    expect(await headerCellsHarnesses[2].getColumnWidth()).toEqual(166.656);
+    expect(await headerCellsHarnesses[3].getColumnWidth()).toEqual(333.359);
   });
 });
 

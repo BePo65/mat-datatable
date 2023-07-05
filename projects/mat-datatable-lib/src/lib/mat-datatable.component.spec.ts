@@ -764,17 +764,62 @@ describe('MatDatatableComponent', () => {
   });
 
   describe('Table columns resizing', () => {
-    // HACK let fixture: ComponentFixture<DatatableTestComponent>;
-    // HACK let debugElement: DebugElement[];
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
 
     beforeEach(() => {
-      // TODO initialize everything needed to simulate mouse events
-      // TODO this.debugElement = fixture.debugElement.queryAll(By.component(DatatableTestComponent));
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
-    it('should resize a resizable column', () => {
-      expect(true).toBe(false);
+    it('should get resizable columns', async () => {
+      const headerRow = await loader.getHarness(MatHeaderRowHarness);
+      const headerCells = await headerRow.getCells({ isResizable: true });
+
+      expect(headerCells.length).toBe(2);
     });
+
+    /* eslint-disable jasmine/new-line-before-expect */
+    it('should resize a resizable column', async () => {
+      const headerRow = await loader.getHarness(MatHeaderRowHarness);
+      const headerCells = await headerRow.getCells();
+
+      expect(headerCells).toHaveSize(4);
+
+      expect(await headerCells[1].getColumnWidth()).toEqual(166.656);
+      await headerCells[1].resize(200);
+      expect(await headerCells[1].getColumnWidth()).toEqual(200);
+    });
+    /* eslint-enable jasmine/new-line-before-expect */
+
+    /* eslint-disable jasmine/new-line-before-expect */
+    it('should not resize a non-resizable column', async () => {
+      const headerRow = await loader.getHarness(MatHeaderRowHarness);
+      const headerCells = await headerRow.getCells();
+
+      expect(headerCells).toHaveSize(4);
+
+      // Cell without resizer cannot resize
+      expect(await headerCells[0].getColumnWidth()).toEqual(83.3281);
+      await headerCells[0].resize(100);
+      expect(await headerCells[0].getColumnWidth()).toEqual(83.3281);
+    });
+    /* eslint-enable jasmine/new-line-before-expect */
   });
 });
 

@@ -3,7 +3,7 @@ import {
   HarnessPredicate
 } from '@angular/cdk/testing';
 
-import { CellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
+import { CellHarnessFilters, HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
@@ -36,6 +36,21 @@ export abstract class _MatCellHarnessBase extends ContentContainerComponentHarne
 
     throw Error('Could not determine column name of cell.');
   }
+
+  /**
+   * Gets the cell's column width in 'px' (with padding).
+   * @returns the width of the header cell.
+   */
+  async getColumnWidth(): Promise<number> {
+    const widthAsString = await (await this.host()).getCssValue('width');
+    let width = 0;
+
+    if (!Number.isNaN(widthAsString)) {
+      width = parseFloat(widthAsString);
+    }
+
+    return width;
+  }
 }
 
 /** Harness for interacting with a mat-datatable cell of a row. */
@@ -63,7 +78,7 @@ export class MatRowCellHarness extends _MatCellHarnessBase {
 
   /**
    * Check, if cell is defined as 'showAsSingleLine'.
-   * @returns true, if cell is shown as single line.
+   * @returns true, if cell is shown as single line
    */
   async isSingleLine(): Promise<boolean> {
     return (await this.host()).hasClass('mat-datatable-single-line');
@@ -74,39 +89,62 @@ export class MatRowCellHarness extends _MatCellHarnessBase {
 export class MatHeaderCellHarness extends _MatCellHarnessBase {
   /** The selector for the host element of a `MatHeaderCellHarness` instance. */
   static hostSelector = '.mat-mdc-header-cell';
-  private _headerContent = this.locatorFor('.mat-sort-header-content');
-
-  /**
-   * Gets the cell's header text.
-   * @returns the header text of the cell.
-   */
-  override async getText(): Promise<string> {
-    return (await this._headerContent()).text();
-  }
-
-  /**
-   * Gets the cell's column width.
-   * @returns the width of the header cell.
-   */
-  async getColumnWidth(): Promise<string> {
-    const cell = await this._headerContent();
-    return (await this._headerContent()).text();
-  }
+  protected resizerElement = this.locatorForOptional('.resize-holder');
+  protected headerContent = this.locatorFor('.mat-sort-header-content');
 
   /**
    * Gets a `HarnessPredicate` that can be used to search for a table header cell with specific
    * attributes.
-   * @param options  -Options for narrowing the search
+   * @param options - Options for narrowing the search
    * @returns a `HarnessPredicate` configured with the given options.
    */
-  static with(options: CellHarnessFilters = {}): HarnessPredicate<MatHeaderCellHarness> {
+  static with(options: HeaderCellHarnessFilters = {}): HarnessPredicate<MatHeaderCellHarness> {
     return new HarnessPredicate(MatHeaderCellHarness, options)
       .addOption('text', options.text, (harness, text) =>
         HarnessPredicate.stringMatches(harness.getText(), text)
       )
       .addOption('columnName', options.columnName, (harness, name) =>
         HarnessPredicate.stringMatches(harness.getColumnName(), name)
+      )
+      .addOption('isResizable', options.isResizable, (harness, isResizable) =>
+        booleanMatches(harness.isResizable(), isResizable)
       );
+  }
+
+  /**
+   * Gets the cell's header text.
+   * The method must take the text from the div containing the header title;
+   * otherwise the sorting position would be appended.
+   * @returns the header text of the cell.
+   */
+  override async getText(): Promise<string> {
+    return (await this.headerContent()).text();
+  }
+
+  /**
+   * Check, if cell is defined as 'resizable'.
+   * @returns true, if cell is resizable
+   */
+  async isResizable(): Promise<boolean> {
+    return (await this.resizerElement() !== null);
+  }
+
+  /**
+   * Resize header cell (and therefore column) to new width.
+   * @param newWidth - new width of the column
+   * @returns promise that completes after resizing the column
+   */
+  async resize(newWidth: number): Promise<void> {
+    const element = await this.resizerElement();
+    if (element !== null) {
+      const originalWidth = await this.getColumnWidth();
+      const startPosition = 0;
+      const endPosition = startPosition + (newWidth - originalWidth);
+      await (element).dispatchEvent('mousedown',{ pageX: startPosition });
+      document.dispatchEvent(new MouseEvent('mousemove', { buttons: 1, clientX: endPosition }));
+      document.dispatchEvent(new MouseEvent('mouseup',{ clientX: endPosition }));
+    }
+    return;
   }
 }
 
