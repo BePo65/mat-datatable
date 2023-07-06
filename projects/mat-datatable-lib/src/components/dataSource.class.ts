@@ -42,10 +42,10 @@ export class PaginationDataSource<T, F> implements SimpleDataSource<T> {
    * 'loading$' emits 'true'; when the data from the datasource arrived,
    * 'loading$' emits 'false'.
    * Errors from the datasource ('endpoint') are ignored; an empty page is emitted.
-   * @param [pageNumber=0] - number of the page to be loaded (zero-based)
-   * @param [pageSize=10] - number of rows to load
-   * @param [sorts=[]] - list of sort definitions to apply
-   * @param [filter] - filter object to apply
+   * @param pageNumber - number of the page to be loaded (zero-based; default value: 0)
+   * @param pageSize - number of rows to load (default value: 10)
+   * @param sorts - list of sort definitions to apply (default value: [])
+   * @param filter - filter object to apply
    */
   loadPage(
     pageNumber = 0,
