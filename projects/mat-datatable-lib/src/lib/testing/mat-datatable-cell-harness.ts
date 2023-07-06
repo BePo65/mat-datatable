@@ -131,7 +131,8 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
 
   /**
    * Resize header cell (and therefore column) to new width.
-   * @param newWidth - new width of the column
+   * The final size of the cell depends on the use HarnessEnvironment
+   * @param newWidth - new width of the column (in px)
    * @returns promise that completes after resizing the column
    */
   async resize(newWidth: number): Promise<void> {
@@ -140,9 +141,9 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
       const originalWidth = await this.getColumnWidth();
       const startPosition = 0;
       const endPosition = startPosition + (newWidth - originalWidth);
-      await (element).dispatchEvent('mousedown',{ pageX: startPosition });
+      await (element).dispatchEvent('mousedown', { pageX: startPosition });
       document.dispatchEvent(new MouseEvent('mousemove', { buttons: 1, clientX: endPosition }));
-      document.dispatchEvent(new MouseEvent('mouseup',{ clientX: endPosition }));
+      document.dispatchEvent(new MouseEvent('mouseup', { clientX: endPosition }));
     }
     return;
   }

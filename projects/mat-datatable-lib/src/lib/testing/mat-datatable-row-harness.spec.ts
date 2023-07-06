@@ -122,10 +122,16 @@ describe('MatRowHarness', () => {
     const rowCellsHarnesses = await dataRowHarness.getCells();
 
     expect(rowCellsHarnesses.length).toEqual(4);
-    expect(await rowCellsHarnesses[0].getColumnWidth()).toEqual(83.3281);
-    expect(await rowCellsHarnesses[1].getColumnWidth()).toEqual(166.656);
-    expect(await rowCellsHarnesses[2].getColumnWidth()).toEqual(166.656);
-    expect(await rowCellsHarnesses[3].getColumnWidth()).toEqual(333.359);
+
+    const widthCol1 = await rowCellsHarnesses[0].getColumnWidth();
+    const widthCol2 = await rowCellsHarnesses[1].getColumnWidth();
+    const widthCol3 = await rowCellsHarnesses[2].getColumnWidth();
+    const widthCol4 = await rowCellsHarnesses[3].getColumnWidth();
+
+    expect(widthCol1).toBeGreaterThan(0);
+    expect(widthCol2).toBeCloseTo(widthCol1 * 2, 1);
+    expect(widthCol3).toBeCloseTo(widthCol2, 1);
+    expect(widthCol4).toBeCloseTo(widthCol2 * 2, 1);
   });
 });
 
@@ -225,10 +231,16 @@ describe('MatHeaderRowHarness', () => {
     const headerCellsHarnesses = await headerRowHarness.getCells();
 
     expect(headerCellsHarnesses.length).toEqual(4);
-    expect(await headerCellsHarnesses[0].getColumnWidth()).toEqual(83.3281);
-    expect(await headerCellsHarnesses[1].getColumnWidth()).toEqual(166.656);
-    expect(await headerCellsHarnesses[2].getColumnWidth()).toEqual(166.656);
-    expect(await headerCellsHarnesses[3].getColumnWidth()).toEqual(333.359);
+
+    const widthCol1 = await headerCellsHarnesses[0].getColumnWidth();
+    const widthCol2 = await headerCellsHarnesses[1].getColumnWidth();
+    const widthCol3 = await headerCellsHarnesses[2].getColumnWidth();
+    const widthCol4 = await headerCellsHarnesses[3].getColumnWidth();
+
+    expect(widthCol1).toBeGreaterThan(0);
+    expect(widthCol2).toBeCloseTo(widthCol1 * 2, 1);
+    expect(widthCol3).toBeCloseTo(widthCol2, 1);
+    expect(widthCol4).toBeCloseTo(widthCol2 * 2, 1);
   });
 });
 

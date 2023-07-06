@@ -24,7 +24,10 @@ export interface HeaderCellHarnessFilters extends CellHarnessFilters {
 }
 
 /** A set of criteria that can be used to filter a list of row harness instances. */
-export interface RowHarnessFilters extends BaseHarnessFilters {}
+export interface RowHarnessFilters extends BaseHarnessFilters {
+  // TODO is this a good definition for columnName?
+  content?: Record<string, string | RegExp>;
+}
 
 /** A set of criteria that can be used to filter a list of mat-datatable harness instances. */
 export interface MatDatatableHarnessFilters extends BaseHarnessFilters {}
