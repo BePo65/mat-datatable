@@ -800,11 +800,12 @@ describe('MatDatatableComponent', () => {
 
       expect(headerCells).toHaveSize(2);
 
-      const newWidth = 200;
-      await headerCells[1].resize(newWidth);
-      const currentWidth = await headerCells[0].getColumnWidth();
+      const targetWidth = 400;
+      await headerCells[1].resize(targetWidth);
+      const newWidth = await headerCells[1].getColumnWidth();
 
-      expect(Math.abs(currentWidth - newWidth)).toBeLessThan(10);
+      expect(Math.abs(newWidth - targetWidth)).toBeLessThan(10);
+      expect(newWidth).toBe(targetWidth);
     });
 
     /* eslint-disable jasmine/new-line-before-expect */
@@ -815,11 +816,12 @@ describe('MatDatatableComponent', () => {
       expect(headerCells).toHaveSize(4);
 
       const originalWidth = await headerCells[0].getColumnWidth();
+      expect(originalWidth).toBeGreaterThan(1);
 
       // Cell without resizer cannot resize
-      expect(originalWidth).toBeGreaterThan(1);
       await headerCells[0].resize(100);
-      expect(await headerCells[0].getColumnWidth()).toBe(originalWidth);
+      const newWidth = await headerCells[0].getColumnWidth();
+      expect(newWidth).toBe(originalWidth);
     });
     /* eslint-enable jasmine/new-line-before-expect */
   });
@@ -924,7 +926,7 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     cell: (row: DatatableTestRow) => row.position.toString(),
     headerAlignment: 'right',
     cellAlignment: 'right',
-    width: '80px'
+    width: '5em'
   },
   {
     columnId: 'name',
@@ -932,10 +934,10 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     cell: (row: DatatableTestRow) => row.name,
     headerAlignment: 'left',
     cellAlignment: 'left',
-    width: '160px',
+    width: '20em',
+    resizable: true,
     showAsSingleLine: true,
-    sortable: true,
-    resizable: true
+    sortable: true
   },
   {
     columnId: 'weight',
@@ -943,7 +945,8 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     cell: (row: DatatableTestRow) => row.weight.toString(),
     headerAlignment: 'right',
     cellAlignment: 'right',
-    width: '160px',
+    width: '10em',
+    resizable: true,
     sortable: true
   },
   {
@@ -952,10 +955,8 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     cell: (row: DatatableTestRow) => row.symbol,
     headerAlignment: 'center',
     cellAlignment: 'center',
-    width: '320px',
     tooltip: (row: DatatableTestRow) => `Hint: ${row.symbol}`,
-    showAsMailtoLink: true,
-    resizable: true
+    showAsMailtoLink: true
   }
 ];
 
