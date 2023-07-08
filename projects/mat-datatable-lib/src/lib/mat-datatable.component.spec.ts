@@ -662,7 +662,7 @@ describe('MatDatatableComponent', () => {
     });
   });
 
-  describe('pagable table', () => {
+  describe('Pagable table', () => {
     let fixture: ComponentFixture<PagableTestComponent>;
     let loader: HarnessLoader;
     let component: PagableTestComponent;
@@ -794,22 +794,18 @@ describe('MatDatatableComponent', () => {
       expect(headerCells.length).toBe(2);
     });
 
-    /* eslint-disable jasmine/new-line-before-expect */
     it('should resize a resizable column', async () => {
       const headerRow = await loader.getHarness(MatHeaderRowHarness);
-      const headerCells = await headerRow.getCells();
+      const headerCells = await headerRow.getCells({ isResizable: true });
 
-      expect(headerCells).toHaveSize(4);
+      expect(headerCells).toHaveSize(2);
 
-      const originalWidth = await headerCells[1].getColumnWidth();
-      expect(originalWidth).toBeGreaterThan(1);
+      const newWidth = 200;
+      await headerCells[1].resize(newWidth);
+      const currentWidth = await headerCells[0].getColumnWidth();
 
-      await headerCells[1].resize(200);
-      const newWidth = await headerCells[1].getColumnWidth();
-      // Cannot check width to be 200, as width depends on HarnessEnvironment
-      expect(Math.abs(newWidth - originalWidth)).toBeGreaterThan(1);
+      expect(Math.abs(currentWidth - newWidth)).toBeLessThan(10);
     });
-    /* eslint-enable jasmine/new-line-before-expect */
 
     /* eslint-disable jasmine/new-line-before-expect */
     it('should not resize a non-resizable column', async () => {

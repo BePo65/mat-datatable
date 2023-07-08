@@ -130,8 +130,9 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
   }
 
   /**
-   * Resize header cell (and therefore column) to new width.
-   * The final size of the cell depends on the use HarnessEnvironment
+   * Resize header cell (and therefore column) to new width with the mouse.
+   * The final size of the cell depends on several factors and is therefore
+   * not exactly the given 'newWidth'.
    * @param newWidth - new width of the column (in px)
    * @returns promise that completes after resizing the column
    */
