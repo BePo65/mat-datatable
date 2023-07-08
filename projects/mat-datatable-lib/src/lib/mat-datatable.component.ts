@@ -170,6 +170,12 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     }
   }
 
+  /**
+   * Gets 'ngStyle' property of table header cell.
+   * This method creates the style to set the column width.
+   * @param columnDefinition - object defining a table cell
+   * @returns object with properties that reflect the css styles of the header cell
+   */
   protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
@@ -181,6 +187,12 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     return result;
   }
 
+  /**
+   * Gets 'ngStyle' property of table data cell.
+   * This method creates the style for data cells according to the given definition.
+   * @param columnDefinition - object defining a table cell
+   * @returns object with properties that reflect the css styles of the data cell
+   */
   protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
