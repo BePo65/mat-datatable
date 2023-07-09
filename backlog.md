@@ -1,4 +1,3 @@
-* add filtering for rows
 * add virtual scroller
 * activeRow - add scrollIntoPosition
 * add cypress tests
