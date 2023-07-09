@@ -7,6 +7,27 @@ import { HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
+   * Checks if the specified nullable boolean value matches the given value.
+   * @param value The nullable boolean value to check, or a Promise resolving to the
+   *   nullable boolean value.
+   * @param pattern The boolean the value is expected to match. If `pattern` is `null`,
+   *   the value is expected to be `null`.
+   * @returns Whether the value matches the pattern.
+   */
+  static async booleanMatches(
+    value: boolean | null | Promise<boolean | null>,
+    pattern: boolean | null
+  ): Promise<boolean> {
+    value = await value;
+    if (pattern === null) {
+      return value === null;
+    } else if (value === null) {
+      return false;
+    }
+    return value === pattern;
+  }
+
+  /**
    * Gets the cell's text.
    * @returns the text of the cell.
    */
@@ -72,7 +93,7 @@ export class MatRowCellHarness extends _MatCellHarnessBase {
         HarnessPredicate.stringMatches(harness.getColumnName(), name)
       )
       .addOption('isSingleLine', options.isSingleLine, (harness, isSingleLine) =>
-        booleanMatches(harness.isSingleLine(), isSingleLine)
+      _MatCellHarnessBase.booleanMatches(harness.isSingleLine(), isSingleLine)
       );
   }
 
@@ -107,7 +128,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
         HarnessPredicate.stringMatches(harness.getColumnName(), name)
       )
       .addOption('isResizable', options.isResizable, (harness, isResizable) =>
-        booleanMatches(harness.isResizable(), isResizable)
+      _MatCellHarnessBase.booleanMatches(harness.isResizable(), isResizable)
       );
   }
 
@@ -149,24 +170,3 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
     return;
   }
 }
-
-/**
- * Checks if the specified nullable boolean value matches the given value.
- * @param value The nullable boolean value to check, or a Promise resolving to the
- *   nullable boolean value.
- * @param pattern The boolean the value is expected to match. If `pattern` is `null`,
- *   the value is expected to be `null`.
- * @returns Whether the value matches the pattern.
- */
-const booleanMatches= async (
-  value: boolean | null | Promise<boolean | null>,
-  pattern: boolean | null
-): Promise<boolean> => {
-  value = await value;
-  if (pattern === null) {
-    return value === null;
-  } else if (value === null) {
-    return false;
-  }
-  return value === pattern;
-};
