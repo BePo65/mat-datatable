@@ -127,6 +127,16 @@ describe('MatRowHarness', () => {
     expect(filteredRowHarnesses.length).toEqual(1);
   });
 
+  it('should get array of MatRowHarness - filter by element content without match', async () => {
+    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
+      { rowCellsContent: {
+        weight: '12'
+      }}
+    ));
+
+    expect(filteredRowHarnesses.length).toEqual(0);
+  });
+
   it('should get array of MatRowHarness - filter by element content with regexp', async () => {
     const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
       { rowCellsContent: {
@@ -150,6 +160,16 @@ describe('MatRowHarness', () => {
     const rowContent = await filteredRowHarnesses[0].getCellTextByIndex({ columnName: 'name' });
 
     expect(rowContent).toEqual(['Helium']);
+  });
+
+  it('should get array of MatRowHarness - filter by element content with illegal column name', async () => {
+    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
+      { rowCellsContent: {
+        illegalCol: 'any value'
+      }}
+    ));
+
+    expect(filteredRowHarnesses.length).toEqual(0);
   });
 
   it('should get width of a data cells', async () => {
