@@ -117,6 +117,41 @@ describe('MatRowHarness', () => {
     expect(columnValues).toEqual(['1', 'Hydrogen', '1.0079', 'H']);
   });
 
+  it('should get array of MatRowHarness - filter by element content with string', async () => {
+    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
+      { rowCellsContent: {
+        weight: '9.0122'
+      }}
+    ));
+
+    expect(filteredRowHarnesses.length).toEqual(1);
+  });
+
+  it('should get array of MatRowHarness - filter by element content with regexp', async () => {
+    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
+      { rowCellsContent: {
+        name: /(H.+|Boron)/
+      }}
+    ));
+
+    expect(filteredRowHarnesses.length).toEqual(3);
+  });
+
+  it('should get array of MatRowHarness - filter by element content with mixed filters', async () => {
+    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
+      { rowCellsContent: {
+        name: /(H.+|Boron)/,
+        weight: '4.0026'
+      }}
+    ));
+
+    expect(filteredRowHarnesses.length).toEqual(1);
+
+    const rowContent = await filteredRowHarnesses[0].getCellTextByIndex({ columnName: 'name' });
+
+    expect(rowContent).toEqual(['Helium']);
+  });
+
   it('should get width of a data cells', async () => {
     const dataRowHarness = await loader.getHarness(MatRowHarness);
     const rowCellsHarnesses = await dataRowHarness.getCells();

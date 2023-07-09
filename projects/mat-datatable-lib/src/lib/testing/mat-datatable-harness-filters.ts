@@ -25,8 +25,8 @@ export interface HeaderCellHarnessFilters extends CellHarnessFilters {
 
 /** A set of criteria that can be used to filter a list of row harness instances. */
 export interface RowHarnessFilters extends BaseHarnessFilters {
-  // TODO is this a good definition for columnName?
-  content?: Record<string, string | RegExp>;
+  /** Only find instances whose cells content matches the given values. */
+  rowCellsContent?: Record<string, string | RegExp>;
 }
 
 /** A set of criteria that can be used to filter a list of mat-datatable harness instances. */
