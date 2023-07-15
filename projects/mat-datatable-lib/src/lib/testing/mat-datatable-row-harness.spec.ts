@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, of } from 'rxjs';
 
-import { Page, RequestPageOfList, RequestSortDataList } from '../../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsRange, FieldSortDefinition } from '../../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
@@ -382,7 +382,7 @@ class TableHarnessTestComponent {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<TableHarnessTestRow>[], filters?: object) => {
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<TableHarnessTestRow>[], filters?: object) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
@@ -398,7 +398,7 @@ class TableHarnessTestComponent {
 
 class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
   private data: TableHarnessTestRow[];
-  private currentSortingDefinitions: RequestSortDataList<TableHarnessTestRow>[] = [];
+  private currentSortingDefinitions: FieldSortDefinition<TableHarnessTestRow>[] = [];
   private unsortedData: TableHarnessTestRow[];
 
   constructor(testData: TableHarnessTestRow[]) {
@@ -415,19 +415,19 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
-    rowsRange: RequestPageOfList,
-    sorts?: RequestSortDataList<TableHarnessTestRow>[],
+    rowsRange: RequestRowsRange,
+    sorts?: FieldSortDefinition<TableHarnessTestRow>[],
     filters?: TableHarnessTestFilter // eslint-disable-line @typescript-eslint/no-unused-vars
   )  {
     if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
       this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
     }
-    const startIndex = rowsRange.page * rowsRange.numberOfRows;
+    const startIndex = rowsRange.startRowIndex * rowsRange.numberOfRows;
     const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
-      pageNumber: rowsRange.page,
+      startRowIndex: rowsRange.startRowIndex,
       returnedElements: resultingData.length,
       totalElements: this.data.length
     } as Page<TableHarnessTestRow>;
@@ -440,10 +440,10 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
    */
-  private areSortDefinitionsEqual(a: RequestSortDataList<TableHarnessTestRow>[], b: RequestSortDataList<TableHarnessTestRow>[]): boolean {
+  private areSortDefinitionsEqual(a: FieldSortDefinition<TableHarnessTestRow>[], b: FieldSortDefinition<TableHarnessTestRow>[]): boolean {
     return a.length === b.length &&
     a.every((element, index) => (element.fieldName === b[index].fieldName) &&
-      element.order === b[index].order);
+      element.sortDirection === b[index].sortDirection);
   }
 
   private getSortedData(): TableHarnessTestRow[] {
@@ -456,7 +456,7 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
       let result = 0;
       for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
         const fieldName = this.currentSortingDefinitions[i].fieldName;
-        const isAsc = (this.currentSortingDefinitions[i].order === 'asc');
+        const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
         const valueA = a[fieldName] as string | number;
         const valueB = b[fieldName] as string | number;
         result = compare(valueA, valueB, isAsc);

@@ -8,7 +8,7 @@ export {
   SortHeaderArrowPosition
 } from '@angular/material/sort';
 
-export { SortDirectionAscDesc } from './mat-multi-sort-badge.directive';
+export { SortDirectionAscDesc } from './mat-multi-sort.interface';
 
 // MatMultiSort
 export * from './mat-multi-sort.directive';

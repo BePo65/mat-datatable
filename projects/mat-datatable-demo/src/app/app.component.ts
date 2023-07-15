@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
@@ -11,27 +11,24 @@ import {
   MatSortDefinition,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
-import { RequestPageOfList, RequestSortDataList } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
-
-// HACK filter type as a starter - replace with correct one
-type EmptyTestFilter = object;
+import { RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
-  @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem, EmptyTestFilter>;
+export class AppComponent {
+  @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
 
   title = 'Mat-Datatable-Demo';
 
-  protected dataStore = new DemoTableDataStore<DemoTableItem, object>();
+  protected dataStore = new DemoTableDataStore<DemoTableItem>();
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
     {
-      columnId: 'id',
+      columnId: 'userId',
       header: 'ID',
-      cell: (row: DemoTableItem) => row.userId.toString(),
+      cell: (row: DemoTableItem) => row?.userId?.toString(),
       headerAlignment: 'right',
       cellAlignment: 'right',
       width: '5em'
@@ -39,7 +36,7 @@ export class AppComponent implements AfterViewInit {
     {
       columnId: 'firstName',
       header: 'First Name',
-      cell: (row: DemoTableItem) => row.firstName,
+      cell: (row: DemoTableItem) => row?.firstName,
       headerAlignment: 'left',
       cellAlignment: 'left',
       width: '10em',
@@ -49,7 +46,7 @@ export class AppComponent implements AfterViewInit {
     {
       columnId: 'lastName',
       header: 'Last Name',
-      cell: (row: DemoTableItem) => row.lastName,
+      cell: (row: DemoTableItem) => row?.lastName,
       headerAlignment: 'right',
       cellAlignment: 'right',
       width: '10em',
@@ -58,16 +55,16 @@ export class AppComponent implements AfterViewInit {
     {
       columnId: 'email',
       header: 'EMail',
-      cell: (row: DemoTableItem) => row.email,
+      cell: (row: DemoTableItem) => row?.email,
       width: '20em',
-      tooltip: (row: DemoTableItem) => row.email,
+      tooltip: (row: DemoTableItem) => row?.email,
       showAsMailtoLink: true,
       resizable: true
     },
     {
       columnId: 'birthday',
       header: 'Birthday',
-      cell: (row: DemoTableItem) => row.birthday.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
+      cell: (row: DemoTableItem) => row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
       headerAlignment: 'center',
       cellAlignment: 'center',
       width: '8em',
@@ -77,13 +74,12 @@ export class AppComponent implements AfterViewInit {
     {
       columnId: 'description',
       header: 'Description',
-      cell: (row: DemoTableItem) => row.description,
-      tooltip: (row: DemoTableItem) => row.description,
+      cell: (row: DemoTableItem) => row?.description,
+      tooltip: (row: DemoTableItem) => row?.description,
       showAsSingleLine: true
     }
   ];
-  protected displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'description'];
-  protected currentPage = 0;
+  protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'description'];
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
@@ -99,14 +95,9 @@ export class AppComponent implements AfterViewInit {
     this.headersTextFromColumnDefinitions();
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => this.currentPageSizeChanged());
-  }
-
-  // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DemoTableItem>[], filters?: object) => {
+  // Arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DemoTableItem>[], filters?: FieldFilterDefinition<DemoTableItem>[]) => {
     const newPage = this.dataStore.getPagedData(rowsRange, sorts, filters);
-    this.currentPage = +this.table.page + 1;
     return newPage;
   };
 
@@ -124,14 +115,10 @@ export class AppComponent implements AfterViewInit {
     if ($event.length > 0) {
       result = $event
         .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId )
-        .map(row => row.userId)
+        .map(row => row?.userId)
         .join('; ') || '-';
     }
     this.selectedRowsAsString = result;
-  }
-
-  protected onPageSizeChanged() {
-    this.currentPageSizeChanged();
   }
 
   protected headerFromColumnId(columnId: string): string {
@@ -150,7 +137,7 @@ export class AppComponent implements AfterViewInit {
   // Demo to show sorting by code
   protected onSortId() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'id', direction:'asc' }
+      { columnId:'userId', direction:'asc' }
     ];
     this.table.sortDefinitions = newSort;
   }
@@ -215,21 +202,6 @@ export class AppComponent implements AfterViewInit {
     } else {
       return '-';
     }
-  }
-
-  // Demo to show / change pageSize of datasource
-  protected onTogglePageSize() {
-    const oldPageSize = this.table.pageSize;
-    const newPageSize = oldPageSize === 10 ? 20 : 10;
-    this.table.pageSize = +newPageSize;
-    this.currentPageSizeChanged();
-  }
-  private currentPageSizeChanged() {
-      this.currentPageSize$.next(this.table.pageSize.toString());
-  }
-
-  protected onGotoPage(pageNumber: number) {
-    this.table.page = pageNumber;
   }
 
   /**

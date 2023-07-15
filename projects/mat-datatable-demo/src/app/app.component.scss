@@ -22,10 +22,6 @@
   margin: 2em 0 0.75em 1em;
 }
 
-.page-size-row {
-  margin: 1.4em 0 1.25em 1em;
-}
-
 .current-sort-label {
   margin: 0 0.25em 0 0;
 }
@@ -44,13 +40,11 @@
 }
 
 .activation-button-container,
-.page-size-button-container,
 .selection-button-container {
   margin: 0 0 0.75em;
 }
 
 .activation-button,
-.page-size-button,
 .goto-page-button {
   margin: 0 1em 0 0;
 }
@@ -58,14 +52,4 @@
 .activated-row-label,
 .selected-rows-label  {
   margin: 0 0.25em 0 1em;
-}
-
-.page-number-label,
-.page-size-label {
-  margin: 0 0.25em 0 0;
-}
-
-.page-number-value,
-.page-size-value {
-  margin: 0 1.5em 0 0;
 }

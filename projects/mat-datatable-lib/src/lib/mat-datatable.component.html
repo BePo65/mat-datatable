@@ -4,40 +4,38 @@
   color="primary"
   mode="indeterminate">
 </mat-progress-bar>
-<table mat-table matMultiSort class="full-width-table mat-datatable"
-  [dataSource]="dataSource"
-  (matMultiSortChange)="onMultiSortChanged($event)">
-  <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
-    <th mat-header-cell
-      class="mat-datatable-header-cell"
-      *matHeaderCellDef
-      mat-multi-sort-header
-      [disabled]="!column.sortable"
-      [ngStyle]="headerFormat(column)"
-      [arrowPosition]="sortArrowPosition(column)"
-      [matHeaderAlignment]="column.headerAlignment"
-      [matResizable]="column.resizable">
-      {{column.header}}
-    </th>
-    <td mat-cell class="mat-datatable-cell" *matCellDef="let row" [ngClass]="{'mat-datatable-single-line':column.showAsSingleLine}" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">
-      <span *ngIf="!column?.showAsMailtoLink; else mailToLink">{{column.cell(row)}}</span>
-      <ng-template #mailToLink><a href="mailto:${column.cell(row)}">{{column.cell(row)}}</a></ng-template>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-  <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
-    [ngClass]="{
-      'selected-row': currentSelectedRows.includes(row),
-      'activated-row': currentActivatedRow === row
-    }"
-    (click)="onRowClicked(row)">
-  </tr>
-</table>
-<mat-paginator #paginator
-  [length]="(dataSource.page$ | async)?.totalElements"
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 20]"
-  [showFirstLastButtons]="true"
-  class="mat-paginator-sticky">
-</mat-paginator>
+<cdk-virtual-scroll-viewport
+  #tvs="table-virtual-scroll"
+  tvsItemSize="52"
+  class="mat-datatable-viewport">
+  <table mat-table matMultiSort
+    class="full-width-table mat-datatable"
+    [dataSource]="dataSource"
+    (matMultiSortChange)="onMultiSortChanged($event)">
+    <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
+      <th mat-header-cell
+        class="mat-datatable-header-cell"
+        *matHeaderCellDef
+        mat-multi-sort-header
+        [disabled]="!column.sortable"
+        [ngStyle]="headerFormat(column)"
+        [arrowPosition]="sortArrowPosition(column)"
+        [matHeaderAlignment]="column.headerAlignment"
+        [matResizable]="column.resizable">
+        {{column.header}}
+      </th>
+      <td mat-cell class="mat-datatable-cell" *matCellDef="let row" [ngClass]="{'mat-datatable-single-line':column.showAsSingleLine}" [ngStyle]="columnFormat(column)" [attr.title]="column?.tooltip?.(row)">
+        <span *ngIf="!column?.showAsMailtoLink; else mailToLink">{{column.cell(row)}}</span>
+        <ng-template #mailToLink><a href="mailto:${column.cell(row)}" onclick="event.stopPropagation()">{{column.cell(row)}}</a></ng-template>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{
+        'selected-row': currentSelectedRows.includes(row),
+        'activated-row': currentActivatedRow === row
+      }"
+      (click)="onRowClicked(row)">
+    </tr>
+  </table>
+</cdk-virtual-scroll-viewport>

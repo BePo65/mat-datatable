@@ -2,16 +2,16 @@ import { delay, of } from 'rxjs';
 
 import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
 
-import { RequestSortDataList, RequestPageOfList, Page } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
+import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
 
 /**
  * Datastore for the DemoTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class DemoTableDataStore<DatatableItem, DatatableFilter> {
+export class DemoTableDataStore<DatatableItem> {
   private data: DatatableItem[];
-  private currentSortingDefinitions: RequestSortDataList<DatatableItem>[] = [];
+  private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
 
   constructor() {
     this.data = [ ...EXAMPLE_DATA as DatatableItem[] ];
@@ -26,21 +26,24 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
-    rowsRange: RequestPageOfList,
-    sorts?: RequestSortDataList<DatatableItem>[],
-    filters?: DatatableFilter // eslint-disable-line @typescript-eslint/no-unused-vars
+    rowsRange: RequestRowsRange,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[] // eslint-disable-line @typescript-eslint/no-unused-vars
   ) {
-    if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
+    if ((sorts !== undefined) &&
+         !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
+         (rowsRange.numberOfRows !== 0)) {
       this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
     }
-    const startIndex = rowsRange.page * rowsRange.numberOfRows;
+    const startIndex = rowsRange.startRowIndex;
     const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
-      pageNumber: rowsRange.page,
+      startRowIndex: startIndex,
       returnedElements: resultingData.length,
-      totalElements: this.data.length
+      totalElements: this.data.length,
+      totalFilteredElements: this.data.length
     } as Page<DatatableItem>;
     const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
     return of(result).pipe(delay(simulatedResponseTime));
@@ -63,10 +66,10 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
    */
-  private areSortDefinitionsEqual(a: RequestSortDataList<DatatableItem>[], b: RequestSortDataList<DatatableItem>[]): boolean {
+  private areSortDefinitionsEqual(a: FieldSortDefinition<DatatableItem>[], b: FieldSortDefinition<DatatableItem>[]): boolean {
     return a.length === b.length &&
     a.every((element, index) => (element.fieldName === b[index].fieldName) &&
-      element.order === b[index].order);
+      element.sortDirection === b[index].sortDirection);
   }
 
   private getSortedData(): DatatableItem[] {
@@ -79,7 +82,7 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
       let result = 0;
       for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
         const fieldName = this.currentSortingDefinitions[i].fieldName;
-        const isAsc = (this.currentSortingDefinitions[i].order === 'asc');
+        const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
         const valueA = a[fieldName] as string | number;
         const valueB = b[fieldName] as string | number;
         result = compare(valueA, valueB, isAsc);

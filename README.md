@@ -47,7 +47,7 @@ Only a minimal set of the functionality of ngx-datatable is implemented.
 The table implements virtual scrolling.
 
 The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web).
-Bith fonts are part of the project and not fetched via https.
+Both fonts are part of the project and not fetched via https.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -69,6 +69,10 @@ Install the package from npmjs
    npm install @bepo65/mat-datatable
    ```
 
+### Embed mat-datatable in project
+
+TODO add sample project - height of the mat-datatable must be set!
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- API -->
@@ -80,6 +84,8 @@ TODO add the api documentation here.
 
 <!-- ROADMAP -->
 ## Roadmap
+
+TODO update roadmap
 
 - [ ] Create table component
     - [ ] Add angular library
