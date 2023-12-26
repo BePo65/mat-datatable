@@ -56,18 +56,18 @@ describe('PaginationDatasource', () => {
     const spy = createSpy('endpoint').and.callFake(() => of(allPages[page++]));
     const dataSource = new PaginationDataSource<User, UserFilter>(spy);
 
-      testScheduler.run(helpers => {
-        const { expectObservable, flush } = helpers;
-        const expectedMarbles = 'i';
-        const expectedValues = {
-          i: allPages[0]
-        };
+    testScheduler.run(helpers => {
+      const { expectObservable, flush } = helpers;
+      const expectedMarbles = 'i';
+      const expectedValues = {
+        i: allPages[0]
+      };
 
-        expectObservable(dataSource.page$).toBe(expectedMarbles, expectedValues);
+      expectObservable(dataSource.page$).toBe(expectedMarbles, expectedValues);
 
-        flush();
+      flush();
 
-        expect(spy).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
 
     // complete all subscriptions

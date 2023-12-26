@@ -12,7 +12,7 @@ export interface RequestFilter {
   combine(): { [name:string]: string }
 }
 
-  // TODO change name to RowsRange
+// TODO change name to RowsRange
 export interface RequestPageOfList {
   // TODO rename to startRowNumber
   page: number
@@ -27,9 +27,9 @@ export interface Page<T> {
   totalElements: number
 }
 
-// TODO export type DatasourceEndpoint<T, Q extends RequestFilter> = (
-export type DatasourceEndpoint<T, Q> = (
+// TODO export type DatasourceEndpoint<T, F extends RequestFilter> = (
+export type DatasourceEndpoint<T, F> = (
   rowsRange: RequestPageOfList,
   sorts?: RequestSortDataList<T>[],
-  filters?: Q
+  filters?: F
 ) => Observable<Page<T>>

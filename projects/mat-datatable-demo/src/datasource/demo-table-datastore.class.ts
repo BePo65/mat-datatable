@@ -5,7 +5,7 @@ import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
 import { RequestSortDataList, RequestPageOfList, Page } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
 
 /**
- * Data source for the DemoTable view. This class should
+ * Datastore for the DemoTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
@@ -47,7 +47,7 @@ export class DemoTableDataStore<DatatableItem, DatatableFilter> {
   }
 
   /**
-   * Gets a single element from the mocked datasource (without sorting).
+   * Gets a single element from the mocked datastore (without sorting).
    * As the demo does not manipulate the data, we can return a reference
    * to the original data.
    * @param index - element to be selected (zero based).
