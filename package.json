@@ -10,9 +10,9 @@
   "license": "MIT",
   "scripts": {
     "lint": "npm run lint:root && npm run lint:lib && npm run lint:demo",
-    "lint:root": "eslint --report-unused-disable-directives --config=./.eslintrc.root.json .",
-    "lint:lib": "eslint --report-unused-disable-directives \"projects/mat-datatable-lib\"",
-    "lint:demo": "eslint --report-unused-disable-directives \"projects/mat-datatable-demo\"",
+    "lint:root": "eslint --config=./.eslintrc.root.json .",
+    "lint:lib": "eslint \"projects/mat-datatable-lib\"",
+    "lint:demo": "eslint \"projects/mat-datatable-demo\"",
     "lint:scss": "stylelint \"**/*.scss\"",
     "lint:commits": "commitlint --from 81ad0b8fb70526 --to HEAD --verbose",
     "test": "npm run test:lib -- --watch=false && npm run test:demo -- --watch=false",
