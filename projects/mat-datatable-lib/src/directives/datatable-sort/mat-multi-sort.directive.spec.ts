@@ -862,7 +862,6 @@ class SimpleMatMultiSortApp {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
     dispatchMouseEvent(sortElement, event);
   }
@@ -895,7 +894,7 @@ class FakeDataSource extends DataSource<any> {
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
     return collectionViewer.viewChange.pipe(map(() => []));
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   disconnect() {}
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -1023,7 +1022,6 @@ class MatMultiSortWithoutExplicitInputs {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
     dispatchMouseEvent(sortElement, event);
   }

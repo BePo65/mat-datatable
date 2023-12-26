@@ -1,5 +1,4 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { Component, DebugElement, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
