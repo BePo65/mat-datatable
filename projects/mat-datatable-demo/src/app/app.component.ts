@@ -106,7 +106,7 @@ export class AppComponent implements AfterViewInit {
   // arrow function is required to give dataStore.getPagedData the correct 'this'
   protected getData = (rowsRange: RequestPageOfList, sorts?: RequestSortDataList<DemoTableItem>[], filters?: object) => {
     const newPage = this.dataStore.getPagedData(rowsRange, sorts, filters);
-    this.currentPage = this.table.page + 1;
+    this.currentPage = +this.table.page + 1;
     return newPage;
   };
 
