@@ -12,8 +12,8 @@ import { MatSortDefinition } from '../interfaces/datatable-sort-definition.inter
 
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
 import { MatDatatableModule } from './mat-datatable.module';
-import SINGLE_PAGE_DATA from './mocking-data/demo-table.mock.data.atoms';
-import PAGABLE_DATA from './mocking-data/demo-table.mock.data.users';
+import PAGABLE_DATA from './mocking-data/mock-data.pageable';
+import SINGLE_PAGE_DATA from './mocking-data/mock-data.simple';
 import { MatDatatableHarness, MatHeaderRowHarness } from './testing';
 
 describe('MatDatatableComponent', () => {
