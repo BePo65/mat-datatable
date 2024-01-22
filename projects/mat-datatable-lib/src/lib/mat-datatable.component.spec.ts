@@ -6,7 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, of } from 'rxjs';
 
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
-import { Page, RequestRowsRange, FieldSortDefinition } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
@@ -662,107 +662,6 @@ describe('MatDatatableComponent', () => {
     });
   });
 
-  describe('Pagable table', () => {
-    let fixture: ComponentFixture<PagableTestComponent>;
-    let loader: HarnessLoader;
-    let component: PagableTestComponent;
-
-    beforeEach(waitForAsync(() => {
-      void TestBed.configureTestingModule({
-        imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
-        ],
-        declarations: [
-          PagableTestComponent
-        ]
-      })
-      .compileComponents();
-    }));
-
-    beforeEach(() => {
-      fixture = TestBed.createComponent(PagableTestComponent);
-      fixture.detectChanges();
-      component = fixture.componentInstance;
-      loader = TestbedHarnessEnvironment.loader(fixture);
-    });
-
-    it('should get first page on load', async () => {
-      const table = await loader.getHarness(MatDatatableHarness);
-      const rows = await table.getRows();
-      const rowContent = await table.getCellTextByIndex();
-
-      expect(rows.length).toBe(10);
-      expect(rowContent).toEqual(PagableDataPage1);
-    });
-
-    it('should switch to second page', async () => {
-      const table = await loader.getHarness(MatDatatableHarness);
-      // TODO component.matDataTable.page = 1;
-      const rows = await table.getRows();
-      const rowContent = await table.getCellTextByIndex();
-
-      expect(rows.length).toBe(10);
-      expect(rowContent).toEqual(PagableDataPage2);
-    });
-
-    it('should switch to non existing page', async () => {
-      const table = await loader.getHarness(MatDatatableHarness);
-      // TODO component.matDataTable.page = 100;
-      const rows = await table.getRows();
-      const rowContent = await table.getCellTextByIndex();
-
-      expect(rows.length).toBe(10);
-      expect(rowContent).toEqual(PagableDataPage1);
-    });
-
-    it('should set and get page size', async () => {
-      const table = await loader.getHarness(MatDatatableHarness);
-      // TODO component.matDataTable.pageSize = 15;
-      const rows = await table.getRows();
-
-      expect(rows.length).toBe(15);
-      // TODO expect(component.matDataTable.pageSize).toEqual(15);
-    });
-
-    it('should emit onPageSizeChange on changing pageSize', () => {
-      let currentPageSize: number | undefined;
-      // TODO component.matDataTable.pageSizeChange
-        // .pipe(
-        //   first()
-        // )
-        // .subscribe((value: number) => currentPageSize = value);
-      // TODO component.matDataTable.pageSize = 20;
-
-      expect(currentPageSize).toEqual(20);
-    });
-
-    it('should stay on page when setting page size', async () => {
-      const table = await loader.getHarness(MatDatatableHarness);
-      // TODO component.matDataTable.page = 2;
-      const rowContentOld = await table.getCellTextByIndex();
-      const oldIdOfFirstRow = rowContentOld[0][0];
-      const idOfElement20 = component.getRow(20).userId.toString();
-      const idOfElement30 = component.getRow(30).userId.toString();
-
-      // TODO expect(component.matDataTable.pageSize).toEqual(10);
-      // TODO expect(component.matDataTable.paginator.pageIndex).toEqual(2);
-      expect(oldIdOfFirstRow).toEqual(idOfElement20);
-
-      // TODO component.matDataTable.pageSize = 15;
-
-      // TODO expect(component.matDataTable.pageSize).toEqual(15);
-      // TODO expect(component.matDataTable.paginator.pageIndex).toEqual(2);
-
-      const rowContentNew = await table.getCellTextByIndex();
-      const newIdOfFirstRow = rowContentNew[0][0];
-
-      expect(rowContentOld.length).toBe(10);
-      expect(rowContentNew.length).toBe(15);
-      expect(newIdOfFirstRow).toEqual(idOfElement30);
-    });
-  });
-
   describe('Table columns resizing', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
@@ -827,7 +726,7 @@ describe('MatDatatableComponent', () => {
   });
 });
 
-class StaticTableDataStore<TRow, TFilter> {
+class StaticTableDataStore<TRow> {
   private data: TRow[];
   private currentSortingDefinitions: FieldSortDefinition<TRow>[];
   private unsortedData: TRow[];
@@ -842,25 +741,28 @@ class StaticTableDataStore<TRow, TFilter> {
    * Paginate the data.
    * @param rowsRange - data to be selected
    * @param sorts - optional array of objects with the sorting definition
-   * @param filters - optional object with the filter definition
+   * @param filters - optional array of objects with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
     rowsRange: RequestRowsRange,
     sorts?: FieldSortDefinition<TRow>[],
-    filters?: TFilter // eslint-disable-line @typescript-eslint/no-unused-vars
-  )  {
-    if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
+    filters?: FieldFilterDefinition<TRow>[] // eslint-disable-line @typescript-eslint/no-unused-vars
+  ) {
+    if ((sorts !== undefined) &&
+         !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
+         (rowsRange.numberOfRows !== 0)) {
       this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
     }
-    const startIndex = rowsRange.startRowIndex * rowsRange.numberOfRows;
+    const startIndex = rowsRange.startRowIndex;
     const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
-      startRowIndex: rowsRange.startRowIndex,
+      startRowIndex: startIndex,
       returnedElements: resultingData.length,
-      totalElements: this.data.length
+      totalElements: this.data.length,
+      totalFilteredElements: this.data.length
     } as Page<TRow>;
     return of(result);
   }
@@ -962,28 +864,29 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
 
 const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
 
-type EmptyTestFilter = object;
-
 @Component({
   template: `
-  <mat-datatable #testTable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [datastoreGetter]="getData"
-    (rowClick)="onRowClick($event)"
-    (rowSelectionChange)="onRowSelectionChange($event)"
-    (sortChange)="onSortChanged($event)">
-    No data to display.
-  </mat-datatable>
-  `
+  <div class="content-table">
+    <mat-datatable #testTable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [datastoreGetter]="getData"
+      (rowClick)="onRowClick($event)"
+      (rowSelectionChange)="onRowSelectionChange($event)"
+      (sortChange)="onSortChanged($event)">
+      No data to display.
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
 })
 class DatatableTestComponent {
-  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow>;
   lastClickedRowAsString = '-';
   selectedRowsAsString = '-';
 
-  protected dataStore = new StaticTableDataStore(datatableTestData);
+  protected dataStore = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinition[] = [];
@@ -995,7 +898,7 @@ class DatatableTestComponent {
   }
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: object) => {
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
@@ -1026,19 +929,22 @@ class DatatableTestComponent {
 
 @Component({
   template: `
-  <mat-datatable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [datastoreGetter]="getData"
-    (rowClick)="onRowClick($event)"
-    (sortChange)="onSortChanged($event)">
-    No data to display.
-  </mat-datatable>
-  `
+  <div class="content-table">
+    <mat-datatable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [datastoreGetter]="getData"
+      (rowClick)="onRowClick($event)"
+      (sortChange)="onSortChanged($event)">
+      No data to display.
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
 })
 class DatatableEmptyTestComponent {
-  dataStore = new StaticTableDataStore([] as DatatableTestRow[]);
+  dataStore = new StaticTableDataStore<DatatableTestRow>([] as DatatableTestRow[]);
   protected columnDefinitions = datatableTestColumnDefinitions;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinition[] = [];
@@ -1047,7 +953,7 @@ class DatatableEmptyTestComponent {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: object) => {
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
@@ -1063,30 +969,33 @@ class DatatableEmptyTestComponent {
 
 @Component({
   template: `
-  <mat-datatable #testTable1
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [datastoreGetter]="getData1"
-    (sortChange)="onSortChanged1($event)"
-  >
-    No data to display.
-  </mat-datatable>
-  <mat-datatable #testTable2
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [datastoreGetter]="getData2"
-    (sortChange)="onSortChanged2($event)"
-  >
-    No data to display.
-  </mat-datatable>
-  `
+  <div class="content-table">
+    <mat-datatable #testTable1
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [datastoreGetter]="getData1"
+      (sortChange)="onSortChanged1($event)"
+    >
+      No data to display.
+    </mat-datatable>
+    <mat-datatable #testTable2
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [datastoreGetter]="getData2"
+      (sortChange)="onSortChanged2($event)"
+    >
+      No data to display.
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
 })
 class DatatableDoubleTestComponent {
-  @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
-  @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow, EmptyTestFilter>;
+  @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;
+  @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow>;
 
-  dataStore1 = new StaticTableDataStore(datatableTestData);
-  dataStore2 = new StaticTableDataStore(datatableTestData);
+  dataStore1 = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
+  dataStore2 = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinition[] = [];
@@ -1095,12 +1004,12 @@ class DatatableDoubleTestComponent {
   protected readonly currentSorts2$ = new BehaviorSubject<MatSortDefinition[]>([]);
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData1 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: object) => {
+  protected getData1 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
     return this.dataStore1.getPagedData(rowsRange, sorts, filters);
   };
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData2 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: object) => {
+  protected getData2 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
     return this.dataStore2.getPagedData(rowsRange, sorts, filters);
   };
 
@@ -1186,21 +1095,24 @@ const datatablePagableTestColumnDefinitions: MatColumnDefinition<DatatablePagabl
 
 @Component({
   template: `
-  <mat-datatable #testTable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [datastoreGetter]="getData"
-    (rowClick)="onRowClick($event)"
-    (sortChange)="onSortChanged($event)">
-    No data to display.
-  </mat-datatable>
-  `
+  <div class="content-table">
+    <mat-datatable #testTable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [datastoreGetter]="getData"
+      (rowClick)="onRowClick($event)"
+      (sortChange)="onSortChanged($event)">
+      No data to display.
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
 })
 class PagableTestComponent {
-  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatablePagableTestRow, EmptyTestFilter>;
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatablePagableTestRow>;
 
-  protected dataStore = new StaticTableDataStore<DatatablePagableTestRow, EmptyTestFilter>(PAGABLE_DATA);
+  protected dataStore = new StaticTableDataStore<DatatablePagableTestRow>(PAGABLE_DATA);
   protected columnDefinitions = datatablePagableTestColumnDefinitions;
   protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'description'];
   protected currentSorts: MatSortDefinition[] = [];
@@ -1213,7 +1125,7 @@ class PagableTestComponent {
   }
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatablePagableTestRow>[], filters?: object) => {
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatablePagableTestRow>[], filters?: FieldFilterDefinition<DatatablePagableTestRow>[]) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
