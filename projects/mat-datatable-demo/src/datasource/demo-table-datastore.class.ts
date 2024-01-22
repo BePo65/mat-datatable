@@ -22,7 +22,7 @@ export class DemoTableDataStore<DatatableItem> {
    * Paginate the data.
    * @param rowsRange - data to be selected
    * @param sorts - optional array of objects with the sorting definition
-   * @param filters - optional object with the filter definition
+   * @param filters - optional array of objects with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
