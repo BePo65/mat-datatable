@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, of } from 'rxjs';
 
-import { Page, RequestRowsRange, FieldSortDefinition } from '../../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
@@ -204,25 +204,27 @@ type TableHarnessTestRow = {
   symbol: string;
 }
 
-type EmptyTestFilter = object;
-
+// HTML for mat-datatable requires surrounding div with height set
 @Component({
   template: `
-  <mat-datatable #testTable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [datastoreGetter]="getData"
-    (rowClick)="onRowClick($event)"
-    (sortChange)="onSortChanged($event)">
-    loading...
-  </mat-datatable>
-  `
+  <div class="content-table">
+    <mat-datatable #testTable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [datastoreGetter]="getData"
+      (rowClick)="onRowClick($event)"
+      (sortChange)="onSortChanged($event)">
+      loading...
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
 })
 class TableHarnessTestComponent {
-  @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow, EmptyTestFilter>;
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow>;
 
-  dataStore = new TableHarnessTestDataStore<TableHarnessTestRow, EmptyTestFilter>([
+  dataStore = new TableHarnessTestDataStore<TableHarnessTestRow>([
     { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
     { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
     { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
@@ -279,7 +281,7 @@ class TableHarnessTestComponent {
   protected selectedRowsAsString = '-';
 
   // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<TableHarnessTestRow>[], filters?: object) => {
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<TableHarnessTestRow>[], filters?: FieldFilterDefinition<TableHarnessTestRow>[]) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
   };
 
@@ -293,14 +295,14 @@ class TableHarnessTestComponent {
   }
 }
 
-class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
-  private data: TableHarnessTestRow[];
-  private currentSortingDefinitions: FieldSortDefinition<TableHarnessTestRow>[] = [];
-  private unsortedData: TableHarnessTestRow[];
+class TableHarnessTestDataStore<DatatableItem> {
+  private data: DatatableItem[];
+  private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
+  private unsortedData: DatatableItem[];
 
-  constructor(testData: TableHarnessTestRow[]) {
-    this.unsortedData = structuredClone(testData) as TableHarnessTestRow[];
-    this.data = structuredClone(testData) as TableHarnessTestRow[];
+  constructor(testData: DatatableItem[]) {
+    this.unsortedData = structuredClone(testData) as DatatableItem[];
+    this.data = structuredClone(testData) as DatatableItem[];
     this.currentSortingDefinitions = [];
   }
 
@@ -308,26 +310,29 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
    * Paginate the data.
    * @param rowsRange - data to be selected
    * @param sorts - optional array of objects with the sorting definition
-   * @param filters - optional object with the filter definition
+   * @param filters - optional array of objects with the filter definition
    * @returns observable for the data for the mat-datatable
    */
   getPagedData(
     rowsRange: RequestRowsRange,
-    sorts?: FieldSortDefinition<TableHarnessTestRow>[],
-    filters?: TableHarnessTestFilter // eslint-disable-line @typescript-eslint/no-unused-vars
-  )  {
-    if ((sorts !== undefined) && !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[] // eslint-disable-line @typescript-eslint/no-unused-vars
+  ) {
+    if ((sorts !== undefined) &&
+         !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
+         (rowsRange.numberOfRows !== 0)) {
       this.currentSortingDefinitions = sorts;
       this.data = this.getSortedData();
     }
-    const startIndex = rowsRange.startRowIndex * rowsRange.numberOfRows;
+    const startIndex = rowsRange.startRowIndex;
     const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
-      startRowIndex: rowsRange.startRowIndex,
+      startRowIndex: startIndex,
       returnedElements: resultingData.length,
-      totalElements: this.data.length
-    } as Page<TableHarnessTestRow>;
+      totalElements: this.data.length,
+      totalFilteredElements: this.data.length
+    } as Page<DatatableItem>;
     return of(result);
   }
 
@@ -337,14 +342,14 @@ class TableHarnessTestDataStore<TableHarnessTestRow, TableHarnessTestFilter> {
    * @param b - 2nd sort definition
    * @returns true= both definitions are equal
    */
-  private areSortDefinitionsEqual(a: FieldSortDefinition<TableHarnessTestRow>[], b: FieldSortDefinition<TableHarnessTestRow>[]): boolean {
+  private areSortDefinitionsEqual(a: FieldSortDefinition<DatatableItem>[], b: FieldSortDefinition<DatatableItem>[]): boolean {
     return a.length === b.length &&
     a.every((element, index) => (element.fieldName === b[index].fieldName) &&
       element.sortDirection === b[index].sortDirection);
   }
 
-  private getSortedData(): TableHarnessTestRow[] {
-    const baseData = structuredClone(this.unsortedData) as TableHarnessTestRow[];
+  private getSortedData(): DatatableItem[] {
+    const baseData = structuredClone(this.unsortedData) as DatatableItem[];
     if (!this.currentSortingDefinitions || this.currentSortingDefinitions.length === 0) {
       return baseData;
     }
