@@ -9,7 +9,7 @@
   "author": "Bernhard Pottler",
   "license": "MIT",
   "scripts": {
-    "lint": "npm run lint:root && npm run lint:lib && npm run lint:demo",
+    "lint": "npm run lint:root && npm run lint:lib && npm run lint:demo && npm run lint:scss",
     "lint:root": "eslint --config=./.eslintrc.root.json .",
     "lint:lib": "eslint \"projects/mat-datatable-lib\"",
     "lint:demo": "eslint \"projects/mat-datatable-demo\"",
