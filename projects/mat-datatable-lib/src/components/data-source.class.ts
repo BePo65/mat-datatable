@@ -102,10 +102,6 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     ) {
     super();
 
-    // default implementation is set here; given parameter 'datastoreEndpoint'
-    // is handled at the end of the constructor
-    this.endpoint = this._emptyDatasourceEndpoint<T>;
-
     // Get the number of rows in the data store;
     // no input value from requestDataStoreSizes$.next' is required
     this.requestDataStoreSizes$
@@ -130,8 +126,12 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
         }
       );
 
+    // endpoint is set after 'this.requestDataStoreSizes$' because setter
+    // triggers 'this.reloadSizeOfDatastore()'
     if (this.datastoreEndpoint !== undefined) {
       this.endpoint = this.datastoreEndpoint;
+    } else {
+      this.endpoint = this._emptyDatasourceEndpoint<T>;
     }
   }
 
