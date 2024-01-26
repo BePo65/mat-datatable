@@ -2,6 +2,10 @@ import { Observable } from 'rxjs';
 
 import { SortDirectionAscDesc } from '../directives/datatable-sort/mat-multi-sort.interface';
 
+type UnionKeys<T> = T extends T? keyof T : never;
+type StrictUnionHelper<T, TAll> = T extends T? T & Partial<Record<Exclude<UnionKeys<TAll>, keyof T>, undefined>> : never;
+type StrictUnion<T> = StrictUnionHelper<T, T>
+
 /**
  * Type defining the sorting a column.
  * @template T - type defining the data of a table row
@@ -37,7 +41,7 @@ export type FieldFilterDefinitionRange<T> = {
  * Definition of a filter for a table column.
  * @template T - type defining the data of a table row
  */
-export type FieldFilterDefinition<T> = FieldFilterDefinitionSimple<T> | FieldFilterDefinitionRange<T>
+export type FieldFilterDefinition<T> = StrictUnion<(FieldFilterDefinitionSimple<T> | FieldFilterDefinitionRange<T>)>
 
 /**
  * Interface defining the properties of a requests for a range of rows.
