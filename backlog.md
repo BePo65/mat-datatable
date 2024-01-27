@@ -1,4 +1,5 @@
-* show rowsInDatastore and filteredRowsInDatastore in demo project
+* add (optional) footer to mat-datatable
+* show rowsInDatastore and filteredRowsInDatastore in footer in demo project
 * add filtering to demo
 * activeRow - add scrollIntoPosition
 * demo - resize table to viewport
