@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
 
@@ -18,7 +18,7 @@ import { RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from 'pr
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
 
   title = 'Mat-Datatable-Demo';
@@ -86,13 +86,37 @@ export class AppComponent {
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
   protected currentPageSize$ = new BehaviorSubject('');
+  protected numberOfRows = '-';
+  protected numberOfFilteredRows = '-';
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
+  private readonly unsubscribe$ = new Subject<void>();
 
   constructor() {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
     this.headersTextFromColumnDefinitions();
+  }
+
+  ngAfterViewInit(): void {
+    this.table.totalRowsChanged
+    .pipe(
+      takeUntil(this.unsubscribe$),
+      delay(0)
+    )
+    .subscribe(numberOfRows => this.numberOfRows = numberOfRows.toString());
+
+    this.table.filteredRowsChanged
+    .pipe(
+      takeUntil(this.unsubscribe$),
+      delay(0)
+    )
+    .subscribe(numberOfRows => this.numberOfFilteredRows = numberOfRows.toString());
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   // Arrow function is required to give dataStore.getPagedData the correct 'this'
