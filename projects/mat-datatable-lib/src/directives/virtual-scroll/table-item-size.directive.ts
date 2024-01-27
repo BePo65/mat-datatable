@@ -162,7 +162,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
   private readonly dataSourceChanges$ = new Subject<void>();
 
   // Stream that emits when this TableItemSizeDirective gets destroyed; used to terminate all streams
-  private readonly unsubscribeAllStreams$ = new Subject<void>();
+  private readonly unsubscribe$ = new Subject<void>();
 
   private stickyPositions!: Map<HTMLElement, number> | null;
   private resetStickyPositions = new Subject<void>();
@@ -179,7 +179,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
 
       virtualScrollStrategy.scrolledIndexChange
         .pipe(
-          takeUntil(this.unsubscribeAllStreams$),
+          takeUntil(this.unsubscribe$),
           // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
           delay(0)
         )
@@ -195,7 +195,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
 
         virtualScrollStrategy.visibleRowsChange
           .pipe(
-            takeUntil(this.unsubscribeAllStreams$)
+            takeUntil(this.unsubscribe$)
           )
           .subscribe(visibleRows =>
             setTimeout(() => this.visibleRowsChanged$.next(visibleRows), 0)
@@ -203,8 +203,8 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
   }
 
   ngOnDestroy() {
-    this.unsubscribeAllStreams$.next();
-    this.unsubscribeAllStreams$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
     this.dataSourceChanges$.complete();
   }
 
@@ -239,7 +239,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
         )
     ])
       .pipe(
-        takeUntil(this.unsubscribeAllStreams$)
+        takeUntil(this.unsubscribe$)
       )
       .subscribe(([stickyOffset]) => {
         if (!this.stickyPositions) {
@@ -311,7 +311,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
       .pipe(
         distinctUntilChanged(),
         takeUntil(this.dataSourceChanges$),
-        takeUntil(this.unsubscribeAllStreams$),
+        takeUntil(this.unsubscribe$),
         tap(sizes => {
           this.scrollStrategy.dataLength = sizes.totalFilteredElements;
           this.totalRowsChanged$.next(sizes.totalElements);
