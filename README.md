@@ -85,16 +85,6 @@ TODO add the api documentation here.
 <!-- ROADMAP -->
 ## Roadmap
 
-TODO update roadmap
-
-- [ ] Create table component
-    - [ ] Add angular library
-    - [ ] Add harness for library testing
-    - [ ] Add cypress component test
-- [ ] Add demo project
-    - [ ] Add angular application
-    - [ ] Add cypress end--to-end test
-
 See the [open issues](https://github.com/bepo65mat-datatable/repo_name/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
