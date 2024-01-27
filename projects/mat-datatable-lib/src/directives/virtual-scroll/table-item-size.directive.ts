@@ -92,24 +92,24 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
       case 'ArrowDown':
         this.scrollToIndex(this.firstVisibleIndexChanged$.value + 1);
         break;
-        case 'ArrowUp':
-          this.scrollToIndex(Math.max(this.firstVisibleIndexChanged$.value - 1, 0));
-          break;
-        case 'PageDown':
-          // show the 'old' last line as 'new' first line
-          this.scrollToIndex((this.firstVisibleIndexChanged$.value + this.visibleRowsChanged$.value - 1));
-          break;
-        case 'PageUp':
-          // show the 'old' first line as 'new' last line
-          this.scrollToIndex(Math.max(this.firstVisibleIndexChanged$.value - this.visibleRowsChanged$.value + 1, 0));
-          break;
-        case 'End':
-          this.scrollToIndex(this.scrollStrategy.dataLength - 1);
-          break;
-        case 'Home':
-          this.scrollToIndex(0);
-          break;
-      }
+      case 'ArrowUp':
+        this.scrollToIndex(Math.max(this.firstVisibleIndexChanged$.value - 1, 0));
+        break;
+      case 'PageDown':
+        // show the 'old' last line as 'new' first line
+        this.scrollToIndex((this.firstVisibleIndexChanged$.value + this.visibleRowsChanged$.value - 1));
+        break;
+      case 'PageUp':
+        // show the 'old' first line as 'new' last line
+        this.scrollToIndex(Math.max(this.firstVisibleIndexChanged$.value - this.visibleRowsChanged$.value + 1, 0));
+        break;
+      case 'End':
+        this.scrollToIndex(this.scrollStrategy.dataLength - 1);
+        break;
+      case 'Home':
+        this.scrollToIndex(0);
+        break;
+    }
   }
 
   @Input('tvsItemSize')
@@ -174,32 +174,33 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
   constructor(
     private ngZone: NgZone,
     @Inject(VIRTUAL_SCROLL_STRATEGY)
-    virtualScrollStrategy: FixedSizeTableVirtualScrollStrategy) {
-      this.scrollStrategy = virtualScrollStrategy;
+    virtualScrollStrategy: FixedSizeTableVirtualScrollStrategy
+  ) {
+    this.scrollStrategy = virtualScrollStrategy;
 
-      virtualScrollStrategy.scrolledIndexChange
-        .pipe(
-          takeUntil(this.unsubscribe$),
-          // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
-          delay(0)
-        )
-        .subscribe(index =>
-          /**
-           * In order to avoid hitting change detection for every scroll event, all of the events
-           * emitted from the scrolledIndexChange stream will be run outside the Angular zone.
-           * To update any data bindings as a result of such an event, you have to run the callback
-           * using 'NgZone.run'.
-           */
-          this.ngZone.run(() => this.firstVisibleIndexChanged$.next(index))
-        );
+    virtualScrollStrategy.scrolledIndexChange
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
+        delay(0)
+      )
+      .subscribe(index =>
+        /**
+         * In order to avoid hitting change detection for every scroll event, all of the events
+         * emitted from the scrolledIndexChange stream will be run outside the Angular zone.
+         * To update any data bindings as a result of such an event, you have to run the callback
+         * using 'NgZone.run'.
+         */
+        this.ngZone.run(() => this.firstVisibleIndexChanged$.next(index))
+      );
 
-        virtualScrollStrategy.visibleRowsChange
-          .pipe(
-            takeUntil(this.unsubscribe$)
-          )
-          .subscribe(visibleRows =>
-            setTimeout(() => this.visibleRowsChanged$.next(visibleRows), 0)
-          );
+    virtualScrollStrategy.visibleRowsChange
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(visibleRows =>
+        setTimeout(() => this.visibleRowsChanged$.next(visibleRows), 0)
+      );
   }
 
   ngOnDestroy() {
@@ -378,7 +379,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
       .forEach((el: Element) => {
         const parent = el.parentElement;
         let baseOffset = 0;
-          if ((this.stickyPositions !== null) && (parent !== null) && this.stickyPositions.has(parent)) {
+        if ((this.stickyPositions !== null) && (parent !== null) && this.stickyPositions.has(parent)) {
           baseOffset = this.stickyPositions.get(parent) || 0;
         }
         (el as HTMLElement).style.bottom = `${-baseOffset + offset}px`;
