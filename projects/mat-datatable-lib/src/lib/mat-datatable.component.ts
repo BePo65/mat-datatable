@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatTable } from '@angular/material/table';
-import { of as observableOf, Subject, takeUntil } from 'rxjs';
+import { Observable, of as observableOf, Subject, takeUntil } from 'rxjs';
 
 import { TableVirtualScrollDataSource } from '../components/data-source.class';
 import {
@@ -18,6 +18,7 @@ import {
   Sort,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
+import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
 import { DatasourceEndpoint, Page, FieldSortDefinition } from '../interfaces/datasource-endpoint.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
@@ -49,11 +50,14 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   @ViewChild(MatTable) table!: MatTable<TRowData>;
   @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
   @ViewChild(MatMultiSort) sort!: MatMultiSort;
+  public totalRowsChanged!: Observable<number>;
+  public filteredRowsChanged!: Observable<number>;
 
   protected dataSource!: TableVirtualScrollDataSource<TRowData>;
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
 
+  @ViewChild('tvs') private tvs!: TableItemSizeDirective<TRowData>;
   private readonly unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -73,7 +77,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
         // Scroll to start of list
         this.viewport.scrollToIndex(0);
       });
-    }
+
+    this.totalRowsChanged = this.tvs.totalRowsChanged;
+    this.filteredRowsChanged = this.tvs.filteredRowsChanged;
+  }
 
   ngOnDestroy(): void {
     // clear row references
