@@ -1,7 +1,7 @@
 import { BaseHarnessFilters } from '@angular/cdk/testing';
 import { SortDirection } from '@angular/material/sort';
 
-export interface MultiSortHarnessFilters extends BaseHarnessFilters {}
+export type MultiSortHarnessFilters = BaseHarnessFilters
 
 export interface MultiSortHeaderHarnessFilters extends BaseHarnessFilters {
   label?: string | RegExp;

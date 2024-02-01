@@ -28,4 +28,4 @@ export interface RowHarnessFilters extends BaseHarnessFilters {
 }
 
 /** A set of criteria that can be used to filter a list of mat-datatable harness instances. */
-export interface MatDatatableHarnessFilters extends BaseHarnessFilters {}
+export type MatDatatableHarnessFilters = BaseHarnessFilters
