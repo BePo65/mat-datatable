@@ -8,6 +8,7 @@
     (rowClick)="onRowClick($event)"
     (rowSelectionChange)="onRowSelectionChange($event)"
     (sortChange)="onSortChanged($event)"
+    [withFooter]="withFooter"
   >loading...</mat-datatable>
 </div>
 <div class="current-sort">
@@ -58,6 +59,9 @@
   <div class="rows-count-container">
     <div class="count-label">Number of rows:</div>
     <div>{{numberOfRows}}</div>
+    <div>&nbsp;</div>
+    <div class="count-label">First visible row:</div>
+    <div>{{firstVisibleRow}}</div>
     <div class="count-label">Number of filtered rows:</div>
     <div>{{numberOfFilteredRows}}</div>
   </div>

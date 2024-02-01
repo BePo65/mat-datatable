@@ -12,6 +12,11 @@
   }
 }
 
+.mat-mdc-table .mat-mdc-footer-row .mat-mdc-footer-cell {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+
 .mdc-linear-progress {
   --mdc-linear-progress-track-height: 2px;
 }

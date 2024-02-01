@@ -44,12 +44,14 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Input() datastoreGetter: DatasourceEndpoint<TRowData> = emptyDatastoreGetter;
+  @Input() withFooter!: boolean;
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
   @ViewChild(MatTable) table!: MatTable<TRowData>;
   @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
   @ViewChild(MatMultiSort) sort!: MatMultiSort;
+  public firstVisibleIndexChanged!: Observable<number>;
   public totalRowsChanged!: Observable<number>;
   public filteredRowsChanged!: Observable<number>;
 
@@ -78,6 +80,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
         this.viewport.scrollToIndex(0);
       });
 
+    this.firstVisibleIndexChanged = this.tvs.firstVisibleIndexChanged;
     this.totalRowsChanged = this.tvs.totalRowsChanged;
     this.filteredRowsChanged = this.tvs.filteredRowsChanged;
   }

@@ -89,6 +89,10 @@ See the [open issues](https://github.com/bepo65mat-datatable/repo_name/issues) f
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Hints on possible extensions
+
++ to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914).
+
 <!-- CONTRIBUTING -->
 ## Contributing
 

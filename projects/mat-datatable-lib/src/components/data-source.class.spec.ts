@@ -216,7 +216,7 @@ describe('TableVirtualScrollDataSource', () => {
        * 1. by the constructor of the dataSource
        * 2. by setSorts
        * 3. by setFilters
-      */
+       */
       expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters

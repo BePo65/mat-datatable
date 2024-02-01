@@ -79,6 +79,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       showAsSingleLine: true
     }
   ];
+  protected withFooter = true;
   protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'description'];
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
@@ -88,6 +89,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected currentPageSize$ = new BehaviorSubject('');
   protected numberOfRows = '-';
   protected numberOfFilteredRows = '-';
+  protected firstVisibleRow = '-';
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
@@ -112,6 +114,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       delay(0)
     )
     .subscribe(numberOfRows => this.numberOfFilteredRows = numberOfRows.toString());
+
+    this.table.firstVisibleIndexChanged
+    .pipe(
+      takeUntil(this.unsubscribe$),
+      delay(0)
+    )
+    .subscribe(firstVisibleRow => this.firstVisibleRow = firstVisibleRow.toString());
   }
 
   ngOnDestroy(): void {

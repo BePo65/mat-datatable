@@ -7,6 +7,7 @@
 <cdk-virtual-scroll-viewport
   #tvs="table-virtual-scroll"
   tvsItemSize="52"
+  [footerEnabled]="withFooter"
   class="mat-datatable-viewport">
   <table mat-table matMultiSort
     class="full-width-table mat-datatable"
@@ -28,6 +29,7 @@
         <span *ngIf="!column?.showAsMailtoLink; else mailToLink">{{column.cell(row)}}</span>
         <ng-template #mailToLink><a href="mailto:${column.cell(row)}" onclick="event.stopPropagation()">{{column.cell(row)}}</a></ng-template>
       </td>
+      <td mat-footer-cell *matFooterCellDef class="mat-datatable-footer-cell">???</td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
@@ -37,5 +39,8 @@
       }"
       (click)="onRowClicked(row)">
     </tr>
+    <ng-container *ngIf="withFooter">
+      <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="footer-row"></tr>
+    </ng-container>
   </table>
 </cdk-virtual-scroll-viewport>
