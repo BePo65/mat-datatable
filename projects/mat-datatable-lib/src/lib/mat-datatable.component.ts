@@ -4,9 +4,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { MatTable } from '@angular/material/table';
@@ -20,7 +22,7 @@ import {
 } from '../directives/datatable-sort';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
 import { DatasourceEndpoint, Page, FieldSortDefinition } from '../interfaces/datasource-endpoint.interface';
-import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
+import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
@@ -39,7 +41,7 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
     '../directives/datatable-resizable.directive.scss'
   ]
 })
-export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy, OnInit {
+export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
@@ -55,6 +57,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   public totalRowsChanged!: Observable<number>;
   public filteredRowsChanged!: Observable<number>;
 
+  protected displayedFooterColumns: string[] = [];
   protected dataSource!: TableVirtualScrollDataSource<TRowData>;
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
@@ -90,6 +93,19 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     this.currentSelectedRows = [];
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const displayedColumnsChanges = changes['displayedColumns'];
+    if (this.withFooter && (displayedColumnsChanges !== undefined)) {
+      if (Array.isArray(displayedColumnsChanges.currentValue)) {
+        const displayedColumns = displayedColumnsChanges.currentValue as string[];
+        this.displayedFooterColumns = this.footerColumnsFromColumns(displayedColumns);
+      } else {
+        console.error(`'displayedColumns' is not an array of strings ('${typeof displayedColumnsChanges.currentValue}')`);
+      }
+
+    }
   }
 
   /**
@@ -204,6 +220,31 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
     return result;
   }
 
+  /**
+   * Gets 'ngStyle' property of table footer cell.
+   * This method creates the style for footer cells according to the given definition.
+   * @param footerCellAlignment - definition of the footer cell
+   * @returns object with properties that reflect the css styles of the footer cell
+   */
+  protected footerColumnFormat(footerCellAlignment?: ColumnAlignmentType): Record<string, string> | undefined {
+    const result: Record<string, string> = {};
+    if (footerCellAlignment !== undefined) {
+      switch (footerCellAlignment) {
+        case 'left':
+          result['text-align'] = 'start';
+          break;
+        case 'center':
+          result['text-align'] = 'center';
+          break;
+        case 'right':
+          result['text-align'] = 'end';
+          break;
+      }
+    }
+
+    return result;
+  }
+
   protected sortArrowPosition(columnDefinition: MatColumnDefinition<TRowData>): SortHeaderArrowPosition {
     return columnDefinition.headerAlignment === 'right' ? 'before' : 'after';
   }
@@ -247,6 +288,37 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   }
 
   /**
+   * Extract the list of footer columns to display from the
+   * list of columns to display. The footer can have columns tha
+   * span several columns; therefore we need a different list.
+   * @param newDisplayedColumns - list of the id of the columns to display
+   * @returns list of the id of the footer columns to display
+   */
+  private footerColumnsFromColumns(newDisplayedColumns: string[]) {
+    const displayedFooterColumns: string[] = [];
+    let i = 0;
+    const numberOfColumns = newDisplayedColumns.length;
+    while (i < numberOfColumns) {
+      displayedFooterColumns.push(newDisplayedColumns[i]);
+
+      // Do we have a footer columnSpan for this column?
+      const columnDefinition = this.columnDefinitions.find(element => element.columnId === newDisplayedColumns[i]);
+      if (columnDefinition !== undefined) {
+        const colSpan = columnDefinition.footerColumnSpan;
+        if ((colSpan !== undefined) && Number.isInteger(colSpan) && (colSpan > 1)) {
+          i += colSpan;
+        } else {
+          i++;
+        }
+      } else {
+        console.error(`Column to display ('${newDisplayedColumns[i]}') has no column definition`);
+        i++;
+      }
+    }
+    return displayedFooterColumns;
+  }
+
+  /**
    * Convert an array of type Sort[] to an array of type RequestSortDataList[]
    * used in class PaginationDataSource.
    * @param sorts - sorting definition to convert
@@ -282,13 +354,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnDestroy
   }
 }
 
-  /**
-   * Default implementation of the datastoreGetter input variable
-   * returning an observable that emits a Page with no data rows.
-   * @returns observable that emits a single empty Page
-   */
-  const emptyDatastoreGetter = <T>() => {
-    return observableOf({
+/**
+ * Default implementation of the datastoreGetter input variable
+ * returning an observable that emits a Page with no data rows.
+ * @returns observable that emits a single empty Page
+ */
+const emptyDatastoreGetter = <T>() => {
+  return observableOf({
     content: [] as T[],
     startRowIndex: 0,
     returnedElements: 0,

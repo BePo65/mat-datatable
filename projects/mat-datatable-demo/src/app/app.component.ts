@@ -31,52 +31,56 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       cell: (row: DemoTableItem) => row?.userId?.toString(),
       headerAlignment: 'right',
       cellAlignment: 'right',
-      width: '5em'
+      width: '5em',
+      footer: '0 / 0',
+      footerColumnSpan: 5
     },
     {
       columnId: 'firstName',
-      header: 'First Name',
-      cell: (row: DemoTableItem) => row?.firstName,
-      headerAlignment: 'left',
-      cellAlignment: 'left',
-      width: '10em',
       sortable: true,
-      resizable: true
+      resizable: true,
+      header: 'First Name',
+      headerAlignment: 'left',
+      cell: (row: DemoTableItem) => row?.firstName,
+      cellAlignment: 'left',
+      width: '10em'
     },
     {
       columnId: 'lastName',
+      sortable: true,
       header: 'Last Name',
-      cell: (row: DemoTableItem) => row?.lastName,
       headerAlignment: 'right',
+      cell: (row: DemoTableItem) => row?.lastName,
       cellAlignment: 'right',
-      width: '10em',
-      sortable: true
+      width: '10em'
     },
     {
       columnId: 'email',
+      resizable: true,
       header: 'EMail',
       cell: (row: DemoTableItem) => row?.email,
       width: '20em',
       tooltip: (row: DemoTableItem) => row?.email,
-      showAsMailtoLink: true,
-      resizable: true
+      showAsMailtoLink: true
     },
     {
       columnId: 'birthday',
-      header: 'Birthday',
-      cell: (row: DemoTableItem) => row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
-      headerAlignment: 'center',
-      cellAlignment: 'center',
-      width: '8em',
       sortable: true,
-      resizable: false
+      resizable: false,
+      header: 'Birthday',
+      headerAlignment: 'center',
+      cell: (row: DemoTableItem) => row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
+      cellAlignment: 'center',
+      width: '8em'
     },
     {
       columnId: 'description',
       header: 'Description',
       cell: (row: DemoTableItem) => row?.description,
       tooltip: (row: DemoTableItem) => row?.description,
-      showAsSingleLine: true
+      showAsSingleLine: true,
+      footer: 'no filter',
+      footerAlignment: 'right'
     }
   ];
   protected withFooter = true;
@@ -94,6 +98,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
   private readonly unsubscribe$ = new Subject<void>();
+  private formattedDatastoreLengths = 'filtered {0} / total {1}';
 
   constructor() {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
@@ -106,14 +111,20 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribe$),
       delay(0)
     )
-    .subscribe(numberOfRows => this.numberOfRows = numberOfRows.toString());
+    .subscribe(numberOfRows => {
+      this.numberOfRows = numberOfRows.toString();
+      this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+    });
 
     this.table.filteredRowsChanged
     .pipe(
       takeUntil(this.unsubscribe$),
       delay(0)
     )
-    .subscribe(numberOfRows => this.numberOfFilteredRows = numberOfRows.toString());
+    .subscribe(numberOfRows => {
+      this.numberOfFilteredRows = numberOfRows.toString();
+      this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+    });
 
     this.table.firstVisibleIndexChanged
     .pipe(
@@ -245,5 +256,18 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     for (let i = 0; i < this.columnDefinitions.length; i++) {
       this.headers[this.columnDefinitions[i].columnId] = this.columnDefinitions[i].header;
     }
+  }
+
+  /**
+   * Format a list of strings using a template string.
+   * Usage: formatString('Hello {0}, your order {1} has been shipped.', 'John', 10001)
+   * @param template - template string with placeholders in the form of {indexOfDataToInsert}
+   * @param args - array of strings with data to insert into the template
+   * @returns formatted string
+   */
+  private formatString(template: string, ...args: string[]) {
+    return template.replace(/{([0-9]+)}/g, (match, index: number) => {
+      return typeof args[index] === 'undefined' ? match : args[index];
+    });
   }
 }

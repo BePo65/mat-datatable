@@ -1,8 +1,6 @@
 * add footer to mat-datatable
-  ==> add default format
-  ==> update to angular v16 to use 'transform' in @input of columnDefinitions
+  ==> test with 'withFooter=false'
   ==> add testing harness
-* show rowsInDatastore and filteredRowsInDatastore in footer in demo project
 * add filtering to demo
 * activeRow - add scrollIntoPosition
 * add / use trackBy
