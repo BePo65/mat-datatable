@@ -1,6 +1,3 @@
-* add footer to mat-datatable
-  ==> test with 'withFooter=false'
-  ==> add testing harness
 * add filtering to demo
 * activeRow - add scrollIntoPosition
 * add / use trackBy

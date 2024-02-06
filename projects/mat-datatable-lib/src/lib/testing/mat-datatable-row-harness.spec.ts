@@ -11,10 +11,10 @@ import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.in
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
 import { MatDatatableModule } from '../mat-datatable.module';
 
-import { MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
+import { MatFooterRowHarness, MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
 
 describe('MatRowHarness', () => {
-  let fixture: ComponentFixture<TableHarnessTestComponent>;
+  let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;
   let loader: HarnessLoader;
 
   beforeEach(waitForAsync(() => {
@@ -24,14 +24,14 @@ describe('MatRowHarness', () => {
         NoopAnimationsModule
       ],
       declarations: [
-        TableHarnessTestComponent
+        TableWithoutFooterHarnessTestComponent
       ]
     })
     .compileComponents();
   }));
 
   beforeEach( async () => {
-    fixture = TestBed.createComponent(TableHarnessTestComponent);
+    fixture = TestBed.createComponent(TableWithoutFooterHarnessTestComponent);
     fixture.autoDetectChanges();
 
     // await to virtual scroll render finish
@@ -196,9 +196,9 @@ describe('MatRowHarness', () => {
 });
 
 describe('MatHeaderRowHarness', () => {
-  let fixture: ComponentFixture<TableHarnessTestComponent>;
+  let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;
   let loader: HarnessLoader;
-  let component: TableHarnessTestComponent;
+  let component: TableWithoutFooterHarnessTestComponent;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
@@ -207,14 +207,14 @@ describe('MatHeaderRowHarness', () => {
         NoopAnimationsModule
       ],
       declarations: [
-        TableHarnessTestComponent
+        TableWithoutFooterHarnessTestComponent
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableHarnessTestComponent);
+    fixture = TestBed.createComponent(TableWithoutFooterHarnessTestComponent);
     fixture.detectChanges();
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
@@ -304,6 +304,82 @@ describe('MatHeaderRowHarness', () => {
   });
 });
 
+describe('MatFooterRowHarness', () => {
+  let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;
+  let loader: HarnessLoader;
+
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
+      imports: [
+        MatDatatableModule,
+        NoopAnimationsModule
+      ],
+      declarations: [
+        TableWithoutFooterHarnessTestComponent
+      ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TableWithoutFooterHarnessTestComponent);
+    fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  });
+
+  it('should get array of MatRowCellHarness of cells in footer row', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerCellsHarnesses = await footerRowHarness.getCells();
+
+    expect(footerCellsHarnesses.length).toEqual(3);
+    expect(footerCellsHarnesses[0].constructor.name).toEqual('MatFooterCellHarness');
+  });
+
+  it('should get array of MatRowCellHarness of selected cells in footer row - filter by element content', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerCellsHarnesses = await footerRowHarness.getCells({ columnName: 'name' });
+
+    expect(footerCellsHarnesses.length).toEqual(1);
+    expect(footerCellsHarnesses[0].constructor.name).toEqual('MatFooterCellHarness');
+    expect(await footerCellsHarnesses[0].getText()).toEqual('f2');
+  });
+
+  it('should get array of content of cells in footer row', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerContent = await footerRowHarness.getCellTextByIndex();
+
+    expect(footerContent.length).toEqual(3);
+    expect(footerContent).toEqual(['f1', 'f2', 'f4']);
+  });
+
+  it('should get array of content of selected cells in footer row - filter with regex', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerContent = await footerRowHarness.getCellTextByIndex({ text: /.+[14]/ });
+
+    expect(footerContent.length).toEqual(2);
+    expect(footerContent).toEqual(['f1', 'f4']);
+  });
+
+  it('should get array of content of selected cells in footer as row - filter by column name', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerContent = await footerRowHarness.getCellTextByIndex({ columnName: 'name' });
+
+    expect(footerContent.length).toEqual(1);
+    expect(footerContent).toEqual(['f2']);
+  });
+
+  it('should get array of cells in footer row as object', async () => {
+    const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+    const footerContent = await footerRowHarness.getCellTextByColumnName();
+    const columnNames = Object.getOwnPropertyNames(footerContent);
+    const columnValues = Object.values(footerContent);
+
+    expect(columnValues.length).toEqual(3);
+    expect(columnNames).toEqual(['position', 'name', 'symbol']);
+    expect(columnValues).toEqual(['f1', 'f2', 'f4']);
+  });
+});
+
 type TableHarnessTestRow = {
   position: number;
   name: string;
@@ -321,14 +397,15 @@ type TableHarnessTestRow = {
       [rowSelectionMode]="currentSelectionMode"
       [datastoreGetter]="getData"
       (rowClick)="onRowClick($event)"
-      (sortChange)="onSortChanged($event)">
+      (sortChange)="onSortChanged($event)"
+      [withFooter]="true">
       loading...
     </mat-datatable>
   </div>
   `,
   styles: ['.content-table { height: 400px; }']
 })
-class TableHarnessTestComponent {
+class TableWithoutFooterHarnessTestComponent {
   @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow>;
 
   dataStore = new TableHarnessTestDataStore<TableHarnessTestRow>([
@@ -350,7 +427,9 @@ class TableHarnessTestComponent {
       cell: (row: TableHarnessTestRow) => row.position.toString(),
       headerAlignment: 'right',
       cellAlignment: 'right',
-      width: '5em'
+      width: '5em',
+      footer: 'f1',
+      footerAlignment: 'right'
     },
     {
       columnId: 'name',
@@ -361,7 +440,9 @@ class TableHarnessTestComponent {
       cellAlignment: 'left',
       width: '10em',
       sortable: true,
-      resizable: true
+      resizable: true,
+      footer: 'f2',
+      footerColumnSpan: 2
     },
     {
       columnId: 'weight',
@@ -379,7 +460,8 @@ class TableHarnessTestComponent {
       width: '20em',
       tooltip: (row: TableHarnessTestRow) => `Hint: ${row.symbol}`,
       showAsMailtoLink: true,
-      resizable: true
+      resizable: true,
+      footer: 'f4'
     }
   ];
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];

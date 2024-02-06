@@ -13,8 +13,8 @@ import { MatDatatableModule } from '../mat-datatable.module';
 
 import { MatDatatableHarness } from './mat-datatable-table-harness';
 
-describe('MatDatatableHarness', () => {
-  let fixture: ComponentFixture<TableHarnessTestComponent>;
+describe('MatDatatableHarness without footer', () => {
+  let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;
   let loader: HarnessLoader;
 
   beforeEach(waitForAsync(() => {
@@ -24,14 +24,14 @@ describe('MatDatatableHarness', () => {
         NoopAnimationsModule
       ],
       declarations: [
-        TableHarnessTestComponent
+        TableWithoutFooterHarnessTestComponent
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableHarnessTestComponent);
+    fixture = TestBed.createComponent(TableWithoutFooterHarnessTestComponent);
     fixture.detectChanges();
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
@@ -44,24 +44,27 @@ describe('MatDatatableHarness', () => {
 
   it('should get the different kinds of rows in the mat-datatable', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
-    const headerRow = await table.getHeaderRow();
+    const headerRows = await table.getHeaderRows();
+    const footerRows = await table.getFooterRows();
     const rows = await table.getRows();
 
-    expect(headerRow).toBeDefined();
+    expect(headerRows).toBeDefined();
+    expect(headerRows.length).toBe(1);
+    expect(footerRows).toBeDefined();
+    expect(footerRows.length).toBe(0);
     expect(rows.length).toBe(10);
   });
 
   it('should get cells inside a row', async () => {
     const table = await loader.getHarness(MatDatatableHarness);
-    const headerRow = await table.getHeaderRow();
+    const headerRows = await table.getHeaderRows();
     const rows = await table.getRows();
 
-    const headerCells = await headerRow.getCellTextByIndex();
+    const headerCells = await headerRows[0].getCellTextByIndex();
+    const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
 
     expect(headerCells.length).toEqual(4);
     expect(headerCells).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
-
-    const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
 
     expect(cells).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
   });
@@ -117,11 +120,12 @@ describe('MatDatatableHarness', () => {
 
     expect(text).toEqual({
       position: {
-        headerText: ['No.'],
-        text: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        headerText: 'No.',
+        text: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        footerText: undefined
       },
       name: {
-        headerText: ['Name'],
+        headerText: 'Name',
         text: [
           'Hydrogen',
           'Helium',
@@ -133,10 +137,11 @@ describe('MatDatatableHarness', () => {
           'Oxygen',
           'Fluorine',
           'Neon'
-        ]
+        ],
+        footerText: undefined
       },
       weight: {
-        headerText: ['Weight'],
+        headerText: 'Weight',
         text: [
           '1.0079',
           '4.0026',
@@ -148,11 +153,13 @@ describe('MatDatatableHarness', () => {
           '15.9994',
           '18.9984',
           '20.1797'
-        ]
+        ],
+        footerText: undefined
       },
       symbol: {
-        headerText: ['Symbol'],
-        text: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne']
+        headerText: 'Symbol',
+        text: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne'],
+        footerText: undefined
       }
     });
   });
@@ -195,6 +202,128 @@ describe('MatDatatableHarness', () => {
       symbol: 'H'
     });
   });
+
+  it('should rows of an empty table', async () => {
+    const component = fixture.componentInstance;
+    component.removeAllData();
+
+    const table = await loader.getHarness(MatDatatableHarness);
+    const headerRows = await table.getHeaderRows();
+    const footerRows = await table.getFooterRows();
+    const rows = await table.getRows();
+
+    expect(headerRows).toBeDefined();
+    expect(headerRows.length).toBe(1);
+    expect(footerRows).toBeDefined();
+    expect(footerRows.length).toBe(0);
+    expect(rows.length).toBe(0);
+  });
+});
+
+describe('MatDatatableHarness with footer', () => {
+  let fixture: ComponentFixture<TableWithFooterHarnessTestComponent>;
+  let loader: HarnessLoader;
+
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
+      imports: [
+        MatDatatableModule,
+        NoopAnimationsModule
+      ],
+      declarations: [
+        TableWithFooterHarnessTestComponent
+      ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TableWithFooterHarnessTestComponent);
+    fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  });
+
+  it('should get the different kinds of rows in the mat-datatable with footer', async () => {
+    const table = await loader.getHarness(MatDatatableHarness);
+    const headerRows = await table.getHeaderRows();
+    const rows = await table.getRows();
+    const footerRows = await table.getFooterRows();
+
+    expect(headerRows).toBeDefined();
+    expect(headerRows.length).toBe(1);
+    expect(footerRows).toBeDefined();
+    expect(footerRows.length).toBe(1);
+    expect(rows.length).toBe(10);
+  });
+
+  it('should get cells inside a row with footer', async () => {
+    const table = await loader.getHarness(MatDatatableHarness);
+    const headerRows = await table.getHeaderRows();
+    const footerRows = await table.getFooterRows();
+    const rows = await table.getRows();
+
+    const headerCells = await headerRows[0].getCellTextByIndex();
+    const footerCells = await footerRows[0].getCellTextByIndex();
+    const cells = (await parallel(() => rows.map(row => row.getCells()))).map(row => row.length);
+
+    expect(headerCells.length).toEqual(4);
+    expect(headerCells).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+
+    expect(footerCells.length).toEqual(3);
+    expect(footerCells).toEqual(['f1', 'f2', 'f4']);
+
+    expect(cells).toEqual([4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
+  });
+
+  it('should be able to get the mat-datatable text organized by columns with footer', async () => {
+    const table = await loader.getHarness(MatDatatableHarness);
+    const text = await table.getCellTextByColumnName();
+
+    expect(text).toEqual({
+      position: {
+        headerText: 'No.',
+        text: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        footerText: 'f1'
+      },
+      name: {
+        headerText: 'Name',
+        text: [
+          'Hydrogen',
+          'Helium',
+          'Lithium',
+          'Beryllium',
+          'Boron',
+          'Carbon',
+          'Nitrogen',
+          'Oxygen',
+          'Fluorine',
+          'Neon'
+        ],
+        footerText: 'f2'
+      },
+      weight: {
+        headerText: 'Weight',
+        text: [
+          '1.0079',
+          '4.0026',
+          '6.941',
+          '9.0122',
+          '10.811',
+          '12.0107',
+          '14.0067',
+          '15.9994',
+          '18.9984',
+          '20.1797'
+        ],
+        footerText: undefined
+      },
+      symbol: {
+        headerText: 'Symbol',
+        text: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne'],
+        footerText: 'f4'
+      }
+    });
+  });
 });
 
 type TableHarnessTestRow = {
@@ -221,7 +350,7 @@ type TableHarnessTestRow = {
   `,
   styles: ['.content-table { height: 400px; }']
 })
-class TableHarnessTestComponent {
+class TableWithoutFooterHarnessTestComponent {
   @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow>;
 
   dataStore = new TableHarnessTestDataStore<TableHarnessTestRow>([
@@ -280,6 +409,108 @@ class TableHarnessTestComponent {
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
+  public removeAllData() {
+    this.dataStore.removeAllData();
+    this.currentSorts = [];
+  }
+
+  // arrow function is required to give dataStore.getPagedData the correct 'this'
+  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<TableHarnessTestRow>[], filters?: FieldFilterDefinition<TableHarnessTestRow>[]) => {
+    return this.dataStore.getPagedData(rowsRange, sorts, filters);
+  };
+
+  protected onRowClick($event: TableHarnessTestRow) {
+    this.selectedRowsAsString = $event.name;
+  }
+
+  protected onSortChanged(currentSorts: MatSortDefinition[]) {
+    this.currentSorts = currentSorts;
+    this.currentSorts$.next(currentSorts);
+  }
+}
+
+// HTML for mat-datatable requires surrounding div with height set
+@Component({
+  template: `
+  <div class="content-table">
+    <mat-datatable #testTable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [datastoreGetter]="getData"
+      (rowClick)="onRowClick($event)"
+      (sortChange)="onSortChanged($event)"
+      [withFooter]="true">
+      loading...
+    </mat-datatable>
+  </div>
+  `,
+  styles: ['.content-table { height: 400px; }']
+})
+class TableWithFooterHarnessTestComponent {
+  @ViewChild('testTable') matDataTable!: MatDatatableComponent<TableHarnessTestRow>;
+
+  dataStore = new TableHarnessTestDataStore<TableHarnessTestRow>([
+    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
+  ] as TableHarnessTestRow[]);
+  protected columnDefinitions: MatColumnDefinition<TableHarnessTestRow>[] = [
+    {
+      columnId: 'position',
+      header: 'No.',
+      cell: (row: TableHarnessTestRow) => row.position.toString(),
+      headerAlignment: 'right',
+      cellAlignment: 'right',
+      width: '5em',
+      footer: 'f1',
+      footerAlignment: 'right'
+    },
+    {
+      columnId: 'name',
+      header: 'Name',
+      cell: (row: TableHarnessTestRow) => row.name,
+      headerAlignment: 'left',
+      cellAlignment: 'left',
+      width: '10em',
+      sortable: true,
+      resizable: true,
+      footer: 'f2',
+      footerColumnSpan: 2
+    },
+    {
+      columnId: 'weight',
+      header: 'Weight',
+      cell: (row: TableHarnessTestRow) => row.weight.toString(),
+      headerAlignment: 'right',
+      cellAlignment: 'right',
+      width: '10em',
+      sortable: true
+    },
+    {
+      columnId: 'symbol',
+      header: 'Symbol',
+      cell: (row: TableHarnessTestRow) => row.symbol,
+      width: '20em',
+      tooltip: (row: TableHarnessTestRow) => `Hint: ${row.symbol}`,
+      showAsMailtoLink: true,
+      resizable: true,
+      footer: 'f4'
+    }
+  ];
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  protected currentSorts: MatSortDefinition[] = [];
+  protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
+  protected currentSelectionMode: RowSelectionType = 'none';
+  protected selectedRowsAsString = '-';
+
   // arrow function is required to give dataStore.getPagedData the correct 'this'
   protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<TableHarnessTestRow>[], filters?: FieldFilterDefinition<TableHarnessTestRow>[]) => {
     return this.dataStore.getPagedData(rowsRange, sorts, filters);
@@ -307,7 +538,7 @@ class TableHarnessTestDataStore<DatatableItem> {
   }
 
   /**
-   * Paginate the data.
+   * Get a page of data from the datastore.
    * @param rowsRange - data to be selected
    * @param sorts - optional array of objects with the sorting definition
    * @param filters - optional array of objects with the filter definition
@@ -334,6 +565,15 @@ class TableHarnessTestDataStore<DatatableItem> {
       totalFilteredElements: this.data.length
     } as Page<DatatableItem>;
     return of(result);
+  }
+
+  /**
+   * Remove all data from the datastore.
+   */
+  removeAllData() {
+    this.unsortedData = [] as DatatableItem[];
+    this.data = [] as DatatableItem[];
+    this.currentSortingDefinitions = [];
   }
 
   /**

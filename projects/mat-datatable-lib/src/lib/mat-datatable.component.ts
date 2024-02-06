@@ -46,7 +46,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Input() datastoreGetter: DatasourceEndpoint<TRowData> = emptyDatastoreGetter;
-  @Input() withFooter!: boolean;
+  @Input() withFooter = false;
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();

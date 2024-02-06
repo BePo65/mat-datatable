@@ -13,7 +13,7 @@ import { MatSortDefinition } from '../interfaces/datatable-sort-definition.inter
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
 import { MatDatatableModule } from './mat-datatable.module';
 import SINGLE_PAGE_DATA from './mocking-data/mock-data.simple';
-import { MatDatatableHarness, MatHeaderRowHarness } from './testing';
+import { MatDatatableHarness, MatFooterRowHarness, MatHeaderRowHarness } from './testing';
 
 describe('MatDatatableComponent', () => {
   describe('Table creation', () => {
@@ -62,13 +62,24 @@ describe('MatDatatableComponent', () => {
 
     it('should create a table with correct header', async () => {
       const table = await loader.getHarness(MatDatatableHarness);
-      const headerRow = await table.getHeaderRow();
+      const headerRow = await table.getHeaderRows();
       const header = await loader.getHarness(MatHeaderRowHarness);
       const headerContent = await header.getCellTextByIndex();
 
       expect(headerRow).toBeDefined();
       expect(headerContent.length).toEqual(4);
       expect(headerContent).toEqual(['No.', 'Name', 'Weight', 'Symbol']);
+    });
+
+    it('should create a table with correct footer', async () => {
+      const table = await loader.getHarness(MatDatatableHarness);
+      const footerRow = await table.getFooterRows();
+      const footerRowHarness = await loader.getHarness(MatFooterRowHarness);
+      const footerContent = await footerRowHarness.getCellTextByIndex();
+
+      expect(footerRow).toBeDefined();
+      expect(footerContent.length).toEqual(3);
+      expect(footerContent).toEqual(['f1', 'f2', 'f4']);
     });
 
     it('should create a table with correct data', async () => {
@@ -827,7 +838,9 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     cell: (row: DatatableTestRow) => row.position.toString(),
     headerAlignment: 'right',
     cellAlignment: 'right',
-    width: '5em'
+    width: '5em',
+    footer: 'f1',
+    footerAlignment: 'right'
   },
   {
     columnId: 'name',
@@ -838,7 +851,9 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     width: '20em',
     resizable: true,
     showAsSingleLine: true,
-    sortable: true
+    sortable: true,
+    footer: 'f2',
+    footerColumnSpan: 2
   },
   {
     columnId: 'weight',
@@ -857,7 +872,8 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
     headerAlignment: 'center',
     cellAlignment: 'center',
     tooltip: (row: DatatableTestRow) => `Hint: ${row.symbol}`,
-    showAsMailtoLink: true
+    showAsMailtoLink: true,
+    footer: 'f4'
   }
 ];
 
@@ -873,7 +889,8 @@ const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
       [datastoreGetter]="getData"
       (rowClick)="onRowClick($event)"
       (rowSelectionChange)="onRowSelectionChange($event)"
-      (sortChange)="onSortChanged($event)">
+      (sortChange)="onSortChanged($event)"
+      [withFooter]="true">
       No data to display.
     </mat-datatable>
   </div>
@@ -935,7 +952,8 @@ class DatatableTestComponent {
       [rowSelectionMode]="currentSelectionMode"
       [datastoreGetter]="getData"
       (rowClick)="onRowClick($event)"
-      (sortChange)="onSortChanged($event)">
+      (sortChange)="onSortChanged($event)"
+      [withFooter]="true">
       No data to display.
     </mat-datatable>
   </div>
@@ -974,7 +992,7 @@ class DatatableEmptyTestComponent {
       [displayedColumns]="displayedColumns"
       [datastoreGetter]="getData1"
       (sortChange)="onSortChanged1($event)"
-    >
+      [withFooter]="true">
       No data to display.
     </mat-datatable>
     <mat-datatable #testTable2
@@ -982,7 +1000,7 @@ class DatatableEmptyTestComponent {
       [displayedColumns]="displayedColumns"
       [datastoreGetter]="getData2"
       (sortChange)="onSortChanged2($event)"
-    >
+      [withFooter]="true">
       No data to display.
     </mat-datatable>
   </div>

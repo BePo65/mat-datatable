@@ -3,7 +3,7 @@ import {
   HarnessPredicate
 } from '@angular/cdk/testing';
 
-import { HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
+import { CellHarnessFilters, HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
@@ -168,5 +168,27 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: endPosition }));
     }
     return;
+  }
+}
+
+/** Harness for interacting with a mat-datatable cell of a footer row. */
+export class MatFooterCellHarness extends _MatCellHarnessBase {
+  /** The selector for the host element of a `MatFooterCellHarness` instance. */
+  static hostSelector = '.mat-mdc-footer-cell';
+
+  /**
+   * Gets a `HarnessPredicate` that can be used to search for a table footer cell with specific
+   * attributes.
+   * @param options Options for narrowing the search
+   * @returns a `HarnessPredicate` configured with the given options.
+   */
+  static with(options: CellHarnessFilters = {}): HarnessPredicate<MatFooterCellHarness> {
+    return new HarnessPredicate(MatFooterCellHarness, options)
+      .addOption('text', options.text, (harness, text) =>
+        HarnessPredicate.stringMatches(harness.getText(), text)
+      )
+      .addOption('columnName', options.columnName, (harness, name) =>
+        HarnessPredicate.stringMatches(harness.getColumnName(), name)
+      );
   }
 }

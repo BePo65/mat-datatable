@@ -10,6 +10,7 @@ import {
   MatDatatableHarnessFilters
 } from './mat-datatable-harness-filters';
 import {
+  MatFooterRowHarness,
   MatHeaderRowHarness,
   MatRowHarness,
   MatRowHarnessColumnsText
@@ -19,7 +20,8 @@ import {
 export interface MatDatatableHarnessColumnsText {
   [columnName: string]: {
     text: string[];
-    headerText: string[];
+    headerText: string;
+    footerText: string | undefined;
   };
 }
 
@@ -27,7 +29,6 @@ export interface MatDatatableHarnessColumnsText {
 export class MatDatatableHarness extends ContentContainerComponentHarness<string> {
   /** The selector for the host element of a `MatDatatableHarness` instance. */
   static hostSelector = '.mat-datatable';
-  protected _headerRowHarness = MatHeaderRowHarness;
   protected _rowHarness = MatRowHarness;
 
   /**
@@ -45,10 +46,10 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
 
  /**
   * Gets the header row of a mat-datatable.
-  * @returns the header row of the mat-datatable.
+  * @returns array of the header rows of the mat-datatable (length is always 1).
   */
- async getHeaderRow(): Promise<MatHeaderRowHarness> {
-  return this.locatorFor(MatHeaderRowHarness)();
+ async getHeaderRows(): Promise<MatHeaderRowHarness[]> {
+  return this.locatorForAll(MatHeaderRowHarness)();
  }
 
   /**
@@ -58,6 +59,14 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
    */
   async getRows(filter: RowHarnessFilters = {}): Promise<MatRowHarness[]> {
     return this.locatorForAll(this._rowHarness.with(filter))();
+  }
+
+  /**
+   * Gets the footer row in a mat-datatable.
+   * @returns array of the footer rows of the mat-datatable (or an empty array, if no footer is defined).
+   */
+  async getFooterRows(): Promise<MatFooterRowHarness[]> {
+    return this.locatorForAll(MatFooterRowHarness)();
   }
 
   /**
@@ -74,14 +83,16 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
    * @returns an object with all columns with headerText and array of data values.
    */
   async getCellTextByColumnName(): Promise<MatDatatableHarnessColumnsText> {
-    const [headerRow, dataRows] = await parallel(() => [
-      this.getHeaderRow(),
+    const [headerRows, footerRows, dataRows] = await parallel(() => [
+      this.getHeaderRows(),
+      this.getFooterRows(),
       this.getRows()
     ]);
 
     const text: MatDatatableHarnessColumnsText = {};
-    const [headerData, rowsData] = await parallel(() => [
-      headerRow.getCellTextByColumnName(),
+    const [headerData, footerData, rowsData] = await parallel(() => [
+      headerRows[0].getCellTextByColumnName(),
+      (footerRows.length === 1) ? footerRows[0].getCellTextByColumnName() : undefined,
       parallel(() => dataRows.map(row => row.getCellTextByColumnName()))
     ]);
 
@@ -91,7 +102,8 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
 
         if (!text[columnName]) {
           text[columnName] = {
-            headerText: getCellTextsByColumn(headerData, columnName),
+            headerText: getHeaderCellTextByColumn(headerData, columnName),
+            footerText: (footerData !== undefined) ? getFooterCellTextByColumn(footerData, columnName) : undefined,
             text: []
           };
         }
@@ -105,19 +117,37 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
 }
 
 /**
- * Extracts the text of the cell of a particular column.
+ * Extracts the text of the header cell of a particular column.
  * @param headerRowData - Array with text extracted from a mat-datatable header row organized by columns.
  * @param column - Name of the column to get the text from.
- * @returns an array of selected cell texts.
+ * @returns the selected cell text.
  */
-const getCellTextsByColumn = (headerRowData: MatRowHarnessColumnsText, column: string): string[] => {
-  const columnTexts: string[] = [];
+const getHeaderCellTextByColumn = (headerRowData: MatRowHarnessColumnsText, column: string): string => {
+  let columnText = '';
 
   Object.keys(headerRowData).forEach(columnName => {
     if (columnName === column) {
-      columnTexts.push(headerRowData[columnName]);
+      columnText = headerRowData[columnName];
     }
   });
 
-  return columnTexts;
+  return columnText;
+};
+
+/**
+ * Extracts the text of the header cell of a particular column.
+ * @param footerRowData - Array with text extracted from a mat-datatable footer row organized by columns.
+ * @param column - Name of the column to get the text from.
+ * @returns the selected footer cell text (or undefined, if no footer is defined).
+ */
+const getFooterCellTextByColumn = (footerRowData: MatRowHarnessColumnsText, column: string): string | undefined => {
+  let columnText: string | undefined;
+
+  Object.keys(footerRowData).forEach(columnName => {
+    if (columnName === column) {
+      columnText = footerRowData[columnName];
+    }
+  });
+
+  return columnText;
 };

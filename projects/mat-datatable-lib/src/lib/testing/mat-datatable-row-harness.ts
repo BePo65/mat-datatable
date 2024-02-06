@@ -8,7 +8,8 @@ import {
 import {
   _MatCellHarnessBase,
   MatRowCellHarness,
-  MatHeaderCellHarness
+  MatHeaderCellHarness,
+  MatFooterCellHarness
 } from './mat-datatable-cell-harness';
 import {
   CellHarnessFilters,
@@ -158,5 +159,29 @@ export class MatHeaderRowHarness extends _MatRowHarnessBase<
    */
   override async getCells(filter: HeaderCellHarnessFilters = {} as HeaderCellHarnessFilters): Promise<MatHeaderCellHarness[]> {
     return this.locatorForAll(this._cellHarness.with(filter))();
+  }
+}
+
+/** Harness for interacting with an Angular Material table footer row. */
+export class MatFooterRowHarness extends _MatRowHarnessBase<
+  typeof MatFooterCellHarness,
+  MatFooterCellHarness,
+  CellHarnessFilters
+> {
+  /** The selector for the host element of a `MatFooterRowHarness` instance. */
+  static hostSelector = '.mat-mdc-footer-row';
+  protected _cellHarness = MatFooterCellHarness;
+
+  /**
+   * Gets a `HarnessPredicate` that can be used to search for a table footer row cell with specific
+   * attributes.
+   * @param options Options for narrowing the search
+   * @returns a `HarnessPredicate` configured with the given options.
+   */
+  static with<T extends MatFooterRowHarness>(
+    this: ComponentHarnessConstructor<T>,
+    options: RowHarnessFilters = {}
+  ): HarnessPredicate<T> {
+    return new HarnessPredicate(this, options);
   }
 }

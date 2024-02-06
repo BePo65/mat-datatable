@@ -2,11 +2,14 @@
  * Public API Surface of mat-datatable testing harness
  */
 
-export { MatDatatableHarness, MatDatatableHarnessColumnsText } from './mat-datatable-table-harness';
+// MatDatatableHarness, MatDatatableHarnessColumnsText
+export * from './mat-datatable-table-harness';
 
-export { MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
+// _MatRowHarnessBase, MatFooterRowHarness, MatHeaderRowHarness, MatRowHarness
+export * from './mat-datatable-row-harness';
 
-export { MatRowCellHarness, MatHeaderCellHarness } from './mat-datatable-cell-harness';
+// _MatCellHarnessBase, MatRowCellHarness, MatFooterCellHarness, MatHeaderCellHarness
+export * from './mat-datatable-cell-harness';
 
 // CellHarnessFilters, MatDatatableHarnessFilters, RowHarnessFilters
 export * from './mat-datatable-harness-filters';
