@@ -22,12 +22,12 @@ describe('MatMultiSortBadgeDirective', () => {
     testComponent = fixture.debugElement.componentInstance as BadgeTestApp;
     fixture.detectChanges(); // initial binding
 
-    badgeHostDebugElement = fixture.debugElement.query(By.directive(MatMultiSortBadgeDirective))!;
+    badgeHostDebugElement = fixture.debugElement.query(By.directive(MatMultiSortBadgeDirective));
     badgeHostNativeElement = badgeHostDebugElement.nativeElement as HTMLElement;
   });
 
   it('should update the badge based on attribute', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content')!;
+    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -38,7 +38,7 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should be able to pass in falsy values to the badge content', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content')!;
+    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -49,7 +49,7 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should treat null and undefined as empty strings in the badge content', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content')!;
+    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -137,7 +137,7 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should apply view encapsulation on create badge content', () => {
-    const badge = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content')!;
+    const badge = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
     let encapsulationAttr: Attr | undefined;
 
     for (let i = 0; i < badge.attributes.length; i++) {
@@ -169,7 +169,7 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should expose the badge element', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content')!;
+    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content');
 
     expect(fixture.componentInstance.badgeInstance.getBadgeElement()).toBe(badgeElement as HTMLElement);
   });

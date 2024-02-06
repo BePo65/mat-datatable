@@ -862,8 +862,10 @@ class SimpleMatMultiSortApp {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
-    dispatchMouseEvent(sortElement, event);
+    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
+    if ((sortElement !== undefined) && (sortElement !== null)) {
+      dispatchMouseEvent(sortElement, event);
+    }
   }
 
   /**
@@ -1022,8 +1024,10 @@ class MatMultiSortWithoutExplicitInputs {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
-    dispatchMouseEvent(sortElement, event);
+    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
+    if ((sortElement !== undefined) && (sortElement !== null)) {
+      dispatchMouseEvent(sortElement, event);
+    }
   }
 }
 
