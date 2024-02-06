@@ -10,14 +10,15 @@
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        // Path is relative to the workspace as this file extends the root .eslintrc.json!
         "project": "projects/mat-datatable-lib/cypress/tsconfig.json",
         "ecmaVersion": 2021,
         "sourceType": "module"
       },
       "settings": {
         "import/parsers": {
-          "@typescript-eslint/parser": [".ts"]
+          "@typescript-eslint/parser": [
+            ".ts"
+          ]
         },
         "import/resolver": {
           "node": true,
