@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxRerenderModule } from 'ngx-rerender';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +28,8 @@ import { MatDatatableModule } from 'projects/mat-datatable-lib/src';
     MatIconModule,
     MatSelectModule,
     MatSlideToggleModule,
-    MatDatatableModule
+    MatDatatableModule,
+    NgxRerenderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

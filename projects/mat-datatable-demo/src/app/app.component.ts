@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
@@ -12,6 +12,7 @@ import {
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
 import { RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
@@ -240,6 +241,19 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.activatedRow = this.dataStore.getUnsortedPage(3);
     this.activatedRowAsString = this.activatedRowToString();
   }
+
+  /**
+   * Event handler for the slide toggle setting the 'withFooter' property.
+   * @param event - source and new value of the slide toggle
+   */
+  protected onWithFooterChanged(event: MatSlideToggleChange): void {
+    this.withFooter = event.checked;
+  }
+
+  /**
+   * Create a string representation of activated row.
+   * @returns string with the userId of the activated row as string
+   */
   private activatedRowToString(): string {
     if (this.table !== undefined) {
       return this.table.activatedRow?.userId.toString() || '-';
