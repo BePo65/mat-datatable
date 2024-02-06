@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -23,6 +24,7 @@ describe('AppComponent', () => {
         MatChipsModule,
         MatFormFieldModule,
         MatSelectModule,
+        MatSlideToggleModule,
         MatDatatableModule
       ]
     }).compileComponents();

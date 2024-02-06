@@ -4,6 +4,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,6 +26,7 @@ import { MatDatatableModule } from 'projects/mat-datatable-lib/src';
     MatFormFieldModule,
     MatIconModule,
     MatSelectModule,
+    MatSlideToggleModule,
     MatDatatableModule
   ],
   providers: [],

@@ -59,10 +59,11 @@
   display: grid;
   gap: 0 0;
   grid-template:
-    ". . . . ." 1fr
-    ". . . . ." 1fr
-    / max-content 5em 1em max-content 5em
+    ". . . . . . ." 1fr
+    ". . . . . . ." 1fr
+    / max-content 5em 1em max-content 5em 1em max-content
     ;
+  width: max-content;
 }
 
 .count-label {
