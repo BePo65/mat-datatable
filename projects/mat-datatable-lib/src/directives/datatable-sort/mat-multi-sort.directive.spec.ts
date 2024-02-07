@@ -897,7 +897,6 @@ class FakeDataSource extends DataSource<any> {
     return collectionViewer.viewChange.pipe(map(() => []));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() {}
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
