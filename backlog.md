@@ -1,4 +1,5 @@
 * add filtering to demo
+* add filtering to tests
 * activeRow - add scrollIntoPosition
 * add / use trackBy
 * demo - resize table to viewport
