@@ -352,6 +352,50 @@ describe('MatDatatableComponent', () => {
     });
   });
 
+  describe('Table filtering', () => {
+    let fixture: ComponentFixture<DatatableTestComponent>;
+    let loader: HarnessLoader;
+    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
+      const result: string[] = [];
+      result.push(entry.position.toString());
+      result.push(entry.name);
+      result.push(entry.weight.toString());
+      result.push(entry.symbol);
+      return result;
+    });
+
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
+        imports: [
+          MatDatatableModule,
+          NoopAnimationsModule
+        ],
+        declarations: [
+          DatatableTestComponent,
+          DatatableEmptyTestComponent
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(DatatableTestComponent);
+      fixture.detectChanges();
+      component = fixture.componentInstance;
+      loader = TestbedHarnessEnvironment.loader(fixture);
+    });
+
+    it('should filter a table', async() => {
+      // TODO set filter
+      const table = await loader.getHarness(MatDatatableHarness);
+      const rows = await table.getRows();
+      const rowContent = await table.getCellTextByIndex();
+
+      expect(rows.length).toBe(1);
+      expect(rowContent).toEqual(singlePageDataAsStrings);
+    });
+  });
+
   describe('Table row activation', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let component: DatatableTestComponent;
