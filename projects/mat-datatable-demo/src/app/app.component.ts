@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
@@ -12,7 +13,6 @@ import {
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
 import { RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
