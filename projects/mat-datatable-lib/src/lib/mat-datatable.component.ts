@@ -21,7 +21,7 @@ import {
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
-import { DatasourceEndpoint, Page, FieldSortDefinition } from '../interfaces/datasource-endpoint.interface';
+import { DatasourceEndpoint, Page, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datasource-endpoint.interface';
 import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
@@ -157,6 +157,15 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       sortables.push(sortEntry);
     }
     this.sort.sortDefinitions = sortables;
+  }
+
+  public get filterDefinitions() : FieldFilterDefinition<TRowData>[] {
+    return this.dataSource.filters;
+  }
+  public set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
+    if (newFilters && Array.isArray(newFilters)) {
+      this.dataSource.filters = newFilters;
+    }
   }
 
   /**
