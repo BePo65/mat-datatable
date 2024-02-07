@@ -355,6 +355,7 @@ describe('MatDatatableComponent', () => {
   describe('Table filtering', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
+    let component: DatatableTestComponent;
     const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
       const result: string[] = [];
       result.push(entry.position.toString());
@@ -385,14 +386,33 @@ describe('MatDatatableComponent', () => {
       loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
-    it('should filter a table', async() => {
-      // TODO set filter
+    it('should filter a table for a single string value', async() => {
+      const currentFilter = { fieldName:'name', value:'Helium' };
+      component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
+      fixture.detectChanges();
+      const expectedRows = singlePageDataAsStrings.filter(element => element[1] === currentFilter.value);
+
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
       const rowContent = await table.getCellTextByIndex();
 
-      expect(rows.length).toBe(1);
-      expect(rowContent).toEqual(singlePageDataAsStrings);
+      expect(rows.length).toBe(2);
+      expect(rowContent).toEqual(expectedRows);
+    });
+
+    it('should filter a table for a range of numeric values', async() => {
+      const currentFilter = { fieldName:'position', valueFrom:5, valueTo:7 };
+      component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
+      fixture.detectChanges();
+      const expectedRows = singlePageDataAsStrings.filter(element => (parseInt(element[0]) >= currentFilter.valueFrom) &&
+      (parseInt(element[0]) <= currentFilter.valueTo));
+
+      const table = await loader.getHarness(MatDatatableHarness);
+      const rows = await table.getRows();
+      const rowContent = await table.getCellTextByIndex();
+
+      expect(rows.length).toBe(3);
+      expect(rowContent).toEqual(expectedRows);
     });
   });
 
@@ -801,21 +821,49 @@ class StaticTableDataStore<TRow> {
   getPagedData(
     rowsRange: RequestRowsRange,
     sorts?: FieldSortDefinition<TRow>[],
-    filters?: FieldFilterDefinition<TRow>[] // eslint-disable-line @typescript-eslint/no-unused-vars
+    filters?: FieldFilterDefinition<TRow>[]
   ) {
-    if ((sorts !== undefined) &&
-         !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
-         (rowsRange.numberOfRows !== 0)) {
-      this.currentSortingDefinitions = sorts;
-      this.data = this.getSortedData();
+    let selectedDataset = structuredClone(this.unsortedData) as TRow[];
+
+    // Filter data
+    if ((filters !== undefined) &&
+        Array.isArray(filters) &&
+        (filters.length > 0)) {
+      selectedDataset = selectedDataset.filter((row: TRow) => {
+        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<TRow>) => {
+          if (currentFilter.value !== undefined) {
+            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
+          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
+            isSelected ||= (
+              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
+              (row[currentFilter.fieldName] <= currentFilter.valueTo)
+              );
+          }
+          return isSelected;
+        }, false);
+      });
     }
+
+    // Sort data
+    if ((sorts !== undefined) &&
+        Array.isArray(sorts) &&
+        (sorts.length > 0) &&
+        !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
+        (rowsRange.numberOfRows !== 0)) {
+      this.currentSortingDefinitions = sorts;
+      selectedDataset.sort(this.compareFn);
+    }
+
+    // Save sorted and filtered data for later use
+    this.data = selectedDataset;
+
     const startIndex = rowsRange.startRowIndex;
     const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
     const result = {
       content: resultingData,
       startRowIndex: startIndex,
       returnedElements: resultingData.length,
-      totalElements: this.data.length,
+      totalElements: this.unsortedData.length,
       totalFilteredElements: this.data.length
     } as Page<TRow>;
     return of(result);
@@ -845,27 +893,20 @@ class StaticTableDataStore<TRow> {
       element.sortDirection === b[index].sortDirection);
   }
 
-  private getSortedData(): TRow[] {
-    const baseData = structuredClone(this.unsortedData) as TRow[];
-    if (!this.currentSortingDefinitions || this.currentSortingDefinitions.length === 0) {
-      return baseData;
-    }
-
-    return baseData.sort((a, b) => {
-      let result = 0;
-      for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
-        const fieldName = this.currentSortingDefinitions[i].fieldName;
-        const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
-        const valueA = a[fieldName] as string | number;
-        const valueB = b[fieldName] as string | number;
-        result = compare(valueA, valueB, isAsc);
-        if (result !== 0) {
-          break;
-        }
+  private compareFn = (a: TRow, b: TRow): number => {
+    let result = 0;
+    for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
+      const fieldName = this.currentSortingDefinitions[i].fieldName;
+      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const valueA = a[fieldName] as string | number;
+      const valueB = b[fieldName] as string | number;
+      result = compare(valueA, valueB, isAsc);
+      if (result !== 0) {
+        break;
       }
-      return result;
-    });
-  }
+    }
+    return result;
+  };
 }
 
 type DatatableTestRow = {
@@ -943,8 +984,8 @@ const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
 })
 class DatatableTestComponent {
   @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow>;
-  lastClickedRowAsString = '-';
-  selectedRowsAsString = '-';
+  public lastClickedRowAsString = '-';
+  public selectedRowsAsString = '-';
 
   protected dataStore = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
   protected columnDefinitions = datatableTestColumnDefinitions;
@@ -952,6 +993,15 @@ class DatatableTestComponent {
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
+
+  public get currentFilters() : FieldFilterDefinition<DatatableTestRow>[] {
+    return this.matDataTable.filterDefinitions;
+  }
+  public set currentFilters(newFilters : FieldFilterDefinition<DatatableTestRow>[]) {
+    if (newFilters && Array.isArray(newFilters)) {
+      this.matDataTable.filterDefinitions = newFilters;
+    }
+  }
 
   getRow(rowIndex: number, fromSortedRows = false) {
     return this.dataStore.getRow(rowIndex, fromSortedRows);

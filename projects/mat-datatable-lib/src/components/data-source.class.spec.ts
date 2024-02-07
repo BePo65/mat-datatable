@@ -718,6 +718,7 @@ class FakeUserDataStore {
     } as Page<User>;
 
     let selectedDataset = structuredClone(this.fakeDataset) as User[];
+
     // Sort data - only the first entry of the definitions is used
     if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
       selectedDataset = selectedDataset.sort((a: User, b: User) => {
@@ -736,6 +737,7 @@ class FakeUserDataStore {
         return result;
       });
     }
+
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
       selectedDataset = selectedDataset.filter((currentUser: User) => {
