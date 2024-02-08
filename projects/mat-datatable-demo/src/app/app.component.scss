@@ -18,8 +18,7 @@
 
 .activated-row,
 .current-sort,
-.selected-rows,
-.rows-count {
+.selected-rows {
   margin: 2em 0 0.75em 1em;
 }
 
@@ -65,18 +64,10 @@
   margin: 0 0.25em 0 1em;
 }
 
-.rows-count-container {
-  display: grid;
-  gap: 0 0;
-  grid-template:
-    ". . . . . . ." 1fr
-    ". . . . . . ." 1fr
-    / max-content 5em 1em max-content 5em 1em max-content
-    ;
-  width: max-content;
+.filter-button-container {
+  margin: 2em 0 0.75em 1em;
 }
 
-.count-label {
-  margin: 0 0 0.5em;
-  padding: 0 0.7em 0 0;
+.with-footer-toggle {
+  margin: 2em 0 0.75em 1em;
 }

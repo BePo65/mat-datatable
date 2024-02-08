@@ -56,23 +56,9 @@
   </span>
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
-<div class="rows-count">
-  <div class="rows-count-container">
-    <div class="count-label">Number of rows:</div>
-    <div>{{numberOfRows}}</div>
-    <div>&nbsp;</div>
-    <div class="count-label">First visible row:</div>
-    <div>{{firstVisibleRow}}</div>
-    <div>&nbsp;</div>
-    <div class="count-label">
-      <mat-slide-toggle [checked]="withFooter" (change)="onWithFooterChanged($event)">With footer</mat-slide-toggle>
-    </div>
-    <div class="count-label">Number of filtered rows:</div>
-    <div>{{numberOfFilteredRows}}</div>
-    <div>&nbsp;</div>
-    <div>&nbsp;</div>
-    <div>&nbsp;</div>
-    <div>&nbsp;</div>
-    <div>&nbsp;</div>
-  </div>
+<div class="filter-button-container">
+set filter here
+</div>
+<div class="with-footer-toggle">
+  <mat-slide-toggle [checked]="withFooter" (change)="onWithFooterChanged($event)">With footer</mat-slide-toggle>
 </div>
