@@ -34,7 +34,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       cellAlignment: 'right',
       width: '5em',
       footer: '0 / 0',
-      footerColumnSpan: 5
+      footerColumnSpan: 2
     },
     {
       columnId: 'firstName',
@@ -53,7 +53,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       headerAlignment: 'right',
       cell: (row: DemoTableItem) => row?.lastName,
       cellAlignment: 'right',
-      width: '10em'
+      width: '10em',
+      footer: 'no filter',
+      footerColumnSpan: 3
     },
     {
       columnId: 'email',
@@ -80,7 +82,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       cell: (row: DemoTableItem) => row?.description,
       tooltip: (row: DemoTableItem) => row?.description,
       showAsSingleLine: true,
-      footer: 'no filter',
+      footer: 'First visible row: -',
       footerAlignment: 'right'
     }
   ];
@@ -100,6 +102,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private headers: Record<string, string> = {};
   private readonly unsubscribe$ = new Subject<void>();
   private formattedDatastoreLengths = 'filtered {0} / total {1}';
+  private formattedFirstVisibleRow = 'First visible row: {0}';
 
   constructor() {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
@@ -132,7 +135,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribe$),
       delay(0)
     )
-    .subscribe(firstVisibleRow => this.firstVisibleRow = firstVisibleRow.toString());
+    .subscribe(firstVisibleRow => {
+      this.firstVisibleRow = firstVisibleRow.toString();
+      this.columnDefinitions[5].footer = this.formatString(this.formattedFirstVisibleRow, this.firstVisibleRow.toString());
+    });
   }
 
   ngOnDestroy(): void {
