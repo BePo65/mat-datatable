@@ -15,7 +15,7 @@
 <div class="current-sort">
   <span class="current-sort-label">Current sort:</span>
   <span>
-    <mat-chip-listbox aria-label="Current sorting definition">
+    <mat-chip-listbox class="current-sort-list" aria-label="Current sorting definition">
       <mat-chip *ngFor="let sort of currentSorts$ | async" (removed)="removeSort(sort.columnId)">
         {{headerFromColumnId(sort.columnId)}}, {{sort.direction}}
         <button matChipRemove [attr.aria-label]="'remove ' + headerFromColumnId(sort.columnId)">
