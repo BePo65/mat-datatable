@@ -1,4 +1,3 @@
-* add filtering to demo (to demo-table-datastore)
 * activeRow - add scrollIntoPosition
 * add / use trackBy
 * demo - resize table to viewport

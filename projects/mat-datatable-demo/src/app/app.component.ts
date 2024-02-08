@@ -248,6 +248,25 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.activatedRowAsString = this.activatedRowToString();
   }
 
+  // Demo to show filtering by code
+  protected onFilterByValue() {
+    const currentFilter = [{ fieldName:'lastName', value:'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
+    this.table.filterDefinitions = currentFilter;
+    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+}
+
+  protected onFilterByRange() {
+    const currentFilter = [{ fieldName:'userId', valueFrom:50, valueTo:67 }] as FieldFilterDefinition<DemoTableItem>[];
+    this.table.filterDefinitions = currentFilter;
+    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+  }
+
+  protected onClearFilter() {
+    const currentFilter = []  as FieldFilterDefinition<DemoTableItem>[];
+    this.table.filterDefinitions = currentFilter;
+    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+  }
+
   /**
    * Event handler for the slide toggle setting the 'withFooter' property.
    * @param event - source and new value of the slide toggle
@@ -289,5 +308,25 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     return template.replace(/{([0-9]+)}/g, (match, index: number) => {
       return typeof args[index] === 'undefined' ? match : args[index];
     });
+  }
+
+  /**
+   * Format filter definitions as string.
+   * Only the first entry is converted.
+   * @param filterDefinition - array with filter definitions
+   * @returns filter definition, formatted string
+   */
+  private filterDefinitionToString(filterDefinition: FieldFilterDefinition<DemoTableItem>[]): string {
+    let filterAsString = 'kein Filter';
+    if(filterDefinition && Array.isArray(filterDefinition) && (filterDefinition.length > 0)) {
+      const filter = filterDefinition[0];
+      if (filter.value !== undefined) {
+        filterAsString = `Filter: '${filter.fieldName}' = '${filter.value.toString()}' `;
+      } else  if (filter.valueFrom !== undefined) {
+        filterAsString = `Filter: '${filter.fieldName}' = ${filter.valueFrom.toString()}-${filter.valueTo.toString()}`;
+      }
+    }
+
+    return filterAsString;
   }
 }

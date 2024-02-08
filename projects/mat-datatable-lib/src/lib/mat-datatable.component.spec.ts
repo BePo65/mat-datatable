@@ -893,6 +893,12 @@ class StaticTableDataStore<TRow> {
       element.sortDirection === b[index].sortDirection);
   }
 
+  /**
+   * Compare function for sorting the current dataset.
+   * @param a - row to compare against
+   * @param b - row to compare with parameter a
+   * @returns 0:a===b; -1:a<b; 1:a>b
+   */
   private compareFn = (a: TRow, b: TRow): number => {
     let result = 0;
     for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
@@ -1139,7 +1145,7 @@ class DatatableDoubleTestComponent {
  * @param a - 1st parameter to compare
  * @param b - 2nd parameter to compare
  * @param isAsc - is this an ascending comparison
- * @returns comparison result
+ * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
  */
 const compare = (a: string | number, b: string | number, isAsc: boolean): number => {
   return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);

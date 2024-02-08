@@ -57,7 +57,9 @@
   <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
 </div>
 <div class="filter-button-container">
-set filter here
+  <button mat-raised-button class="sort-button" (click)="onFilterByValue()">Filter by value</button>
+  <button mat-raised-button class="sort-button" (click)="onFilterByRange()">Filter by range</button>
+  <button mat-raised-button class="sort-button" (click)="onClearFilter()">Remove all filter</button>
 </div>
 <div class="with-footer-toggle">
   <mat-slide-toggle [checked]="withFooter" (change)="onWithFooterChanged($event)">With footer</mat-slide-toggle>
