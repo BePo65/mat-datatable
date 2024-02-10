@@ -89,6 +89,15 @@ export class DemoTableDataStore<DatatableItem> {
   }
 
   /**
+   * Gets the mocked datastore. As the demo does not manipulate the data,
+   * we can return a reference to the original data.
+   * @returns the raw data of the datastore.
+   */
+  getUnsortedData(): DatatableItem[] {
+    return EXAMPLE_DATA as DatatableItem[];
+  }
+
+  /**
    * Compare function for sorting the current dataset.
    * @param a - row to compare against
    * @param b - row to compare with parameter a

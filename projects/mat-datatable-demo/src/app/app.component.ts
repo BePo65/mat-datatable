@@ -152,6 +152,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     return newPage;
   };
 
+  protected trackBy(index: number, item: DemoTableItem) {
+    return item?.userId ?? -1;
+  }
+
   protected onRowClick($event: DemoTableItem) {
     window.alert(`row clicked; id=${$event.userId}`);
   }
@@ -243,8 +247,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.activatedRow = undefined;
     this.activatedRowAsString = '-';
   }
-  protected onSetActivated() {
-    this.table.activatedRow = this.dataStore.getUnsortedPage(3);
+  protected onSetActivated(rowId: number) {
+    const activatedRow = this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+    this.table.activatedRow = activatedRow;
     this.activatedRowAsString = this.activatedRowToString();
   }
 

@@ -9,6 +9,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  TrackByFunction,
   ViewChild
 } from '@angular/core';
 import { MatTable } from '@angular/material/table';
@@ -46,6 +47,20 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
   @Input() datastoreGetter: DatasourceEndpoint<TRowData> = emptyDatastoreGetter;
+  // @Input() trackBy: TrackByFunction<TRowData>;
+  @Input()
+  get trackBy(): TrackByFunction<TRowData> {
+    return this._trackByFn;
+  }
+  set trackBy(fn: TrackByFunction<TRowData>) {
+    if (fn && typeof fn === 'function') {
+      this._trackByFn = fn;
+    } else {
+      this._trackByFn = this.defaultTrackBy;
+    }
+  }
+  protected _trackByFn: TrackByFunction<TRowData> = this.defaultTrackBy;
+
   @Input() withFooter = false;
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
@@ -297,6 +312,15 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   }
 
   /**
+   * Are 2 rows equal? Used by template to mark currentActivatedRow.
+   * @param rowA - first row to compare
+   * @param rowB - second row to compare
+   * @returns true: rowA equals rowB
+   */
+  protected areRowsEqual(rowA: TRowData, rowB: TRowData): boolean {
+    return this.trackBy(0, rowA) === this.trackBy(0, rowB);
+  }
+  /**
    * Extract the list of footer columns to display from the
    * list of columns to display. The footer can have columns tha
    * span several columns; therefore we need a different list.
@@ -360,6 +384,19 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       result.push(element);
     }
     return result;
+  }
+
+  /**
+   * Default implementation of trackBy function.
+   * This function is required, as in strict mode 'trackBy'
+   * must not be undefined.
+   * @param this - required by @typescript-eslint/unbound-method
+   * @param index - index of the row
+   * @param item - object with the row data
+   * @returns stringified content of the item
+   */
+  private defaultTrackBy(this: void, index: number, item: TRowData): string {
+    return JSON.stringify(item);
   }
 }
 

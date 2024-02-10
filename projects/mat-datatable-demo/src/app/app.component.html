@@ -4,11 +4,12 @@
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
+    [withFooter]="withFooter"
     [datastoreGetter]="getData"
+    [trackBy]="trackBy"
     (rowClick)="onRowClick($event)"
     (rowSelectionChange)="onRowSelectionChange($event)"
     (sortChange)="onSortChanged($event)"
-    [withFooter]="withFooter"
     *mcRerender="withFooter"
   >loading...</mat-datatable>
 </div>
@@ -37,9 +38,13 @@
 <div class="activated-row">
   <span class="activation-button-container">
     <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
-    <button  mat-raised-button class="activation-button" (click)="onSetActivated()">Set activated row</button>
+    <button  mat-raised-button class="activation-button" (click)="onSetActivated(3)">Use 'ID=3' as activated row</button>
+    <button  mat-raised-button class="activation-button" (click)="onSetActivated(98)">Use 'ID=98' as activated row</button>
   </span>
-  <span class="activated-row-label">Active row:</span><span>{{activatedRowAsString}}</span>
+  <span class="activated-row-container">
+    <span class="activated-row-label">Active row:</span>
+    <span class="activated-row-value">{{activatedRowAsString}}</span>
+  </span>
 </div>
 <div class="selected-rows">
   <span class="selection-button-container">

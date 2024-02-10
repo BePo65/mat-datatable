@@ -12,6 +12,7 @@
   <table mat-table matMultiSort
     class="full-width-table mat-datatable"
     [dataSource]="dataSource"
+    [trackBy]="_trackByFn"
     (matMultiSortChange)="onMultiSortChanged($event)">
     <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.columnId">
       <th mat-header-cell
@@ -37,7 +38,7 @@
     <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
       [ngClass]="{
         'selected-row': currentSelectedRows.includes(row),
-        'activated-row': ((currentActivatedRow !== undefined) &&(currentActivatedRow === row))
+        'activated-row': ((currentActivatedRow !== undefined) && areRowsEqual(currentActivatedRow, row))
       }"
       (click)="onRowClicked(row)">
     </tr>
