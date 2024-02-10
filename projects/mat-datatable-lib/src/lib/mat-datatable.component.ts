@@ -174,10 +174,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     this.sort.sortDefinitions = sortables;
   }
 
-  public get filterDefinitions() : FieldFilterDefinition<TRowData>[] {
+  get filterDefinitions() : FieldFilterDefinition<TRowData>[] {
     return this.dataSource.filters;
   }
-  public set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
+  set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
     if (newFilters && Array.isArray(newFilters)) {
       this.dataSource.filters = newFilters;
     }
@@ -320,6 +320,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   protected areRowsEqual(rowA: TRowData, rowB: TRowData): boolean {
     return this.trackBy(0, rowA) === this.trackBy(0, rowB);
   }
+
   /**
    * Extract the list of footer columns to display from the
    * list of columns to display. The footer can have columns tha
