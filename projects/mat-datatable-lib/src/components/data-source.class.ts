@@ -48,7 +48,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
   /** Stream emitting render data to the table (depends on ordered data changes). */
   private readonly renderData = new BehaviorSubject<T[]>([]);
 
-  /** Is this DataStore connected to a table? */
+  /** Is this DataSource connected to a table? */
   private isConnectedToTable = false;
 
   /** maximum number of rows available in data store after filtering */
