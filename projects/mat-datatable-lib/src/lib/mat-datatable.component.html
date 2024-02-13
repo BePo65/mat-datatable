@@ -37,7 +37,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row class="mat-datatable-row" *matRowDef="let row; columns: displayedColumns;"
       [ngClass]="{
-        'selected-row': currentSelectedRows.includes(row),
+        'selected-row': selectedRowsIncludes(row),
         'activated-row': ((currentActivatedRow !== undefined) && areRowsEqual(currentActivatedRow, row))
       }"
       (click)="onRowClicked(row)">

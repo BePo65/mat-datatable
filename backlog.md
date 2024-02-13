@@ -1,7 +1,7 @@
 * activeRow - add scrollIntoPosition
-* add / use trackBy
-* demo - resize table to viewport
+  get index of a row for current sort / filter definition
 * add / delete entries => redraw table
+* demo - resize table to viewport
 * add cypress tests
 * add all exported elements to public-api.ts
 * add documentation for api to readme (incl. columnDefinition)

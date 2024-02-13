@@ -239,7 +239,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.selectedRows = [];
   }
   protected onSetSelection() {
-    this.table.selectedRows = [ this.dataStore.getUnsortedPage(1), this.dataStore.getUnsortedPage(3), this.dataStore.getUnsortedPage(88) ];
+    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 88 ]);
   }
 
   // Demo to show setting activated rows by code
@@ -248,7 +248,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.activatedRowAsString = '-';
   }
   protected onSetActivated(rowId: number) {
-    const activatedRow = this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+    const activatedRow = this.selectSingleRowByUserId(rowId);
     this.table.activatedRow = activatedRow;
     this.activatedRowAsString = this.activatedRowToString();
   }
@@ -258,8 +258,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     const currentFilter = [{ fieldName:'lastName', value:'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
-}
-
+  }
   protected onFilterByRange() {
     const currentFilter = [{ fieldName:'userId', valueFrom:50, valueTo:67 }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
@@ -278,6 +277,28 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    */
   protected onWithFooterChanged(event: MatSlideToggleChange): void {
     this.withFooter = event.checked;
+  }
+
+  /**
+   * Get row from raw data selected by its userId column.
+   * @param rowId - userId of the row to select
+   * @returns row selected by the given userId
+   */
+  private selectSingleRowByUserId(rowId: number) {
+    return this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+  }
+
+  /**
+   * Get an array of rows from raw data selected by its userId column.
+   * @param rowIds - array of userId's of the rows to select
+   * @returns row selected by the given userId
+   */
+  private selectRowsByUserId(rowIds: number[]): DemoTableItem[] {
+    let result: DemoTableItem[] = [];
+    if (rowIds && Array.isArray(rowIds) && (rowIds.length > 0)) {
+      result = this.dataStore.getUnsortedData().filter(row => rowIds.includes(row.userId));
+    }
+    return result;
   }
 
   /**

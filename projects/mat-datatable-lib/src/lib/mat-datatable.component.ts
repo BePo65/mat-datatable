@@ -322,6 +322,15 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   }
 
   /**
+   *  Check, if the given row is part of the selectedRows.
+   * @param row - row to be checked
+   * @returns true = given row is part of the selectedRows
+   */
+  protected selectedRowsIncludes(row: TRowData): boolean {
+    return this.selectedRows.some(selectedRow => this.areRowsEqual(row, selectedRow));
+  }
+
+  /**
    * Extract the list of footer columns to display from the
    * list of columns to display. The footer can have columns tha
    * span several columns; therefore we need a different list.
