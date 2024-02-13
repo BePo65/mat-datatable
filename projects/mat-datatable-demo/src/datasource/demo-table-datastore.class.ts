@@ -110,13 +110,24 @@ export class DemoTableDataStore<DatatableItem> {
       const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
       const valueA = a[fieldName] as string | number;
       const valueB = b[fieldName] as string | number;
-      result = compare(valueA, valueB, isAsc);
+      result = this.compare(valueA, valueB, isAsc);
       if (result !== 0) {
         break;
       }
     }
     return result;
   };
+
+  /**
+   * Simple sort comparator for string | number values.
+   * @param a - 1st parameter to compare
+   * @param b - 2nd parameter to compare
+   * @param isAsc - is this an ascending comparison
+   * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
+   */
+  private compare(a: string | number, b: string | number, isAsc: boolean): number {
+    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+  }
 
   /**
    * Compare 2 sort definitions.
@@ -130,14 +141,3 @@ export class DemoTableDataStore<DatatableItem> {
       element.sortDirection === b[index].sortDirection);
   }
 }
-
-/**
- * Simple sort comparator for string | number values.
- * @param a - 1st parameter to compare
- * @param b - 2nd parameter to compare
- * @param isAsc - is this an ascending comparison
- * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
- */
-const compare = (a: string | number, b: string | number, isAsc: boolean): number => {
-  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
-};
