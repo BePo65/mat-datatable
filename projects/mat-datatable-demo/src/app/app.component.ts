@@ -171,6 +171,18 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.selectedRowsAsString = result;
   }
 
+  /**
+   * Event handler for the slide toggle setting the 'withFooter' property.
+   * @param event - source and new value of the slide toggle
+   */
+  protected onWithFooterChanged(event: MatSlideToggleChange): void {
+    this.withFooter = event.checked;
+    this.onClearSort();
+    this.onClearSelection();
+    this.onClearActivated();
+    this.onClearFilter();
+  }
+
   protected headerFromColumnId(columnId: string): string {
     return this.headers[columnId];
   }
@@ -229,23 +241,23 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.sortDefinitions = [];
   }
 
-  // Demo to show setting selected rows by code
-  protected onClearSelection() {
-    this.table.selectedRows = [];
-  }
-  protected onSetSelection() {
-    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 88 ]);
-  }
-
   // Demo to show setting activated rows by code
-  protected onClearActivated() {
-    this.table.activatedRow = undefined;
-    this.activatedRowAsString = '-';
-  }
   protected onSetActivated(rowId: number) {
     const activatedRow = this.selectSingleRowByUserId(rowId);
     this.table.activatedRow = activatedRow;
     this.activatedRowAsString = this.activatedRowToString();
+  }
+  protected onClearActivated() {
+    this.table.activatedRow = undefined;
+    this.activatedRowAsString = '-';
+  }
+
+  // Demo to show setting selected rows by code
+  protected onSetSelection() {
+    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 88 ]);
+  }
+  protected onClearSelection() {
+    this.table.selectedRows = [];
   }
 
   // Demo of scrollToRów
@@ -275,14 +287,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
-  }
-
-  /**
-   * Event handler for the slide toggle setting the 'withFooter' property.
-   * @param event - source and new value of the slide toggle
-   */
-  protected onWithFooterChanged(event: MatSlideToggleChange): void {
-    this.withFooter = event.checked;
   }
 
   /**
