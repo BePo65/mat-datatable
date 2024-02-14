@@ -54,7 +54,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       cell: (row: DemoTableItem) => row?.lastName,
       cellAlignment: 'right',
       width: '10em',
-      footer: 'no filter',
+      footer: 'Filter: -',
       footerColumnSpan: 3
     },
     {
@@ -93,6 +93,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
   protected activatedRowAsString = '-';
+  protected currentFilterAsString = '-';
   protected currentPageSize$ = new BehaviorSubject('');
   protected numberOfRows = '-';
   protected numberOfFilteredRows = '-';
@@ -260,17 +261,20 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected onFilterByValue() {
     const currentFilter = [{ fieldName:'lastName', value:'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
-    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+    this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
+    this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
   protected onFilterByRange() {
     const currentFilter = [{ fieldName:'userId', valueFrom:50, valueTo:67 }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
-    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+    this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
+    this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
   protected onClearFilter() {
     const currentFilter = []  as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
-    this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
+    this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
+    this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
 
   /**
@@ -345,13 +349,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * @returns filter definition, formatted string
    */
   private filterDefinitionToString(filterDefinition: FieldFilterDefinition<DemoTableItem>[]): string {
-    let filterAsString = 'kein Filter';
+    let filterAsString = '-';
     if(filterDefinition && Array.isArray(filterDefinition) && (filterDefinition.length > 0)) {
       const filter = filterDefinition[0];
       if (filter.value !== undefined) {
-        filterAsString = `Filter: '${filter.fieldName}' = '${filter.value.toString()}' `;
+        filterAsString = `'${filter.fieldName}' = '${filter.value.toString()}' `;
       } else  if (filter.valueFrom !== undefined) {
-        filterAsString = `Filter: '${filter.fieldName}' = ${filter.valueFrom.toString()}-${filter.valueTo.toString()}`;
+        filterAsString = `'${filter.fieldName}' = ${filter.valueFrom.toString()}-${filter.valueTo.toString()}`;
       }
     }
 
