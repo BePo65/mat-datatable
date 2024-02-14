@@ -254,7 +254,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo to show setting selected rows by code
   protected onSetSelection() {
-    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 88 ]);
+    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 66 ]);
   }
   protected onClearSelection() {
     this.table.selectedRows = [];
