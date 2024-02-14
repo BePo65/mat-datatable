@@ -6,7 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, of } from 'rxjs';
 
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datastore-provider.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 

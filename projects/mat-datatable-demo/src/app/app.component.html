@@ -5,7 +5,7 @@
     [displayedColumns]="displayedColumns"
     [rowSelectionMode]="currentSelectionMode"
     [withFooter]="withFooter"
-    [datastoreGetter]="getData"
+    [dataStoreProvider]="dataStore"
     [trackBy]="trackBy"
     (rowClick)="onRowClick($event)"
     (rowSelectionChange)="onRowSelectionChange($event)"
@@ -44,6 +44,9 @@
   <span class="activated-row-container">
     <span class="activated-row-label">Active row:</span>
     <span class="activated-row-value">{{activatedRowAsString}}</span>
+  </span>
+  <span class="activation-button-container-inline">
+    <button  mat-raised-button class="activation-scroll-button" [disabled]="activatedRowAsString==='-'" (click)="onScrollIntoView(table.activatedRow?.userId)">Scroll into view</button>
   </span>
 </div>
 <div class="selected-rows">

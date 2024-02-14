@@ -13,16 +13,16 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatTable } from '@angular/material/table';
-import { Observable, of as observableOf, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { TableVirtualScrollDataSource } from '../components/data-source.class';
+import { EmptyDataStoreProvider, TableVirtualScrollDataSource } from '../components/data-source.class';
 import {
   MatMultiSort,
   Sort,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
-import { DatasourceEndpoint, Page, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datasource-endpoint.interface';
+import { FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
 import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
@@ -46,8 +46,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
-  @Input() datastoreGetter: DatasourceEndpoint<TRowData> = emptyDatastoreGetter;
-  // @Input() trackBy: TrackByFunction<TRowData>;
+  @Input() dataStoreProvider: DataStoreProvider<TRowData> = new EmptyDataStoreProvider<TRowData>;
   @Input()
   get trackBy(): TrackByFunction<TRowData> {
     return this._trackByFn;
@@ -65,9 +64,11 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
+
   @ViewChild(MatTable) table!: MatTable<TRowData>;
   @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
   @ViewChild(MatMultiSort) sort!: MatMultiSort;
+
   public firstVisibleIndexChanged!: Observable<number>;
   public totalRowsChanged!: Observable<number>;
   public filteredRowsChanged!: Observable<number>;
@@ -81,11 +82,11 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   private readonly unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.dataSource = new TableVirtualScrollDataSource<TRowData>(this.datastoreGetter);
+    this.dataSource = new TableVirtualScrollDataSource<TRowData>(this.dataStoreProvider);
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.endpoint = this.datastoreGetter;
+    this.dataSource.dataStoreProvider = this.dataStoreProvider;
 
     this.sort.multiSortChange
       .pipe(
@@ -180,6 +181,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
     if (newFilters && Array.isArray(newFilters)) {
       this.dataSource.filters = newFilters;
+    }
+  }
+
+  scrollToRow(row: TRowData) {
+    if (row !== undefined) {
+      const indexOfRow = Math.max(this.dataStoreProvider.indexOfRow(row), 0);
+      this.viewport.scrollToIndex(indexOfRow, 'smooth');
     }
   }
 
@@ -409,17 +417,3 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     return JSON.stringify(item);
   }
 }
-
-/**
- * Default implementation of the datastoreGetter input variable
- * returning an observable that emits a Page with no data rows.
- * @returns observable that emits a single empty Page
- */
-const emptyDatastoreGetter = <T>() => {
-  return observableOf({
-    content: [] as T[],
-    startRowIndex: 0,
-    returnedElements: 0,
-    totalElements: 0
-  } as Page<T>);
-};

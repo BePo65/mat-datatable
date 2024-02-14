@@ -32,7 +32,7 @@ import {
 } from 'rxjs/operators';
 
 import { isTVSDataSource, TableVirtualScrollDataSource } from '../../components/data-source.class';
-import { RequestRowsRange } from '../../interfaces/datasource-endpoint.interface';
+import { RequestRowsRange } from '../../interfaces/datastore-provider.interface';
 
 import { FixedSizeTableVirtualScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
 

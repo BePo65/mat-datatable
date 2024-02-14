@@ -2,20 +2,24 @@ import { delay, of } from 'rxjs';
 
 import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
 
-import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
+import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition, DataStoreProvider } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
+
+type trackByFn<T> = (index: number, item: T) => number;
 
 /**
  * Datastore for the DemoTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class DemoTableDataStore<DatatableItem> {
+export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
   private data: DatatableItem[];
   private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
+  private trackBy: trackByFn<DatatableItem>;
 
-  constructor() {
+  constructor(myTrackBy: trackByFn<DatatableItem>) {
     this.data = [ ...EXAMPLE_DATA as DatatableItem[] ];
     this.currentSortingDefinitions = [];
+    this.trackBy = myTrackBy;
   }
 
   /**
@@ -30,12 +34,34 @@ export class DemoTableDataStore<DatatableItem> {
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
   ) {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+
+    // Save sorted and filtered data for later use
+    this.data = selectedDataset;
+    const startIndex = rowsRange.startRowIndex;
+    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
+
+    const result = {
+      content: resultingData,
+      startRowIndex: startIndex,
+      returnedElements: resultingData.length,
+      totalElements: EXAMPLE_DATA.length,
+      totalFilteredElements: selectedDataset.length
+    } as Page<DatatableItem>;
+    const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
+    return of(result).pipe(delay(simulatedResponseTime));
+  }
+
+  private getRawDataSortedFiltered(
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
     let selectedDataset = structuredClone(EXAMPLE_DATA) as DatatableItem[];
 
     // Filter data
     if ((filters !== undefined) &&
-        Array.isArray(filters) &&
-        (filters.length > 0)) {
+      Array.isArray(filters) &&
+      (filters.length > 0)) {
       selectedDataset = selectedDataset.filter((row: DatatableItem) => {
         return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
           if (currentFilter.value !== undefined) {
@@ -44,7 +70,7 @@ export class DemoTableDataStore<DatatableItem> {
             isSelected ||= (
               (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
               (row[currentFilter.fieldName] <= currentFilter.valueTo)
-              );
+            );
           }
           return isSelected;
         }, false);
@@ -53,29 +79,31 @@ export class DemoTableDataStore<DatatableItem> {
 
     // Sort data
     if ((sorts !== undefined) &&
-        Array.isArray(sorts) &&
-        (sorts.length > 0) &&
-        !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
-        (rowsRange.numberOfRows !== 0)) {
+      Array.isArray(sorts) &&
+      (sorts.length > 0) &&
+      !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
       this.currentSortingDefinitions = sorts;
       selectedDataset.sort(this.compareFn);
     }
 
-    // Save sorted and filtered data for later use
-    this.data = selectedDataset;
-
-    const startIndex = rowsRange.startRowIndex;
-    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
-    const result = {
-      content: resultingData,
-      startRowIndex: startIndex,
-      returnedElements: resultingData.length,
-      totalElements: EXAMPLE_DATA.length,
-      totalFilteredElements: this.data.length
-    } as Page<DatatableItem>;
-    const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
-    return of(result).pipe(delay(simulatedResponseTime));
+    return selectedDataset;
   }
+
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   */
+  indexOfRow(
+    row: DatatableItem,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]) {
+      const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+      return selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow));
+    }
 
   /**
    * Gets a single element from the mocked datastore (without sorting).

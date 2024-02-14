@@ -12,7 +12,7 @@ import {
   MatSortDefinition,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
-import { RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datasource-endpoint.interface';
+import { FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +24,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   title = 'Mat-Datatable-Demo';
 
-  protected dataStore = new DemoTableDataStore<DemoTableItem>();
+  protected dataStore = new DemoTableDataStore<DemoTableItem>(this.trackBy);
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
     {
       columnId: 'userId',
@@ -146,13 +146,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  // Arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DemoTableItem>[], filters?: FieldFilterDefinition<DemoTableItem>[]) => {
-    const newPage = this.dataStore.getPagedData(rowsRange, sorts, filters);
-    return newPage;
-  };
-
-  protected trackBy(index: number, item: DemoTableItem) {
+  protected trackBy(this: void, index: number, item: DemoTableItem) {
     return item?.userId ?? -1;
   }
 
@@ -253,6 +247,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.activatedRowAsString = this.activatedRowToString();
   }
 
+  // Demo of scrollToRów
+  protected onScrollIntoView(rowId?: number) {
+    // row.userId or rowId are used, as 'trackBy' uses 'userId' as reference
+    const rowToScrollTo = this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+    if (rowToScrollTo) {
+      this.table.scrollToRow(rowToScrollTo);
+    }
+  }
+
   // Demo to show filtering by code
   protected onFilterByValue() {
     const currentFilter = [{ fieldName:'lastName', value:'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
@@ -264,7 +267,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.filterDefinitions = currentFilter;
     this.columnDefinitions[2].footer = this.filterDefinitionToString(currentFilter);
   }
-
   protected onClearFilter() {
     const currentFilter = []  as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;

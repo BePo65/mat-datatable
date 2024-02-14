@@ -4,7 +4,7 @@
 import { of, Subject } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 
-import { Page, FieldSortDefinition, RequestRowsRange, FieldFilterDefinition, FieldFilterDefinitionSimple, FieldFilterDefinitionRange } from '../interfaces/datasource-endpoint.interface';
+import { Page, FieldSortDefinition, RequestRowsRange, FieldFilterDefinition, FieldFilterDefinitionSimple, FieldFilterDefinitionRange } from '../interfaces/datastore-provider.interface';
 
 import { TableVirtualScrollDataSource, TableVirtualScrollDataStoreSizes } from './data-source.class';
 

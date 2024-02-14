@@ -1,5 +1,5 @@
-* activeRow - add scrollIntoPosition
-  get index of a row for current sort / filter definition
+* fix tests
+* add tests for trackBy
 * add / delete entries => redraw table
 * demo - resize table to viewport
 * add cypress tests

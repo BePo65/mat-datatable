@@ -64,21 +64,34 @@ export interface Page<T> {
 }
 
 /**
- * Type defining the signature of a function fetching data from
- * the datastore. The function returns an observable emitting
- * a Page<T> object.
- * @template T - type defining the data of a table row
- */
-export type DatasourceEndpoint<T> = (
-  rowsRange: RequestRowsRange,
-  sorts?: FieldSortDefinition<T>[],
-  filters?: FieldFilterDefinition<T>[]
-) => Observable<Page<T>>
-
-/**
  * Interface defining the methods of a class fetching data from a server.
  * @template T - type defining the data of a table row
  */
-export interface DataStoreGetter<T> {
-  getPagedData: (rowsRange: RequestRowsRange) => Observable<Page<T>>
+export interface DataStoreProvider<T> {
+  /**
+   * Fetching data from the datastore respecting sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns observable emitting a Page<T> object
+   */
+  getPagedData: (
+    rowsRange: RequestRowsRange,
+    sorts?: FieldSortDefinition<T>[],
+    filters?: FieldFilterDefinition<T>[]
+  ) => Observable<Page<T>>
+
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   */
+  indexOfRow: (
+    row: T,
+    sorts?: FieldSortDefinition<T>[],
+    filters?: FieldFilterDefinition<T>[]
+  ) => number
 }

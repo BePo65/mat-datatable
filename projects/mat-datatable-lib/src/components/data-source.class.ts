@@ -2,7 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, take, takeUntil, filter, switchMap, tap } from 'rxjs/operators';
 
-import { DatasourceEndpoint, Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datasource-endpoint.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
 
 export interface TableVirtualScrollDataStoreSizes {
   totalElements: number
@@ -88,17 +88,17 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
   }
   private _filters: FieldFilterDefinition<T>[] = [];
 
-  get endpoint(): DatasourceEndpoint<T> {
-    return this._endpoint;
+  get dataStoreProvider(): DataStoreProvider<T> {
+    return this._dataStoreProvider;
   }
-  set endpoint(newEndpoint: DatasourceEndpoint<T>) {
-    this._endpoint = newEndpoint;
+  set dataStoreProvider(newDataStoreProvider: DataStoreProvider<T>) {
+    this._dataStoreProvider = newDataStoreProvider;
     this.reloadSizeOfDatastore();
   }
-  private _endpoint!: DatasourceEndpoint<T>;
+  private _dataStoreProvider!: DataStoreProvider<T>;
 
   constructor(
-    private datastoreEndpoint?: DatasourceEndpoint<T>
+    private datastoreProviderObject?: DataStoreProvider<T>
     ) {
     super();
 
@@ -107,7 +107,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     this.requestDataStoreSizes$
       .pipe(
         takeUntil(this.unsubscribe$),
-        switchMap(() => this.endpoint(this.requestForSizesOnly, this.sorts, this.filters)
+        switchMap(() => this.dataStoreProvider.getPagedData(this.requestForSizesOnly, this.sorts, this.filters)
           .pipe(
             take(1),
             map((page: Page<T>) => {
@@ -126,12 +126,12 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
         }
       );
 
-    // endpoint is set after 'this.requestDataStoreSizes$' because setter
+    // dataStoreProvider is set after 'this.requestDataStoreSizes$' because setter
     // triggers 'this.reloadSizeOfDatastore()'
-    if (this.datastoreEndpoint !== undefined) {
-      this.endpoint = this.datastoreEndpoint;
+    if (this.datastoreProviderObject !== undefined) {
+      this.dataStoreProvider = this.datastoreProviderObject;
     } else {
-      this.endpoint = this._emptyDatasourceEndpoint<T>;
+      this.dataStoreProvider = new EmptyDataStoreProvider<T>;
     }
   }
 
@@ -212,7 +212,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
           // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
           setTimeout(() => this.loadingSubject.next(true), 0);
         }),
-        switchMap(range => this.endpoint(range, this.sorts, this.filters)
+        switchMap(range => this.dataStoreProvider.getPagedData(range, this.sorts, this.filters)
           .pipe(
             take(1),
             tap(() => this.loadingSubject.next(false))
@@ -287,22 +287,36 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     return (page.totalElements !== this.dataStoreSizes$.value.totalElements) ||
     (page.totalFilteredElements !== this.dataStoreSizes$.value.totalFilteredElements);
   }
-
-  /**
-   * Default implementation for the data source endpoint property,
-   * returning an observable that emits a Page with no data rows.
-   * @param rowsRange - range of data to fetch (unused, as this implementation simulates an empty datastore)
-   * @returns observable that synchronously emits a single empty Page
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _emptyDatasourceEndpoint<T>(this: void, rowsRange: RequestRowsRange) {
-    return of(
-      {
-        content: [] as T[],
-        startRowIndex: 0,
-        returnedElements: 0,
-        totalElements: 0,
-        totalFilteredElements: 0
-      } as Page<T>);
-  }
 }
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+/**
+ * Class that implements an empty datastore used as a default dataStoreProvider
+ * for the TableVirtualScrollDataSource class.
+ * @template T
+ */
+export class EmptyDataStoreProvider<T> implements DataStoreProvider<T> {
+  getPagedData(
+    rowsRange: RequestRowsRange,
+    sorts?: FieldSortDefinition<T>[],
+    filters?: FieldFilterDefinition<T>[]) {
+      return of(
+        {
+          content: [] as T[],
+          startRowIndex: 0,
+          returnedElements: 0,
+          totalElements: 0,
+          totalFilteredElements: 0
+        } as Page<T>);
+    }
+
+  indexOfRow(
+    row: T,
+    sorts?: FieldSortDefinition<T>[],
+    filters?: FieldFilterDefinition<T>[]) {
+      return -1;
+    }
+}
+
+/* eslint-enable @typescript-eslint/no-unused-vars */
