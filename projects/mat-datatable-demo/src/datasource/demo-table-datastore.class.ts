@@ -59,9 +59,7 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     let selectedDataset = structuredClone(EXAMPLE_DATA) as DatatableItem[];
 
     // Filter data
-    if ((filters !== undefined) &&
-      Array.isArray(filters) &&
-      (filters.length > 0)) {
+    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
       selectedDataset = selectedDataset.filter((row: DatatableItem) => {
         return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
           if (currentFilter.value !== undefined) {
@@ -78,10 +76,7 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     }
 
     // Sort data
-    if ((sorts !== undefined) &&
-      Array.isArray(sorts) &&
-      (sorts.length > 0) &&
-      !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts)) {
+    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
       this.currentSortingDefinitions = sorts;
       selectedDataset.sort(this.compareFn);
     }
