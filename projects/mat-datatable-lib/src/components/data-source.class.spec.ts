@@ -1,14 +1,21 @@
 /* eslint-disable jasmine/new-line-before-expect */
 /* eslint-disable jasmine/no-expect-in-setup-teardown */
 
+import { TrackByFunction } from '@angular/core';
 import { of, Subject } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 
-import { Page, FieldSortDefinition, RequestRowsRange, FieldFilterDefinition, FieldFilterDefinitionSimple, FieldFilterDefinitionRange } from '../interfaces/datastore-provider.interface';
+import {
+  Page,
+  FieldSortDefinition,
+  RequestRowsRange,
+  FieldFilterDefinition,
+  FieldFilterDefinitionSimple,
+  FieldFilterDefinitionRange,
+  DataStoreProvider
+} from '../interfaces/datastore-provider.interface';
 
 import { TableVirtualScrollDataSource, TableVirtualScrollDataStoreSizes } from './data-source.class';
-
-import createSpy = jasmine.createSpy;
 
 type pageRequest<T> = {
   rowsRange: RequestRowsRange,
@@ -31,16 +38,6 @@ describe('TableVirtualScrollDataSource', () => {
   });
 
   it('should emit datastore sizes once on connect', () => {
-    const allEndpointResults: Page<User>[] = [
-      {
-        content: [],
-        startRowIndex: 0,
-        returnedElements: 0,
-        totalElements: 80,
-        totalFilteredElements: 80
-      }
-    ];
-
     const allDatastoreSizes: TableVirtualScrollDataStoreSizes[] = [
       {
         totalElements: 80,
@@ -56,9 +53,9 @@ describe('TableVirtualScrollDataSource', () => {
       }
     ];
 
-    let page = 0;
-    const spyOnEndpoint = createSpy('endpoint').and.callFake(() => of(allEndpointResults[page++]));
-    const dataSource = new TableVirtualScrollDataSource<User>(spyOnEndpoint);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     const dataStoreSizes = dataSource.attachVirtualScroller(rangeToDisplay);
     dataSource.connect();
@@ -93,26 +90,24 @@ describe('TableVirtualScrollDataSource', () => {
     // The spy also gets called by virtual scroller for getting the size of the datastore:
     // 1x from the constructor and 1x für every setting of 'sorts' and 'filters'.
     const expectedSpyCallingParameters = [
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':1,'numberOfRows':2 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':5,'numberOfRows':1 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
-      [{ 'startRowIndex':27,'numberOfRows':3 }, [], []]
-    ];
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':1, 'numberOfRows':2 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':5, 'numberOfRows':1 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0, 'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':27, 'numberOfRows':3 }, [], []]
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     const dataStoreSizes = dataSource.attachVirtualScroller(rangeToDisplay);
     dataSource.connect();
@@ -150,10 +145,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -168,16 +163,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':55,'numberOfRows':1 }, [], []]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     const renderData = dataSource.connect();
@@ -217,10 +210,10 @@ describe('TableVirtualScrollDataSource', () => {
        * 2. by setSorts
        * 3. by setFilters
        */
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -248,16 +241,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':27,'numberOfRows':3 }, [], []]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     const renderData = dataSource.connect();
@@ -295,10 +286,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -326,16 +317,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName:'id', sortDirection:'desc' }], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName:'id', sortDirection:'desc' }], []],
       [{ 'startRowIndex':27,'numberOfRows':3 }, [{ fieldName:'id', sortDirection:'desc' }], []]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     const renderData = dataSource.connect();
@@ -373,10 +362,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -394,7 +383,7 @@ describe('TableVirtualScrollDataSource', () => {
 
     // The spy also gets called by virtual scroller for getting the size of the datastore
     const expectedSpyCallingParameters = [
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [], [] as FieldFilterDefinition<User>[]],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], [{ fieldName:'name', value:'User0037' }]],
       [{ 'startRowIndex':0,'numberOfRows':1 }, [], [{ fieldName:'name', value:'User0037' }]],
@@ -404,16 +393,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], [{ fieldName:'name', value:'User0028' }]],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]],
       [{ 'startRowIndex':20,'numberOfRows':3 }, [], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     const renderData = dataSource.connect();
@@ -451,10 +438,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -472,7 +459,7 @@ describe('TableVirtualScrollDataSource', () => {
 
     // The spy also gets called by virtual scroller for getting the size of the datastore
     const expectedSpyCallingParameters = [
-      [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [], [] as FieldFilterDefinition<User>[]],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'name', sortDirection: 'desc' }], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'name', sortDirection: 'desc' }], [{ fieldName:'name', value:'User0037' }]],
       [{ 'startRowIndex':0,'numberOfRows':1 }, [{ fieldName: 'name', sortDirection: 'desc' }], [{ fieldName:'name', value:'User0037' }]],
@@ -482,16 +469,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0068', valueTo: 'User0079' }]],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]],
       [{ 'startRowIndex':20,'numberOfRows':3 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     const renderData = dataSource.connect();
@@ -529,10 +514,87 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
+      expect(callingParams).toEqual(expectedSpyCallingParameters);
+    });
+
+    // Complete source
+    dataSource.disconnect();
+  });
+
+  it('should get 3 pages from datasource with sorting, filtering and trackBy', () => {
+    const allEndpointParameters: pageRequest<User>[] = [
+      { rowsRange:{ startRowIndex:0, numberOfRows:0 }, sorts:[], filters:[] },
+      { rowsRange:{ startRowIndex:0, numberOfRows:1 }, sorts:[{ fieldName:'name', sortDirection:'desc' }], filters:[{ fieldName:'name', value:'User0037' }] as FieldFilterDefinitionSimple<User>[] },
+      { rowsRange:{ startRowIndex:0, numberOfRows:2 }, sorts:[], filters:[{ fieldName:'name', valueFrom:'User0068', valueTo:'User0079' }] as FieldFilterDefinitionRange<User>[] },
+      { rowsRange:{ startRowIndex:20, numberOfRows:3 }, sorts:[{ fieldName:'id', sortDirection:'desc' }], filters:[{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }] as FieldFilterDefinitionRange<User>[] }
+    ];
+
+    // The spy also gets called by virtual scroller for getting the size of the datastore
+    const expectedSpyCallingParameters = [
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [], [] as FieldFilterDefinition<User>[]],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'name', sortDirection: 'desc' }], []],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'name', sortDirection: 'desc' }], [{ fieldName:'name', value:'User0037' }]],
+      [{ 'startRowIndex':0,'numberOfRows':1 }, [{ fieldName: 'name', sortDirection: 'desc' }], [{ fieldName:'name', value:'User0037' }]],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [], [{ fieldName:'name', value:'User0037' }]],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [], [{ fieldName:'name', valueFrom:'User0068', valueTo: 'User0079' }]],
+      [{ 'startRowIndex':0,'numberOfRows':2 }, [], [{ fieldName:'name', valueFrom:'User0068', valueTo: 'User0079' }]],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0068', valueTo: 'User0079' }]],
+      [{ 'startRowIndex':0,'numberOfRows':0 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]],
+      [{ 'startRowIndex':20,'numberOfRows':3 }, [{ fieldName: 'id', sortDirection: 'desc' }], [{ fieldName:'name', valueFrom:'User0003', valueTo:'User0030' }]]
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
+
+    const defaultSorts: FieldSortDefinition<User>[] = [];
+    const defaultFilters: FieldFilterDefinition<User>[] = [];
+
+    const trackByUserId: TrackByFunction<User> =  (index: number, item: User) => item.id;
+    const fakeDataStore = new FakeUserDataStore<User>(trackByUserId, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
+    const rangeToDisplay = new Subject<RequestRowsRange>;
+    dataSource.attachVirtualScroller(rangeToDisplay);
+    const renderData = dataSource.connect();
+
+    testScheduler.run(helpers => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '1-2----3-|';
+      const expectedMarbles = 'a-(bc)-(de)';
+      const expectedValues = {
+        a: [{ id: 37, name: 'User0037' }],
+        b: [{ id: 37, name: 'User0037' }, undefined],
+        c: [{ id: 68, name: 'User0068' }, { id: 69, name: 'User0069' }],
+        d: Array(3),
+        e: [{ id: 10, name: 'User0010' }, { id: 9, name: 'User0009' }, { id: 8, name: 'User0008' }]
+      };
+
+      const source = cold(sourceMarbles, {
+        1: allEndpointParameters[1],
+        2: allEndpointParameters[2],
+        3: allEndpointParameters[3]
+      });
+
+      // Use source to make dataSource emit values
+      source.subscribe(
+        request => {
+          if (request !== undefined) {
+            dataSource.sorts = request.sorts || defaultSorts;
+            dataSource.filters = request.filters || defaultFilters;
+            rangeToDisplay.next(request.rowsRange);
+          }
+        }
+      );
+
+      expectObservable(renderData).toBe(expectedMarbles, expectedValues);
+
+      flush();
+
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+
+      // Check calling parameters
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -547,15 +609,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':11 }, [], []]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     dataSource.connect();
@@ -592,10 +653,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -616,16 +677,14 @@ describe('TableVirtualScrollDataSource', () => {
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':0,'numberOfRows':0 }, [], []],
       [{ 'startRowIndex':2,'numberOfRows':5 }, [], []]
-    ];
+    ] as [ RequestRowsRange, FieldSortDefinition<User>[], FieldFilterDefinition<User>[] ][];
 
     const defaultSorts: FieldSortDefinition<User>[] = [];
     const defaultFilters: FieldFilterDefinition<User>[] = [];
 
-    const fakeDataStore = new FakeUserDataStore(80);
-    const spy = createSpy('endpoint').and.callFake((range: RequestRowsRange, sorts: FieldSortDefinition<User>[], filters: FieldFilterDefinition<User>[]) => {
-      return of(fakeDataStore.getData(range, sorts, filters));
-    });
-    const dataSource = new TableVirtualScrollDataSource<User>(spy);
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const spyOnEndpoint = spyOn(fakeDataStore, 'getPagedData').and.callThrough();
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
     const rangeToDisplay = new Subject<RequestRowsRange>;
     dataSource.attachVirtualScroller(rangeToDisplay);
     dataSource.connect();
@@ -666,10 +725,10 @@ describe('TableVirtualScrollDataSource', () => {
 
       flush();
 
-      expect(spy).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
+      expect(spyOnEndpoint).toHaveBeenCalledTimes(expectedSpyCallingParameters.length);
 
       // Check calling parameters
-      const callingParams = spy.calls.allArgs();
+      const callingParams = spyOnEndpoint.calls.allArgs();
       expect(callingParams).toEqual(expectedSpyCallingParameters);
     });
 
@@ -678,7 +737,7 @@ describe('TableVirtualScrollDataSource', () => {
   });
 });
 
-class FakeUserDataStore {
+class FakeUserDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
   public get datastoreSize() : number {
     return this._datastoreSize;
   }
@@ -697,79 +756,135 @@ class FakeUserDataStore {
   }
   private _datastoreFilteredSize = 0;
 
-  private fakeDataset: User[] = [];
+  private trackBy: TrackByFunction<DatatableItem>;
+  private fakeDataset: DatatableItem[] = [];
+  private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
 
-  constructor(defaultDatastoreSize = 0) {
+  constructor(myTrackBy?: TrackByFunction<DatatableItem>, defaultDatastoreSize = 0) {
     this._datastoreSize = defaultDatastoreSize;
     this.createDataset();
+    this.trackBy = myTrackBy ?? this.defaultTrackBy;
   }
 
-  getData(
+  getPagedData(
     rowsRange: RequestRowsRange,
-    sorts?: FieldSortDefinition<User>[],
-    filters?: FieldFilterDefinition<User>[]
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
   ) {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+    const startIndex = rowsRange.startRowIndex;
+    const resultingData = selectedDataset.slice(startIndex, startIndex + rowsRange.numberOfRows);
+
     const newPage = {
-      content: [],
-      startRowIndex: rowsRange.startRowIndex,
-      returnedElements: Math.max(rowsRange.numberOfRows, 0),
+      content: resultingData,
+      startRowIndex: startIndex,
+      returnedElements: resultingData.length,
       totalElements: this.datastoreSize,
-      totalFilteredElements: this.datastoreSize
-    } as Page<User>;
+      totalFilteredElements: selectedDataset.length
+    } as Page<DatatableItem>;
 
-    let selectedDataset = structuredClone(this.fakeDataset) as User[];
+    return of(newPage);
+  }
 
-    // Sort data - only the first entry of the definitions is used
-    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
-      selectedDataset = selectedDataset.sort((a: User, b: User) => {
-        const isAsc = (sorts[0].sortDirection === 'asc');
-        let result = 0;
-        if (sorts[0].fieldName === 'id') {
-          const aId = a.id;
-          const bId = b.id;
-          result = (aId === bId ? 0 : (aId < bId ? -1 : 1)) * (isAsc ? 1 : -1);
-        } else if (sorts[0].fieldName === 'name') {
-          const aName = a.name;
-          const bName = b.name;
-          result = (aName === bName ? 0 : (aName < bName ? -1 : 1)) * (isAsc ? 1 : -1);
-        }
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   */
+  indexOfRow(
+    row: DatatableItem,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
+  }
 
-        return result;
-      });
-    }
+  private getRawDataSortedFiltered(
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
+    let selectedDataset = structuredClone(this.fakeDataset) as DatatableItem[];
 
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
-      selectedDataset = selectedDataset.filter((currentUser: User) => {
-        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<User>) => {
+      selectedDataset = selectedDataset.filter((row: DatatableItem) => {
+        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
           if (currentFilter.value !== undefined) {
-            isSelected ||= currentUser[currentFilter.fieldName] === currentFilter.value;
+            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
           } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
             isSelected ||= (
-              (currentUser[currentFilter.fieldName] >= currentFilter.valueFrom) &&
-              (currentUser[currentFilter.fieldName] <= currentFilter.valueTo)
-              );
+              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
+              (row[currentFilter.fieldName] <= currentFilter.valueTo)
+            );
           }
           return isSelected;
         }, false);
       });
     }
 
-    if (rowsRange.numberOfRows > 0) {
-      newPage.content = selectedDataset.slice(rowsRange.startRowIndex, rowsRange.startRowIndex + rowsRange.numberOfRows);
+    // Sort data - only the first entry of the definitions is used
+    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
+      this.currentSortingDefinitions = sorts;
+      selectedDataset.sort(this.compareFn);
     }
 
-    newPage.returnedElements = newPage.content.length;
-    newPage.totalFilteredElements = selectedDataset.length;
-
-    return newPage;
+    return selectedDataset;
   }
 
   private createDataset() {
     this.fakeDataset = Array.from({ length: this.datastoreSize }, (v: unknown, k: number) => {
       const index = k;
-      const newUser = { id: index, name: `User${index.toString().padStart(4, '0')}` } as User;
+      const newUser = { id: index, name: `User${index.toString().padStart(4, '0')}` } as DatatableItem;
       return newUser;
     });
+  }
+
+  /**
+   * Default implementation of trackBy function.
+   * This function is required, as in strict mode 'trackBy'
+   * must not be undefined.
+   * @param this - required by @typescript-eslint/unbound-method
+   * @param index - index of the row
+   * @param item - object with the row data
+   * @returns stringified content of the item
+   */
+  private defaultTrackBy(this: void, index: number, item: DatatableItem): string {
+    return JSON.stringify(item);
+  }
+
+  /**
+   * Compare function for sorting the current dataset.
+   * @param a - row to compare against
+   * @param b - row to compare with parameter a
+   * @returns 0:a===b; -1:a<b; 1:a>b
+   */
+  private compareFn = (a: DatatableItem, b: DatatableItem): number => {
+    let result = 0;
+    for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
+      const fieldName = this.currentSortingDefinitions[i].fieldName;
+      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const valueA = a[fieldName] as string | number;
+      const valueB = b[fieldName] as string | number;
+      result = this.compare(valueA, valueB, isAsc);
+      if (result !== 0) {
+        break;
+      }
+    }
+    return result;
+  };
+
+  /**
+   * Simple sort comparator for string | number values.
+   * @param a - 1st parameter to compare
+   * @param b - 2nd parameter to compare
+   * @param isAsc - is this an ascending comparison
+   * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
+   */
+  private compare(a: string | number, b: string | number, isAsc: boolean): number {
+    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
   }
 }
