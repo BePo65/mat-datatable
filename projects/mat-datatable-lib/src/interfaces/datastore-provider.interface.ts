@@ -87,11 +87,11 @@ export interface DataStoreProvider<T> {
    * @param row - row to get the index for
    * @param sorts - optional array of objects with the sorting definition
    * @param filters - optional array of objects with the filter definition
-   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   * @returns observable emitting the index of the row in the datastore (0..n-1) or -1 (= row not in data store)
    */
   indexOfRow: (
     row: T,
     sorts?: FieldSortDefinition<T>[],
     filters?: FieldFilterDefinition<T>[]
-  ) => number
+  ) => Observable<number>
 }

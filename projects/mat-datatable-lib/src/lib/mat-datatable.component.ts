@@ -187,8 +187,14 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
 
   scrollToRow(row: TRowData) {
     if (row !== undefined) {
-      const indexOfRow = Math.max(this.dataStoreProvider.indexOfRow(row), 0);
-      this.viewport.scrollToIndex(indexOfRow, 'smooth');
+      this.dataSource.rowToIndex(row)
+        .pipe(
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe(index => {
+          const indexOfRow = Math.max(index, 0);
+          this.viewport.scrollToIndex(indexOfRow);
+        });
     }
   }
 

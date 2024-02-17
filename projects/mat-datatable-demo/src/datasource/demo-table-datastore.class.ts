@@ -51,6 +51,51 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     return of(result).pipe(delay(simulatedResponseTime));
   }
 
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns observable emitting the index of the row in the datastore (0..n-1) or -1 (= row not in data store)
+   */
+  indexOfRow(
+    row: DatatableItem,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+    const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
+    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)))
+      .pipe(delay(simulatedResponseTime));
+  }
+
+  /**
+   * Gets a single element from the mocked datastore (without sorting).
+   * As the demo does not manipulate the data, we can return a reference
+   * to the original data.
+   * @param index - element to be selected (zero based).
+   * @returns the selected element.
+   */
+  getUnsortedPage(index: number): DatatableItem {
+    return EXAMPLE_DATA[index] as DatatableItem;
+  }
+
+  /**
+   * Gets the mocked datastore. As the demo does not manipulate the data,
+   * we can return a reference to the original data.
+   * @returns the raw data of the datastore.
+   */
+  getUnsortedData(): DatatableItem[] {
+    return EXAMPLE_DATA as DatatableItem[];
+  }
+
+  /**
+   * Get complete list of rows after filtering and sorting.
+   * @param sorts - sort definitions
+   * @param filters - filter definitions
+   * @returns array of rows after filtering and sorting
+   */
   private getRawDataSortedFiltered(
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
@@ -84,42 +129,6 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
   }
 
   /**
-   * Get the relative index of a row in the datastore (0..n) respecting
-   * sorting and filtering.
-   * @param row - row to get the index for
-   * @param sorts - optional array of objects with the sorting definition
-   * @param filters - optional array of objects with the filter definition
-   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
-   */
-  indexOfRow(
-    row: DatatableItem,
-    sorts?: FieldSortDefinition<DatatableItem>[],
-    filters?: FieldFilterDefinition<DatatableItem>[]) {
-      const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
-      return selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow));
-    }
-
-  /**
-   * Gets a single element from the mocked datastore (without sorting).
-   * As the demo does not manipulate the data, we can return a reference
-   * to the original data.
-   * @param index - element to be selected (zero based).
-   * @returns the selected element.
-   */
-  getUnsortedPage(index: number): DatatableItem {
-    return EXAMPLE_DATA[index] as DatatableItem;
-  }
-
-  /**
-   * Gets the mocked datastore. As the demo does not manipulate the data,
-   * we can return a reference to the original data.
-   * @returns the raw data of the datastore.
-   */
-  getUnsortedData(): DatatableItem[] {
-    return EXAMPLE_DATA as DatatableItem[];
-  }
-
-  /**
    * Compare function for sorting the current dataset.
    * @param a - row to compare against
    * @param b - row to compare with parameter a
@@ -149,17 +158,5 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
    */
   private compare(a: string | number, b: string | number, isAsc: boolean): number {
     return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
-  }
-
-  /**
-   * Compare 2 sort definitions.
-   * @param a - 1st sort definition
-   * @param b - 2nd sort definition
-   * @returns true= both definitions are equal
-   */
-  private areSortDefinitionsEqual(a: FieldSortDefinition<DatatableItem>[], b: FieldSortDefinition<DatatableItem>[]): boolean {
-    return a.length === b.length &&
-    a.every((element, index) => (element.fieldName === b[index].fieldName) &&
-      element.sortDirection === b[index].sortDirection);
   }
 }

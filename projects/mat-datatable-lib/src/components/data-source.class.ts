@@ -174,6 +174,24 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
   }
 
   /**
+   * Get index of row in filtered and sorted list of rows.
+   * The index is in the range of 0..n-1 or
+   * -1 if the row is not part of filtered list.
+   * @param row - row to get index for
+   * @returns observable that emits index of row
+   */
+  rowToIndex(row: T): Observable<number> {
+    // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
+    setTimeout(() => this.loadingSubject.next(true), 0);
+
+    return this.dataStoreProvider.indexOfRow(row, this.sorts, this.filters)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => this.loadingSubject.next(false))
+      );
+  }
+
+  /**
    * Attach the handlers to the stream of row ranges to display, emitted
    * by the virtual scroller.
    */
@@ -315,7 +333,7 @@ export class EmptyDataStoreProvider<T> implements DataStoreProvider<T> {
     row: T,
     sorts?: FieldSortDefinition<T>[],
     filters?: FieldFilterDefinition<T>[]) {
-      return -1;
+      return of(-1);
     }
 }
 
