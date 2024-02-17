@@ -86,6 +86,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   }
 
   ngAfterViewInit(): void {
+    // Set DataStoreProvider to value defined in parent element
     this.dataSource.dataStoreProvider = this.dataStoreProvider;
 
     this.sort.multiSortChange
