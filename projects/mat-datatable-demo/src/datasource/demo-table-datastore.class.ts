@@ -1,10 +1,9 @@
+import { TrackByFunction } from '@angular/core';
 import { delay, of } from 'rxjs';
 
 import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
 
 import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition, DataStoreProvider } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
-
-type trackByFn<T> = (index: number, item: T) => number;
 
 /**
  * Datastore for the DemoTable view. This class should
@@ -14,9 +13,9 @@ type trackByFn<T> = (index: number, item: T) => number;
 export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
   private data: DatatableItem[];
   private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
-  private trackBy: trackByFn<DatatableItem>;
+  private trackBy: TrackByFunction<DatatableItem>;
 
-  constructor(myTrackBy: trackByFn<DatatableItem>) {
+  constructor(myTrackBy: TrackByFunction<DatatableItem>) {
     this.data = [ ...EXAMPLE_DATA as DatatableItem[] ];
     this.currentSortingDefinitions = [];
     this.trackBy = myTrackBy;
