@@ -1,5 +1,3 @@
-* fix tests
-* add tests for trackBy
 * add / delete entries => redraw table
 * demo - resize table to viewport
 * add cypress tests

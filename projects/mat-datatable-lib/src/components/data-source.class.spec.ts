@@ -2,7 +2,7 @@
 /* eslint-disable jasmine/no-expect-in-setup-teardown */
 
 import { TrackByFunction } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 
 import {
@@ -27,6 +27,26 @@ interface User {
   id: number;
   name: string;
 }
+
+interface Atom {
+  id: number;
+  name: string;
+  weight: number;
+  symbol: string;
+}
+
+const sortableDataset = [
+  { id: 5, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+  { id: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+  { id: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+  { id: 2, name: 'Helium', weight: 6.1234, symbol: 'He' },
+  { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' },
+  { id: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+  { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+  { id: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
+  { id: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+  { id: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' }
+] as Atom[];
 
 describe('TableVirtualScrollDataSource', () => {
   let testScheduler: TestScheduler;
@@ -735,6 +755,129 @@ describe('TableVirtualScrollDataSource', () => {
     // Complete source
     dataSource.disconnect();
   });
+
+  it('should get index of row in datasource', done => {
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
+
+    const rowToGetIndexFor = { id: 55, name: 'User0055' } as User;
+    dataSource.rowToIndex(rowToGetIndexFor)
+      .subscribe(index => {
+        expect(index).toBe(55);
+        done();
+      });
+  });
+
+  it('should get index of row in datasource with sorting', done => {
+    const fakeDataStore = new FakeUserDataStore<Atom>();
+    fakeDataStore.dataSet = sortableDataset;
+    const dataSource = new TableVirtualScrollDataSource<Atom>(fakeDataStore);
+    const sorts = [{ fieldName:'name', sortDirection:'desc' }] as FieldSortDefinition<Atom>[];
+    dataSource.sorts = sorts;
+
+    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' } as Atom;
+    dataSource.rowToIndex(rowToGetIndexFor)
+      .subscribe(index => {
+        expect(index).toBe(3);
+        done();
+      });
+  });
+
+  it('should get index of row in datastore with filtering', done => {
+    const fakeDataStore = new FakeUserDataStore<Atom>();
+    fakeDataStore.dataSet = sortableDataset;
+    const dataSource = new TableVirtualScrollDataSource<Atom>(fakeDataStore);
+    const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
+    dataSource.filters = filters;
+
+    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' } as Atom;
+    dataSource.rowToIndex(rowToGetIndexFor)
+      .subscribe(index => {
+        expect(index).toBe(1);
+        done();
+      });
+  });
+
+  it('should get index of row in datastore with sorting and filtering', done => {
+    const fakeDataStore = new FakeUserDataStore<Atom>();
+    fakeDataStore.dataSet = sortableDataset;
+    const dataSource = new TableVirtualScrollDataSource<Atom>(fakeDataStore);
+    const sorts = [{ fieldName:'name', sortDirection:'desc' }, { fieldName:'id', sortDirection:'desc' }] as FieldSortDefinition<Atom>[];
+    dataSource.sorts = sorts;
+    const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
+    dataSource.filters = filters;
+
+    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' } as Atom;
+    dataSource.rowToIndex(rowToGetIndexFor)
+      .subscribe(index => {
+        expect(index).toBe(0);
+        done();
+      });
+  });
+
+  it('should get index of not existing row in datastore with sorting and filtering', done => {
+    const fakeDataStore = new FakeUserDataStore<Atom>();
+    fakeDataStore.dataSet = sortableDataset;
+    const dataSource = new TableVirtualScrollDataSource<Atom>(fakeDataStore);
+    const sorts = [{ fieldName:'name', sortDirection:'desc' }] as FieldSortDefinition<Atom>[];
+    dataSource.sorts = sorts;
+    const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
+    dataSource.filters = filters;
+
+    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' } as Atom;
+    dataSource.rowToIndex(rowToGetIndexFor)
+      .subscribe(index => {
+        expect(index).toBe(-1);
+        done();
+      });
+  });
+
+  it('should indicate loading when getting index of row in datastore', () => {
+    const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
+    const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
+
+    const rangeToDisplay = new Subject<RequestRowsRange>;
+    dataSource.attachVirtualScroller(rangeToDisplay);
+    dataSource.connect();
+    let numberOfCalls = 0;
+
+    testScheduler.run(helpers => {
+      const { cold, expectObservable, flush } = helpers;
+      const sourceMarbles = '-1-|';
+      const expectedMarbles = 'ab';
+
+      // rxjs marble tests cannot get values emitted by setTimeout;
+      // the data-source emits true on loading$ via setTimeout to avoid
+      // "ExpressionChangedAfterItHasBeenCheckedError"
+      const expectedValues = {
+        a: false,
+        b: false
+      };
+
+      const source = cold(sourceMarbles, {
+        1: { id: 55, name: 'User0055' } as User
+      });
+
+      // Use source to make dataSource emit values
+      source.subscribe(
+        row => {
+          if (row !== undefined) {
+            dataSource.rowToIndex(row)
+             .subscribe(() => numberOfCalls++);
+          }
+        }
+      );
+
+      expectObservable(dataSource.loading$).toBe(expectedMarbles, expectedValues);
+
+      flush();
+
+      expect(numberOfCalls).toBe(1);
+    });
+
+    // Complete source
+    dataSource.disconnect();
+  });
 });
 
 class FakeUserDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
@@ -770,7 +913,7 @@ class FakeUserDataStore<DatatableItem> implements DataStoreProvider<DatatableIte
     rowsRange: RequestRowsRange,
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
-  ) {
+  ): Observable<Page<DatatableItem>> {
     const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
     const startIndex = rowsRange.startRowIndex;
     const resultingData = selectedDataset.slice(startIndex, startIndex + rowsRange.numberOfRows);
@@ -798,9 +941,16 @@ class FakeUserDataStore<DatatableItem> implements DataStoreProvider<DatatableIte
     row: DatatableItem,
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
-  ) {
+  ): Observable<number> {
     const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
     return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
+  }
+
+  public set dataSet(newDataset : DatatableItem[]) {
+    if (newDataset && Array.isArray(newDataset)) {
+      this.fakeDataset = newDataset;
+      this._datastoreSize = newDataset.length;
+    }
   }
 
   private getRawDataSortedFiltered(

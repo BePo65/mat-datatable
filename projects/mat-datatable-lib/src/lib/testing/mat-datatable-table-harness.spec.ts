@@ -1,11 +1,11 @@
 import { HarnessLoader, parallel } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component, ViewChild } from '@angular/core';
+import { Component, TrackByFunction, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../../interfaces/datastore-provider.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../../interfaces/datastore-provider.interface';
 import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
 import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
@@ -333,6 +333,152 @@ type TableHarnessTestRow = {
   symbol: string;
 }
 
+class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
+  private trackBy: TrackByFunction<DatatableItem>;
+  private data: DatatableItem[];
+  private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
+  private unsortedData: DatatableItem[];
+
+  constructor(testData: DatatableItem[], myTrackBy?: TrackByFunction<DatatableItem>) {
+    this.unsortedData = structuredClone(testData) as DatatableItem[];
+    this.data = structuredClone(testData) as DatatableItem[];
+    this.currentSortingDefinitions = [];
+    this.trackBy = myTrackBy ?? this.defaultTrackBy;
+  }
+
+  /**
+   * Get a page of data from the datastore.
+   * @param rowsRange - data to be selected
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns observable for the data for the mat-datatable
+   */
+  getPagedData(
+    rowsRange: RequestRowsRange,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+
+    // Save sorted and filtered data for later use
+    this.data = selectedDataset;
+
+    const startIndex = rowsRange.startRowIndex;
+    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
+    const result = {
+      content: resultingData,
+      startRowIndex: startIndex,
+      returnedElements: resultingData.length,
+      totalElements: this.unsortedData.length,
+      totalFilteredElements: selectedDataset.length
+    } as Page<DatatableItem>;
+    return of(result);
+  }
+
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   */
+  indexOfRow(
+    row: DatatableItem,
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ): Observable<number> {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
+  }
+
+  /**
+   * Remove all data from the datastore.
+   */
+  removeAllData() {
+    this.unsortedData = [] as DatatableItem[];
+    this.data = [] as DatatableItem[];
+    this.currentSortingDefinitions = [];
+  }
+
+  private getRawDataSortedFiltered(
+    sorts?: FieldSortDefinition<DatatableItem>[],
+    filters?: FieldFilterDefinition<DatatableItem>[]
+  ) {
+    let selectedDataset = structuredClone(this.unsortedData) as DatatableItem[];
+
+    // Filter data
+    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
+      selectedDataset = selectedDataset.filter((row: DatatableItem) => {
+        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
+          if (currentFilter.value !== undefined) {
+            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
+          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
+            isSelected ||= (
+              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
+              (row[currentFilter.fieldName] <= currentFilter.valueTo)
+            );
+          }
+          return isSelected;
+        }, false);
+      });
+    }
+
+    // Sort data - only the first entry of the definitions is used
+    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
+      this.currentSortingDefinitions = sorts;
+      selectedDataset.sort(this.compareFn);
+    }
+
+    return selectedDataset;
+  }
+
+  /**
+   * Default implementation of trackBy function.
+   * This function is required, as in strict mode 'trackBy'
+   * must not be undefined.
+   * @param this - required by @typescript-eslint/unbound-method
+   * @param index - index of the row
+   * @param item - object with the row data
+   * @returns stringified content of the item
+   */
+  private defaultTrackBy(this: void, index: number, item: DatatableItem): string {
+    return JSON.stringify(item);
+  }
+
+  /**
+   * Compare function for sorting the current dataset.
+   * @param a - row to compare against
+   * @param b - row to compare with parameter a
+   * @returns 0:a===b; -1:a<b; 1:a>b
+   */
+  private compareFn = (a: DatatableItem, b: DatatableItem): number => {
+    let result = 0;
+    for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
+      const fieldName = this.currentSortingDefinitions[i].fieldName;
+      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const valueA = a[fieldName] as string | number;
+      const valueB = b[fieldName] as string | number;
+      result = this.compare(valueA, valueB, isAsc);
+      if (result !== 0) {
+        break;
+      }
+    }
+    return result;
+  };
+
+  /**
+   * Simple sort comparator for string | number values.
+   * @param a - 1st parameter to compare
+   * @param b - 2nd parameter to compare
+   * @param isAsc - is this an ascending comparison
+   * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
+   */
+  private compare(a: string | number, b: string | number, isAsc: boolean): number {
+    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+  }
+}
+
 // HTML for mat-datatable requires surrounding div with height set
 @Component({
   template: `
@@ -341,9 +487,11 @@ type TableHarnessTestRow = {
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
       [rowSelectionMode]="currentSelectionMode"
-      [datastoreGetter]="getData"
+      [dataStoreProvider]="dataStore"
+      [trackBy]="trackBy"
       (rowClick)="onRowClick($event)"
-      (sortChange)="onSortChanged($event)">
+      (sortChange)="onSortChanged($event)"
+      >
       loading...
     </mat-datatable>
   </div>
@@ -437,10 +585,12 @@ class TableWithoutFooterHarnessTestComponent {
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
       [rowSelectionMode]="currentSelectionMode"
-      [datastoreGetter]="getData"
+      [withFooter]="true"
+      [dataStoreProvider]="dataStore"
+      [trackBy]="trackBy"
       (rowClick)="onRowClick($event)"
       (sortChange)="onSortChanged($event)"
-      [withFooter]="true">
+      >
       loading...
     </mat-datatable>
   </div>
@@ -525,99 +675,3 @@ class TableWithFooterHarnessTestComponent {
     this.currentSorts$.next(currentSorts);
   }
 }
-
-class TableHarnessTestDataStore<DatatableItem> {
-  private data: DatatableItem[];
-  private currentSortingDefinitions: FieldSortDefinition<DatatableItem>[] = [];
-  private unsortedData: DatatableItem[];
-
-  constructor(testData: DatatableItem[]) {
-    this.unsortedData = structuredClone(testData) as DatatableItem[];
-    this.data = structuredClone(testData) as DatatableItem[];
-    this.currentSortingDefinitions = [];
-  }
-
-  /**
-   * Get a page of data from the datastore.
-   * @param rowsRange - data to be selected
-   * @param sorts - optional array of objects with the sorting definition
-   * @param filters - optional array of objects with the filter definition
-   * @returns observable for the data for the mat-datatable
-   */
-  getPagedData(
-    rowsRange: RequestRowsRange,
-    sorts?: FieldSortDefinition<DatatableItem>[],
-    filters?: FieldFilterDefinition<DatatableItem>[] // eslint-disable-line @typescript-eslint/no-unused-vars
-  ) {
-    if ((sorts !== undefined) &&
-         !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
-         (rowsRange.numberOfRows !== 0)) {
-      this.currentSortingDefinitions = sorts;
-      this.data = this.getSortedData();
-    }
-    const startIndex = rowsRange.startRowIndex;
-    const resultingData = this.data.slice(startIndex, startIndex + rowsRange.numberOfRows);
-    const result = {
-      content: resultingData,
-      startRowIndex: startIndex,
-      returnedElements: resultingData.length,
-      totalElements: this.data.length,
-      totalFilteredElements: this.data.length
-    } as Page<DatatableItem>;
-    return of(result);
-  }
-
-  /**
-   * Remove all data from the datastore.
-   */
-  removeAllData() {
-    this.unsortedData = [] as DatatableItem[];
-    this.data = [] as DatatableItem[];
-    this.currentSortingDefinitions = [];
-  }
-
-  /**
-   * Compare 2 sort definitions.
-   * @param a - 1st sort definition
-   * @param b - 2nd sort definition
-   * @returns true= both definitions are equal
-   */
-  private areSortDefinitionsEqual(a: FieldSortDefinition<DatatableItem>[], b: FieldSortDefinition<DatatableItem>[]): boolean {
-    return a.length === b.length &&
-    a.every((element, index) => (element.fieldName === b[index].fieldName) &&
-      element.sortDirection === b[index].sortDirection);
-  }
-
-  private getSortedData(): DatatableItem[] {
-    const baseData = structuredClone(this.unsortedData) as DatatableItem[];
-    if (!this.currentSortingDefinitions || this.currentSortingDefinitions.length === 0) {
-      return baseData;
-    }
-
-    return baseData.sort((a, b) => {
-      let result = 0;
-      for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
-        const fieldName = this.currentSortingDefinitions[i].fieldName;
-        const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
-        const valueA = a[fieldName] as string | number;
-        const valueB = b[fieldName] as string | number;
-        result = compare(valueA, valueB, isAsc);
-        if (result !== 0) {
-          break;
-        }
-      }
-      return result;
-    });
-  }
-}
-
-/**
- * Simple sort comparator for string | number values.
- * @param a - 1st parameter to compare
- * @param b - 2nd parameter to compare
- * @param isAsc - is this an ascending comparison
- * @returns comparison result
- */
-const compare = (a: string | number, b: string | number, isAsc: boolean): number => {
-  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
-};

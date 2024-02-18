@@ -1,12 +1,12 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component, ViewChild } from '@angular/core';
+import { Component, TrackByFunction, ViewChild } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { BehaviorSubject, first, of } from 'rxjs';
+import { BehaviorSubject, first, Observable, of } from 'rxjs';
 
 import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition } from '../interfaces/datastore-provider.interface';
+import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
@@ -800,15 +800,17 @@ describe('MatDatatableComponent', () => {
   });
 });
 
-class StaticTableDataStore<TRow> {
+class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
+  private trackBy: TrackByFunction<TRow>;
   private data: TRow[];
   private currentSortingDefinitions: FieldSortDefinition<TRow>[];
   private unsortedData: TRow[];
 
-  constructor(testData: TRow[]) {
+  constructor(testData: TRow[], myTrackBy?: TrackByFunction<TRow>) {
     this.unsortedData = structuredClone(testData) as TRow[];
     this.data = structuredClone(testData) as TRow[];
     this.currentSortingDefinitions = [];
+    this.trackBy = myTrackBy ?? this.defaultTrackBy;
   }
 
   /**
@@ -823,36 +825,7 @@ class StaticTableDataStore<TRow> {
     sorts?: FieldSortDefinition<TRow>[],
     filters?: FieldFilterDefinition<TRow>[]
   ) {
-    let selectedDataset = structuredClone(this.unsortedData) as TRow[];
-
-    // Filter data
-    if ((filters !== undefined) &&
-        Array.isArray(filters) &&
-        (filters.length > 0)) {
-      selectedDataset = selectedDataset.filter((row: TRow) => {
-        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<TRow>) => {
-          if (currentFilter.value !== undefined) {
-            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
-          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
-            isSelected ||= (
-              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
-              (row[currentFilter.fieldName] <= currentFilter.valueTo)
-              );
-          }
-          return isSelected;
-        }, false);
-      });
-    }
-
-    // Sort data
-    if ((sorts !== undefined) &&
-        Array.isArray(sorts) &&
-        (sorts.length > 0) &&
-        !this.areSortDefinitionsEqual(this.currentSortingDefinitions, sorts) &&
-        (rowsRange.numberOfRows !== 0)) {
-      this.currentSortingDefinitions = sorts;
-      selectedDataset.sort(this.compareFn);
-    }
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
 
     // Save sorted and filtered data for later use
     this.data = selectedDataset;
@@ -864,9 +837,26 @@ class StaticTableDataStore<TRow> {
       startRowIndex: startIndex,
       returnedElements: resultingData.length,
       totalElements: this.unsortedData.length,
-      totalFilteredElements: this.data.length
+      totalFilteredElements: selectedDataset.length
     } as Page<TRow>;
     return of(result);
+  }
+
+  /**
+   * Get the relative index of a row in the datastore (0..n) respecting
+   * sorting and filtering.
+   * @param row - row to get the index for
+   * @param sorts - optional array of objects with the sorting definition
+   * @param filters - optional array of objects with the filter definition
+   * @returns index of the row in the datastore (0..n-1) or -1=row not in data store
+   */
+  indexOfRow(
+    row: TRow,
+    sorts?: FieldSortDefinition<TRow>[],
+    filters?: FieldFilterDefinition<TRow>[]
+  ): Observable<number> {
+    const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
+    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
   }
 
   getRow(rowIndex: number, fromSortedRows = false) {
@@ -881,16 +871,50 @@ class StaticTableDataStore<TRow> {
     return source[rowIndex];
   }
 
+  private getRawDataSortedFiltered(
+    sorts?: FieldSortDefinition<TRow>[],
+    filters?: FieldFilterDefinition<TRow>[]
+  ) {
+    let selectedDataset = structuredClone(this.unsortedData) as TRow[];
+
+    // Filter data
+    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
+      selectedDataset = selectedDataset.filter((row: TRow) => {
+        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<TRow>) => {
+          if (currentFilter.value !== undefined) {
+            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
+          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
+            isSelected ||= (
+              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
+              (row[currentFilter.fieldName] <= currentFilter.valueTo)
+            );
+          }
+          return isSelected;
+        }, false);
+      });
+    }
+
+    // Sort data - only the first entry of the definitions is used
+    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
+// TODO must be set even if sorts === []
+      this.currentSortingDefinitions = sorts;
+      selectedDataset.sort(this.compareFn);
+    }
+
+    return selectedDataset;
+  }
+
   /**
-   * Compare 2 sort definitions.
-   * @param a - 1st sort definition
-   * @param b - 2nd sort definition
-   * @returns true= both definitions are equal
+   * Default implementation of trackBy function.
+   * This function is required, as in strict mode 'trackBy'
+   * must not be undefined.
+   * @param this - required by @typescript-eslint/unbound-method
+   * @param index - index of the row
+   * @param item - object with the row data
+   * @returns stringified content of the item
    */
-  private areSortDefinitionsEqual(a: FieldSortDefinition<TRow>[], b: FieldSortDefinition<TRow>[]): boolean {
-    return a.length === b.length &&
-    a.every((element, index) => (element.fieldName === b[index].fieldName) &&
-      element.sortDirection === b[index].sortDirection);
+  private defaultTrackBy(this: void, index: number, item: TRow): string {
+    return JSON.stringify(item);
   }
 
   /**
@@ -906,13 +930,24 @@ class StaticTableDataStore<TRow> {
       const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
       const valueA = a[fieldName] as string | number;
       const valueB = b[fieldName] as string | number;
-      result = compare(valueA, valueB, isAsc);
+      result = this.compare(valueA, valueB, isAsc);
       if (result !== 0) {
         break;
       }
     }
     return result;
   };
+
+  /**
+   * Simple sort comparator for string | number values.
+   * @param a - 1st parameter to compare
+   * @param b - 2nd parameter to compare
+   * @param isAsc - is this an ascending comparison
+   * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
+   */
+  private compare(a: string | number, b: string | number, isAsc: boolean): number {
+    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+  }
 }
 
 type DatatableTestRow = {
@@ -977,11 +1012,13 @@ const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
       [rowSelectionMode]="currentSelectionMode"
-      [datastoreGetter]="getData"
+      [withFooter]="true"
+      [dataStoreProvider]="dataStore"
+      [trackBy]="trackBy"
       (rowClick)="onRowClick($event)"
       (rowSelectionChange)="onRowSelectionChange($event)"
       (sortChange)="onSortChanged($event)"
-      [withFooter]="true">
+      >
       No data to display.
     </mat-datatable>
   </div>
@@ -993,7 +1030,7 @@ class DatatableTestComponent {
   public lastClickedRowAsString = '-';
   public selectedRowsAsString = '-';
 
-  protected dataStore = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
+  protected dataStore = new StaticTableDataStore<DatatableTestRow>(datatableTestData, this.trackBy);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinition[] = [];
@@ -1013,10 +1050,9 @@ class DatatableTestComponent {
     return this.dataStore.getRow(rowIndex, fromSortedRows);
   }
 
-  // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
-    return this.dataStore.getPagedData(rowsRange, sorts, filters);
-  };
+  protected trackBy(this: void, index: number, item: DatatableTestRow) {
+    return item?.position ?? -1;
+  }
 
   protected onRowClick($event: DatatableTestRow) {
     if ($event !== undefined) {
@@ -1050,10 +1086,12 @@ class DatatableTestComponent {
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
       [rowSelectionMode]="currentSelectionMode"
-      [datastoreGetter]="getData"
+      [withFooter]="true"
+      [dataStoreProvider]="dataStore"
+      [trackBy]="trackBy"
       (rowClick)="onRowClick($event)"
       (sortChange)="onSortChanged($event)"
-      [withFooter]="true">
+      >
       No data to display.
     </mat-datatable>
   </div>
@@ -1061,7 +1099,7 @@ class DatatableTestComponent {
   styles: ['.content-table { height: 400px; }']
 })
 class DatatableEmptyTestComponent {
-  dataStore = new StaticTableDataStore<DatatableTestRow>([] as DatatableTestRow[]);
+  dataStore = new StaticTableDataStore<DatatableTestRow>([] as DatatableTestRow[], this.trackBy);
   protected columnDefinitions = datatableTestColumnDefinitions;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts: MatSortDefinition[] = [];
@@ -1069,10 +1107,9 @@ class DatatableEmptyTestComponent {
   protected currentSelectionMode: RowSelectionType = 'none';
   protected selectedRowsAsString = '-';
 
-  // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
-    return this.dataStore.getPagedData(rowsRange, sorts, filters);
-  };
+  protected trackBy(this: void, index: number, item: DatatableTestRow) {
+    return item?.position ?? -1;
+  }
 
   protected onRowClick($event: DatatableTestRow) {
     this.selectedRowsAsString = $event.name;
@@ -1090,17 +1127,21 @@ class DatatableEmptyTestComponent {
     <mat-datatable #testTable1
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
-      [datastoreGetter]="getData1"
+      [withFooter]="true"
+      [dataStoreProvider]="dataStore1"
+      [trackBy]="trackBy"
       (sortChange)="onSortChanged1($event)"
-      [withFooter]="true">
+      >
       No data to display.
     </mat-datatable>
     <mat-datatable #testTable2
       [columnDefinitions]="columnDefinitions"
       [displayedColumns]="displayedColumns"
-      [datastoreGetter]="getData2"
+      [withFooter]="true"
+      [dataStoreProvider]="dataStore2"
+      [trackBy]="trackBy"
       (sortChange)="onSortChanged2($event)"
-      [withFooter]="true">
+      >
       No data to display.
     </mat-datatable>
   </div>
@@ -1111,8 +1152,8 @@ class DatatableDoubleTestComponent {
   @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;
   @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow>;
 
-  dataStore1 = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
-  dataStore2 = new StaticTableDataStore<DatatableTestRow>(datatableTestData);
+  dataStore1 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData) as DatatableTestRow[], this.trackBy);
+  dataStore2 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData) as DatatableTestRow[], this.trackBy);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinition[] = [];
@@ -1120,15 +1161,9 @@ class DatatableDoubleTestComponent {
   protected currentSorts2: MatSortDefinition[] = [];
   protected readonly currentSorts2$ = new BehaviorSubject<MatSortDefinition[]>([]);
 
-  // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData1 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
-    return this.dataStore1.getPagedData(rowsRange, sorts, filters);
-  };
-
-  // arrow function is required to give dataStore.getPagedData the correct 'this'
-  protected getData2 = (rowsRange: RequestRowsRange, sorts?: FieldSortDefinition<DatatableTestRow>[], filters?: FieldFilterDefinition<DatatableTestRow>[]) => {
-    return this.dataStore2.getPagedData(rowsRange, sorts, filters);
-  };
+  protected trackBy(this: void, index: number, item: DatatableTestRow) {
+    return item?.position ?? -1;
+  }
 
   protected onSortChanged1(currentSorts: MatSortDefinition[]) {
     this.currentSorts1 = currentSorts;
@@ -1139,14 +1174,3 @@ class DatatableDoubleTestComponent {
     this.currentSorts2$.next(currentSorts);
   }
 }
-
-/**
- * Simple sort comparator for string | number values.
- * @param a - 1st parameter to compare
- * @param b - 2nd parameter to compare
- * @param isAsc - is this an ascending comparison
- * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
- */
-const compare = (a: string | number, b: string | number, isAsc: boolean): number => {
-  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
-};
