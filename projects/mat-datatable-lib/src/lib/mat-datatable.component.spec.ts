@@ -895,10 +895,11 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     }
 
     // Sort data - only the first entry of the definitions is used
-    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
-// TODO must be set even if sorts === []
+    if ((sorts !== undefined) && Array.isArray(sorts)) {
       this.currentSortingDefinitions = sorts;
-      selectedDataset.sort(this.compareFn);
+      if ((sorts.length > 0)) {
+        selectedDataset.sort(this.compareFn);
+      }
     }
 
     return selectedDataset;

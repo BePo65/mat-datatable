@@ -120,9 +120,11 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     }
 
     // Sort data
-    if ((sorts !== undefined) && Array.isArray(sorts) && (sorts.length > 0)) {
+    if ((sorts !== undefined) && Array.isArray(sorts)) {
       this.currentSortingDefinitions = sorts;
-      selectedDataset.sort(this.compareFn);
+      if ((sorts.length > 0)) {
+        selectedDataset.sort(this.compareFn);
+      }
     }
 
     return selectedDataset;
