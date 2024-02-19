@@ -289,6 +289,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
 
+  // Demo of changing data store
+  protected onAddData() {
+    // TODO add data
+  }
+  protected onDeleteData() {
+    // TODO delete data
+  }
+  protected onResetData() {
+    // TODO reset set to original data
+  }
+
   /**
    * Get row from raw data selected by its userId column.
    * @param rowId - userId of the row to select
