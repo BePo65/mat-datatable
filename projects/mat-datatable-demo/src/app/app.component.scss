@@ -42,8 +42,8 @@
   margin: 0.5em 0 0 1em;
 }
 
-.activated-row {
-  margin: 1.5em 0 0 1em;
+.activate-row-container {
+  margin: .5em 0 0 1em;
 }
 
 .activation-button-container,
@@ -56,7 +56,7 @@
   margin: 0 1em 0 0;
 }
 
-.activated-row-container{
+.activated-row-container {
   margin: 0 0.75em 0 1em;
 }
 
@@ -78,8 +78,14 @@
 }
 
 .sort-button,
-.selection-button {
+.selection-button,
+.filter-button,
+.change-content-button {
   margin: 0 1em 1em 0;
+}
+
+.selected-rows-container {
+  margin: 1em 0 0 1em;
 }
 
 .selected-rows-label  {
@@ -95,9 +101,13 @@
 }
 
 .filter-button-container {
-  margin: 1.5em 0 -14px 1em;
+  margin: 0 0 0 1em;
 }
 
 .current-filter-label {
   margin: 0 0.25em 0 1em;
+}
+
+.change-content-container{
+  margin: .5em 0 0 1em;
 }
