@@ -1,5 +1,12 @@
-.page-title {
+.header {
+  display: grid;
+  grid-template-columns: auto max-content;
   margin: 0.25em 0.5em 0.75em;
+}
+
+.with-footer-toggle {
+  justify-self: end;
+  margin: 1.9rem 2rem 0 0;
 }
 
 .content-table {
@@ -93,8 +100,4 @@
 
 .current-filter-label {
   margin: 0 0.25em 0 1em;
-}
-
-.with-footer-toggle {
-  margin: 2em 0 0.75em 1em;
 }
