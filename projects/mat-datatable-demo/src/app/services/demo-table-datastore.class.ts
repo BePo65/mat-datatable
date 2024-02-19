@@ -1,7 +1,7 @@
 import { TrackByFunction } from '@angular/core';
 import { delay, of } from 'rxjs';
 
-import EXAMPLE_DATA from '../app/services/demo-table.mock.data';
+import EXAMPLE_DATA from './demo-table.mock.data';
 
 import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition, DataStoreProvider } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
 

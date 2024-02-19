@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
-import { DemoTableDataStore } from '../datasource/demo-table-datastore.class';
+import { DemoTableDataStore } from './services/demo-table-datastore.class';
 
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
