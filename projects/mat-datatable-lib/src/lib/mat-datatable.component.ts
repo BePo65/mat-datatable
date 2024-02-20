@@ -198,6 +198,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     }
   }
 
+  reloadTable() {
+    this.dataSource.reloadSizeOfDatastore();
+  }
+
   /**
    * Gets 'ngStyle' property of table header cell.
    * This method creates the style to set the column width.

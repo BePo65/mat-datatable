@@ -3,7 +3,6 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { DemoTableDataStore } from './services/demo-table-datastore.class';
-
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
 import {
@@ -98,6 +97,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected numberOfRows = '-';
   protected numberOfFilteredRows = '-';
   protected firstVisibleRow = '-';
+  protected datasourceModified = false;
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
@@ -291,13 +291,69 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo of changing data store
   protected onAddData() {
-    // TODO add data
+    const newRows = [
+      {
+        'userId': 205,
+        'firstName': 'Gerty',
+        'lastName': 'Briiginshaw',
+        'email': 'gbriiginshaw0@nytimes.com',
+        'birthday': new Date('2023-11-21'),
+        'description': 'Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros.'
+      },
+      {
+        'userId': 138,
+        'firstName': 'Susannah',
+        'lastName': 'Stellin',
+        'email': 'sstellin1@booking.com',
+        'birthday': new Date('2023-08-02'),
+        'description': 'Sed sagittis.'
+      },
+      {
+        'userId': 301,
+        'firstName': 'Buckie',
+        'lastName': 'Beardall',
+        'email': 'bbeardall2@tripod.com',
+        'birthday': new Date('2023-10-14'),
+        'description': 'Pellentesque ultrices mattis odio. Donec vitae nisi.'
+      },
+      {
+        'userId': 114,
+        'firstName': 'Winifred',
+        'lastName': 'Mabbott',
+        'email': 'wmabbott3@artisteer.com',
+        'birthday': new Date('2023-10-24'),
+        'description': 'Morbi non lectus.'
+      },
+      {
+        'userId': 257,
+        'firstName': 'Tadd',
+        'lastName': 'Tindall',
+        'email': 'ttindall4@who.int',
+        'birthday': new Date('2023-11-22'),
+        'description': 'Pellentesque eget nunc.'
+      },
+      {
+        'userId': 146,
+        'firstName': 'Debora',
+        'lastName': 'Lawry',
+        'email': 'dlawry5@tamu.edu',
+        'birthday': new Date('2023-05-23'),
+        'description': 'In hac habitasse platea dictumst.'
+      }
+    ] as DemoTableItem[];
+    this.dataStore.insertRows(100, newRows);
+    this.table.reloadTable();
+    this.datasourceModified = true;
   }
   protected onDeleteData() {
-    // TODO delete data
+    this.dataStore.deleteRows(100, 3);
+    this.table.reloadTable();
+    this.datasourceModified = true;
   }
   protected onResetData() {
-    // TODO reset set to original data
+    this.dataStore.resetData();
+    this.table.reloadTable();
+    this.datasourceModified = false;
   }
 
   /**

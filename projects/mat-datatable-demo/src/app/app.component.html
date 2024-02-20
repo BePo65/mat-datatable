@@ -77,8 +77,8 @@
     <span class="current-filter-label">Current filter:</span><span>{{currentFilterAsString}}</span>
   </div>
   <div class="change-content-container">
-    <button mat-raised-button class="change-content-button" (click)="onResetData()">Reset data</button>
-    <button mat-raised-button class="change-content-button" (click)="onAddData()">Add rows</button>
-    <button mat-raised-button class="change-content-button" (click)="onDeleteData()">Remove rows</button>
+    <button mat-raised-button class="change-content-button" [disabled]="!datasourceModified" (click)="onResetData()">Reset data</button>
+    <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onAddData()">Add rows</button>
+    <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onDeleteData()">Remove rows</button>
   </div>
 </div>
