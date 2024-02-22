@@ -2,8 +2,11 @@
  * Public API Surface of mat-datatable
  */
 
-// MatDatatableComponent, MatDatatableModule, Sort
-export * from './lib';
+// MatDatatableComponent
+export * from './lib/mat-datatable.component';
+
+// MatDatatableModule
+export * from './lib/mat-datatable.module';
 
 export {
   MatMultiSort,
@@ -11,6 +14,8 @@ export {
   MatMultiSortModule,
   SortDirectionAscDesc
 } from './directives/datatable-sort';
+
+export { Sort } from '@angular/material/sort';
 
 // MatColumnDefinition<TRowData>
 export * from './interfaces/datatable-column-definition.interface';
