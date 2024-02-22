@@ -3,10 +3,16 @@
  */
 
 // MatDatatableHarness, MatDatatableHarnessColumnsText
-// MatHeaderRowHarness, MatRowHarness
-// MatRowCellHarness, MatHeaderCellHarness
+export * from '../lib/testing/mat-datatable-table-harness';
+
+// _MatRowHarnessBase, MatFooterRowHarness, MatHeaderRowHarness, MatRowHarness
+export * from '../lib/testing/mat-datatable-row-harness';
+
+// _MatCellHarnessBase, MatRowCellHarness, MatFooterCellHarness, MatHeaderCellHarness
+export * from '../lib/testing/mat-datatable-cell-harness';
+
 // CellHarnessFilters, MatDatatableHarnessFilters, RowHarnessFilters
-export * from '../lib/testing';
+export * from '../lib/testing/mat-datatable-harness-filters';
 
 // DomSortingDefinition, MatMultiSortHarness, MultiSortHarnessFilters,
 // MatMultiSortHeaderHarness, MultiSortHeaderHarnessFilters

@@ -9,11 +9,11 @@ import { MatMultiSortHarness } from '../directives/datatable-sort/testing';
 import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
+import { MatDatatableHarness, MatHeaderRowHarness, MatFooterRowHarness } from '../testing';
 
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
 import { MatDatatableModule } from './mat-datatable.module';
 import SINGLE_PAGE_DATA from './mocking-data/mock-data.simple';
-import { MatDatatableHarness, MatFooterRowHarness, MatHeaderRowHarness } from './testing';
 
 describe('MatDatatableComponent', () => {
   describe('Table creation', () => {
