@@ -154,4 +154,6 @@ For details of the commit messages format see [Contributing to Angular](https://
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
+This project uses icons from the [Google Material Icons Library](https://developers.google.com/fonts/docs/material_icons) that are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

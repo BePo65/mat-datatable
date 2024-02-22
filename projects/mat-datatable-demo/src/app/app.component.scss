@@ -1,3 +1,11 @@
+.main {
+  display: flex;
+  flex-flow: column;
+  height: 100vH;
+  overflow: hidden;
+  width: 100vw;
+}
+
 .header {
   display: grid;
   grid-template-columns: auto max-content;
@@ -10,8 +18,8 @@
 }
 
 .content-table {
-  height: 400px;
-  margin: 0 1em;
+  flex-grow : 1;
+  margin: 0 1em 1.5em;
   overflow: auto;
 }
 
@@ -110,4 +118,11 @@
 
 .change-content-container{
   margin: .5em 0 0 1em;
+}
+
+.toggle-buttons-pane-button {
+  bottom: 1em;
+  color: white;
+  position: absolute;
+  right: 1em;
 }

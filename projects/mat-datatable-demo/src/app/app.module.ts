@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -19,9 +20,10 @@ import { MatDatatableModule } from 'projects/mat-datatable-lib/src';
     AppComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule,
+    HttpClientModule,
     MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,

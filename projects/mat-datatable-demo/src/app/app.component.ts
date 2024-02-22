@@ -1,5 +1,8 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { DemoTableDataStore } from './services/demo-table-datastore.class';
@@ -16,7 +19,18 @@ import { FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('slideInBottom', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('500ms ease-out', style({ transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
+      ])
+    ])
+  ]
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
@@ -98,6 +112,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected numberOfFilteredRows = '-';
   protected firstVisibleRow = '-';
   protected datasourceModified = false;
+  protected buttonsPaneVisible = true;
 
   private currentLocale = 'en-US';
   private headers: Record<string, string> = {};
@@ -105,8 +120,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private formattedDatastoreLengths = 'filtered {0} / total {1}';
   private formattedFirstVisibleRow = 'First visible row: {0}';
 
-  constructor() {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
+
+    // Register svg icons
+    iconRegistry.addSvgIcon(
+      'show_button_pane',
+      sanitizer.bypassSecurityTrustResourceUrl('../assets/arrow_upward_FILL0_wght400_GRAD0_opsz24.svg'));
+    iconRegistry.addSvgIcon(
+      'hide_button_pane',
+      sanitizer.bypassSecurityTrustResourceUrl('../assets/arrow_downward_FILL0_wght400_GRAD0_opsz24.svg'));
+
     this.headersTextFromColumnDefinitions();
   }
 
@@ -291,6 +315,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo of changing data store
   protected onAddData() {
+    /* spell-checker: disable */
     const newRows = [
       {
         'userId': 205,
@@ -341,6 +366,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         'description': 'In hac habitasse platea dictumst.'
       }
     ] as DemoTableItem[];
+    /* spell-checker: enable */
     this.dataStore.insertRows(100, newRows);
     this.table.reloadTable();
     this.datasourceModified = true;
@@ -354,6 +380,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.dataStore.resetData();
     this.table.reloadTable();
     this.datasourceModified = false;
+  }
+
+  /**
+   * Toggle display of pane with test buttons.
+   */
+  protected toggleButtonsPane() {
+    this.buttonsPaneVisible = !this.buttonsPaneVisible;
   }
 
   /**

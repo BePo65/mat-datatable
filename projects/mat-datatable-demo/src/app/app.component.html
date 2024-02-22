@@ -1,84 +1,94 @@
-<div class="header">
-  <h1 class="page-title">{{title}}</h1>
-  <mat-slide-toggle class="with-footer-toggle" [checked]="withFooter" (change)="onWithFooterChanged($event)">With footer</mat-slide-toggle>
-</div>
-<div class="content-table mat-elevation-z8">
-  <mat-datatable #datatable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [withFooter]="withFooter"
-    [dataStoreProvider]="dataStore"
-    [trackBy]="trackBy"
-    (rowClick)="onRowClick($event)"
-    (rowSelectionChange)="onRowSelectionChange($event)"
-    (sortChange)="onSortChanged($event)"
-    *mcRerender="withFooter"
+<div class="main">
+  <div class="header">
+    <h1 class="page-title">{{title}}</h1>
+    <mat-slide-toggle class="with-footer-toggle" [checked]="withFooter" (change)="onWithFooterChanged($event)">With footer</mat-slide-toggle>
+  </div>
+  <div class="content-table mat-elevation-z8">
+    <mat-datatable #datatable
+      [columnDefinitions]="columnDefinitions"
+      [displayedColumns]="displayedColumns"
+      [rowSelectionMode]="currentSelectionMode"
+      [withFooter]="withFooter"
+      [dataStoreProvider]="dataStore"
+      [trackBy]="trackBy"
+      (rowClick)="onRowClick($event)"
+      (rowSelectionChange)="onRowSelectionChange($event)"
+      (sortChange)="onSortChanged($event)"
+      *mcRerender="withFooter"
+      >
+      loading...
+    </mat-datatable>
+  </div>
+  <div id="test-buttons" *ngIf="buttonsPaneVisible"  [@slideInBottom]>
+    <div class="current-sort">
+      <span class="current-sort-label">Current sort:</span>
+      <span>
+        <mat-chip-listbox class="current-sort-list" aria-label="Current sorting definition">
+          <mat-chip *ngFor="let sort of currentSorts$ | async" (removed)="removeSort(sort.columnId)">
+            {{headerFromColumnId(sort.columnId)}}, {{sort.direction}}
+            <button matChipRemove [attr.aria-label]="'remove ' + headerFromColumnId(sort.columnId)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-listbox>
+      </span>
+    </div>
+    <div class="sort-button-container">
+      <button mat-raised-button class="sort-button" (click)="onClearSort()">Remove sorts</button>
+      <button mat-raised-button class="sort-button" (click)="onSortId()">Sort by ID</button>
+      <button mat-raised-button class="sort-button" (click)="onSortLastNameFirstNameBirthday()">Sort by lastName, firstName, birthday</button>
+      <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayAsc()">Sort by lastName, birthday</button>
+      <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayDesc()">Sort by lastName, birthday ▼</button>
+      <button mat-raised-button class="sort-button" (click)="onSortBirthdayAsc()">Sort by birthday</button>
+      <button mat-raised-button class="sort-button" (click)="onSortBirthdayDesc()">Sort by birthday ▼</button>
+    </div>
+    <div class="activate-row-container">
+      <span class="activation-button-container">
+        <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
+        <button  mat-raised-button class="activation-button" (click)="onSetActivated(3)">Use 'ID=3' as activated row</button>
+        <button  mat-raised-button class="activation-button" (click)="onSetActivated(98)">Use 'ID=98' as activated row</button>
+      </span>
+      <span class="activated-row-container">
+        <span class="activated-row-label">Active row:</span>
+        <span class="activated-row-value">{{activatedRowAsString}}</span>
+      </span>
+      <span class="activation-button-container-inline">
+        <button  mat-raised-button class="activation-scroll-button" [disabled]="activatedRowAsString==='-'" (click)="onScrollIntoView(table.activatedRow?.userId)">Scroll into view</button>
+      </span>
+    </div>
+    <div class="selected-rows-container">
+      <span class="selection-button-container">
+        <mat-label class="mode-selection-label">Selection mode</mat-label>
+        <mat-form-field appearance="fill" class="mode-selection">
+          <mat-select [(value)]="currentSelectionMode">
+            <mat-option value="none">none</mat-option>
+            <mat-option value="single">single</mat-option>
+            <mat-option value="multi">multi</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
+        <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
+      </span>
+      <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
+    </div>
+    <div class="filter-button-container">
+      <button mat-raised-button class="filter-button" (click)="onClearFilter()">Remove all filter</button>
+      <button mat-raised-button class="filter-button" (click)="onFilterByValue()">Filter by value</button>
+      <button mat-raised-button class="filter-button" (click)="onFilterByRange()">Filter by range</button>
+      <span class="current-filter-label">Current filter:</span><span>{{currentFilterAsString}}</span>
+    </div>
+    <div class="change-content-container">
+      <button mat-raised-button class="change-content-button" [disabled]="!datasourceModified" (click)="onResetData()">Reset data</button>
+      <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onAddData()">Add rows</button>
+      <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onDeleteData()">Remove rows</button>
+    </div>
+  </div>
+  <button mat-mini-fab color="primary"
+    class="toggle-buttons-pane-button"
+    title="{{buttonsPaneVisible ? 'Hide' : 'Show'}} test buttons pane"
+    aria-label="Hide test buttons pane"
+    (click)="toggleButtonsPane()"
     >
-    loading...
-  </mat-datatable>
-</div>
-<div id="test-buttons">
-  <div class="current-sort">
-    <span class="current-sort-label">Current sort:</span>
-    <span>
-      <mat-chip-listbox class="current-sort-list" aria-label="Current sorting definition">
-        <mat-chip *ngFor="let sort of currentSorts$ | async" (removed)="removeSort(sort.columnId)">
-          {{headerFromColumnId(sort.columnId)}}, {{sort.direction}}
-          <button matChipRemove [attr.aria-label]="'remove ' + headerFromColumnId(sort.columnId)">
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip>
-      </mat-chip-listbox>
-    </span>
-  </div>
-  <div class="sort-button-container">
-    <button mat-raised-button class="sort-button" (click)="onClearSort()">Remove sorts</button>
-    <button mat-raised-button class="sort-button" (click)="onSortId()">Sort by ID</button>
-    <button mat-raised-button class="sort-button" (click)="onSortLastNameFirstNameBirthday()">Sort by lastName, firstName, birthday</button>
-    <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayAsc()">Sort by lastName, birthday</button>
-    <button mat-raised-button class="sort-button" (click)="onSortLastNameBirthdayDesc()">Sort by lastName, birthday ▼</button>
-    <button mat-raised-button class="sort-button" (click)="onSortBirthdayAsc()">Sort by birthday</button>
-    <button mat-raised-button class="sort-button" (click)="onSortBirthdayDesc()">Sort by birthday ▼</button>
-  </div>
-  <div class="activate-row-container">
-    <span class="activation-button-container">
-      <button  mat-raised-button class="activation-button" (click)="onClearActivated()">Clear activated row</button>
-      <button  mat-raised-button class="activation-button" (click)="onSetActivated(3)">Use 'ID=3' as activated row</button>
-      <button  mat-raised-button class="activation-button" (click)="onSetActivated(98)">Use 'ID=98' as activated row</button>
-    </span>
-    <span class="activated-row-container">
-      <span class="activated-row-label">Active row:</span>
-      <span class="activated-row-value">{{activatedRowAsString}}</span>
-    </span>
-    <span class="activation-button-container-inline">
-      <button  mat-raised-button class="activation-scroll-button" [disabled]="activatedRowAsString==='-'" (click)="onScrollIntoView(table.activatedRow?.userId)">Scroll into view</button>
-    </span>
-  </div>
-  <div class="selected-rows-container">
-    <span class="selection-button-container">
-      <mat-label class="mode-selection-label">Selection mode</mat-label>
-      <mat-form-field appearance="fill" class="mode-selection">
-        <mat-select [(value)]="currentSelectionMode">
-          <mat-option value="none">none</mat-option>
-          <mat-option value="single">single</mat-option>
-          <mat-option value="multi">multi</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button  mat-raised-button class="selection-button" (click)="onClearSelection()">Clear selection</button>
-      <button  mat-raised-button class="selection-button" (click)="onSetSelection()">Set predefined selection</button>
-    </span>
-    <span class="selected-rows-label">Selected rows:</span><span>{{selectedRowsAsString}}</span>
-  </div>
-  <div class="filter-button-container">
-    <button mat-raised-button class="filter-button" (click)="onClearFilter()">Remove all filter</button>
-    <button mat-raised-button class="filter-button" (click)="onFilterByValue()">Filter by value</button>
-    <button mat-raised-button class="filter-button" (click)="onFilterByRange()">Filter by range</button>
-    <span class="current-filter-label">Current filter:</span><span>{{currentFilterAsString}}</span>
-  </div>
-  <div class="change-content-container">
-    <button mat-raised-button class="change-content-button" [disabled]="!datasourceModified" (click)="onResetData()">Reset data</button>
-    <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onAddData()">Add rows</button>
-    <button mat-raised-button class="change-content-button" [disabled]="datasourceModified" (click)="onDeleteData()">Remove rows</button>
-  </div>
+    <mat-icon svgIcon="{{buttonsPaneVisible ? 'hide_button_pane' : 'show_button_pane'}}"></mat-icon>
+  </button>
 </div>
