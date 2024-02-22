@@ -1,13 +1,12 @@
 /*
   "include": ["../cypress.config.ts"] is required for eslint
-  "types": ["cypress-real-events"] is required for eslint
  */
  {
   "extends": "../tsconfig.app.json",
   "compilerOptions": {
     "inlineSources": false,
     "sourceMap": false,
-    "types": ["cypress-real-events"]
+    "types": []
   },
   "include": [
     "**/*.ts",
