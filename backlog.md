@@ -1,4 +1,9 @@
-* make mat-datatable component the only / main interface (making use of e.g. datasource unnecessary)
-* add all exported elements to public-api.ts
 * add documentation for api to readme (incl. columnDefinition)
 * update README (API) and copy it to lib project
+* publish v15
+* update to angular v16
+* publish v16
+* update to angular v17
+* change library to standalone
+* publish v17
+* add ssr
