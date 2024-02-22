@@ -30,11 +30,8 @@
     "init-changelog": "standard-version -i CHANGELOG.md --same-file --prerelease pre --first-release",
     "release": "standard-version -i CHANGELOG.md --same-file",
     "e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"npm run cypress:demo:run:e2e\"",
-    "ct": "npm run cypress:lib:run:ct",
     "cypress:demo:open": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress open --project=projects/mat-datatable-demo\"",
-    "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\"",
-    "cypress:lib:open": "cypress open --project=projects/mat-datatable-lib",
-    "cypress:lib:run:ct": "cypress run --project=projects/mat-datatable-lib --component"
+    "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\""
   },
   "private": false,
   "dependencies": {

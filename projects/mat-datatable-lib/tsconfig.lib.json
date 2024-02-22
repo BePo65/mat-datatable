@@ -9,7 +9,6 @@
     "types": []
   },
   "exclude": [
-    "**/*.spec.ts",
-    "cypress"
+    "**/*.spec.ts"
   ]
 }

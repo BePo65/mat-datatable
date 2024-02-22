@@ -9,7 +9,6 @@
       "files": [
         "*.ts"
       ],
-      "excludedFiles": "cypress.config.ts",
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
@@ -26,86 +25,6 @@
             "prefix": "mat",
             "style": "kebab-case"
           }
-        ]
-      }
-    },
-    {
-      "files": [
-        "cypress.config.ts"
-      ],
-      "parser": "@typescript-eslint/parser",
-      "parserOptions": {
-        "project": "projects/mat-datatable-lib/cypress/tsconfig.json",
-        "ecmaVersion": 2021,
-        "sourceType": "module"
-      },
-      "settings": {
-        "import/parsers": {
-          "@typescript-eslint/parser": [
-            ".ts"
-          ]
-        },
-        "import/resolver": {
-          "node": true,
-          "typescript": {
-            "project": [
-              "projects/mat-datatable-lib/cypress/tsconfig.json"
-            ]
-          }
-        }
-      },
-      "rules": {
-        "@typescript-eslint/quotes": [
-          "error",
-          "single"
-        ],
-        "@typescript-eslint/unbound-method": [
-          "error",
-          {
-            "ignoreStatic": true
-          }
-        ],
-        "arrow-parens": [
-          "error",
-          "as-needed"
-        ],
-        "comma-dangle": "error",
-        "jsdoc/require-param-type": "off",
-        "jsdoc/require-returns-type": [
-          "off",
-          {
-            "contexts": [
-              "any"
-            ]
-          }
-        ],
-        "no-trailing-spaces": "warn",
-        "no-multiple-empty-lines": [
-          "error",
-          {
-            "max": 1,
-            "maxBOF": 1,
-            "maxEOF": 1
-          }
-        ],
-        "object-curly-spacing": [
-          "error",
-          "always",
-          {
-            "objectsInObjects": false
-          }
-        ],
-        "prefer-arrow/prefer-arrow-functions": [
-          "warn",
-          {
-            "disallowPrototype": true,
-            "singleReturnOnly": false,
-            "classPropertiesAllowed": false
-          }
-        ],
-        "semi": [
-          "error",
-          "always"
         ]
       }
     }
