@@ -45,7 +45,7 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
   }
 
  /**
-  * Gets the header row of a mat-datatable.
+  * Gets a list of the header rows of a mat-datatable.
   * @returns array of the header rows of the mat-datatable (length is always 1).
   */
  async getHeaderRows(): Promise<MatHeaderRowHarness[]> {
@@ -62,7 +62,7 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
   }
 
   /**
-   * Gets the footer row in a mat-datatable.
+   * Gets a list of the footer rows in a mat-datatable.
    * @returns array of the footer rows of the mat-datatable (or an empty array, if no footer is defined).
    */
   async getFooterRows(): Promise<MatFooterRowHarness[]> {
