@@ -9,12 +9,12 @@ import { DemoTableDataStore } from './services/demo-table-datastore.class';
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
 import {
+  FieldFilterDefinition,
   MatColumnDefinition,
   MatDatatableComponent,
   MatSortDefinition,
   RowSelectionType
 } from 'projects/mat-datatable-lib/src';
-import { FieldFilterDefinition } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
 
 @Component({
   selector: 'app-root',
