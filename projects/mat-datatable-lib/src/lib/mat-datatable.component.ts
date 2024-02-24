@@ -65,13 +65,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
 
-  @ViewChild(MatTable) table!: MatTable<TRowData>;
-  @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
-  @ViewChild(MatMultiSort) sort!: MatMultiSort;
-
   public firstVisibleIndexChanged!: Observable<number>;
   public totalRowsChanged!: Observable<number>;
   public filteredRowsChanged!: Observable<number>;
+
+  @ViewChild(MatTable) protected table!: MatTable<TRowData>;
+  @ViewChild(CdkVirtualScrollViewport) protected viewport!: CdkVirtualScrollViewport;
+  @ViewChild(MatMultiSort) protected sort!: MatMultiSort;
 
   protected displayedFooterColumns: string[] = [];
   protected dataSource!: TableVirtualScrollDataSource<TRowData>;
