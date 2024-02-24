@@ -69,7 +69,7 @@ export abstract class _MatRowHarnessBase<
   }
 
   /**
-   * Gets a list of `MatRowCellHarness` or 'MatHeaderCellHarness' for all cells in the row.
+   * Gets a list of `MatRowCellHarness`, 'MatHeaderCellHarness' or 'MatFooterCellHarness' for all cells in the row.
    * @param filter - filter to select the sut (default; all cells).
    * @returns an array of the selected cells.
    */
