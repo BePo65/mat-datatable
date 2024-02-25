@@ -1,4 +1,4 @@
-<a name="readme-top"></a>
+<a name="top"></a>
 
 # Mat-Datatable
 
@@ -15,23 +15,31 @@ A simple data table with virtual scrolling using Angular Material.
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#embed-mat-datatable-in-your-project">Embed Mat-Datatable In Your Project</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#used-assets">Used Assets</a></li>
+    <li><a href="#mat-datatable-demo">Mat-Datatable Demo</a></li>
+    <li><a href="#api-reerence">API Reference</a></li>
+      <ul>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#interfaces">Interfaces</a></li>
+        <li><a href="#type-aliases">Type Aliases</a></li>
+        <li><a href="#testing-harnesses">Testing Harnesses</a></li>
+      </ul>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#hints-on-possible-extensions">Hints On Possible Extensions</a></li>
     <li><a href="#contributing">Contributing</a></li>
+      <ul>
+        <li><a href="#changelog">Changelog</a></li>
+      </ul>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -46,7 +54,7 @@ Nat-Datatable implements a table with virtual scrolling, sorting and filtering. 
 
 Try out the [live demo](https://bepo65.github.io/mat-datatable/).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -64,7 +72,7 @@ Install the package from npmjs
    npm install @bepo65/mat-datatable
    ```
 
-### Embed mat-datatable in project
+### Embed Mat-Datatable In Your Project
 
 Configure your angular application module (e.g: app.module.ts):
 ```ts
@@ -128,13 +136,17 @@ export class AppComponent {
 
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-## Used assets
+<!-- USED ASSETS -->
+## Used Assets
 
 The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and the [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web) font.
 Both fonts are part of the project and not fetched via https.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- MAT-DATATABLE DEMO -->
 ## Mat-Datatable Demo
 
 Demo project to show all features of Mat-Datatable.
@@ -147,19 +159,21 @@ npm start
 
 Navigate to http://localhost:4200
 
-<!-- API -->
-## API reference
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- API REFERENCE -->
+## API Reference
 
 `import { MatDatatable } from '@bepo65/mat-datatable';`
 
-## Classes
+### Classes
 
-### **MatDatatable**
+#### **MatDatatable**
 
 Component to create an angular material table based datatable.
 The component is generic; the given type is used to define the object for the row data.
 
-#### **Properties**
+##### **Properties**
 
 | Name | Description |
 |------|-------------|
@@ -241,7 +255,7 @@ The component is generic; the given type is used to define the object for the ro
 | `filterDefinitions: FieldFilterDefinition\<T>[]` | Gets / sets the current filter definition. |
 | | |
 
-#### **Methods**
+##### **Methods**
 
 | | |
 |------|-------------|
@@ -255,14 +269,14 @@ The component is generic; the given type is used to define the object for the ro
 | `reloadTable` | Reloads the rows of the table. |
 | | |
 
-## Interfaces
+### Interfaces
 
-### DataStoreProvider
+#### DataStoreProvider
 
 Component to create an angular material table based datatable.
 The component is generic; the given type is used to define the object for the row data.
 
-#### **Methods**
+##### **Methods**
 
 | | |
 |------|-------------|
@@ -275,11 +289,11 @@ The component is generic; the given type is used to define the object for the ro
 | Observable<Page<T>> | Emitting fetched data from the datastore. |
 | | |
 
-### MatColumnDefinition
+#### MatColumnDefinition
 
 Interface for the definition of a single table column.
 
-#### **Properties**
+##### **Properties**
 
 | Name | Description |
 |------|-------------|
@@ -299,11 +313,11 @@ Interface for the definition of a single table column.
 | `footerColumnSpan: number` | The number of columns a footer should span. By default a footer spans 1 column. |
 | | |
 
-### MatSortDefinition
+#### MatSortDefinition
 
 Interface for the definition of the sorting of 1 table column.
 
-#### **Properties**
+##### **Properties**
 
 | Name | Description |
 |------|-------------|
@@ -311,11 +325,11 @@ Interface for the definition of the sorting of 1 table column.
 | `direction: SortDirection` | The direction used to sort the column. |
 | | |
 
-### Page
+#### Page
 
 Interface defining the properties of a requests for a range of rows.
 
-#### **Properties**
+##### **Properties**
 
 | Name | Description |
 |------|-------------|
@@ -323,11 +337,11 @@ Interface defining the properties of a requests for a range of rows.
 | `numberOfRows: number` | The number of rows to return. |
 | | |
 
-### RequestRowsRange
+#### RequestRowsRange
 
 Interface defining the properties of a page of rows returned from the datastore.
 
-#### **Properties**
+##### **Properties**
 
 | Name | Description |
 |------|-------------|
@@ -338,10 +352,9 @@ Interface defining the properties of a page of rows returned from the datastore.
 | `totalFilteredElements` | The number of rows after filtering. |
 | | |
 
+### Type Aliases
 
-## Type aliases
-
-### ColumnAlignmentType
+#### ColumnAlignmentType
 
 The alignment of the content of a column
 
@@ -350,7 +363,7 @@ The alignment of the content of a column
 | type ColumnAlignmentType = "left" | "center" | "right"; |
 | |
 
-### FieldFilterDefinition
+#### FieldFilterDefinition
 
 The definition of a parameter filtering for the column identified by the given 'fieldName'.
 
@@ -359,7 +372,7 @@ The definition of a parameter filtering for the column identified by the given '
 | type FieldFilterDefinition<T> = StrictUnion\<(FieldFilterDefinitionSimple\<T> \| FieldFilterDefinitionRange\<T>)>; |
 | |
 
-### FieldFilterDefinitionRange
+#### FieldFilterDefinitionRange
 
 The definition of a parameter filtering for a range of values.
 
@@ -368,7 +381,7 @@ The definition of a parameter filtering for a range of values.
 | type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;valueFrom: string \| number \| Date<br>&nbsp;&nbsp;valueTo: string \| number \| Date<br>}; |
 | |
 
-### FieldFilterDefinitionSimple
+#### FieldFilterDefinitionSimple
 
 The definition of a parameter filtering for a single value.
 
@@ -377,7 +390,7 @@ The definition of a parameter filtering for a single value.
 | type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;value: string \| number \| Date<br>}; |
 | |
 
-### FieldSortDefinition
+#### FieldSortDefinition
 
 The definition of a single sort parameter.
 
@@ -386,7 +399,7 @@ The definition of a single sort parameter.
 | type FieldSortDefinition<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;sortDirection: SortDirectionAscDesc<br>}; |
 | |
 
-### RowSelectionType
+#### RowSelectionType
 
 How many rows can be selected.
 
@@ -395,7 +408,7 @@ How many rows can be selected.
 | type RowSelectionType = 'none' \| 'single' \| 'multi'; |
 | |
 
-### SortDirectionAscDesc
+#### SortDirectionAscDesc
 
 The direction of a sort.
 
@@ -404,18 +417,25 @@ The direction of a sort.
 | type SortDirection = 'asc' \| 'desc'; |
 | |
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Testing Harnesses
+
+Mat-Datatable includes a set of testing harnesses that can be found in the testing subdirectory.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
 See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-## Hints on possible extensions
+<!-- HINTS ON POSSIBLE EXTENSIONS -->
+## Hints On Possible Extensions
 
 + to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -471,7 +491,7 @@ type and scope
 For details of the commit messages format see [Contributing to Angular](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
@@ -480,4 +500,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 This project uses icons from the [Google Material Icons Library](https://developers.google.com/fonts/docs/material_icons) that are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
