@@ -1,5 +1,6 @@
-* add documentation for api to readme (incl. columnDefinition)
-* update README (API) and copy it to lib project
+* add testing directory to dist
+* Add scripts for Github and build
+* add testing API to basic readme file
 * publish v15
 * update to angular v16
 * publish v16
