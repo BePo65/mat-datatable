@@ -1,11 +1,125 @@
+<a id="top"></a>
+
 # API reference for Mat-Datatable testing
 ------------------------------------------------
 
 `import { MatDatatableHarness } from '@bepo65/mat-datatable/testing';`
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#classes">Classes</a>
+      <ul>
+        <li><a href="#_matrowcellharnessbase">_MatRowCellHarnessBase</a></li>
+        <li><a href="#_matrowharnessbase">_MatRowHarnessBase</a></li>
+        <li><a href="#matdatatableharness">MatDatatableHarness</a></li>
+        <li><a href="#matfootercellharness">MatFooterCellHarness</a></li>
+        <li><a href="#matfooterrowharness">MatFooterRowHarness</a></li>
+        <li><a href="#matheadercellharness">MatHeaderCellHarness</a></li>
+        <li><a href="#matheaderrowharness">MatHeaderRowHarness</a></li>
+        <li><a href="#matrowcellharness">MatRowCellHarness</a></li>
+        <li><a href="#matrowharness">MatRowHarness</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#interfaces">Interfaces</a>
+      <ul>
+        <li><a href="#cellharnessfilters">CellHarnessFilters</a></li>
+        <li><a href="#matdatatableharnesscolumnstext">MatDatatableHarnessColumnsText</a></li>
+        <li><a href="#matdatatableharnessfilters">MatDatatableHarnessFilters</a></li>
+        <li><a href="#matrowharnesscolumnstext">MatRowHarnessColumnsText</a></li>
+        <li><a href="#rowharnessfilters">RowHarnessFilters</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
+
 ## Classes
 
-### **MatDatatableHarness extends** [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
+<a id="_matrowcellharnessbase"></a>
+
+### **_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
+
+#### **Methods**
+
+| | |
+|------|-------------|
+| `static async booleanMatches` | Checks if the specified nullable boolean value matches the given value. |
+| **Parameters**|
+| value: boolean \| null \| Promise\<boolean \| null> | The nullable boolean value to check, or a Promise resolving to the nullable boolean value. |
+| pattern: boolean \| null | The boolean the value is expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
+| **Returns** |
+| Promise\<boolean> | Whether the value matches the pattern. |
+| | |
+
+| | |
+|------|-------------|
+| `async getColumnName` | Gets the name of the column that the cell belongs to. |
+| **Returns** |
+| Promise\<string> | The name of the column that the cell belongs to. |
+| | |
+
+| | |
+|------|-------------|
+| `async getColumnWidth` | Gets the cell's width in 'px' (with padding). |
+| **Returns** |
+| Promise\<number> | The cell's width. |
+| | |
+
+| | |
+|------|-------------|
+| `async getText` | Gets the cell's text. |
+| **Returns** |
+| Promise\<string> | The cell's text. |
+| | |
+
+<a id="_matrowharnessbase"></a>
+
+### **_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+
+Abstract class used as base for harnesses that interact with a mat-datatable row.
+
+#### **Methods**
+
+| | |
+|------|-------------|
+| `async getCells` | Gets a list of 'MatRowCellHarness', 'MatHeaderCellHarness' or 'MatFooterCellHarness' for all cells in the row. |
+| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
+  **Returns** |
+| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
+| | |
+
+| | |
+|------|-------------|
+| `async getCellTextByColumnName` | Gets the text inside the row organized by columns. |
+  **Returns** |
+| Promise\<MatRowHarnessColumnsText> | The text inside the row organized by columns. |
+| | |
+
+| | |
+|------|-------------|
+| `async getCellTextByIndex` | Gets the text of the cells in the row. |
+| **Parameters**|
+| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
+| **Returns** |
+| Promise\<string[]> | The text of the cells in the row. |
+| | |
+
+| | |
+|------|-------------|
+| `static async rowCellsContentMatch` | Checks if the values of the table row columns given in the 'value' parameter, match the given column values. Only columns defined in the pattern are inspected. |
+| **Parameters**|
+| value: MatRowHarnessColumnsText \| Promise<MatRowHarnessColumnsText> \| null | The nullable object defining all columns of a row and their values used for the checks. Alternatively a Promise resolving to the nullable object. |
+| pattern: Record<string, string \| RegExp> \| null | Object defining the columns and the values or RegExp expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
+| **Returns** |
+| Promise\<boolean> | Whether the value matches the pattern. |
+| | |
+
+<a id="matdatatableharness"></a>
+
+### **MatDatatableHarness** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
 
 Harness for interacting with a mat-datatable in tests.
 
@@ -125,98 +239,21 @@ Harness for interacting with a mat-datatable in tests.
 | HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
 | | |
 
-<div id="MatRowHarnessBase"><div>
+<a id="matfootercellharness"></a>
 
-### **_MatRowHarnessBase extends** [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+### **MatFooterCellHarness** extends [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
 
-Abstract class used as base for harnesses that interact with a mat-datatable row.
-
-#### **Methods**
-
-| | |
-|------|-------------|
-| `async getCells` | Gets a list of 'MatRowCellHarness', 'MatHeaderCellHarness' or 'MatFooterCellHarness' for all cells in the row. |
-| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-  **Returns** |
-| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
-| | |
-
-| | |
-|------|-------------|
-| `async getCellTextByColumnName` | Gets the text inside the row organized by columns. |
-  **Returns** |
-| Promise\<MatRowHarnessColumnsText> | The text inside the row organized by columns. |
-| | |
-
-| | |
-|------|-------------|
-| `async getCellTextByIndex` | Gets the text of the cells in the row. |
-| **Parameters**|
-| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-| **Returns** |
-| Promise\<string[]> | The text of the cells in the row. |
-| | |
-
-| | |
-|------|-------------|
-| `static async rowCellsContentMatch` | Checks if the values of the table row columns given in the 'value' parameter, match the given column values. Only columns defined in the pattern are inspected. |
-| **Parameters**|
-| value: MatRowHarnessColumnsText \| Promise<MatRowHarnessColumnsText> \| null | The nullable object defining all columns of a row and their values used for the checks. Alternatively a Promise resolving to the nullable object. |
-| pattern: Record<string, string \| RegExp> \| null | Object defining the columns and the values or RegExp expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
-| **Returns** |
-| Promise\<boolean> | Whether the value matches the pattern. |
-| | |
-
-### **MatRowHarness extends** [_MatRowHarnessBase](#MatRowHarnessBase)
-
-Harness for interacting with a mat-datatable row.
+Harness for interacting with an MDC-based Angular Material table footer cell.
 
 #### **Properties**
 
 | | |
 |------|-------------|
-| `static hostSelector: '.mat-mdc-row'` | Used to identify the elements in the DOM. |
+| `static hostSelector: '.mat-mdc-footer-cell'` | The selector for the host element of a 'MatFooterCellHarness' instance. |
 
-#### **Methods**
+<a id="matfooterrowharness"></a>
 
-| | |
-|---|---|
-| `async click` | Clicks the row (e.g. to select a row). |
-| **Returns** |
-| Promise\<void> | Promise that resolves when the click action completes. |
-| | |
-
-| | |
-|------|-------------|
-| `static with` | Gets a `HarnessPredicate` that can be used to search for a mat-datatable row with specific attributes. |
-| **Parameters** |
-| options: RowHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
-
-### **MatHeaderRowHarness extends** [_MatRowHarnessBase](#MatRowHarnessBase)
-
-Harness for interacting with a mat-datatable header row.
-
-#### Properties
-
-| | |
-|------|-------------|
-| `static hostSelector: '.mat-mdc-header-row'` | Used to identify the host element of a 'MatHeaderRowHarness' instance. |
-| | |
-
-#### Methods
-
-| | |
-|------|-------------|
-| `async getCells` | Gets a list of 'MatRowCellHarness' for all cells in the row. |
-| **Parameters** |
-| filter: HeaderCellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-| **Returns** |
-| Promise\<MatHeaderCellHarness[]> | A filtered list of MatRowCellHarness for the cells in the header row. |
-| | |
-
-### **MatFooterRowHarness extends** [_MatRowHarnessBase](#MatRowHarnessBase)
+### **MatFooterRowHarness** extends [_MatRowHarnessBase](#MatRowHarnessBase)
 
 Harness for interacting with a mat-datatable footer row.
 
@@ -227,44 +264,9 @@ Harness for interacting with a mat-datatable footer row.
 | `static hostSelector: '.mat-mdc-footer-row'` | Used to identify the host element of a 'MatFooterRowHarness' instance. |
 | | |
 
-<div id="MatRowCellHarnessBase"><div>
+<a id="matheadercellharness"></a>
 
-### *_MatRowCellHarnessBase extends** [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
-
-#### **Methods**
-
-| | |
-|------|-------------|
-| `static async booleanMatches` | Checks if the specified nullable boolean value matches the given value. |
-| **Parameters**|
-| value: boolean \| null \| Promise\<boolean \| null> | The nullable boolean value to check, or a Promise resolving to the nullable boolean value. |
-| pattern: boolean \| null | The boolean the value is expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
-| **Returns** |
-| Promise\<boolean> | Whether the value matches the pattern. |
-| | |
-
-| | |
-|------|-------------|
-| `async getColumnName` | Gets the name of the column that the cell belongs to. |
-| **Returns** |
-| Promise\<string> | The name of the column that the cell belongs to. |
-| | |
-
-| | |
-|------|-------------|
-| `async getColumnWidth` | Gets the cell's width in 'px' (with padding). |
-| **Returns** |
-| Promise\<number> | The cell's width. |
-| | |
-
-| | |
-|------|-------------|
-| `async getText` | Gets the cell's text. |
-| **Returns** |
-| Promise\<string> | The cell's text. |
-| | |
-
-### **MatHeaderCellHarness extends** [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
+### **MatHeaderCellHarness** extends [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
 
 Harness for interacting with an MDC-based Angular Material table header cell.
 
@@ -299,17 +301,33 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 | Promise\<void> | The cell got resized. |
 | | |
 
-### **MatFooterCellHarness extends** [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
+<a id="matheaderrowharness"></a>
 
-Harness for interacting with an MDC-based Angular Material table footer cell.
+### **MatHeaderRowHarness** extends [_MatRowHarnessBase](#MatRowHarnessBase)
 
-#### **Properties**
+Harness for interacting with a mat-datatable header row.
+
+#### Properties
 
 | | |
 |------|-------------|
-| `static hostSelector: '.mat-mdc-footer-cell'` | The selector for the host element of a 'MatFooterCellHarness' instance. |
+| `static hostSelector: '.mat-mdc-header-row'` | Used to identify the host element of a 'MatHeaderRowHarness' instance. |
+| | |
 
-### **MatRowCellHarness extends** [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
+#### Methods
+
+| | |
+|------|-------------|
+| `async getCells` | Gets a list of 'MatRowCellHarness' for all cells in the row. |
+| **Parameters** |
+| filter: HeaderCellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
+| **Returns** |
+| Promise\<MatHeaderCellHarness[]> | A filtered list of MatRowCellHarness for the cells in the header row. |
+| | |
+
+<a id="matrowcellharness"></a>
+
+### **MatRowCellHarness** extends [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
 
 Harness for interacting with a mat-datatable cell in a row.
 
@@ -327,6 +345,37 @@ Harness for interacting with a mat-datatable cell in a row.
 | **Returns** |
 | Promise\<boolean> | The cell is shown as single line. |
 | | |
+
+<a id="matrowharness"></a>
+
+### **MatRowHarness** extends [_MatRowHarnessBase](#MatRowHarnessBase)
+
+Harness for interacting with a mat-datatable row.
+
+#### **Properties**
+
+| | |
+|------|-------------|
+| `static hostSelector: '.mat-mdc-row'` | Used to identify the elements in the DOM. |
+
+#### **Methods**
+
+| | |
+|---|---|
+| `async click` | Clicks the row (e.g. to select a row). |
+| **Returns** |
+| Promise\<void> | Promise that resolves when the click action completes. |
+| | |
+
+| | |
+|------|-------------|
+| `static with` | Gets a `HarnessPredicate` that can be used to search for a mat-datatable row with specific attributes. |
+| **Parameters** |
+| options: RowHarnessFilters = {} | Options for narrowing the search. |
+| **Returns** |
+| HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## **Interfaces**
 
@@ -384,3 +433,6 @@ A set of criteria that can be used to filter a list of row harness instances.
 |------|-------------|
 | - | |
 | | |
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+<p>(<a href="#matrowharness">back to matrowharness</a>)</p>
