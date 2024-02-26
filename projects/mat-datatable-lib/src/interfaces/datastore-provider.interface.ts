@@ -22,8 +22,6 @@ export type FieldSortDefinition<T> = {
 export type FieldFilterDefinitionSimple<T> = {
   fieldName: keyof T
   value: string | number | Date
-  valueFrom: never
-  valueTo: never
 }
 
 /**
@@ -32,7 +30,6 @@ export type FieldFilterDefinitionSimple<T> = {
  */
 export type FieldFilterDefinitionRange<T> = {
   fieldName: keyof T
-  value: never
   valueFrom: string | number | Date
   valueTo: string | number | Date
 }
