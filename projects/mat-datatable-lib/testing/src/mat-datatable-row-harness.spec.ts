@@ -5,13 +5,20 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../../interfaces/datastore-provider.interface';
-import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
-import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
-import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
-import { MatDatatableModule } from '../mat-datatable.module';
-
 import { MatFooterRowHarness, MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
+
+import {
+  DataStoreProvider,
+  FieldFilterDefinition,
+  FieldSortDefinition,
+  MatColumnDefinition,
+  MatDatatableComponent,
+  MatDatatableModule,
+  MatSortDefinition,
+  Page,
+  RequestRowsRange,
+  RowSelectionType
+} from 'mat-datatable';
 
 describe('MatRowHarness', () => {
   let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;
@@ -247,10 +254,10 @@ describe('MatHeaderRowHarness', () => {
 
   // Sorting indicator should have no impact on 'getCellTextByIndex'
   it('should get array of content of cells in header row with sorted columns', async () => {
-    component.matDataTable.sort.sortDefinitions = [
-      { active: 'name', direction: 'desc' },
-      { active: 'weight', direction: 'asc' }
-    ];
+    component.matDataTable.sortDefinitions = [
+      { columnId: 'name', direction: 'desc' },
+      { columnId: 'weight', direction: 'asc' }
+    ] as MatSortDefinition[];
 
     const headerRowHarness = await loader.getHarness(MatHeaderRowHarness);
     const headerContent = await headerRowHarness.getCellTextByIndex();

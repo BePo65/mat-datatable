@@ -19,6 +19,8 @@
         <li><a href="#matfooterrowharness">MatFooterRowHarness</a></li>
         <li><a href="#matheadercellharness">MatHeaderCellHarness</a></li>
         <li><a href="#matheaderrowharness">MatHeaderRowHarness</a></li>
+        <li><a href="#matmultisortharness">MatMultiSortHarness</a></li>
+        <li><a href="#matmultisortheaderharness">MatMultiSortHeaderHarness</a></li>
         <li><a href="#matrowcellharness">MatRowCellHarness</a></li>
         <li><a href="#matrowharness">MatRowHarness</a></li>
       </ul>
@@ -27,9 +29,12 @@
       <a href="#interfaces">Interfaces</a>
       <ul>
         <li><a href="#cellharnessfilters">CellHarnessFilters</a></li>
+        <li><a href="#domsortingdefinition">DomSortingDefinition</a></li>
         <li><a href="#matdatatableharnesscolumnstext">MatDatatableHarnessColumnsText</a></li>
         <li><a href="#matdatatableharnessfilters">MatDatatableHarnessFilters</a></li>
         <li><a href="#matrowharnesscolumnstext">MatRowHarnessColumnsText</a></li>
+        <li><a href="#multisortharnessfilters">MultiSortHarnessFilters</a></li>
+        <li><a href="#multisortheaderharnessfilters">MultiSortHeaderHarnessFilters</a></li>
         <li><a href="#rowharnessfilters">RowHarnessFilters</a></li>
       </ul>
     </li>
@@ -325,6 +330,147 @@ Harness for interacting with a mat-datatable header row.
 | Promise\<MatHeaderCellHarness[]> | A filtered list of MatRowCellHarness for the cells in the header row. |
 | | |
 
+<a id="matmultisortharness"></a>
+
+### **MatMultiSortHarness** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+
+Harness for interacting with a mat-multi-sort element in tests.
+
+#### **Properties**
+
+| | |
+|------|-------------|
+| `static hostSelector: '.mat-multi-sort'` | Used to identify the elements in the DOM. |
+| | |
+
+#### **Methods**
+
+| | |
+|---|---|
+| `async getActiveHeaders` | Gets all headers used for sorting in the 'mat-multi-sort'. |
+| **Returns** |
+| Promise\<MatMultiSortHeaderHarness[]> | All headers used for sorting. |
+| | |
+
+| | |
+|---|---|
+| `async getActiveSortData` | Gets the sorting data for all headers used for sorting in the 'mat-multi-sort'. |
+| **Returns** |
+| Promise\<DomSortingDefinition[]> | Sorting data of all headers used for sorting. |
+| | |
+
+| | |
+|---|---|
+| `async getSortHeaders` | Gets the headers used for sorting in the 'mat-multi-sort' reduced by the given 'filter'. |
+| **Parameters** |
+| filter: MultiSortHeaderHarnessFilters = {} | |
+| **Returns** |
+| Promise\<MatMultiSortHeaderHarness[]> | The filtered sort headers. |
+| | |
+
+| | |
+|---|---|
+| `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
+| **Returns** |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
+| | |
+
+| | |
+|---|---|
+| `static with` | Gets a 'HarnessPredicate' that can be used to search for a 'mat-multi-sort' with specific attributes. |
+| **Parameters** |
+| options: MultiSortHarnessFilters = {} | Options for narrowing the search. |
+| **Returns** |
+| HarnessPredicate\<MatMultiSortHarness> | A 'HarnessPredicate' configured with the given options. |
+| | |
+
+<a id="matmultisortheaderharness"></a>
+
+### **MatMultiSortHeaderHarness** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+
+Harness for interacting with a `mat-multi-sort header` element in tests.
+
+#### **Properties**
+
+| | |
+|---|---|
+| `static hostSelector` | Used to identify the elements in the DOM (value: '.mat-multi-sort-header'). |
+| | |
+
+#### **Methods**
+
+| | |
+|---|---|
+| `async click` | Clicks the header to change its sorting direction. Only works if the header is enabled. |
+| **Returns** |
+| Promise\<void> | Promise that resolves when the click action completes. |
+| | |
+
+| | |
+|---|---|
+| `async getAllSortData` | Gets an object with the sorting data of the header. |
+| **Returns** |
+| Promise\<MatMultiSortHeaderHarnessSortDefinition> | The sorting data of the header. |
+| | |
+
+| | |
+|---|---|
+| `async getId` | Gets the id of the sort header. |
+| **Returns** |
+| Promise\<string> | The id of the sort header. |
+| | |
+
+| | |
+|---|---|
+| `async getLabel` | Gets the label of the sort header. |
+| **Returns** |
+| Promise\<string> | The label of the sort header. |
+| | |
+
+| | |
+|---|---|
+| `async getSortDirection` | Gets the sorting direction of the header. |
+| **Returns** |
+| Promise\<SortDirection> | The sorting direction of the header. |
+| | |
+
+| | |
+|---|---|
+| `async getSortPosition` | Gets the sorting position of the header. |
+| **Returns** |
+| Promise\<SortDirection> | The sorting position of the header (1..n). |
+| | |
+
+| | |
+|---|---|
+| `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
+| **Returns** |
+| Promise<TestElement> | The 'Promise' for the 'TestElement'. |
+| | |
+
+| | |
+|---|---|
+| `async isActive` | Gets whether the sort header is currently being used for sorting. |
+| **Returns** |
+| Promise<boolean> | `True`, if the sort header is currently being used for sorting. |
+| | |
+
+| | |
+|---|---|
+| `async isDisabled` | Whether the sort header is disabled. |
+| **Returns** |
+| Promise<boolean> | `True`, if the sort header is disabled. |
+| | |
+
+| | |
+|---|---|
+| `static with` | Gets a 'HarnessPredicate' that can be used to search for a sort header with specific attributes. |
+| **Parameters** |
+| options: MultiSortHeaderHarnessFilters = {} | Options for narrowing the search. |
+| **Returns** |
+| HarnessPredicate\<MatMultiSortHeaderHarness> | A 'HarnessPredicate' configured with the given options. |
+| | |
+
 <a id="matrowcellharness"></a>
 
 ### **MatRowCellHarness** extends [_MatRowCellHarnessBase](#MatRowCellHarnessBase)
@@ -391,6 +537,18 @@ A set of criteria that can be used to filter a list of cell harness instances.
 | text: string \| RegExp | Only find instances whose text matches the given value. |
 | | |
 
+### **DomSortingDefinition**
+
+#### **Properties**
+
+| | |
+|---|---|
+| `id: string` | ID of the header element. |
+| `label: string` | Label of the header. |
+| `sortDirection: SortDirection` | Sort direction of the header. |
+| `sortPosition: number` | Sort position of the header (1..n). |
+| | |
+
 ### **MatDatatableHarnessColumnsText**
 
 Text extracted from a table organized by columns.
@@ -422,6 +580,27 @@ A set of criteria that can be used to filter a list of table harness instances.
 Text extracted from a table row organized by columns.
 
 This interface describes an object, whose keys are the names of the columns and whose values are the corresponding cell content.
+
+### **MultiSortHarnessFilters**
+
+#### **Properties**
+
+| | |
+|---|---|
+| - | |
+| | |
+
+### **MultiSortHeaderHarnessFilters**
+
+#### **Properties**
+
+| | |
+|---|---|
+| `label: string \| RegExp` | Label of the header. |
+| `id: string \| RegExp` | ID of the header element. |
+| `sortDirection: SortDirection` | Sort direction of the header. |
+| `sortPosition: number` | Sort position of the header (1..n). |
+| | |
 
 ### **RowHarnessFilters**
 

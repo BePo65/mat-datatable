@@ -5,13 +5,20 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../../interfaces/datastore-provider.interface';
-import { MatColumnDefinition } from '../../interfaces/datatable-column-definition.interface';
-import { MatSortDefinition } from '../../interfaces/datatable-sort-definition.interface';
-import { MatDatatableComponent, RowSelectionType } from '../mat-datatable.component';
-import { MatDatatableModule } from '../mat-datatable.module';
-
 import { MatDatatableHarness } from './mat-datatable-table-harness';
+
+import {
+  DataStoreProvider,
+  FieldFilterDefinition,
+  FieldSortDefinition,
+  MatColumnDefinition,
+  MatDatatableComponent,
+  MatDatatableModule,
+  MatSortDefinition,
+  Page,
+  RequestRowsRange,
+  RowSelectionType
+} from 'mat-datatable';
 
 describe('MatDatatableHarness without footer', () => {
   let fixture: ComponentFixture<TableWithoutFooterHarnessTestComponent>;

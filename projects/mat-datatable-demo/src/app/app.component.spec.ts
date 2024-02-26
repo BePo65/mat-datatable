@@ -12,7 +12,7 @@ import { NgxRerenderModule } from 'ngx-rerender';
 
 import { AppComponent } from './app.component';
 
-import { MatDatatableModule } from 'projects/mat-datatable-lib/src/public-api';
+import { MatDatatableModule } from 'mat-datatable';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

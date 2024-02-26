@@ -19,7 +19,7 @@ import { MatMultiSort } from './mat-multi-sort.directive';
 import { MatMultiSortModule } from './mat-multi-sort.module';
 import { dispatchMouseEvent } from './testbed/fake-events/dispatch-events';
 import { createFakeEvent, createMouseEvent } from './testbed/fake-events/event-objects';
-import { wrappedErrorMessage } from './testing/wrapped-error-message';
+import { wrappedErrorMessage } from './wrapped-error-message';
 
 describe('MatMultiSorDirective', () => {
   describe('without default options', () =>  {

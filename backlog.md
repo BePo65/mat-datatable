@@ -1,4 +1,3 @@
-* add testing directory to dist
 * Add scripts for Github and build
 * add testing API to basic readme file
 * publish v15
