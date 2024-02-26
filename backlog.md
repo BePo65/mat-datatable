@@ -1,5 +1,3 @@
-* Add scripts for Github and build
-* add testing API to basic readme file
 * publish v15
 * update to angular v16
 * publish v16
