@@ -1,6 +1,7 @@
-* add virtual scroller
-* activeRow - add scrollIntoPosition
-* add cypress tests
-* add all exported elements to public-api.ts
-* add documentation for api to readme (incl. columnDefinition)
-* update README (API) and copy it to lib project
+* publish v15
+* update to angular v16
+* publish v16
+* update to angular v17
+* change library to standalone
+* publish v17
+* add ssr

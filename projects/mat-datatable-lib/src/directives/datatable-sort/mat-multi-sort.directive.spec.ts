@@ -19,7 +19,7 @@ import { MatMultiSort } from './mat-multi-sort.directive';
 import { MatMultiSortModule } from './mat-multi-sort.module';
 import { dispatchMouseEvent } from './testbed/fake-events/dispatch-events';
 import { createFakeEvent, createMouseEvent } from './testbed/fake-events/event-objects';
-import { wrappedErrorMessage } from './testing/wrapped-error-message';
+import { wrappedErrorMessage } from './wrapped-error-message';
 
 describe('MatMultiSorDirective', () => {
   describe('without default options', () =>  {
@@ -862,9 +862,10 @@ class SimpleMatMultiSortApp {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
-    dispatchMouseEvent(sortElement, event);
+    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
+    if ((sortElement !== undefined) && (sortElement !== null)) {
+      dispatchMouseEvent(sortElement, event);
+    }
   }
 
   /**
@@ -895,7 +896,7 @@ class FakeDataSource extends DataSource<any> {
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
     return collectionViewer.viewChange.pipe(map(() => []));
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   disconnect() {}
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -1008,6 +1009,7 @@ class MatMultiSortableInvalidDirection {}
   `
 })
 class MatMultiSortWithoutExplicitInputs {
+
   latestSortEvent!: Sort[];
 
   active!: string;
@@ -1023,9 +1025,10 @@ class MatMultiSortWithoutExplicitInputs {
   }
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`)!;
-    dispatchMouseEvent(sortElement, event);
+    const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
+    if ((sortElement !== undefined) && (sortElement !== null)) {
+      dispatchMouseEvent(sortElement, event);
+    }
   }
 }
 

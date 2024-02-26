@@ -1,25 +1,29 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
+  TrackByFunction,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
-import { of as observableOf, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { PaginationDataSource } from '../components/dataSource.class';
+import { EmptyDataStoreProvider, TableVirtualScrollDataSource } from '../components/data-source.class';
 import {
   MatMultiSort,
   Sort,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
-import { DatasourceEndpoint, Page, RequestSortDataList } from '../interfaces/datasource-endpoint.interface';
-import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
+import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
+import { FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
+import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
@@ -27,7 +31,7 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
 /**
  * Datatable component based on Angular Material.
  * @class MatDatatableComponent
- * @implements {AfterViewInit}
+ * @implements { AfterViewInit }
  * @template TRowData - type / interface definition for data of a single row
  */
 @Component({
@@ -38,67 +42,87 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
     '../directives/datatable-resizable.directive.scss'
   ]
 })
-export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewInit, OnDestroy, OnInit {
+export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
-  @Input() datastoreGetter: DatasourceEndpoint<TRowData, TListFilter> = emptyDatastoreGetter;
+  @Input() dataStoreProvider: DataStoreProvider<TRowData> = new EmptyDataStoreProvider<TRowData>;
+  @Input()
+  get trackBy(): TrackByFunction<TRowData> {
+    return this._trackByFn;
+  }
+  set trackBy(fn: TrackByFunction<TRowData>) {
+    if (fn && typeof fn === 'function') {
+      this._trackByFn = fn;
+    } else {
+      this._trackByFn = this.defaultTrackBy;
+    }
+  }
+  protected _trackByFn: TrackByFunction<TRowData> = this.defaultTrackBy;
+
+  @Input() withFooter = false;
   @Output() rowClick = new EventEmitter<TRowData>();
   @Output() rowSelectionChange = new EventEmitter<TRowData[]>();
   @Output() sortChange = new EventEmitter<MatSortDefinition[]>();
-  @Output() pageSizeChange = new EventEmitter<number>();
-  @ViewChild(MatTable) table!: MatTable<TRowData>;
-  @ViewChild(MatMultiSort) sort!: MatMultiSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  protected dataSource!: PaginationDataSource<TRowData, TListFilter>;
+  public firstVisibleIndexChanged!: Observable<number>;
+  public totalRowsChanged!: Observable<number>;
+  public filteredRowsChanged!: Observable<number>;
+
+  @ViewChild(MatTable) protected table!: MatTable<TRowData>;
+  @ViewChild(CdkVirtualScrollViewport) protected viewport!: CdkVirtualScrollViewport;
+  @ViewChild(MatMultiSort) protected sort!: MatMultiSort;
+
+  protected displayedFooterColumns: string[] = [];
+  protected dataSource!: TableVirtualScrollDataSource<TRowData>;
   protected currentActivatedRow: TRowData | undefined;
   protected currentSelectedRows: TRowData[] = [];
 
+  @ViewChild('tvs') private tvs!: TableItemSizeDirective<TRowData>;
   private readonly unsubscribe$ = new Subject<void>();
 
-  constructor() {
-    // TODO do we need injected parameters?
-  }
-
   ngOnInit(): void {
-    this.dataSource = new PaginationDataSource<TRowData, TListFilter>(
-      this.datastoreGetter
-    );
+    this.dataSource = new TableVirtualScrollDataSource<TRowData>(this.dataStoreProvider);
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.endpoint = this.datastoreGetter;
+    // Set DataStoreProvider to value defined in parent element
+    this.dataSource.dataStoreProvider = this.dataStoreProvider;
 
     this.sort.multiSortChange
       .pipe(
         takeUntil(this.unsubscribe$)
       )
       .subscribe((newSort: Sort[]) => {
-        // reset the paginator after changing the sort definition
-        this.paginator.pageIndex = 0;
-        this.getPageFromDataSource(newSort, this.paginator);
+        this.dataSource.sorts = this.requestSortDefinitionFromSortArray(newSort);
+
+        // Scroll to start of list
+        this.viewport.scrollToIndex(0);
       });
 
-    this.paginator.page
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe(newPage => {
-        this.getPageFromDataSource(this.sort.sortDefinitions, newPage);
-        this.onPageSizeChange(newPage.pageSize);
-      });
-
-    setTimeout(() => {
-      this.getPageFromDataSource(this.sort.sortDefinitions, this.paginator);
-    });
-    }
+    this.firstVisibleIndexChanged = this.tvs.firstVisibleIndexChanged;
+    this.totalRowsChanged = this.tvs.totalRowsChanged;
+    this.filteredRowsChanged = this.tvs.filteredRowsChanged;
+  }
 
   ngOnDestroy(): void {
     // clear row references
     this.currentSelectedRows = [];
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const displayedColumnsChanges = changes['displayedColumns'];
+    if (this.withFooter && (displayedColumnsChanges !== undefined)) {
+      if (Array.isArray(displayedColumnsChanges.currentValue)) {
+        const displayedColumns = displayedColumnsChanges.currentValue as string[];
+        this.displayedFooterColumns = this.footerColumnsFromColumns(displayedColumns);
+      } else {
+        console.error(`'displayedColumns' is not an array of strings ('${typeof displayedColumnsChanges.currentValue}')`);
+      }
+
+    }
   }
 
   /**
@@ -152,22 +176,30 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     this.sort.sortDefinitions = sortables;
   }
 
-  get pageSize(): number {
-    return this.paginator.pageSize;
+  get filterDefinitions() : FieldFilterDefinition<TRowData>[] {
+    return this.dataSource.filters;
   }
-  set pageSize(newPageSize: number) {
-    this.paginator.pageSize = +newPageSize;
-    this.updatedDatasource();
+  set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
+    if (newFilters && Array.isArray(newFilters)) {
+      this.dataSource.filters = newFilters;
+    }
   }
 
-  get page(): number {
-    return this.paginator.pageIndex;
-  }
-  set page(newPage: number) {
-    if ((newPage >= 0) && (newPage < this.paginator.getNumberOfPages())) {
-      this.paginator.pageIndex = newPage;
-      this.updatedDatasource();
+  scrollToRow(row: TRowData) {
+    if (row !== undefined) {
+      this.dataSource.rowToIndex(row)
+        .pipe(
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe(index => {
+          const indexOfRow = Math.max(index, 0);
+          this.viewport.scrollToIndex(indexOfRow);
+        });
     }
+  }
+
+  reloadTable() {
+    this.dataSource.reloadSizeOfDatastore();
   }
 
   /**
@@ -231,6 +263,31 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     return result;
   }
 
+  /**
+   * Gets 'ngStyle' property of table footer cell.
+   * This method creates the style for footer cells according to the given definition.
+   * @param footerCellAlignment - definition of the footer cell
+   * @returns object with properties that reflect the css styles of the footer cell
+   */
+  protected footerColumnFormat(footerCellAlignment?: ColumnAlignmentType): Record<string, string> | undefined {
+    const result: Record<string, string> = {};
+    if (footerCellAlignment !== undefined) {
+      switch (footerCellAlignment) {
+        case 'left':
+          result['text-align'] = 'start';
+          break;
+        case 'center':
+          result['text-align'] = 'center';
+          break;
+        case 'right':
+          result['text-align'] = 'end';
+          break;
+      }
+    }
+
+    return result;
+  }
+
   protected sortArrowPosition(columnDefinition: MatColumnDefinition<TRowData>): SortHeaderArrowPosition {
     return columnDefinition.headerAlignment === 'right' ? 'before' : 'after';
   }
@@ -273,30 +330,54 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     this.sortChange.emit(this.matSortDefinitionFromSortArray(sortStates));
   }
 
-  protected onPageSizeChange(pageSize: number) {
-    this.pageSizeChange.emit(pageSize);
+  /**
+   * Are 2 rows equal? Used by template to mark currentActivatedRow.
+   * @param rowA - first row to compare
+   * @param rowB - second row to compare
+   * @returns true: rowA equals rowB
+   */
+  protected areRowsEqual(rowA: TRowData, rowB: TRowData): boolean {
+    return this.trackBy(0, rowA) === this.trackBy(0, rowB);
   }
 
   /**
-   * Update datasource of table to reflect changed page definition.
+   *  Check, if the given row is part of the selectedRows.
+   * @param row - row to be checked
+   * @returns true = given row is part of the selectedRows
    */
-  private updatedDatasource() {
-    this.paginator.page.next({
-      pageIndex: this.paginator.pageIndex,
-      pageSize: this.paginator.pageSize,
-      length: this.paginator.length
-    });
+  protected selectedRowsIncludes(row: TRowData): boolean {
+    return this.selectedRows.some(selectedRow => this.areRowsEqual(row, selectedRow));
   }
 
   /**
-   * Requests a new page from the datasource.
-   * @param newSort - sorting definition to be used
-   * @param newPage - definition of the page to be fetched
+   * Extract the list of footer columns to display from the
+   * list of columns to display. The footer can have columns tha
+   * span several columns; therefore we need a different list.
+   * @param newDisplayedColumns - list of the id of the columns to display
+   * @returns list of the id of the footer columns to display
    */
-  private getPageFromDataSource(newSort: Sort[], newPage: PageEvent) {
-    const sortFormatted = this.requestSortDefinitionFromSortArray(newSort);
-    // TODO add filter
-    this.dataSource.loadPage(newPage.pageIndex, newPage.pageSize, sortFormatted);
+  private footerColumnsFromColumns(newDisplayedColumns: string[]) {
+    const displayedFooterColumns: string[] = [];
+    let i = 0;
+    const numberOfColumns = newDisplayedColumns.length;
+    while (i < numberOfColumns) {
+      displayedFooterColumns.push(newDisplayedColumns[i]);
+
+      // Do we have a footer columnSpan for this column?
+      const columnDefinition = this.columnDefinitions.find(element => element.columnId === newDisplayedColumns[i]);
+      if (columnDefinition !== undefined) {
+        const colSpan = columnDefinition.footerColumnSpan;
+        if ((colSpan !== undefined) && Number.isInteger(colSpan) && (colSpan > 1)) {
+          i += colSpan;
+        } else {
+          i++;
+        }
+      } else {
+        console.error(`Column to display ('${newDisplayedColumns[i]}') has no column definition`);
+        i++;
+      }
+    }
+    return displayedFooterColumns;
   }
 
   /**
@@ -305,12 +386,12 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
    * @param sorts - sorting definition to convert
    * @returns sorting definition as array of type RequestSortDataList
    */
-  private requestSortDefinitionFromSortArray(sorts: Sort[]): RequestSortDataList<TRowData>[] {
-    const result: RequestSortDataList<TRowData>[] = [];
+  private requestSortDefinitionFromSortArray(sorts: Sort[]): FieldSortDefinition<TRowData>[] {
+    const result: FieldSortDefinition<TRowData>[] = [];
     for (let i = 0; i < sorts.length; i++) {
-      const element: RequestSortDataList<TRowData> = {
+      const element: FieldSortDefinition<TRowData> = {
         fieldName: sorts[i].active as keyof TRowData,
-        order: sorts[i].direction
+        sortDirection: sorts[i].direction
       };
       result.push(element);
     }
@@ -333,18 +414,17 @@ export class MatDatatableComponent<TRowData, TListFilter> implements AfterViewIn
     }
     return result;
   }
-}
 
   /**
-   * Default implementation of the datastoreGetter input variable
-   * returning an observable that emits a Page with no data rows.
-   * @returns observable that emits a single empty Page
+   * Default implementation of trackBy function.
+   * This function is required, as in strict mode 'trackBy'
+   * must not be undefined.
+   * @param this - required by @typescript-eslint/unbound-method
+   * @param index - index of the row
+   * @param item - object with the row data
+   * @returns stringified content of the item
    */
-  const emptyDatastoreGetter = <T>() => {
-    return observableOf({
-    content: [] as T[],
-    pageNumber: 0,
-    returnedElements: 0,
-    totalElements: 0
-  } as Page<T>);
-};
+  private defaultTrackBy(this: void, index: number, item: TRowData): string {
+    return JSON.stringify(item);
+  }
+}

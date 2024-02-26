@@ -6,7 +6,7 @@
       2,
       "always",
       [
-        "checkbox",
+        "lib",
         "demo"
       ]],
     "type-enum": [

@@ -3,6 +3,7 @@
   "ignorePatterns": [
     "**/*"
   ],
+  "reportUnusedDisableDirectives": true,
   "env": {
     "browser": true,
     "es2021": true
@@ -38,7 +39,9 @@
       },
       "settings": {
         "import/parsers": {
-          "@typescript-eslint/parser": [".ts"]
+          "@typescript-eslint/parser": [
+            ".ts"
+          ]
         },
         "import/resolver": {
           "node": true,
@@ -60,12 +63,19 @@
             "ignoreStatic": true
           }
         ],
-        "arrow-parens": ["error", "as-needed"],
+        "arrow-parens": [
+          "error",
+          "as-needed"
+        ],
         "comma-dangle": "error",
         "import/order": [
-          "error", {
+          "error",
+          {
             "groups": [
-              ["builtin", "external"],
+              [
+                "builtin",
+                "external"
+              ],
               "parent",
               "sibling",
               "internal"
@@ -107,8 +117,9 @@
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": [
           "off",
-          {"contexts": [
-            "any"
+          {
+            "contexts": [
+              "any"
             ]
           }
         ],
@@ -124,7 +135,9 @@
         "object-curly-spacing": [
           "error",
           "always",
-          { "objectsInObjects": false }
+          {
+            "objectsInObjects": false
+          }
         ],
         "prefer-arrow/prefer-arrow-functions": [
           "warn",
@@ -134,14 +147,17 @@
             "classPropertiesAllowed": false
           }
         ],
-        "semi": ["error", "always"]
+        "semi": [
+          "error",
+          "always"
+        ]
       }
     },
     {
       "files": [
         "*.spec.ts"
       ],
-      "env":{
+      "env": {
         "jasmine": true
       },
       "plugins": [

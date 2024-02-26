@@ -1,14 +1,15 @@
 // mat-datatable uses angular material theming for defining colors;
 // therefore colors are defined in _mat-datatable-theme.scss
 
+// -2px for header divider and -2px for footer divider
+// TODO check if valid too without footer
+.mat-datatable-viewport {
+  height: calc(100% - 4px);
+}
+
 .full-width-table {
   table-layout: fixed;
   width: 100%;
-}
-
-.mat-paginator-sticky {
-  bottom: 0;
-  position: sticky;
 }
 
 .mat-datatable-loading-spinner {

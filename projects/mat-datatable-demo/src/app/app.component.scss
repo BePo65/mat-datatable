@@ -1,10 +1,25 @@
-.page-title {
+.main {
+  display: flex;
+  flex-flow: column;
+  height: 100vH;
+  overflow: hidden;
+  width: 100vw;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: auto max-content;
   margin: 0.25em 0.5em 0.75em;
 }
 
+.with-footer-toggle {
+  justify-self: end;
+  margin: 1.9rem 2rem 0 0;
+}
+
 .content-table {
-  height: 400px;
-  margin: 0 1em;
+  flex-grow : 1;
+  margin: 0 1em 1.5em;
   overflow: auto;
 }
 
@@ -16,56 +31,98 @@
   margin: 0 1em 0 0;
 }
 
-.activated-row,
-.current-sort,
-.selected-rows {
-  margin: 2em 0 0.75em 1em;
-}
-
-.page-size-row {
-  margin: 1.4em 0 1.25em 1em;
+.current-sort {
+  margin: 0 0 0 1em;
+  min-height: 40px;;
 }
 
 .current-sort-label {
-  margin: 0 0.25em 0 0;
+  display: inline-block;
+  padding: 10px 0 0;
+}
+
+.current-sort-list {
+  display: inline-flex;
+  margin: 0 0 0 1em;
 }
 
 .sort-button-container {
-  margin: 0 0 0.75em 1em;
+  margin: 0.5em 0 0 1em;
 }
 
+.activate-row-container {
+  margin: .5em 0 0 1em;
+}
+
+.activation-button-container,
+.selection-button-container {
+  margin: 0 0 0.75em;
+}
+
+.activation-button,
+.goto-page-button {
+  margin: 0 1em 0 0;
+}
+
+.activated-row-container {
+  margin: 0 0.75em 0 1em;
+}
+
+ .activated-row-label {
+  margin: 0 0.25em 0 0;
+}
+
+.activated-row-value {
+  display: inline-block;
+  width: 2em;
+}
+
+.activation-button-container-inline {
+  margin: 0;
+}
+
+.activation-scroll-button {
+  margin: 0;
+}
+
+.sort-button,
 .selection-button,
-.sort-button {
+.filter-button,
+.change-content-button {
   margin: 0 1em 1em 0;
+}
+
+.selected-rows-container {
+  margin: 1em 0 0 1em;
+}
+
+.selected-rows-label  {
+  margin: 0 0.25em 0 1em;
+}
+
+.selected-rows {
+  margin: 2em 0 -14px 1em;
 }
 
 .selection-button {
   margin: 0.5em 1em 1em 0;
 }
 
-.activation-button-container,
-.page-size-button-container,
-.selection-button-container {
-  margin: 0 0 0.75em;
+.filter-button-container {
+  margin: 0 0 0 1em;
 }
 
-.activation-button,
-.page-size-button,
-.goto-page-button {
-  margin: 0 1em 0 0;
-}
-
-.activated-row-label,
-.selected-rows-label  {
+.current-filter-label {
   margin: 0 0.25em 0 1em;
 }
 
-.page-number-label,
-.page-size-label {
-  margin: 0 0.25em 0 0;
+.change-content-container{
+  margin: .5em 0 0 1em;
 }
 
-.page-number-value,
-.page-size-value {
-  margin: 0 1.5em 0 0;
+.toggle-buttons-pane-button {
+  bottom: 1em;
+  color: white;
+  position: absolute;
+  right: 1em;
 }
