@@ -15,7 +15,7 @@
     "lint:demo": "eslint \"projects/mat-datatable-demo\"",
     "lint:scss": "stylelint \"**/*.scss\"",
     "lint:commits": "commitlint --from 81ad0b8fb70526 --to HEAD --verbose",
-    "test": "npm run test:lib -- --watch=false && npm run test:demo -- --watch=false",
+    "test": "npm run test:lib -- --watch=false --browsers=ChromeHeadless && npm run test:demo -- --watch=false --browsers=ChromeHeadless",
     "test:lib": "ng test mat-datatable-lib",
     "test:demo": "ng test mat-datatable-demo",
     "test:lib:coverage:ui": "set BROWSERSLIST_IGNORE_OLD_DATA=1 && ng test mat-datatable-lib --code-coverage --no-watch && node tools/open-coverage.mjs",
