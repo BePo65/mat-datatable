@@ -5,6 +5,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
+import { ARROW_UPWARD, ARROW_DOWNWARD } from './app.svg';
 import { DemoTableDataStore } from './services/demo-table-datastore.class';
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
@@ -120,16 +121,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private formattedDatastoreLengths = 'filtered {0} / total {1}';
   private formattedFirstVisibleRow = 'First visible row: {0}';
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
 
     // Register svg icons
-    iconRegistry.addSvgIcon(
-      'show_button_pane',
-      sanitizer.bypassSecurityTrustResourceUrl('../assets/arrow_upward_FILL0_wght400_GRAD0_opsz24.svg'));
-    iconRegistry.addSvgIcon(
-      'hide_button_pane',
-      sanitizer.bypassSecurityTrustResourceUrl('../assets/arrow_downward_FILL0_wght400_GRAD0_opsz24.svg'));
+    this.iconRegistry
+      .addSvgIconLiteral('show_button_pane', this.sanitizer.bypassSecurityTrustHtml(ARROW_UPWARD))
+      .addSvgIconLiteral('hide_button_pane', this.sanitizer.bypassSecurityTrustHtml(ARROW_DOWNWARD));
 
     this.headersTextFromColumnDefinitions();
   }
