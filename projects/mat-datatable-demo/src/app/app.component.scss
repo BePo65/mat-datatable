@@ -8,8 +8,13 @@
 
 .header {
   display: grid;
-  grid-template-columns: auto max-content;
+  grid-template-columns: max-content auto max-content;
   margin: 0.25em 0.5em 0.75em;
+}
+
+.header-source {
+  place-self: center center;
+  margin: 0 2em;
 }
 
 .with-footer-toggle {
