@@ -3,7 +3,13 @@ import { delay, of } from 'rxjs';
 
 import EXAMPLE_DATA from './demo-table.mock.data';
 
-import { FieldSortDefinition, RequestRowsRange, Page, FieldFilterDefinition, DataStoreProvider } from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
+import {
+  FieldSortDefinition,
+  RequestRowsRange,
+  Page,
+  FieldFilterDefinition,
+  DataStoreProvider
+} from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
 
 /**
  * Datastore for the DemoTable view. This class should
