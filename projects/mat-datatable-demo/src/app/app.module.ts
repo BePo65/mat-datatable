@@ -12,7 +12,7 @@ import { NgxRerenderModule } from 'ngx-rerender';
 
 import { AppComponent } from './app.component';
 
-import { MatDatatableModule } from 'projects/mat-datatable-lib/src';
+import { MatDatatableModule } from 'mat-datatable';
 
 @NgModule({
   declarations: [

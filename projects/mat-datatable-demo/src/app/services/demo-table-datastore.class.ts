@@ -9,7 +9,7 @@ import {
   Page,
   FieldFilterDefinition,
   DataStoreProvider
-} from 'projects/mat-datatable-lib/src/interfaces/datastore-provider.interface';
+} from 'mat-datatable';
 
 /**
  * Datastore for the DemoTable view. This class should

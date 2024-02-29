@@ -15,7 +15,7 @@ import {
   MatDatatableComponent,
   MatSortDefinition,
   RowSelectionType
-} from 'projects/mat-datatable-lib/src';
+} from 'mat-datatable';
 
 @Component({
   selector: 'app-root',
