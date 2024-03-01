@@ -31,9 +31,8 @@
     "unimported": "npx unimported",
     "deprecated": "npx check-is-deprecated -f ./package.json",
     "copy-readme": "cpy README.md projects/mat-datatable-lib/ && cpy assets/screenshot.jpg projects/mat-datatable-lib/",
-    "postbump": "npm run copy-readme && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg",
-    "init-changelog": "commit-and-tag-version -i CHANGELOG.md --same-file --prerelease pre --first-release",
-    "release": "commit-and-tag-version -i CHANGELOG.md --same-file",
+    "init-changelog": "commit-and-tag-version -i CHANGELOG.md --same-file --prerelease pre --first-release --commit-all",
+    "release": "commit-and-tag-version -i CHANGELOG.md --same-file --commit-all",
     "e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"npm run cypress:demo:run:e2e\"",
     "cypress:demo:open": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress open --project=projects/mat-datatable-demo\"",
     "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\""
@@ -118,6 +117,9 @@
         "filename": "README.md",
         "updater": "tools/npm-scripts/readme-updater.js"
       }
-    ]
+    ],
+    "scripts": {
+      "postbump": "npm run copy-readme && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg"
+    }
   }
 }
