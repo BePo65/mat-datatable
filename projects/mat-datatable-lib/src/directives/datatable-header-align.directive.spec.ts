@@ -91,7 +91,7 @@ describe('MatDatatableHeaderAlignDirective', () => {
           <span>Goyette</span>
         </td>
         <td class="mat-mdc-cell mat-datatable-cell mat-column-email">
-          <span>Alexa1@gmail.com</span>
+          <span>Alexa1&#64;gmail.com</span>
         </td>
       </tr>
     </tbody>

@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "mat-datatable-demo:build:production"
+              "buildTarget": "mat-datatable-demo:build:production"
             },
             "development": {
-              "browserTarget": "mat-datatable-demo:build:development"
+              "buildTarget": "mat-datatable-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mat-datatable-demo:build"
+            "buildTarget": "mat-datatable-demo:build"
           }
         },
         "test": {
