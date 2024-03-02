@@ -133,7 +133,7 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
    * only be changed once the arrow displays again (hint or activation).
    */
   override _updateArrowDirection() {
-    super._arrowDirection = this._getSortDirection();
+    this._arrowDirection = this._getSortDirection();
   }
 
   /**
