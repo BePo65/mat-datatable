@@ -1,6 +1,7 @@
 {
   "entry": [
     "projects/mat-datatable-lib/src/public-api.ts",
+    "projects/mat-datatable-lib/testing/src/public-api.ts",
     "projects/mat-datatable-demo/src/main.ts"
   ],
   "ignorePatterns": [
@@ -28,11 +29,17 @@
     "projects/mat-datatable-lib/cypress/support/commands.ts",
     "projects/mat-datatable-lib/cypress/support/component.ts",
     "projects/mat-datatable-lib/cypress/support/e2e.ts",
-    "projects/mat-datatable-lib/src/lib/mat-datatable.module.ts"
+    "projects/mat-datatable-lib/src/lib/mat-datatable.module.ts",
+    "projects/mat-datatable-lib/src/directives/datatable-sort/testbed/fake-events/dispatch-events.ts",
+    " projects/mat-datatable-lib/src/directives/datatable-sort/testbed/fake-events/event-objects.ts",
+    "projects/mat-datatable-lib/src/directives/datatable-sort/wrapped-error-message.ts",
+    "projects/mat-datatable-lib/src/lib/mocking-data/mock-data.simple.ts",
+    "projects/mat-datatable-lib/testing/src/index.ts"
   ],
   "ignoreUnused": [
     "material-icons",
-    "roboto-fontface"
+    "roboto-fontface",
+    "tslib"
   ],
   "ignoreUnresolved": [
     "mat-datatable"
