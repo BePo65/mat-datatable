@@ -7,16 +7,16 @@ updates:
   open-pull-requests-limit: 10
   ignore:
      - dependency-name: "@angular/*"
-       versions: ["16.x", "17.x"]
+       versions: ["17.x"]
      - dependency-name: "@angular-devkit/build-angular"
-       versions: ["16.x", "17.x"]
+       versions: ["17.x"]
      - dependency-name: "@angular-eslint/*"
-       versions: ["16.x", "17.x"]
+       versions: ["17.x"]
      - dependency-name: "ng-packagr"
-       versions: ["16.x", "17.x"]
+       versions: ["17.x"]
      - dependency-name: "ngx-rerender"
        versions: ["1.3"]
      - dependency-name: "typescript"
-       versions: ["5.x"]
+       versions: ["5.2.x"]
      - dependency-name: "zone"
        versions: ["0.14.1", "0.14.2", "0.14.3"]
