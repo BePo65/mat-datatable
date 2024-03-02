@@ -1,7 +1,7 @@
 {
   "entry": [
-    "projects/mat-datatable-lib/src/public-api.ts",
-    "projects/mat-datatable-lib/testing/src/public-api.ts",
+    "projects/mat-datatable-lib/src/index.ts",
+    "projects/mat-datatable-lib/testing/src/index.ts",
     "projects/mat-datatable-demo/src/main.ts"
   ],
   "ignorePatterns": [
@@ -21,7 +21,6 @@
     "projects/mat-datatable-demo/src/main.ts",
     "projects/mat-datatable-demo/cypress/e2e/app.e2e.cy.ts",
     "projects/mat-datatable-lib/cypress/ct/mat-datatable.cy.ts",
-    "projects/mat-datatable-lib/src/public-api.ts",
     "tools/npm-scripts/readme-updater.js",
     "projects/mat-datatable-demo/cypress/support/commands.ts",
     "projects/mat-datatable-demo/cypress/support/component.ts",
@@ -33,8 +32,7 @@
     "projects/mat-datatable-lib/src/directives/datatable-sort/testbed/fake-events/dispatch-events.ts",
     " projects/mat-datatable-lib/src/directives/datatable-sort/testbed/fake-events/event-objects.ts",
     "projects/mat-datatable-lib/src/directives/datatable-sort/wrapped-error-message.ts",
-    "projects/mat-datatable-lib/src/lib/mocking-data/mock-data.simple.ts",
-    "projects/mat-datatable-lib/testing/src/index.ts"
+    "projects/mat-datatable-lib/src/lib/mocking-data/mock-data.simple.ts"
   ],
   "ignoreUnused": [
     "material-icons",
