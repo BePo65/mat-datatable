@@ -401,8 +401,8 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
   private unsortedData: DatatableItem[];
 
   constructor(testData: DatatableItem[], myTrackBy?: TrackByFunction<DatatableItem>) {
-    this.unsortedData = structuredClone(testData) as DatatableItem[];
-    this.data = structuredClone(testData) as DatatableItem[];
+    this.unsortedData = structuredClone(testData);
+    this.data = structuredClone(testData);
     this.currentSortingDefinitions = [];
     this.trackBy = myTrackBy ?? this.defaultTrackBy;
   }
@@ -457,7 +457,7 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
   ) {
-    let selectedDataset = structuredClone(this.unsortedData) as DatatableItem[];
+    let selectedDataset = structuredClone(this.unsortedData);
 
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {

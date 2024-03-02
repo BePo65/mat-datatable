@@ -121,7 +121,7 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
   ) {
-    let selectedDataset = structuredClone(this.baseData) as DatatableItem[];
+    let selectedDataset = structuredClone(this.baseData);
 
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {

@@ -806,8 +806,8 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
   private unsortedData: TRow[];
 
   constructor(testData: TRow[], myTrackBy?: TrackByFunction<TRow>) {
-    this.unsortedData = structuredClone(testData) as TRow[];
-    this.data = structuredClone(testData) as TRow[];
+    this.unsortedData = structuredClone(testData);
+    this.data = structuredClone(testData);
     this.currentSortingDefinitions = [];
     this.trackBy = myTrackBy ?? this.defaultTrackBy;
   }
@@ -874,7 +874,7 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     sorts?: FieldSortDefinition<TRow>[],
     filters?: FieldFilterDefinition<TRow>[]
   ) {
-    let selectedDataset = structuredClone(this.unsortedData) as TRow[];
+    let selectedDataset = structuredClone(this.unsortedData);
 
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
@@ -1152,8 +1152,8 @@ class DatatableDoubleTestComponent {
   @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;
   @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow>;
 
-  dataStore1 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData) as DatatableTestRow[], this.trackBy);
-  dataStore2 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData) as DatatableTestRow[], this.trackBy);
+  dataStore1 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData), this.trackBy);
+  dataStore2 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData), this.trackBy);
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinition[] = [];

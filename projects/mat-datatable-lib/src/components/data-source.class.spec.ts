@@ -957,7 +957,7 @@ class FakeUserDataStore<DatatableItem> implements DataStoreProvider<DatatableIte
     sorts?: FieldSortDefinition<DatatableItem>[],
     filters?: FieldFilterDefinition<DatatableItem>[]
   ) {
-    let selectedDataset = structuredClone(this.fakeDataset) as DatatableItem[];
+    let selectedDataset = structuredClone(this.fakeDataset);
 
     // Filter data
     if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {

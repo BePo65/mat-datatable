@@ -44,7 +44,7 @@ export class MatMultiSort extends MatSort {
 
     // Trigger sortChange to update arrows in header
     this.sortChange.emit({ active: '', direction: '' });
-    this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
+    this.multiSortChange.emit(structuredClone(this.sortDefinitions));
   }
   private _sortDefinitions: Sort[] = [];
 
@@ -84,7 +84,7 @@ export class MatMultiSort extends MatSort {
    */
   override sort(sortable: MatSortable): void {
     this.updateSortDefinitions(sortable);
-    this.multiSortChange.emit(structuredClone(this.sortDefinitions) as Sort[]);
+    this.multiSortChange.emit(structuredClone(this.sortDefinitions));
 
     // Trigger sortChange to update arrows in header
     this.sortChange.emit({ active: '', direction: '' });
