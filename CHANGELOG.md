@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [16.0.0](https://github.com/BePo65/mat-datatable/compare/v15.0.0...v16.0.0) (2024-03-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* tha project now requires angular v16
+
+### Features
+
+* update to angular v16 ([5ecb525](https://github.com/BePo65/mat-datatable/commit/5ecb5253eaa1f226bf4d97c01ad4be311d81a3c2))
+
 ## [15.0.0](https://github.com/BePo65/mat-datatable/compare/v0.0.0...v15.0.0) (2024-03-01)
 
 
