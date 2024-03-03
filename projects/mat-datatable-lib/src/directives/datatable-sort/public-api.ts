@@ -17,4 +17,4 @@ export * from './mat-multi-sort.directive';
 export * from './mat-multi-sort-header.component';
 
 // MatMultiSortModule
-export * from './mat-multi-sort.module';
+

@@ -2,7 +2,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, TrackByFunction, ViewChild } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, Observable, of } from 'rxjs';
 
 import { MatDatatableHarness, MatHeaderRowHarness, MatFooterRowHarness, MatMultiSortHarness } from '../../testing/src';
@@ -11,7 +11,6 @@ import { MatColumnDefinition } from '../interfaces/datatable-column-definition.i
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 import { MatDatatableComponent, RowSelectionType } from './mat-datatable.component';
-import { MatDatatableModule } from './mat-datatable.module';
 import SINGLE_PAGE_DATA from './mocking-data/mock-data.simple';
 
 describe('MatDatatableComponent', () => {
@@ -31,15 +30,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -118,15 +115,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -367,15 +362,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -422,15 +415,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -457,15 +448,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -595,15 +584,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -636,15 +623,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -688,14 +673,12 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
-        ],
-        declarations: [
           DatatableDoubleTestComponent
+        ],
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -742,15 +725,13 @@ describe('MatDatatableComponent', () => {
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
         imports: [
-          MatDatatableModule,
-          NoopAnimationsModule
+          DatatableEmptyTestComponent,
+          DatatableTestComponent
         ],
-        declarations: [
-          DatatableTestComponent,
-          DatatableEmptyTestComponent
+        providers: [
+          provideNoopAnimations()
         ]
-      })
-      .compileComponents();
+      }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -1007,23 +988,27 @@ const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
 
 @Component({
   template: `
-  <div class="content-table">
-    <mat-datatable #testTable
-      [columnDefinitions]="columnDefinitions"
-      [displayedColumns]="displayedColumns"
-      [rowSelectionMode]="currentSelectionMode"
-      [withFooter]="true"
-      [dataStoreProvider]="dataStore"
-      [trackBy]="trackBy"
-      (rowClick)="onRowClick($event)"
-      (rowSelectionChange)="onRowSelectionChange($event)"
-      (sortChange)="onSortChanged($event)"
-      >
-      No data to display.
-    </mat-datatable>
-  </div>
+<div class="content-table">
+  <mat-datatable #testTable
+    [columnDefinitions]="columnDefinitions"
+    [displayedColumns]="displayedColumns"
+    [rowSelectionMode]="currentSelectionMode"
+    [withFooter]="true"
+    [dataStoreProvider]="dataStore"
+    [trackBy]="trackBy"
+    (rowClick)="onRowClick($event)"
+    (rowSelectionChange)="onRowSelectionChange($event)"
+    (sortChange)="onSortChanged($event)"
+    >
+    No data to display.
+  </mat-datatable>
+</div>
   `,
-  styles: ['.content-table { height: 400px; }']
+  styles: ['.content-table { height: 400px; }'],
+  standalone: true,
+  imports: [
+    MatDatatableComponent
+  ]
 })
 class DatatableTestComponent {
   @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow>;
@@ -1081,22 +1066,26 @@ class DatatableTestComponent {
 
 @Component({
   template: `
-  <div class="content-table">
-    <mat-datatable
-      [columnDefinitions]="columnDefinitions"
-      [displayedColumns]="displayedColumns"
-      [rowSelectionMode]="currentSelectionMode"
-      [withFooter]="true"
-      [dataStoreProvider]="dataStore"
-      [trackBy]="trackBy"
-      (rowClick)="onRowClick($event)"
-      (sortChange)="onSortChanged($event)"
-      >
-      No data to display.
-    </mat-datatable>
-  </div>
+<div class="content-table">
+  <mat-datatable
+    [columnDefinitions]="columnDefinitions"
+    [displayedColumns]="displayedColumns"
+    [rowSelectionMode]="currentSelectionMode"
+    [withFooter]="true"
+    [dataStoreProvider]="dataStore"
+    [trackBy]="trackBy"
+    (rowClick)="onRowClick($event)"
+    (sortChange)="onSortChanged($event)"
+    >
+    No data to display.
+  </mat-datatable>
+</div>
   `,
-  styles: ['.content-table { height: 400px; }']
+  styles: ['.content-table { height: 400px; }'],
+  standalone: true,
+  imports: [
+    MatDatatableComponent
+  ]
 })
 class DatatableEmptyTestComponent {
   dataStore = new StaticTableDataStore<DatatableTestRow>([] as DatatableTestRow[], this.trackBy);
@@ -1123,30 +1112,34 @@ class DatatableEmptyTestComponent {
 
 @Component({
   template: `
-  <div class="content-table">
-    <mat-datatable #testTable1
-      [columnDefinitions]="columnDefinitions"
-      [displayedColumns]="displayedColumns"
-      [withFooter]="true"
-      [dataStoreProvider]="dataStore1"
-      [trackBy]="trackBy"
-      (sortChange)="onSortChanged1($event)"
-      >
-      No data to display.
-    </mat-datatable>
-    <mat-datatable #testTable2
-      [columnDefinitions]="columnDefinitions"
-      [displayedColumns]="displayedColumns"
-      [withFooter]="true"
-      [dataStoreProvider]="dataStore2"
-      [trackBy]="trackBy"
-      (sortChange)="onSortChanged2($event)"
-      >
-      No data to display.
-    </mat-datatable>
-  </div>
+<div class="content-table">
+  <mat-datatable #testTable1
+    [columnDefinitions]="columnDefinitions"
+    [displayedColumns]="displayedColumns"
+    [withFooter]="true"
+    [dataStoreProvider]="dataStore1"
+    [trackBy]="trackBy"
+    (sortChange)="onSortChanged1($event)"
+    >
+    No data to display.
+  </mat-datatable>
+  <mat-datatable #testTable2
+    [columnDefinitions]="columnDefinitions"
+    [displayedColumns]="displayedColumns"
+    [withFooter]="true"
+    [dataStoreProvider]="dataStore2"
+    [trackBy]="trackBy"
+    (sortChange)="onSortChanged2($event)"
+    >
+    No data to display.
+  </mat-datatable>
+</div>
   `,
-  styles: ['.content-table { height: 400px; }']
+  styles: ['.content-table { height: 400px; }'],
+  standalone: true,
+  imports: [
+    MatDatatableComponent
+  ]
 })
 class DatatableDoubleTestComponent {
   @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;

@@ -6,8 +6,8 @@ import {
 } from '@angular/cdk/testing';
 
 import {
-  RowHarnessFilters,
-  MatDatatableHarnessFilters
+  MatDatatableHarnessFilters,
+  RowHarnessFilters
 } from './mat-datatable-harness-filters';
 import {
   MatFooterRowHarness,

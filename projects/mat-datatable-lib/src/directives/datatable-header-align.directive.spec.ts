@@ -10,13 +10,13 @@ describe('MatDatatableHeaderAlignDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [
-        MatDatatableHeaderAlignDirective,
+      imports: [
         TestComponent
       ]
-    })
-    .createComponent(TestComponent);
-    fixture.detectChanges(); // initial binding
+    }).createComponent(TestComponent);
+
+    // initial binding
+    fixture.detectChanges();
 
     // all elements with an attached MatDatatableHeaderAlignDirective
     directiveElements = fixture.debugElement.queryAll(By.directive(MatDatatableHeaderAlignDirective));
@@ -97,6 +97,10 @@ describe('MatDatatableHeaderAlignDirective', () => {
     </tbody>
   </table>
 </div>
-  `
+  `,
+  standalone: true,
+  imports: [
+    MatDatatableHeaderAlignDirective
+  ]
 })
 class TestComponent { }

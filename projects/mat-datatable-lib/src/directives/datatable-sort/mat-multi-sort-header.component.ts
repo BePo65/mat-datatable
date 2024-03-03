@@ -2,6 +2,7 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 
 import { AriaDescriber, FocusMonitor } from '@angular/cdk/a11y';
+import { NgIf } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -26,6 +27,7 @@ import {
 } from '@angular/material/sort';
 import { Subject, takeUntil } from 'rxjs';
 
+import { MatMultiSortBadgeDirective } from './mat-multi-sort-badge.directive';
 import { getMultiSortHeaderNotContainedWithinMultiSortError } from './mat-multi-sort-errors';
 import { MatMultiSort } from './mat-multi-sort.directive';
 
@@ -52,6 +54,11 @@ interface MatSortHeaderColumnDef {
   changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled'],
+  standalone: true,
+  imports: [
+    MatMultiSortBadgeDirective,
+    NgIf
+  ],
   animations: [
     matSortAnimations.indicator,
     matSortAnimations.leftPointer,

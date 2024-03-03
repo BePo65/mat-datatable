@@ -1,4 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { NgClass, NgFor, NgStyle, NgIf, AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -12,15 +13,34 @@ import {
   TrackByFunction,
   ViewChild
 } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import {
+  MatColumnDef,
+  MatCell,
+  MatCellDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable
+} from '@angular/material/table';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { EmptyDataStoreProvider, TableVirtualScrollDataSource } from '../components/data-source.class';
+import { MatDatatableHeaderAlignDirective } from '../directives/datatable-header-align.directive';
+import { MatDatatableResizableDirective } from '../directives/datatable-resizable.directive';
 import {
   MatMultiSort,
   Sort,
   SortHeaderArrowPosition
 } from '../directives/datatable-sort';
+import { MatMultiSortHeader } from '../directives/datatable-sort/mat-multi-sort-header.component';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
 import { FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
 import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
@@ -35,12 +55,41 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
  * @template TRowData - type / interface definition for data of a single row
  */
 @Component({
-  selector: 'mat-datatable',
-  templateUrl: './mat-datatable.component.html',
-  styleUrls: [
-    './mat-datatable.component.scss',
-    '../directives/datatable-resizable.directive.scss'
-  ]
+    selector: 'mat-datatable',
+    templateUrl: './mat-datatable.component.html',
+    styleUrls: [
+        './mat-datatable.component.scss',
+        '../directives/datatable-resizable.directive.scss'
+    ],
+    standalone: true,
+    imports: [
+      AsyncPipe,
+      CdkVirtualScrollViewport,
+      MatCell,
+      MatCellDef,
+      MatColumnDef,
+      MatDatatableHeaderAlignDirective,
+      MatDatatableResizableDirective,
+      MatFooterCell,
+      MatFooterCellDef,
+      MatFooterRow,
+      MatFooterRowDef,
+      MatHeaderCell,
+      MatHeaderCellDef,
+      MatHeaderRow,
+      MatHeaderRowDef,
+      MatMultiSort,
+      MatMultiSortHeader,
+      MatProgressBar,
+      MatRow,
+      MatRowDef,
+      MatTable,
+      NgClass,
+      NgFor,
+      NgIf,
+      NgStyle,
+      TableItemSizeDirective
+    ]
 })
 export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];

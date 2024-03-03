@@ -27,11 +27,12 @@ import {
 
 // Container for MatSortables to manage the sort state and provide default sort parameters.
 @Directive({
-  selector: '[matMultiSort]',
-  exportAs: 'matMultiSort',
-  host: {
-    'class': 'mat-multi-sort'
-  }
+    selector: '[matMultiSort]',
+    exportAs: 'matMultiSort',
+    host: {
+        'class': 'mat-multi-sort'
+    },
+    standalone: true
 })
 export class MatMultiSort extends MatSort {
   // The currently active sort definition.

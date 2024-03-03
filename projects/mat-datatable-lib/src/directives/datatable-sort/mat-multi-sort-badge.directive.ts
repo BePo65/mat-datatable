@@ -26,17 +26,18 @@ const BADGE_CONTENT_CLASS = 'mat-multi-sort-badge-content';
 
 /** Directive to display a text badge. */
 @Directive({
-  selector: '[matMultiSortBadge]',
-  inputs: ['disabled: matMultiSortBadgeDisabled'],
-  host: {
-    'class': 'mat-multi-sort-badge',
-    '[class.mat-multi-sort-badge-above]': '!isAscending()',
-    '[class.mat-multi-sort-badge-below]': 'isAscending()',
-    '[class.mat-multi-sort-badge-before]': '!isAfter()',
-    '[class.mat-multi-sort-badge-after]': 'isAfter()',
-    '[class.mat-multi-sort-badge-hidden]': 'hidden || !content',
-    '[class.mat-multi-sort-badge-disabled]': 'disabled'
-  }
+    selector: '[matMultiSortBadge]',
+    inputs: ['disabled: matMultiSortBadgeDisabled'],
+    host: {
+        'class': 'mat-multi-sort-badge',
+        '[class.mat-multi-sort-badge-above]': '!isAscending()',
+        '[class.mat-multi-sort-badge-below]': 'isAscending()',
+        '[class.mat-multi-sort-badge-before]': '!isAfter()',
+        '[class.mat-multi-sort-badge-after]': 'isAfter()',
+        '[class.mat-multi-sort-badge-hidden]': 'hidden || !content',
+        '[class.mat-multi-sort-badge-disabled]': 'disabled'
+    },
+    standalone: true
 })
 export class MatMultiSortBadgeDirective implements OnInit, OnDestroy {
   /**

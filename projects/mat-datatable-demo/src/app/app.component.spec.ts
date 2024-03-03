@@ -11,24 +11,22 @@ import { NgxRerenderModule } from 'ngx-rerender';
 
 import { AppComponent } from './app.component';
 
-import { MatDatatableModule } from 'mat-datatable';
+import { MatDatatableComponent } from 'mat-datatable';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
       imports: [
+        AppComponent,
         BrowserAnimationsModule,
         HttpClientModule,
         MatButtonModule,
         MatChipsModule,
+        MatDatatableComponent,
         MatFormFieldModule,
         MatIconModule,
         MatSelectModule,
         MatSlideToggleModule,
-        MatDatatableModule,
         NgxRerenderModule
       ]
     }).compileComponents();

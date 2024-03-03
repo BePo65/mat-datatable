@@ -5,15 +5,7 @@
 // MatDatatableComponent
 export * from './lib/mat-datatable.component';
 
-// MatDatatableModule
-export * from './lib/mat-datatable.module';
-
-export {
-  MatMultiSort,
-  MatMultiSortHeader,
-  MatMultiSortModule,
-  SortDirectionAscDesc
-} from './directives/datatable-sort';
+export { MatMultiSort, MatMultiSortHeader, SortDirectionAscDesc } from './directives/datatable-sort';
 
 export { Sort } from '@angular/material/sort';
 

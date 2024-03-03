@@ -14,10 +14,9 @@ describe('MatMultiSortBadgeDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [
-        BadgeTestApp,
-        MatMultiSortBadgeDirective
-      ]
+    imports: [
+      BadgeTestApp
+    ]
     }).createComponent(BadgeTestApp);
     testComponent = fixture.debugElement.componentInstance as BadgeTestApp;
     fixture.detectChanges(); // initial binding
@@ -181,15 +180,19 @@ describe('MatMultiSortBadgeDirective', () => {
   encapsulation: ViewEncapsulation.Emulated,
   styles: ['span { color: hotpink; }'],
   template: `
-    <span [matMultiSortBadge]="badgeContent"
-          [matMultiSortBadgeArrowDirection]="badgeDirection"
-          [matMultiSortBadgePosition]="badgePosition"
-          [matMultiSortBadgeHidden]="badgeHidden"
-          [matMultiSortBadgeDescription]="badgeDescription"
-          [matMultiSortBadgeDisabled]="badgeDisabled">
-      home
-    </span>
-  `
+<span [matMultiSortBadge]="badgeContent"
+      [matMultiSortBadgeArrowDirection]="badgeDirection"
+      [matMultiSortBadgePosition]="badgePosition"
+      [matMultiSortBadgeHidden]="badgeHidden"
+      [matMultiSortBadgeDescription]="badgeDescription"
+      [matMultiSortBadgeDisabled]="badgeDisabled">
+  home
+</span>
+  `,
+  standalone: true,
+  imports: [
+    MatMultiSortBadgeDirective
+  ]
 })
 class BadgeTestApp {
   @ViewChild(MatMultiSortBadgeDirective) badgeInstance!: MatMultiSortBadgeDirective;
@@ -203,10 +206,10 @@ class BadgeTestApp {
 
 @Component({
   template: `
-    <span matMultiSortBadge="Hello">
-      home
-      <div class="mat-multi-sort-badge-content">Pre-existing badge</div>
-    </span>
+<span matMultiSortBadge="Hello">
+  home
+  <div class="mat-multi-sort-badge-content">Pre-existing badge</div>
+</span>
   `
 })
 class PreExistingBadge {}

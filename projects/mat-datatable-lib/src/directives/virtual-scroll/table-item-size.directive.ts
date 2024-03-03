@@ -77,13 +77,14 @@ const defaults = {
 };
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: 'cdk-virtual-scroll-viewport[tvsItemSize]',
-  exportAs: 'table-virtual-scroll',
-  providers: [{
-    provide: VIRTUAL_SCROLL_STRATEGY,
-    useFactory: () => new FixedSizeTableVirtualScrollStrategy()
-  }]
+    // eslint-disable-next-line @angular-eslint/directive-selector
+    selector: 'cdk-virtual-scroll-viewport[tvsItemSize]',
+    exportAs: 'table-virtual-scroll',
+    standalone: true,
+    providers: [{
+      provide: VIRTUAL_SCROLL_STRATEGY,
+      useFactory: () => new FixedSizeTableVirtualScrollStrategy()
+    }]
 })
 export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterContentInit, OnDestroy {
   @HostListener('window:keyup', ['$event'])

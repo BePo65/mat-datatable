@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[matResizable]'
+    selector: '[matResizable]',
+    standalone: true
 })
 export class MatDatatableResizableDirective implements OnInit, OnDestroy {
   @Input()

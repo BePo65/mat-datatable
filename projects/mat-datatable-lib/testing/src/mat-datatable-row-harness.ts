@@ -7,9 +7,9 @@ import {
 
 import {
   _MatCellHarnessBase,
-  MatRowCellHarness,
+  MatFooterCellHarness,
   MatHeaderCellHarness,
-  MatFooterCellHarness
+  MatRowCellHarness
 } from './mat-datatable-cell-harness';
 import {
   CellHarnessFilters,

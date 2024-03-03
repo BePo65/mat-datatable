@@ -10,11 +10,9 @@ describe('MatResizableDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [
-        MatDatatableResizableDirective,
-        TestComponent
-      ]
-    })
+    imports: [MatDatatableResizableDirective,
+        TestComponent]
+})
     .createComponent(TestComponent);
     fixture.detectChanges(); // initial binding
 
@@ -66,23 +64,27 @@ describe('MatResizableDirective', () => {
 
 @Component({
   template: `
-    <tr>
-      <th id="resizableDefault" class="mat-sort-header">
-        <div class="mat-sort-header-container">default header</div>
-      </th>
-      <th id="resizableTrue" class="mat-sort-header" [matResizable]="true">
-        <div class="mat-sort-header-container">resizable header</div>
-      </th>
-      <th id="resizableFalse" class="mat-sort-header" [matResizable]="false">
-        <div class="mat-sort-header-container">not resizable header</div>
-      </th>
-      <th id="resizableDefault" class="mat-sort-header" [matResizable]>
-        <div class="mat-sort-header-container">not resizable header</div>
-      </th>
-      <th id="resizableDefault" class="mat-sort-header" matResizable>
-        <div class="mat-sort-header-container">not resizable header</div>
-      </th>
-    </tr>
-  `
+<tr>
+  <th id="resizableDefault" class="mat-sort-header">
+    <div class="mat-sort-header-container">default header</div>
+  </th>
+  <th id="resizableTrue" class="mat-sort-header" [matResizable]="true">
+    <div class="mat-sort-header-container">resizable header</div>
+  </th>
+  <th id="resizableFalse" class="mat-sort-header" [matResizable]="false">
+    <div class="mat-sort-header-container">not resizable header</div>
+  </th>
+  <th id="resizableDefault" class="mat-sort-header" [matResizable]>
+    <div class="mat-sort-header-container">not resizable header</div>
+  </th>
+  <th id="resizableDefault" class="mat-sort-header" matResizable>
+    <div class="mat-sort-header-container">not resizable header</div>
+  </th>
+</tr>
+  `,
+    standalone: true,
+    imports: [
+      MatDatatableResizableDirective
+    ]
 })
 class TestComponent { }

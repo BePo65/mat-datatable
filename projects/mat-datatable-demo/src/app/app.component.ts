@@ -1,8 +1,15 @@
 import { trigger, transition, style, animate } from '@angular/animations';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatChipListbox, MatChip, MatChipRemove } from '@angular/material/chips';
+import { MatOption } from '@angular/material/core';
+import { MatLabel, MatFormField } from '@angular/material/form-field';
+import { MatIconRegistry, MatIcon } from '@angular/material/icon';
+import { MatSelect } from '@angular/material/select';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxRerenderModule } from 'ngx-rerender';
 import { BehaviorSubject, delay, Subject, takeUntil } from 'rxjs';
 
 import { ARROW_UPWARD, ARROW_DOWNWARD } from './app.svg';
@@ -18,20 +25,39 @@ import {
 } from 'mat-datatable';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('slideInBottom', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)' }),
-        animate('500ms ease-out', style({ transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    animations: [
+      trigger('slideInBottom', [
+        transition(':enter', [
+          style({ transform: 'translateY(100%)' }),
+          animate('500ms ease-out', style({ transform: 'translateY(0)' }))
+        ]),
+        transition(':leave', [
+          animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
+        ])
       ])
-    ])
-  ]
+    ],
+    standalone: true,
+    imports: [
+      AsyncPipe,
+      MatButton,
+      MatChip,
+      MatChipListbox,
+      MatChipRemove,
+      MatDatatableComponent,
+      MatFormField,
+      MatIcon,
+      MatLabel,
+      MatMiniFabButton,
+      MatOption,
+      MatSelect,
+      MatSlideToggle,
+      NgIf,
+      NgFor,
+      NgxRerenderModule
+    ]
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;

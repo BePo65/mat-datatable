@@ -3,7 +3,8 @@ import { AfterViewInit, Directive, ElementRef, Input, Renderer2 } from '@angular
 import { ColumnAlignmentType } from '../interfaces/datatable-column-definition.interface';
 
 @Directive({
-  selector: '[matHeaderAlignment]'
+    selector: '[matHeaderAlignment]',
+    standalone: true
 })
 export class MatDatatableHeaderAlignDirective implements AfterViewInit {
   @Input() matHeaderAlignment: ColumnAlignmentType | undefined;
