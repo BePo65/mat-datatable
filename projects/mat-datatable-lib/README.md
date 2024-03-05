@@ -4,7 +4,7 @@
 
 A simple data table with virtual scrolling using Angular Material.
 
-![Version](https://img.shields.io/badge/version-17.0.1-blue.svg?cacheSeconds=2592000)
+![Version](https://img.shields.io/badge/version-17.1.0-blue.svg?cacheSeconds=2592000)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]
 ![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)

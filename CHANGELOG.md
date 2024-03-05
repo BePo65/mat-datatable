@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [17.1.0](https://github.com/BePo65/mat-datatable/compare/v17.0.1...v17.1.0) (2024-03-05)
+
+
+### Features
+
+* update app and lib to standalone ([917fd2a](https://github.com/BePo65/mat-datatable/commit/917fd2ae46e94f8aaebf033cb1dd44153cad6de9))
+
 ## [17.0.1](https://github.com/BePo65/mat-datatable/compare/v17.0.0...v17.0.1) (2024-03-02)
 
 ## [17.0.0](https://github.com/BePo65/mat-datatable/compare/v16.0.0...v17.0.0) (2024-03-02)
