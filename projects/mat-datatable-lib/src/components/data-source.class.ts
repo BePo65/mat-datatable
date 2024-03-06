@@ -280,7 +280,6 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
       const copyLength = Math.max(Math.min(oldContentLength - offset, range.numberOfRows), 0);
       const copyEndIndex = offset + copyLength;
       // handle case, when we request data beyond the end of the datastore
-      // TODO should we better use sizeOfDatastore instead of 0?
       const filteredSizeOfDataStore= this.filteredSizeOfDataStore || 0;
       const numberOfExcessRows =  Math.max((range.startRowIndex + range.numberOfRows) - filteredSizeOfDataStore, 0);
       const emptyRowsToAdd = Math.max(range.numberOfRows - copyLength - numberOfExcessRows, 0);
