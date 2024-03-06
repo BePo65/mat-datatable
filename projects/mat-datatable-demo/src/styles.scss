@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use '../../mat-datatable-lib/src/lib/mat-datatable-theme' as mat-datatable;
+@use '../../mat-datatable-lib/src/theming' as mat-datatable;
 
 // Fonts for material
 @use 'roboto-fontface/css/roboto/sass/roboto-fontface' with (

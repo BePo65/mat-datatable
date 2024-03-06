@@ -1,5 +1,5 @@
 {
-  "name": "@bepo65/mat-datatable",
+  "name": "mat-datatable",
   "version": "17.1.1",
   "description": "A component for Angular using Angular Material that implements a table as a simplified replacement for ngx-datatable. The project contains a library component and a demo project.",
   "repository": {
@@ -7,12 +7,17 @@
     "url": "https://github.com/BePo65/mat-datatable.git"
   },
   "license": "MIT",
-  "peerDependencies": {
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0"
+  "sideEffects": false,
+  "exports": {
+    "./theming": {
+      "sass": "./theming/index.scss"
+    }
   },
   "dependencies": {
     "tslib": "^2.6.0"
   },
-  "sideEffects": false
+  "peerDependencies": {
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0"
+  }
 }

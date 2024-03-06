@@ -6,7 +6,6 @@
 export * from './lib/mat-datatable.component';
 
 export { MatMultiSort, MatMultiSortHeader, SortDirectionAscDesc } from './directives/datatable-sort';
-
 export { Sort } from '@angular/material/sort';
 
 // MatColumnDefinition<TRowData>
