@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "@angular/material" as mat;
-@use './mat-datatable-table-theme' as mat-datatable-table;
+@use '../lib/mat-datatable-table-theme' as mat-datatable-table;
 @use '../directives/datatable-sort/mat-multi-sort-badge-theme' as mat-datatable-badge;
 
 @mixin theme($theme-or-color-config) {
