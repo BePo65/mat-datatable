@@ -1,6 +1,6 @@
 {
   "name": "mat-datatable",
-  "version": "17.1.1",
+  "version": "17.2.0",
   "description": "A component for Angular using Angular Material that implements a table as a simplified replacement for ngx-datatable. The project contains a library component and a demo project.",
   "repository": {
     "type": "git",

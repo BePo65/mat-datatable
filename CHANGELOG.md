@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [17.2.0](https://github.com/BePo65/mat-datatable/compare/v17.1.1...v17.2.0) (2024-03-06)
+
+
+### Features
+
+* fix problems with using the mat-datatable theme ([81fbc7a](https://github.com/BePo65/mat-datatable/commit/81fbc7a00bf4def71a3bcaed37c584fecb42629e))
+* **lib:** make theme an export of library ([42ee128](https://github.com/BePo65/mat-datatable/commit/42ee128d016eaf8c568324d38e31c1c6923e8066))
+
+
+### Bug Fixes
+
+* remove scope from library ([28b1b59](https://github.com/BePo65/mat-datatable/commit/28b1b59c3b5908088de8cded9ba7e7e06a39084f))
+
 ## [17.1.1](https://github.com/BePo65/mat-datatable/compare/v17.1.0...v17.1.1) (2024-03-05)
 
 ## [17.1.0](https://github.com/BePo65/mat-datatable/compare/v17.0.1...v17.1.0) (2024-03-05)
