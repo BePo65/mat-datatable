@@ -21,8 +21,8 @@
     "test:lib:coverage:ui": "set BROWSERSLIST_IGNORE_OLD_DATA=1 && ng test mat-datatable-lib --code-coverage --watch=false && node tools/open-coverage.mjs",
     "build": "npm run build:lib && npm run build:demo",
     "build:prod": "npm run build:lib:prod && npm run build:demo:prod",
-    "build:lib": "ng build mat-datatable-lib --configuration development && cpy CHANGELOG.md dist/mat-datatable-lib/ && cpy LICENSE dist/mat-datatable-lib/",
-    "build:lib:prod": "ng build mat-datatable-lib --configuration production && cpy CHANGELOG.md dist/mat-datatable-lib/ && cpy LICENSE dist/mat-datatable-lib/",
+    "build:lib": "ng build mat-datatable-lib --configuration development",
+    "build:lib:prod": "ng build mat-datatable-lib --configuration production",
     "build:demo": "ng build mat-datatable-demo --delete-output-path --configuration development",
     "build:demo:prod": "ng build mat-datatable-demo --delete-output-path --configuration production",
     "build:ghpages": "npm run build:prod && del-cli ghpages && cpy \"dist/mat-datatable-demo/**\" ghpages",
@@ -30,7 +30,7 @@
     "start:debug": "ng serve --host=127.0.0.1",
     "unimported": "npx unimported",
     "deprecated": "npx check-is-deprecated -f ./package.json",
-    "copy-readme": "cpy README.md projects/mat-datatable-lib/ && cpy assets/screenshot.jpg projects/mat-datatable-lib/",
+    "copy-to-dist": "cpy README.md projects/mat-datatable-lib/ && cpy assets/screenshot.jpg projects/mat-datatable-lib/ && cpy CHANGELOG.md projects/mat-datatable-lib/ ",
     "init-changelog": "commit-and-tag-version -i CHANGELOG.md --same-file --prerelease pre --first-release --commit-all",
     "release": "commit-and-tag-version -i CHANGELOG.md --same-file --commit-all",
     "e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"npm run cypress:demo:run:e2e\"",
@@ -119,7 +119,7 @@
       }
     ],
     "scripts": {
-      "postbump": "npm run copy-readme && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg"
+      "postbump": "npm run copy-to-dist && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg && git add projects/mat-datatable-lib/CHANGELOG.md"
     }
   }
 }
