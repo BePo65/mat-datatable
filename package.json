@@ -120,7 +120,7 @@
       }
     ],
     "scripts": {
-      "postbump": "npm run copy-to-lib && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg && git add projects/mat-datatable-lib/CHANGELOG.md"
+      "postchangelog": "npm run copy-to-lib && git add projects/mat-datatable-lib/README.md && git add projects/mat-datatable-lib/assets/screenshot.jpg && git add projects/mat-datatable-lib/CHANGELOG.md"
     }
   }
 }
