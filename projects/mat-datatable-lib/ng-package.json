@@ -3,6 +3,9 @@
   "dest": "../../dist/mat-datatable-lib",
   "assets": [
     "assets",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE",
     { "input": "src/lib", "glob": "_mat-datatable-table-theme.scss", "output": "lib" },
     { "input": "src/directives/datatable-sort", "glob": "_mat-multi-sort-badge-theme.scss", "output": "directives/datatable-sort" },
     { "input": "src/theming", "glob": "**/*.scss", "output": "theming" }
