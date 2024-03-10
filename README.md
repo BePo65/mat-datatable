@@ -1089,8 +1089,10 @@ For details of the commit messages format see [Contributing to Angular](https://
 <!-- LICENSE -->
 ## License
 
+Copyright © 2024 [Bernhard Pottler](https://github.com/BePo65).
+
 Distributed under the MIT License. See `LICENSE` for more information.
 
-This project uses icons from the [Google Material Icons Library](https://developers.google.com/fonts/docs/material_icons) that are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/about)' and '[Material Icons](https://github.com/google/material-design-icons)' from the [Google Fonts Library](https://fonts.google.com/) that are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
