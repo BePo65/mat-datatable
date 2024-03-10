@@ -6,6 +6,7 @@
     "type": "git",
     "url": "https://github.com/BePo65/mat-datatable.git"
   },
+  "author": "Bernhard Pottler",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
