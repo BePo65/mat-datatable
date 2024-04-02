@@ -264,7 +264,7 @@ The component is generic; the given type is used to define the object for the ro
 
 | Name | Description |
 |------|-------------|
-| `filterDefinitions: FieldFilterDefinition\<T>[]` | Gets / sets the current filter definition. |
+| `filterDefinitions: FieldFilterDefinition<T>[]` | Gets / sets the current filter definition. |
 | | |
 
 ##### **Methods**
@@ -287,7 +287,7 @@ The component is generic; the given type is used to define the object for the ro
 
 #### DataStoreProvider
 
-Component to create an angular material table based datatable.
+Interface for a component that fetches data from the datastore respecting sorting and filtering.
 The component is generic; the given type is used to define the object for the row data.
 
 ##### **Methods**
@@ -339,7 +339,7 @@ Interface for the definition of the sorting of 1 table column.
 | `direction: SortDirection` | The direction used to sort the column. |
 | | |
 
-#### Page
+#### RequestRowsRange
 
 Interface defining the properties of a requests for a range of rows.
 
@@ -351,7 +351,7 @@ Interface defining the properties of a requests for a range of rows.
 | `numberOfRows: number` | The number of rows to return. |
 | | |
 
-#### RequestRowsRange
+#### Page
 
 Interface defining the properties of a page of rows returned from the datastore.
 
@@ -376,7 +376,7 @@ The alignment of the content of a column
 
 | |
 |------|
-| type ColumnAlignmentType = "left" | "center" | "right"; |
+| type ColumnAlignmentType = "left" \| "center" \| "right"; |
 | |
 
 #### FieldFilterDefinition
