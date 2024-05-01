@@ -50,6 +50,7 @@ A simple data table with virtual scrolling using Angular Material.
       </ul>
     </li>
     <li><a href="#license">License</a></li>
+    <li><a href="#hints">Hints</a></li>
   </ol>
 </details>
 
@@ -1097,5 +1098,8 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- HINTS -->
 ## Hints
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
