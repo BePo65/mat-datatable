@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NgxRerenderModule } from 'ngx-rerender';
 
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         BrowserAnimationsModule,
+        BrowserDynamicTestingModule,
         HttpClientModule,
         MatButtonModule,
         MatChipsModule,
