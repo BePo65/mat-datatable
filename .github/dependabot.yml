@@ -8,3 +8,11 @@ updates:
   ignore:
     - dependency-name: "eslint"
       versions: ["9.x"]
+    - dependency-name: '@angular/*'
+      versions: ['18.x']
+    - dependency-name: '@angular-devkit/build-angular'
+      versions: ['18.x']
+    - dependency-name: '@angular-eslint/*'
+      versions: ['18.x']
+    - dependency-name: 'ng-packagr'
+      versions: ['18.x']
