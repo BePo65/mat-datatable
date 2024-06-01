@@ -60,7 +60,7 @@
     "@angular-eslint/eslint-plugin": "17.5.1",
     "@angular-eslint/eslint-plugin-template": "17.5.1",
     "@angular-eslint/schematics": "17.5.1",
-    "@angular-eslint/template-parser": "17.5.1",
+    "@angular-eslint/template-parser": "17.5.2",
     "@angular/cli": "~17.3.8",
     "@angular/compiler-cli": "^17.3.10",
     "@angular/platform-browser-dynamic": "^17.3.10",
