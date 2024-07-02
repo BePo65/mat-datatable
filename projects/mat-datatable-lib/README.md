@@ -4,7 +4,7 @@
 
 A simple data table with virtual scrolling using Angular Material.
 
-![Version](https://img.shields.io/badge/version-17.2.3-blue.svg?cacheSeconds=2592000)
+![Version](https://img.shields.io/badge/version-17.2.4-blue.svg?cacheSeconds=2592000)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]
 ![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)
@@ -50,6 +50,7 @@ A simple data table with virtual scrolling using Angular Material.
       </ul>
     </li>
     <li><a href="#license">License</a></li>
+    <li><a href="#hints">Hints</a></li>
   </ol>
 </details>
 
@@ -264,7 +265,7 @@ The component is generic; the given type is used to define the object for the ro
 
 | Name | Description |
 |------|-------------|
-| `filterDefinitions: FieldFilterDefinition\<T>[]` | Gets / sets the current filter definition. |
+| `filterDefinitions: FieldFilterDefinition<T>[]` | Gets / sets the current filter definition. |
 | | |
 
 ##### **Methods**
@@ -287,7 +288,7 @@ The component is generic; the given type is used to define the object for the ro
 
 #### DataStoreProvider
 
-Component to create an angular material table based datatable.
+Interface for a component that fetches data from the datastore respecting sorting and filtering.
 The component is generic; the given type is used to define the object for the row data.
 
 ##### **Methods**
@@ -339,7 +340,7 @@ Interface for the definition of the sorting of 1 table column.
 | `direction: SortDirection` | The direction used to sort the column. |
 | | |
 
-#### Page
+#### RequestRowsRange
 
 Interface defining the properties of a requests for a range of rows.
 
@@ -351,7 +352,7 @@ Interface defining the properties of a requests for a range of rows.
 | `numberOfRows: number` | The number of rows to return. |
 | | |
 
-#### RequestRowsRange
+#### Page
 
 Interface defining the properties of a page of rows returned from the datastore.
 
@@ -376,7 +377,7 @@ The alignment of the content of a column
 
 | |
 |------|
-| type ColumnAlignmentType = "left" | "center" | "right"; |
+| type ColumnAlignmentType = "left" \| "center" \| "right"; |
 | |
 
 #### FieldFilterDefinition
@@ -1094,5 +1095,11 @@ Copyright © 2024 [Bernhard Pottler](https://github.com/BePo65).
 Distributed under the MIT License. See `LICENSE` for more information.
 
 This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/about)' and '[Material Icons](https://github.com/google/material-design-icons)' from the [Google Fonts Library](https://fonts.google.com/) that are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- HINTS -->
+## Hints
+As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
