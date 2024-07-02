@@ -1,4 +1,5 @@
 /**
+ * Connect material table to virtual scroller.
  * Based on https://github.com/diprokon/ng-table-virtual-scroll.
  * Adapted for use with mat-datatable project.
  */
