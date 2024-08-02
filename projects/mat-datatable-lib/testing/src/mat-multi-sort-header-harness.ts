@@ -80,6 +80,7 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
       if (position.length !== 0) {
         result = Number(position);
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       result = Number.NaN;
     }

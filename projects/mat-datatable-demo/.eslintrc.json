@@ -55,10 +55,6 @@
         }
       },
       "rules": {
-        "@typescript-eslint/quotes": [
-          "error",
-          "single"
-        ],
         "@typescript-eslint/unbound-method": [
           "error",
           {
