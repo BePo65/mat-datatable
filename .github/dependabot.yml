@@ -11,10 +11,10 @@ updates:
     - dependency-name: "eslint-plugin-cypress"
       versions: ["4.x"]
     - dependency-name: '@angular/*'
-      versions: ['18.x']
+      versions: ['18.x', '19.x']
     - dependency-name: '@angular-devkit/build-angular'
-      versions: ['18.x']
+      versions: ['18.x', '19.x']
     - dependency-name: '@angular-eslint/*'
-      versions: ['18.x']
+      versions: ['18.x', '19.x']
     - dependency-name: 'ng-packagr'
-      versions: ['18.x']
+      versions: ['18.x', '19.x']
