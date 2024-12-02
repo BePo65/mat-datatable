@@ -1102,6 +1102,6 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 ## Hints
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
-As a consequence the package `` cannot be updated to a version 4.x (as this version has a peerDependency of eslint >= 9).
+As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x (as this version has a peerDependency of eslint >= 9).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
