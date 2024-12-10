@@ -4,7 +4,7 @@
 
 A simple data table with virtual scrolling using Angular Material.
 
-![Version](https://img.shields.io/badge/version-17.2.6-blue.svg?cacheSeconds=2592000)
+![Version](https://img.shields.io/badge/version-17.2.7-blue.svg?cacheSeconds=2592000)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]
 ![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)
@@ -1101,5 +1101,7 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 <!-- HINTS -->
 ## Hints
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
+
+As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x (as this version has a peerDependency of eslint >= 9).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
