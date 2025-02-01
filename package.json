@@ -66,7 +66,7 @@
     "@angular/platform-browser-dynamic": "^17.3.12",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-angular": "^19.6.0",
-    "@cypress/schematic": "^2.5.2",
+    "@cypress/schematic": "^3.0.0",
     "@cypress/webpack-preprocessor": "^6.0.2",
     "@types/jasmine": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^8.19.0",
