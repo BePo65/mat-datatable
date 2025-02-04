@@ -64,7 +64,7 @@
     "@angular/cli": "~17.3.11",
     "@angular/compiler-cli": "^17.3.12",
     "@angular/platform-browser-dynamic": "^17.3.12",
-    "@commitlint/cli": "^19.6.1",
+    "@commitlint/cli": "^19.7.1",
     "@commitlint/config-angular": "^19.7.1",
     "@cypress/schematic": "^3.0.0",
     "@cypress/webpack-preprocessor": "^6.0.2",
