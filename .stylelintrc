@@ -9,6 +9,7 @@
         {
           "ignoreKeywords": [ "/A\\d00/" ]
         }
-      ]
+      ],
+      "declaration-property-value-no-unknown": null
     }
 }

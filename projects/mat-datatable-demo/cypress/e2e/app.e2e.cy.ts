@@ -38,6 +38,6 @@ describe('Test demo page', () => {
       .click();
 
     cy.get('#test-buttons')
-      .should('be.not.visible');
+      .should('not.exist');
   });
 });
