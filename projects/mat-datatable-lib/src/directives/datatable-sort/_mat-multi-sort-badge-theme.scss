@@ -24,6 +24,7 @@ $_badge-structure-emitted: false !default;
 // Mixin for building offset given different sizes
 @mixin _badge-size($size) {
   // This mixin isn't used in the context of a theme so we can disable the ampersand check.
+  /* stylelint-disable nesting-selector-no-missing-scoping-root */
   .mat-multi-sort-badge-content {
     width: $size;
     height: $size;
@@ -69,6 +70,7 @@ $_badge-structure-emitted: false !default;
       left: math.div(-$size, 2);
     }
   }
+  /* stylelint-enable nesting-selector-no-missing-scoping-root */
 }
 
 // Structural styles for the badge. They have to be included as a part of the theme,
