@@ -889,7 +889,7 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
    * Default implementation of trackBy function.
    * This function is required, as in strict mode 'trackBy'
    * must not be undefined.
-   * @param this - required by @typescript-eslint/unbound-method
+   * @param this - required by eslint rule "typescript-eslint/unbound-method"
    * @param index - index of the row
    * @param item - object with the row data
    * @returns stringified content of the item

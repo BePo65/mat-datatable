@@ -1102,6 +1102,12 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 ## Hints
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
-As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x (as this version has a peerDependency of eslint >= 9).
+As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x or 5.x (as this version has a peerDependency of eslint >= 9).
+
+`@cypress/webpack-preprocessor` cannot be updated to v7.x as it does not support webpack v4.x (used by angular v17.x).
+
+`cypress` cannot be updated to v15.x as it no longer supports webpack v4.x (angular v18 will switch away from webpack).
+
+`@cypress/schematic` cannot be updated to v4.x, as this requires angular v18.x.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
