@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [17.2.10](https://github.com/BePo65/mat-datatable/compare/v17.2.9...v17.2.10) (2025-10-03)
+
+
+### Bug Fixes
+
+* update packages to fix github dependabot security warning ([30e8433](https://github.com/BePo65/mat-datatable/commit/30e8433ee9ee5bcf6e7de29bb36bd43373d97917))
+* update packages to fix github dependabot security warning ([ae52d6c](https://github.com/BePo65/mat-datatable/commit/ae52d6c74ac53b4b215cd3e9f277eb0b240aec25))
+* update packages to fix github security warnings ([8ddc68f](https://github.com/BePo65/mat-datatable/commit/8ddc68fb65e72158569d64af8ae0188895ee1e24))
+
 ## [17.2.9](https://github.com/BePo65/mat-datatable/compare/v17.2.8...v17.2.9) (2025-07-02)
 
 
