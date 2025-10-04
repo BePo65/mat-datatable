@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [17.2.11](https://github.com/BePo65/mat-datatable/compare/v17.2.10...v17.2.11) (2025-10-04)
+
 ## [17.2.10](https://github.com/BePo65/mat-datatable/compare/v17.2.9...v17.2.10) (2025-10-03)
 
 
