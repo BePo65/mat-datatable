@@ -6,8 +6,8 @@ A simple data table with virtual scrolling using Angular Material.
 
 [![Version](https://img.shields.io/badge/version-17.2.11-blue.svg?cacheSeconds=2592000)](https://github.com/BePo65/mat-datatable/blob/main/CHANGELOG.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/BePo65/mat-datatable/blob/main/LICENSE)
-![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)
-![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)
+[![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)](https://v17.angular.io/docs)
+[![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)](https://v17.material.angular.dev/components/categories)
 
 <!-- TABLE OF CONTENTS -->
 <details>
