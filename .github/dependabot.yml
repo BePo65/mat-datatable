@@ -25,6 +25,6 @@ updates:
     - dependency-name: 'cypress'
       versions: ['15.x']
     - dependency-name: '@cypress/schematic'
-      versions: ['4.x']
+      versions: ['4.x', '5.x']
     - dependency-name: '@cypress/webpack-preprocessor'
       versions: ['7.x']
