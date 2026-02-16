@@ -67,7 +67,7 @@ export interface Page<T> {
 export interface DataStoreProvider<T> {
   /**
    * Fetching data from the datastore respecting sorting and filtering.
-   * @param row - row to get the index for
+   * @param rowsRange - object with definition of rows to get the index for
    * @param sorts - optional array of objects with the sorting definition
    * @param filters - optional array of objects with the filter definition
    * @returns observable emitting a Page<T> object
