@@ -4,9 +4,9 @@
 
 A simple data table with virtual scrolling using Angular Material.
 
-[![Version](https://img.shields.io/badge/version-17.2.12-blue.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-17.2.13-blue.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/CHANGELOG.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/LICENSE)
-[![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)](https://v17.angular.io/docs)
+[![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)](https://angular.dev/overview)
 [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)](https://v17.material.angular.dev/components/categories)
 
 <!-- TABLE OF CONTENTS -->
@@ -188,99 +188,99 @@ The component is generic; the given type is used to define the object for the ro
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
+| Name                                                   | Description                                                                                                                                                          |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@Input() columnDefinitions: MatColumnDefinition<T>[]` | The definition of the columns used in the table. The order of the definitions needs not to correspond to the order of the columns in the table. Default value: `[]`. |
-| | |
+|                                                        |                                                                                                                                                                      |
 
-| Name | Description |
-|------|-------------|
+| Name                                  | Description                                                                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@Input() displayedColumns: string[]` | A list with the names of the columns in the table. The array contains the 'columnId' of the corresponding column definition. Default value: `[]`. |
-| | |
+|                                       |                                                                                                                                                   |
 
-| Name | Description |
-|------|-------------|
+| Name                                          | Description                                         |
+| --------------------------------------------- | --------------------------------------------------- |
 | `@Input() rowSelectionMode: RowSelectionType` | The type of row selection. Default value: `'none'`. |
-| | |
+|                                               |                                                     |
 
-| Name | Description |
-|------|-------------|
+| Name                                               | Description                                                                                                                                                                                              |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@Input() dataStoreProvider: DataStoreProvider<T>` | An object that connects the mat-datatable with the data source. The object must be the instance of a class implementing the DataStoreProvider interface. Default value: `new EmptyDataStoreProvider<T>`. |
-| | |
+|                                                    |                                                                                                                                                                                                          |
 
-| Name | Description |
-|------|-------------|
+| Name                                     | Description                                                                                                                      |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `@Input() trackBy(): TrackByFunction<T>` | A function that returns a value that identifies a single row. Default value: `(index: number, item: T) => JSON.stringify(item)`. |
-| | |
+|                                          |                                                                                                                                  |
 
-| Name | Description |
-|------|-------------|
+| Name                | Description                                                |
+| ------------------- | ---------------------------------------------------------- |
 | withFooter: boolean | Whether the table has a footer row. Default value: `true`. |
-| | |
+|                     |                                                            |
 
-| Name | Description |
-|------|-------------|
+| Name                                  | Description                    |
+| ------------------------------------- | ------------------------------ |
 | `@Output() rowClick: EventEmitter<T>` | Emitted when a row is clicked. |
-| | |
+|                                       |                                |
 
-| Name | Description |
-|------|-------------|
+| Name                                            | Description                                     |
+| ----------------------------------------------- | ----------------------------------------------- |
 | @Output() rowSelectionChange: EventEmitter<T[]> | Emitted when the list of selected rows changes. |
-| | |
+|                                                 |                                                 |
 
-| Name | Description |
-|------|-------------|
+| Name                                                      | Description                               |
+| --------------------------------------------------------- | ----------------------------------------- |
 | `@Output() sortChange: EventEmitter<MatSortDefinition[]>` | Emitted when the sort definition changes. |
-| | |
+|                                                           |                                           |
 
-| Name | Description |
-|------|-------------|
+| Name                                           | Description                                              |
+| ---------------------------------------------- | -------------------------------------------------------- |
 | `firstVisibleIndexChanged: Observable<number>` | Emitted when the index of the first visible row changes. |
-| | |
+|                                                |                                                          |
 
-| Name | Description |
-|------|-------------|
+| Name                                   | Description                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `totalRowsChanged: Observable<number>` | Emitted when the total number of rows in the datastore changes (does not depend on any active filter). |
-| | |
+|                                        |                                                                                                        |
 
-| Name | Description |
-|------|-------------|
+| Name                                      | Description                                       |
+| ----------------------------------------- | ------------------------------------------------- |
 | `filteredRowsChanged: Observable<number>` | Emitted when the number of filtered rows changes. |
-| | |
+|                                           |                                                   |
 
-| Name | Description |
-|------|-------------|
+| Name                           | Description              |
+| ------------------------------ | ------------------------ |
 | `activatedRow: T \| undefined` | Marks a row as 'active'. |
-| | |
+|                                |                          |
 
-| Name | Description |
-|------|-------------|
+| Name                | Description               |
+| ------------------- | ------------------------- |
 | `selectedRows: T[]` | Marks rows as 'selected'. |
-| | |
+|                     |                           |
 
-| Name | Description |
-|------|-------------|
+| Name                                   | Description                              |
+| -------------------------------------- | ---------------------------------------- |
 | `sortDefinitions: MatSortDefinition[]` | Gets / sets the current sort definition. |
-| | |
+|                                        |                                          |
 
-| Name | Description |
-|------|-------------|
+| Name                                            | Description                                |
+| ----------------------------------------------- | ------------------------------------------ |
 | `filterDefinitions: FieldFilterDefinition<T>[]` | Gets / sets the current filter definition. |
-| | |
+|                                                 |                                            |
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `scrollToRow` | Scrolls to the given row. |
+|                |                                                 |
+| -------------- | ----------------------------------------------- |
+| `scrollToRow`  | Scrolls to the given row.                       |
 | **Parameters** |
-| row: T | Row to show on the top of the current viewport. |
-| | |
+| row: T         | Row to show on the top of the current viewport. |
+|                |                                                 |
 
-| | |
-|------|-------------|
+|               |                                |
+| ------------- | ------------------------------ |
 | `reloadTable` | Reloads the rows of the table. |
-| | |
+|               |                                |
 
 <a id="interfaces-api"></a>
 
@@ -293,16 +293,16 @@ The component is generic; the given type is used to define the object for the ro
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `getPagedData` | Fetches data from the datastore respecting sorting and filtering. |
-| **Parameters** |
-| rowsRange: RequestRowsRange | The range of rows to fetch. |
-| sorts: FieldSortDefinition<T>[] | The sort definitions to use. |
-| filters: FieldFilterDefinition<T>[] | The filter definitions to use. |
-| **Returns** |
-| Observable<Page<T>> | Emitting fetched data from the datastore. |
-| | |
+|                                     |                                                                   |
+| ----------------------------------- | ----------------------------------------------------------------- |
+| `getPagedData`                      | Fetches data from the datastore respecting sorting and filtering. |
+| **Parameters**                      |
+| rowsRange: RequestRowsRange         | The range of rows to fetch.                                       |
+| sorts: FieldSortDefinition<T>[]     | The sort definitions to use.                                      |
+| filters: FieldFilterDefinition<T>[] | The filter definitions to use.                                    |
+| **Returns**                         |
+| Observable<Page<T>>                 | Emitting fetched data from the datastore.                         |
+|                                     |                                                                   |
 
 #### MatColumnDefinition
 
@@ -310,23 +310,23 @@ Interface for the definition of a single table column.
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
-| `columnId: string` | The ID of the column. |
-| `sortable: boolean` | Whether this column can be used for sorting. By default a column is not sortable. |
-| `resizable: boolean` | Whether this column can be resized. By default a column is not resizable. |
-| `header: string` | The text in the header row of a column. |
-| `headerAlignment: ColumnAlignmentType` | The alignment of the header row of a column. |
-| `cell: (element: TRowData) => string` | The function to get the content of a cell. |
-| `cellAlignment: ColumnAlignmentType` | The alignment of a data row in a column. |
-| `width: string` | The width of the column. |
-| `tooltip: (element: TRowData) => string` | The function to get the tooltip for a cell. |
-| `showAsMailtoLink: boolean` | Whether this cell should be shown a 'mailto' link. By default a column is not shown as mailto link. |
-| `showAsSingleLine: boolean` | Whether this cell should be truncated to a single line. By default multiline text in a column is not shown as a single line. |
-| `footer: string` | The text in the footer row of a column. |
-| `footerAlignment: ColumnAlignmentType` | The alignment of the footer row of a column. |
-| `footerColumnSpan: number` | The number of columns a footer should span. By default a footer spans 1 column. |
-| | |
+| Name                                     | Description                                                                                                                  |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `columnId: string`                       | The ID of the column.                                                                                                        |
+| `sortable: boolean`                      | Whether this column can be used for sorting. By default a column is not sortable.                                            |
+| `resizable: boolean`                     | Whether this column can be resized. By default a column is not resizable.                                                    |
+| `header: string`                         | The text in the header row of a column.                                                                                      |
+| `headerAlignment: ColumnAlignmentType`   | The alignment of the header row of a column.                                                                                 |
+| `cell: (element: TRowData) => string`    | The function to get the content of a cell.                                                                                   |
+| `cellAlignment: ColumnAlignmentType`     | The alignment of a data row in a column.                                                                                     |
+| `width: string`                          | The width of the column.                                                                                                     |
+| `tooltip: (element: TRowData) => string` | The function to get the tooltip for a cell.                                                                                  |
+| `showAsMailtoLink: boolean`              | Whether this cell should be shown a 'mailto' link. By default a column is not shown as mailto link.                          |
+| `showAsSingleLine: boolean`              | Whether this cell should be truncated to a single line. By default multiline text in a column is not shown as a single line. |
+| `footer: string`                         | The text in the footer row of a column.                                                                                      |
+| `footerAlignment: ColumnAlignmentType`   | The alignment of the footer row of a column.                                                                                 |
+| `footerColumnSpan: number`               | The number of columns a footer should span. By default a footer spans 1 column.                                              |
+|                                          |                                                                                                                              |
 
 #### MatSortDefinition
 
@@ -334,11 +334,11 @@ Interface for the definition of the sorting of 1 table column.
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
-| `columnId: string` | The 'columnId' of the column to use for sorting. |
-| `direction: SortDirection` | The direction used to sort the column. |
-| | |
+| Name                       | Description                                      |
+| -------------------------- | ------------------------------------------------ |
+| `columnId: string`         | The 'columnId' of the column to use for sorting. |
+| `direction: SortDirection` | The direction used to sort the column.           |
+|                            |                                                  |
 
 #### RequestRowsRange
 
@@ -346,11 +346,11 @@ Interface defining the properties of a requests for a range of rows.
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
+| Name                    | Description                           |
+| ----------------------- | ------------------------------------- |
 | `startRowIndex: number` | The index of the first row to return. |
-| `numberOfRows: number` | The number of rows to return. |
-| | |
+| `numberOfRows: number`  | The number of rows to return.         |
+|                         |                                       |
 
 #### Page
 
@@ -358,14 +358,14 @@ Interface defining the properties of a page of rows returned from the datastore.
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
-| `content:T[]` | The array of the requested rows. |
-| `startRowIndex` | The index of the first row returned. |
-| `returnedElements` | The number of rows in 'content'. |
-| `totalElements` | The number of rows in the unfiltered data store. |
-| `totalFilteredElements` | The number of rows after filtering. |
-| | |
+| Name                    | Description                                      |
+| ----------------------- | ------------------------------------------------ |
+| `content:T[]`           | The array of the requested rows.                 |
+| `startRowIndex`         | The index of the first row returned.             |
+| `returnedElements`      | The number of rows in 'content'.                 |
+| `totalElements`         | The number of rows in the unfiltered data store. |
+| `totalFilteredElements` | The number of rows after filtering.              |
+|                         |                                                  |
 
 <a id="type-aliases-api"></a>
 
@@ -375,64 +375,64 @@ Interface defining the properties of a page of rows returned from the datastore.
 
 The alignment of the content of a column
 
-| |
-|------|
+|                                                           |
+| --------------------------------------------------------- |
 | type ColumnAlignmentType = "left" \| "center" \| "right"; |
-| |
+|                                                           |
 
 #### FieldFilterDefinition
 
 The definition of a parameter filtering for the column identified by the given 'fieldName'.
 
-| |
-|------|
+|                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------ |
 | type FieldFilterDefinition<T> = StrictUnion\<(FieldFilterDefinitionSimple\<T> \| FieldFilterDefinitionRange\<T>)>; |
-| |
+|                                                                                                                    |
 
 #### FieldFilterDefinitionRange
 
 The definition of a parameter filtering for a range of values.
 
-| |
-|------|
+|                                                                                                                                                                                     |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;valueFrom: string \| number \| Date<br>&nbsp;&nbsp;valueTo: string \| number \| Date<br>}; |
-| |
+|                                                                                                                                                                                     |
 
 #### FieldFilterDefinitionSimple
 
 The definition of a parameter filtering for a single value.
 
-| |
-|------|
+|                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------ |
 | type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;value: string \| number \| Date<br>}; |
-| |
+|                                                                                                                                |
 
 #### FieldSortDefinition
 
 The definition of a single sort parameter.
 
-| |
-|------|
+|                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------- |
 | type FieldSortDefinition<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;sortDirection: SortDirectionAscDesc<br>}; |
-| |
+|                                                                                                                            |
 
 #### RowSelectionType
 
 How many rows can be selected.
 
-| |
-|------|
+|                                                        |
+| ------------------------------------------------------ |
 | type RowSelectionType = 'none' \| 'single' \| 'multi'; |
-| |
+|                                                        |
 
 #### SortDirectionAscDesc
 
 The direction of a sort.
 
-| |
-|------|
+|                                       |
+| ------------------------------------- |
 | type SortDirection = 'asc' \| 'desc'; |
-| |
+|                                       |
 
 <!-- API TESTING REFERENCE -->
 ## API Testing Harnesses
@@ -449,36 +449,36 @@ The direction of a sort.
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `static async booleanMatches` | Checks if the specified nullable boolean value matches the given value. |
-| **Parameters**|
-| value: boolean \| null \| Promise\<boolean \| null> | The nullable boolean value to check, or a Promise resolving to the nullable boolean value. |
-| pattern: boolean \| null | The boolean the value is expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
-| **Returns** |
-| Promise\<boolean> | Whether the value matches the pattern. |
-| | |
+|                                                     |                                                                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `static async booleanMatches`                       | Checks if the specified nullable boolean value matches the given value.                                 |
+| **Parameters**                                      |
+| value: boolean \| null \| Promise\<boolean \| null> | The nullable boolean value to check, or a Promise resolving to the nullable boolean value.              |
+| pattern: boolean \| null                            | The boolean the value is expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
+| **Returns**                                         |
+| Promise\<boolean>                                   | Whether the value matches the pattern.                                                                  |
+|                                                     |                                                                                                         |
 
-| | |
-|------|-------------|
+|                       |                                                       |
+| --------------------- | ----------------------------------------------------- |
 | `async getColumnName` | Gets the name of the column that the cell belongs to. |
-| **Returns** |
-| Promise\<string> | The name of the column that the cell belongs to. |
-| | |
+| **Returns**           |
+| Promise\<string>      | The name of the column that the cell belongs to.      |
+|                       |                                                       |
 
-| | |
-|------|-------------|
+|                        |                                               |
+| ---------------------- | --------------------------------------------- |
 | `async getColumnWidth` | Gets the cell's width in 'px' (with padding). |
-| **Returns** |
-| Promise\<number> | The cell's width. |
-| | |
+| **Returns**            |
+| Promise\<number>       | The cell's width.                             |
+|                        |                                               |
 
-| | |
-|------|-------------|
-| `async getText` | Gets the cell's text. |
-| **Returns** |
-| Promise\<string> | The cell's text. |
-| | |
+|                  |                       |
+| ---------------- | --------------------- |
+| `async getText`  | Gets the cell's text. |
+| **Returns**      |
+| Promise\<string> | The cell's text.      |
+|                  |                       |
 
 <a id="_matrowharnessbase"></a>
 
@@ -488,39 +488,39 @@ Abstract class used as base for harnesses that interact with a mat-datatable row
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `async getCells` | Gets a list of 'MatRowCellHarness', 'MatHeaderCellHarness' or 'MatFooterCellHarness' for all cells in the row. |
+|                                 |                                                                                                                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `async getCells`                | Gets a list of 'MatRowCellHarness', 'MatHeaderCellHarness' or 'MatFooterCellHarness' for all cells in the row. |
+| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances.                                 |
+| **Returns**                     |
+| Promise\<Cell[]>                | A filtered list of MatRowCellHarness for the cells in the row.                                                 |
+|                                 |                                                                                                                |
+
+|                                    |                                                    |
+| ---------------------------------- | -------------------------------------------------- |
+| `async getCellTextByColumnName`    | Gets the text inside the row organized by columns. |
+| **Returns**                        |
+| Promise\<MatRowHarnessColumnsText> | The text inside the row organized by columns.      |
+|                                    |                                                    |
+
+|                                 |                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------ |
+| `async getCellTextByIndex`      | Gets the text of the cells in the row.                                         |
+| **Parameters**                  |
 | filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-  **Returns** |
-| Promise\<Cell[]> | A filtered list of MatRowCellHarness for the cells in the row. |
-| | |
+| **Returns**                     |
+| Promise\<string[]>              | The text of the cells in the row.                                              |
+|                                 |                                                                                |
 
-| | |
-|------|-------------|
-| `async getCellTextByColumnName` | Gets the text inside the row organized by columns. |
-  **Returns** |
-| Promise\<MatRowHarnessColumnsText> | The text inside the row organized by columns. |
-| | |
-
-| | |
-|------|-------------|
-| `async getCellTextByIndex` | Gets the text of the cells in the row. |
-| **Parameters**|
-| filter: CellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-| **Returns** |
-| Promise\<string[]> | The text of the cells in the row. |
-| | |
-
-| | |
-|------|-------------|
-| `static async rowCellsContentMatch` | Checks if the values of the table row columns given in the 'value' parameter, match the given column values. Only columns defined in the pattern are inspected. |
-| **Parameters**|
-| value: MatRowHarnessColumnsText \| Promise<MatRowHarnessColumnsText> \| null | The nullable object defining all columns of a row and their values used for the checks. Alternatively a Promise resolving to the nullable object. |
-| pattern: Record<string, string \| RegExp> \| null | Object defining the columns and the values or RegExp expected to match. If 'pattern' is 'null', the value is expected to be 'null'. |
-| **Returns** |
-| Promise\<boolean> | Whether the value matches the pattern. |
-| | |
+|                                                                              |                                                                                                                                                                 |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `static async rowCellsContentMatch`                                          | Checks if the values of the table row columns given in the 'value' parameter, match the given column values. Only columns defined in the pattern are inspected. |
+| **Parameters**                                                               |
+| value: MatRowHarnessColumnsText \| Promise<MatRowHarnessColumnsText> \| null | The nullable object defining all columns of a row and their values used for the checks. Alternatively a Promise resolving to the nullable object.               |
+| pattern: Record<string, string \| RegExp> \| null                            | Object defining the columns and the values or RegExp expected to match. If 'pattern' is 'null', the value is expected to be 'null'.                             |
+| **Returns**                                                                  |
+| Promise\<boolean>                                                            | Whether the value matches the pattern.                                                                                                                          |
+|                                                                              |                                                                                                                                                                 |
 
 <a id="matdatatableharness"></a>
 
@@ -530,119 +530,119 @@ Harness for interacting with a mat-datatable in tests.
 
 ##### **Properties**
 
-| Name | Description |
-|------|-------------|
+| Name                                    | Description                                                   |
+| --------------------------------------- | ------------------------------------------------------------- |
 | `static hostSelector: '.mat-datatable'` | The selector for the host element of a 'MatDatatableHarness'. |
-| | |
+|                                         |                                                               |
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `async getAllChildLoaders` | Gets an array of HarnessLoader instances. |
-| **Parameters** |
-| selector: string | A string used for selecting the instances. |
-| **Returns** |
-| Promise\<HarnessLoader[]> | An array of HarnessLoader instances. |
-| | |
+|                            |                                            |
+| -------------------------- | ------------------------------------------ |
+| `async getAllChildLoaders` | Gets an array of HarnessLoader instances.  |
+| **Parameters**             |
+| selector: string           | A string used for selecting the instances. |
+| **Returns**                |
+| Promise\<HarnessLoader[]>  | An array of HarnessLoader instances.       |
+|                            |                                            |
 
-| | |
-|------|-------------|
-| `async getAllHarnesses` | Gets an array of harness instances. |
-| **Parameters** |
+|                         |                                                                                                                                                |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `async getAllHarnesses` | Gets an array of harness instances.                                                                                                            |
+| **Parameters**          |
+| query: HarnessQuery<T>  | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
+| **Returns**             |
+| Promise\<T[]>           | An array of harness instances.                                                                                                                 |
+|                         |                                                                                                                                                |
+
+|                                          |                                                             |
+| ---------------------------------------- | ----------------------------------------------------------- |
+| `async getCellTextByColumnName`          | Gets the text inside the entire table organized by columns. |
+| **Returns**                              |
+| Promise\<MatDatatableHarnessColumnsText> | The text inside the entire table organized by columns.      |
+|                                          |                                                             |
+
+|                            |                                                                 |
+| -------------------------- | --------------------------------------------------------------- |
+| `async getCellTextByIndex` | Gets the text inside the entire table organized by rows.        |
+| **Returns**                |
+| Promise\<string[][]>       | Array for all rows containing the content of a row as an array. |
+|                            |                                                                 |
+
+|                         |                                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------- |
+| `async getChildLoader`  | Searches for an element matching the given selector below the root element of this HarnessLoader. |
+| **Parameters**          |
+| selector: string        | A string used for selecting the HarnessLoader.                                                    |
+| **Returns**             |
+| Promise\<HarnessLoader> | A new HarnessLoader rooted at the first matching element.                                         |
+|                         |                                                                                                   |
+
+|                                 |                                                    |
+| ------------------------------- | -------------------------------------------------- |
+| `async getFooterRows`           | Gets a list of the footer rows in a mat-datatable. |
+| **Returns**                     |
+| Promise\<MatHeaderRowHarness[]> | A list of the footer rows.                         |
+|                                 |                                                    |
+
+|                        |                                                                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `async getHarness`     | Searches for an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader.                 |
+| **Parameters**         |
 | query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
-| **Returns** |
-| Promise\<T[]> | An array of harness instances. |
-| | |
+| **Returns**            |
+| Promise\<T>            | An instance of the harness corresponding to the first matching element.                                                                        |
+|                        |                                                                                                                                                |
 
-| | |
-|------|-------------|
-| `async getCellTextByColumnName` | Gets the text inside the entire table organized by columns. |
-| **Returns** |
-| Promise\<MatDatatableHarnessColumnsText> | The text inside the entire table organized by columns. |
-| | |
+|                          |                                                                                                                                                |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `async getHarnessOrNull` | Gets an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader.                         |
+| **Parameters**           |
+| query HarnessQuery<T>    | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
+| **Returns**              |
+| Promise\<T \| null>      | An instance of the harness corresponding to the first matching element.                                                                        |
+|                          |                                                                                                                                                |
 
-| | |
-|------|-------------|
-| `async getCellTextByIndex` | Gets the text inside the entire table organized by rows. |
-| **Returns** |
-| Promise\<string[][]> | Array for all rows containing the content of a row as an array. |
-| | |
+|                                 |                                                    |
+| ------------------------------- | -------------------------------------------------- |
+| `async getHeaderRows`           | Gets a list of the header rows in a mat-datatable. |
+| **Returns**                     |
+| Promise\<MatHeaderRowHarness[]> | A list of the header rows.                         |
+|                                 |                                                    |
 
-| | |
-|------|-------------|
-| `async getChildLoader`| Searches for an element matching the given selector below the root element of this HarnessLoader. |
-| **Parameters** |
-| selector: string | A string used for selecting the HarnessLoader. |
-| **Returns** |
-| Promise\<HarnessLoader> | A new HarnessLoader rooted at the first matching element. |
-| | |
-
-| | |
-|------|-------------|
-| `async getFooterRows` | Gets a list of the footer rows in a mat-datatable. |
-| **Returns** |
-| Promise\<MatHeaderRowHarness[]> | A list of the footer rows. |
-| | |
-
-| | |
-|------|-------------|
-| `async getHarness` | Searches for an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader. |
-| **Parameters** |
-| query: HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
-| **Returns** |
-| Promise\<T> | An instance of the harness corresponding to the first matching element. |
-| | |
-
-| | |
-|------|-------------|
-| `async getHarnessOrNull` | Gets an instance of the given ComponentHarness class or HarnessPredicate below the root element of this HarnessLoader. |
-| **Parameters** |
-| query HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
-| **Returns** |
-| Promise\<T \| null> | An instance of the harness corresponding to the first matching element. |
-| | |
-
-| | |
-|------|-------------|
-| `async getHeaderRows` | Gets a list of the header rows in a mat-datatable. |
-| **Returns** |
-| Promise\<MatHeaderRowHarness[]> | A list of the header rows. |
-| | |
-
-| | |
-|------|-------------|
-| `async getRows` | Gets a list of the regular data rows in a mat-datatable. |
-| **Parameters** |
+|                                |                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------- |
+| `async getRows`                | Gets a list of the regular data rows in a mat-datatable.                      |
+| **Parameters**                 |
 | filter: RowHarnessFilters = {} | A set of criteria that can be used to filter a list of row harness instances. |
-| **Returns** |
-| Promise\<MatRowHarness[]> | A filtered list of the regular data rows. |
-| | |
+| **Returns**                    |
+| Promise\<MatRowHarness[]>      | A filtered list of the regular data rows.                                     |
+|                                |                                                                               |
 
-| | |
-|------|-------------|
-| `async hasHarness` | Check, if the harness contains the instances defined by 'query'. |
-| **Parameters** |
+|                       |                                                                                                                                                |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `async hasHarness`    | Check, if the harness contains the instances defined by 'query'.                                                                               |
+| **Parameters**        |
 | query HarnessQuery<T> | A query for a ComponentHarness used to filter the instances, which is expressed as either a ComponentHarnessConstructor or a HarnessPredicate. |
-| **Returns** |
-| Promise\<boolean> | 'True', if the instances is part of the harness. |
-| | |
+| **Returns**           |
+| Promise\<boolean>     | 'True', if the instances is part of the harness.                                                                                               |
+|                       |                                                                                                                                                |
 
-| | |
-|------|-------------|
-| `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
-| **Returns** |
-| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
-| | |
+|                       |                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `async host`          | Gets a Promise for the 'TestElement' representing the host element of the component. |
+| **Returns**           |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component.                    |
+|                       |                                                                                      |
 
-| | |
-|------|-------------|
-| `static with` | Gets a 'HarnessPredicate' that can be used to search for a mat-datatable with specific attributes. |
-| **Parameters** |
-| options: TableHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
-| | |
+|                                   |                                                                                                    |
+| --------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `static with`                     | Gets a 'HarnessPredicate' that can be used to search for a mat-datatable with specific attributes. |
+| **Parameters**                    |
+| options: TableHarnessFilters = {} | Options for narrowing the search.                                                                  |
+| **Returns**                       |
+| HarnessPredicate<T>               | A 'HarnessPredicate' configured with the given options.                                            |
+|                                   |                                                                                                    |
 
 <a id="matfootercellharness"></a>
 
@@ -652,8 +652,8 @@ Harness for interacting with an MDC-based Angular Material table footer cell.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                                               |                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------- |
 | `static hostSelector: '.mat-mdc-footer-cell'` | The selector for the host element of a 'MatFooterCellHarness' instance. |
 
 <a id="matfooterrowharness"></a>
@@ -664,10 +664,10 @@ Harness for interacting with a mat-datatable footer row.
 
 ##### Properties
 
-| | |
-|------|-------------|
+|                                              |                                                                        |
+| -------------------------------------------- | ---------------------------------------------------------------------- |
 | `static hostSelector: '.mat-mdc-footer-row'` | Used to identify the host element of a 'MatFooterRowHarness' instance. |
-| | |
+|                                              |                                                                        |
 
 <a id="matheadercellharness"></a>
 
@@ -677,34 +677,34 @@ Harness for interacting with an MDC-based Angular Material table header cell.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                                               |                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------- |
 | `static hostSelector: '.mat-mdc-header-cell'` | The selector for the host element of a 'MatHeaderCellHarness' instance. |
 
 ##### **Methods**
 
-| | |
-|------|-------------|
-| `async getText` | Gets the header cell's text. |
-| **Return** |
-| Promise\<string> | The header cell's text. |
-| | |
+|                  |                              |
+| ---------------- | ---------------------------- |
+| `async getText`  | Gets the header cell's text. |
+| **Return**       |
+| Promise\<string> | The header cell's text.      |
+|                  |                              |
 
-| | |
-|------|-------------|
+|                     |                                               |
+| ------------------- | --------------------------------------------- |
 | `async isResizable` | Check, if the cell is defined as 'resizable'. |
-| **Returns** |
-| Promise\<boolean> | The cell is resizable. |
-| | |
+| **Returns**         |
+| Promise\<boolean>   | The cell is resizable.                        |
+|                     |                                               |
 
-| | |
-|------|-------------|
-| `async resize` | Resize the cell to a new width (if 'resizable'). |
-| **Parameters** |
-| newWidth: number | The new width of the cell in 'px'. |
-| **Returns** |
-| Promise\<void> | The cell got resized. |
-| | |
+|                  |                                                  |
+| ---------------- | ------------------------------------------------ |
+| `async resize`   | Resize the cell to a new width (if 'resizable'). |
+| **Parameters**   |
+| newWidth: number | The new width of the cell in 'px'.               |
+| **Returns**      |
+| Promise\<void>   | The cell got resized.                            |
+|                  |                                                  |
 
 <a id="matheaderrowharness"></a>
 
@@ -714,21 +714,21 @@ Harness for interacting with a mat-datatable header row.
 
 ##### Properties
 
-| | |
-|------|-------------|
+|                                              |                                                                        |
+| -------------------------------------------- | ---------------------------------------------------------------------- |
 | `static hostSelector: '.mat-mdc-header-row'` | Used to identify the host element of a 'MatHeaderRowHarness' instance. |
-| | |
+|                                              |                                                                        |
 
 ##### Methods
 
-| | |
-|------|-------------|
-| `async getCells` | Gets a list of 'MatRowCellHarness' for all cells in the row. |
-| **Parameters** |
+|                                       |                                                                                |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| `async getCells`                      | Gets a list of 'MatRowCellHarness' for all cells in the row.                   |
+| **Parameters**                        |
 | filter: HeaderCellHarnessFilters = {} | A set of criteria that can be used to filter a list of cell harness instances. |
-| **Returns** |
-| Promise\<MatHeaderCellHarness[]> | A filtered list of MatRowCellHarness for the cells in the header row. |
-| | |
+| **Returns**                           |
+| Promise\<MatHeaderCellHarness[]>      | A filtered list of MatRowCellHarness for the cells in the header row.          |
+|                                       |                                                                                |
 
 <a id="matmultisortharness"></a>
 
@@ -738,51 +738,51 @@ Harness for interacting with a mat-multi-sort element in tests.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                                          |                                           |
+| ---------------------------------------- | ----------------------------------------- |
 | `static hostSelector: '.mat-multi-sort'` | Used to identify the elements in the DOM. |
-| | |
+|                                          |                                           |
 
 ##### **Methods**
 
-| | |
-|---|---|
-| `async getActiveHeaders` | Gets all headers used for sorting in the 'mat-multi-sort'. |
-| **Returns** |
-| Promise\<MatMultiSortHeaderHarness[]> | All headers used for sorting. |
-| | |
+|                                       |                                                            |
+| ------------------------------------- | ---------------------------------------------------------- |
+| `async getActiveHeaders`              | Gets all headers used for sorting in the 'mat-multi-sort'. |
+| **Returns**                           |
+| Promise\<MatMultiSortHeaderHarness[]> | All headers used for sorting.                              |
+|                                       |                                                            |
 
-| | |
-|---|---|
-| `async getActiveSortData` | Gets the sorting data for all headers used for sorting in the 'mat-multi-sort'. |
-| **Returns** |
-| Promise\<DomSortingDefinition[]> | Sorting data of all headers used for sorting. |
-| | |
+|                                  |                                                                                 |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| `async getActiveSortData`        | Gets the sorting data for all headers used for sorting in the 'mat-multi-sort'. |
+| **Returns**                      |
+| Promise\<DomSortingDefinition[]> | Sorting data of all headers used for sorting.                                   |
+|                                  |                                                                                 |
 
-| | |
-|---|---|
-| `async getSortHeaders` | Gets the headers used for sorting in the 'mat-multi-sort' reduced by the given 'filter'. |
-| **Parameters** |
-| filter: MultiSortHeaderHarnessFilters = {} | |
-| **Returns** |
-| Promise\<MatMultiSortHeaderHarness[]> | The filtered sort headers. |
-| | |
+|                                            |                                                                                          |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `async getSortHeaders`                     | Gets the headers used for sorting in the 'mat-multi-sort' reduced by the given 'filter'. |
+| **Parameters**                             |
+| filter: MultiSortHeaderHarnessFilters = {} |                                                                                          |
+| **Returns**                                |
+| Promise\<MatMultiSortHeaderHarness[]>      | The filtered sort headers.                                                               |
+|                                            |                                                                                          |
 
-| | |
-|---|---|
-| `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
-| **Returns** |
-| Promise\<TestElement> | The 'TestElement' representing the host element of the component. |
-| | |
+|                       |                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `async host`          | Gets a Promise for the 'TestElement' representing the host element of the component. |
+| **Returns**           |
+| Promise\<TestElement> | The 'TestElement' representing the host element of the component.                    |
+|                       |                                                                                      |
 
-| | |
-|---|---|
-| `static with` | Gets a 'HarnessPredicate' that can be used to search for a 'mat-multi-sort' with specific attributes. |
-| **Parameters** |
-| options: MultiSortHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate\<MatMultiSortHarness> | A 'HarnessPredicate' configured with the given options. |
-| | |
+|                                        |                                                                                                       |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `static with`                          | Gets a 'HarnessPredicate' that can be used to search for a 'mat-multi-sort' with specific attributes. |
+| **Parameters**                         |
+| options: MultiSortHarnessFilters = {}  | Options for narrowing the search.                                                                     |
+| **Returns**                            |
+| HarnessPredicate\<MatMultiSortHarness> | A 'HarnessPredicate' configured with the given options.                                               |
+|                                        |                                                                                                       |
 
 <a id="matmultisortheaderharness"></a>
 
@@ -792,84 +792,84 @@ Harness for interacting with a `mat-multi-sort header` element in tests.
 
 ##### **Properties**
 
-| | |
-|---|---|
+|                       |                                                                             |
+| --------------------- | --------------------------------------------------------------------------- |
 | `static hostSelector` | Used to identify the elements in the DOM (value: '.mat-multi-sort-header'). |
-| | |
+|                       |                                                                             |
 
 ##### **Methods**
 
-| | |
-|---|---|
-| `async click` | Clicks the header to change its sorting direction. Only works if the header is enabled. |
-| **Returns** |
-| Promise\<void> | Promise that resolves when the click action completes. |
-| | |
+|                |                                                                                         |
+| -------------- | --------------------------------------------------------------------------------------- |
+| `async click`  | Clicks the header to change its sorting direction. Only works if the header is enabled. |
+| **Returns**    |
+| Promise\<void> | Promise that resolves when the click action completes.                                  |
+|                |                                                                                         |
 
-| | |
-|---|---|
-| `async getAllSortData` | Gets an object with the sorting data of the header. |
-| **Returns** |
-| Promise\<MatMultiSortHeaderHarnessSortDefinition> | The sorting data of the header. |
-| | |
+|                                                   |                                                     |
+| ------------------------------------------------- | --------------------------------------------------- |
+| `async getAllSortData`                            | Gets an object with the sorting data of the header. |
+| **Returns**                                       |
+| Promise\<MatMultiSortHeaderHarnessSortDefinition> | The sorting data of the header.                     |
+|                                                   |                                                     |
 
-| | |
-|---|---|
-| `async getId` | Gets the id of the sort header. |
-| **Returns** |
-| Promise\<string> | The id of the sort header. |
-| | |
+|                  |                                 |
+| ---------------- | ------------------------------- |
+| `async getId`    | Gets the id of the sort header. |
+| **Returns**      |
+| Promise\<string> | The id of the sort header.      |
+|                  |                                 |
 
-| | |
-|---|---|
+|                  |                                    |
+| ---------------- | ---------------------------------- |
 | `async getLabel` | Gets the label of the sort header. |
-| **Returns** |
-| Promise\<string> | The label of the sort header. |
-| | |
+| **Returns**      |
+| Promise\<string> | The label of the sort header.      |
+|                  |                                    |
 
-| | |
-|---|---|
+|                          |                                           |
+| ------------------------ | ----------------------------------------- |
 | `async getSortDirection` | Gets the sorting direction of the header. |
-| **Returns** |
-| Promise\<SortDirection> | The sorting direction of the header. |
-| | |
+| **Returns**              |
+| Promise\<SortDirection>  | The sorting direction of the header.      |
+|                          |                                           |
 
-| | |
-|---|---|
-| `async getSortPosition` | Gets the sorting position of the header. |
-| **Returns** |
+|                         |                                            |
+| ----------------------- | ------------------------------------------ |
+| `async getSortPosition` | Gets the sorting position of the header.   |
+| **Returns**             |
 | Promise\<SortDirection> | The sorting position of the header (1..n). |
-| | |
+|                         |                                            |
 
-| | |
-|---|---|
-| `async host` | Gets a Promise for the 'TestElement' representing the host element of the component. |
-| **Returns** |
-| Promise<TestElement> | The 'Promise' for the 'TestElement'. |
-| | |
+|                      |                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `async host`         | Gets a Promise for the 'TestElement' representing the host element of the component. |
+| **Returns**          |
+| Promise<TestElement> | The 'Promise' for the 'TestElement'.                                                 |
+|                      |                                                                                      |
 
-| | |
-|---|---|
+|                  |                                                                   |
+| ---------------- | ----------------------------------------------------------------- |
 | `async isActive` | Gets whether the sort header is currently being used for sorting. |
-| **Returns** |
-| Promise<boolean> | `True`, if the sort header is currently being used for sorting. |
-| | |
+| **Returns**      |
+| Promise<boolean> | `True`, if the sort header is currently being used for sorting.   |
+|                  |                                                                   |
 
-| | |
-|---|---|
-| `async isDisabled` | Whether the sort header is disabled. |
-| **Returns** |
-| Promise<boolean> | `True`, if the sort header is disabled. |
-| | |
+|                    |                                         |
+| ------------------ | --------------------------------------- |
+| `async isDisabled` | Whether the sort header is disabled.    |
+| **Returns**        |
+| Promise<boolean>   | `True`, if the sort header is disabled. |
+|                    |                                         |
 
-| | |
-|---|---|
-| `static with` | Gets a 'HarnessPredicate' that can be used to search for a sort header with specific attributes. |
-| **Parameters** |
-| options: MultiSortHeaderHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate\<MatMultiSortHeaderHarness> | A 'HarnessPredicate' configured with the given options. |
-| | |
+|                                              |                                                                                                  |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `static with`                                | Gets a 'HarnessPredicate' that can be used to search for a sort header with specific attributes. |
+| **Parameters**                               |
+| options: MultiSortHeaderHarnessFilters = {}  | Options for narrowing the search.                                                                |
+| **Returns**                                  |
+| HarnessPredicate\<MatMultiSortHeaderHarness> | A 'HarnessPredicate' configured with the given options.                                          |
+|                                              |                                                                                                  |
 
 <a id="matrowcellharness"></a>
 
@@ -879,18 +879,18 @@ Harness for interacting with a mat-datatable cell in a row.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                                        |                                                                      |
+| -------------------------------------- | -------------------------------------------------------------------- |
 | `static hostSelector: '.mat-mdc-cell'` | Used to identify the host element of a 'MatRowCellHarness' instance. |
 
 ##### **Methods**
 
-| | |
-|------|-------------|
+|                      |                                                      |
+| -------------------- | ---------------------------------------------------- |
 | `async isSingleLine` | Check, if the cell is defined as 'showAsSingleLine'. |
-| **Returns** |
-| Promise\<boolean> | The cell is shown as single line. |
-| | |
+| **Returns**          |
+| Promise\<boolean>    | The cell is shown as single line.                    |
+|                      |                                                      |
 
 <a id="matrowharness"></a>
 
@@ -900,26 +900,26 @@ Harness for interacting with a mat-datatable row.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                                       |                                           |
+| ------------------------------------- | ----------------------------------------- |
 | `static hostSelector: '.mat-mdc-row'` | Used to identify the elements in the DOM. |
 
 ##### **Methods**
 
-| | |
-|---|---|
-| `async click` | Clicks the row (e.g. to select a row). |
-| **Returns** |
+|                |                                                        |
+| -------------- | ------------------------------------------------------ |
+| `async click`  | Clicks the row (e.g. to select a row).                 |
+| **Returns**    |
 | Promise\<void> | Promise that resolves when the click action completes. |
-| | |
+|                |                                                        |
 
-| | |
-|------|-------------|
-| `static with` | Gets a `HarnessPredicate` that can be used to search for a mat-datatable row with specific attributes. |
-| **Parameters** |
-| options: RowHarnessFilters = {} | Options for narrowing the search. |
-| **Returns** |
-| HarnessPredicate<T> | A 'HarnessPredicate' configured with the given options. |
+|                                 |                                                                                                        |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `static with`                   | Gets a `HarnessPredicate` that can be used to search for a mat-datatable row with specific attributes. |
+| **Parameters**                  |
+| options: RowHarnessFilters = {} | Options for narrowing the search.                                                                      |
+| **Returns**                     |
+| HarnessPredicate<T>             | A 'HarnessPredicate' configured with the given options.                                                |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -933,23 +933,23 @@ A set of criteria that can be used to filter a list of cell harness instances.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
+|                              |                                                                |
+| ---------------------------- | -------------------------------------------------------------- |
 | columnName: string \| RegExp | Only find instances whose column name matches the given value. |
-| text: string \| RegExp | Only find instances whose text matches the given value. |
-| | |
+| text: string \| RegExp       | Only find instances whose text matches the given value.        |
+|                              |                                                                |
 
 #### **DomSortingDefinition**
 
 ##### **Properties**
 
-| | |
-|---|---|
-| `id: string` | ID of the header element. |
-| `label: string` | Label of the header. |
-| `sortDirection: SortDirection` | Sort direction of the header. |
-| `sortPosition: number` | Sort position of the header (1..n). |
-| | |
+|                                |                                     |
+| ------------------------------ | ----------------------------------- |
+| `id: string`                   | ID of the header element.           |
+| `label: string`                | Label of the header.                |
+| `sortDirection: SortDirection` | Sort direction of the header.       |
+| `sortPosition: number`         | Sort position of the header (1..n). |
+|                                |                                     |
 
 #### **MatDatatableHarnessColumnsText**
 
@@ -959,12 +959,12 @@ This interface describes an object, whose keys are the names of the columns and 
 
 ##### **Properties of a value**
 
-| | |
-|------|-------------|
-| text: string[] | Array with content of the rows of this column. |
-| headerText: string | Content of the header row of this column. |
-| footerText: string \| undefined | Content of the footer row of this column. |
-| | |
+|                                 |                                                |
+| ------------------------------- | ---------------------------------------------- |
+| text: string[]                  | Array with content of the rows of this column. |
+| headerText: string              | Content of the header row of this column.      |
+| footerText: string \| undefined | Content of the footer row of this column.      |
+|                                 |                                                |
 
 #### **MatDatatableHarnessFilters**
 
@@ -972,10 +972,10 @@ A set of criteria that can be used to filter a list of table harness instances.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
-| - | |
-| | |
+|     |     |
+| --- | --- |
+| -   |     |
+|     |     |
 
 #### **MatRowHarnessColumnsText**
 
@@ -987,22 +987,22 @@ This interface describes an object, whose keys are the names of the columns and 
 
 ##### **Properties**
 
-| | |
-|---|---|
-| - | |
-| | |
+|     |     |
+| --- | --- |
+| -   |     |
+|     |     |
 
 #### **MultiSortHeaderHarnessFilters**
 
 ##### **Properties**
 
-| | |
-|---|---|
-| `label: string \| RegExp` | Label of the header. |
-| `id: string \| RegExp` | ID of the header element. |
-| `sortDirection: SortDirection` | Sort direction of the header. |
-| `sortPosition: number` | Sort position of the header (1..n). |
-| | |
+|                                |                                     |
+| ------------------------------ | ----------------------------------- |
+| `label: string \| RegExp`      | Label of the header.                |
+| `id: string \| RegExp`         | ID of the header element.           |
+| `sortDirection: SortDirection` | Sort direction of the header.       |
+| `sortPosition: number`         | Sort position of the header (1..n). |
+|                                |                                     |
 
 #### **RowHarnessFilters**
 
@@ -1010,10 +1010,10 @@ A set of criteria that can be used to filter a list of row harness instances.
 
 ##### **Properties**
 
-| | |
-|------|-------------|
-| - | |
-| | |
+|     |     |
+| --- | --- |
+| -   |     |
+|     |     |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -1090,7 +1090,7 @@ For details of the commit messages format see [Contributing to Angular](https://
 <!-- LICENSE -->
 ## License
 
-Copyright © 2024 [Bernhard Pottler](https://github.com/BePo65).
+Copyright © 2025 [Bernhard Pottler](https://github.com/BePo65).
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
