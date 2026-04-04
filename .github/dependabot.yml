@@ -30,3 +30,10 @@ updates:
         versions: ["4.x", "5.x"]
       - dependency-name: "@cypress/webpack-preprocessor"
         versions: ["7.x"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
