@@ -327,7 +327,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
               const result = {
                 startRowIndex: start,
                 numberOfRows: end - start
-              } as RequestRowsRange;
+              };
 
               if (typeof start !== 'number' || typeof end !== 'number') {
                 result.startRowIndex = 0;

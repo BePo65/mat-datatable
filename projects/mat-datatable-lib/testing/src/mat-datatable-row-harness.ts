@@ -157,7 +157,7 @@ export class MatHeaderRowHarness extends _MatRowHarnessBase<
    * @param filter - filter to select the sut (default; all cells).
    * @returns an array of the selected cells.
    */
-  override async getCells(filter: HeaderCellHarnessFilters = {} as HeaderCellHarnessFilters): Promise<MatHeaderCellHarness[]> {
+  override async getCells(filter: HeaderCellHarnessFilters = {}): Promise<MatHeaderCellHarness[]> {
     return this.locatorForAll(this._cellHarness.with(filter))();
   }
 }

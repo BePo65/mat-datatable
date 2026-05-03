@@ -114,7 +114,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
               return {
                 totalElements: page.totalElements,
                 totalFilteredElements: page.totalFilteredElements
-              } as TableVirtualScrollDataStoreSizes;
+              };
             })
           )
         )
@@ -242,7 +242,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
           this.lastRangeToDisplay = {
             startRowIndex: page.startRowIndex,
             numberOfRows: page.returnedElements
-          } as RequestRowsRange;
+          };
           this.lastRowsContent = page.content;
 
           if (this.datastoreSizesChanged(page)) {
