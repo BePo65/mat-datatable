@@ -760,7 +760,7 @@ describe('TableVirtualScrollDataSource', () => {
     const fakeDataStore = new FakeUserDataStore<User>(undefined, 80);
     const dataSource = new TableVirtualScrollDataSource<User>(fakeDataStore);
 
-    const rowToGetIndexFor = { id: 55, name: 'User0055' } as User;
+    const rowToGetIndexFor = { id: 55, name: 'User0055' };
     dataSource.rowToIndex(rowToGetIndexFor)
       .subscribe(index => {
         expect(index).toBe(55);
@@ -775,7 +775,7 @@ describe('TableVirtualScrollDataSource', () => {
     const sorts = [{ fieldName:'name', sortDirection:'desc' }] as FieldSortDefinition<Atom>[];
     dataSource.sorts = sorts;
 
-    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' } as Atom;
+    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' };
     dataSource.rowToIndex(rowToGetIndexFor)
       .subscribe(index => {
         expect(index).toBe(3);
@@ -790,7 +790,7 @@ describe('TableVirtualScrollDataSource', () => {
     const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
     dataSource.filters = filters;
 
-    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' } as Atom;
+    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' };
     dataSource.rowToIndex(rowToGetIndexFor)
       .subscribe(index => {
         expect(index).toBe(1);
@@ -807,7 +807,7 @@ describe('TableVirtualScrollDataSource', () => {
     const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
     dataSource.filters = filters;
 
-    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' } as Atom;
+    const rowToGetIndexFor = { id: 3, name: 'Helium', weight: 4.0026, symbol: 'He' };
     dataSource.rowToIndex(rowToGetIndexFor)
       .subscribe(index => {
         expect(index).toBe(0);
@@ -824,7 +824,7 @@ describe('TableVirtualScrollDataSource', () => {
     const filters = [{ fieldName:'name', value:'Helium' }] as FieldFilterDefinition<Atom>[];
     dataSource.filters = filters;
 
-    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' } as Atom;
+    const rowToGetIndexFor = { id: 4, name: 'Lithium', weight: 6.941, symbol: 'Li' };
     dataSource.rowToIndex(rowToGetIndexFor)
       .subscribe(index => {
         expect(index).toBe(-1);
@@ -855,7 +855,7 @@ describe('TableVirtualScrollDataSource', () => {
       };
 
       const source = cold(sourceMarbles, {
-        1: { id: 55, name: 'User0055' } as User
+        1: { id: 55, name: 'User0055' }
       });
 
       // Use source to make dataSource emit values
