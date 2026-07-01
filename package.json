@@ -61,7 +61,7 @@
     "@angular-eslint/eslint-plugin-template": "17.5.3",
     "@angular-eslint/schematics": "17.5.3",
     "@angular-eslint/template-parser": "17.5.3",
-    "@angular/cli": "~17.3.17",
+    "@angular/cli": "~22.0.4",
     "@angular/compiler-cli": "^17.3.12",
     "@angular/platform-browser-dynamic": "^17.3.12",
     "@commitlint/cli": "^21.0.2",
