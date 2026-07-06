@@ -72,7 +72,7 @@
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
     "commit-and-tag-version": "^12.7.3",
-    "conventional-commits-filter": "^5.0.0",
+    "conventional-commits-filter": "^6.0.0",
     "cpy-cli": "^7.0.0",
     "cypress": "^14.5.4",
     "del-cli": "^7.0.0",
