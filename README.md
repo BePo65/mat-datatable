@@ -59,7 +59,7 @@ A simple data table with virtual scrolling using Angular Material.
 
 This project extends 'angular material table' so that it can be used as a replacement for [ngx-datatable](https://github.com/swimlane/ngx-datatable) in one of my projects. Unluckily ngx-datatable seems to be dead as it is still on angular v12 and an update to a more recent angular version is not in sight.
 
-Nat-Datatable implements a table with virtual scrolling, sorting and filtering. Only a minimal set of the functionality of ngx-datatable is implemented.
+Mat-Datatable implements a table with virtual scrolling, sorting and filtering. Only a minimal set of the functionality of ngx-datatable is implemented.
 
 ![Screenshot](assets/screenshot.jpg "Screenshot of the demo page")
 
