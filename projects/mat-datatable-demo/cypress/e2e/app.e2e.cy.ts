@@ -19,7 +19,7 @@ describe('Test demo page', () => {
       .should('be.visible');
 
     cy.get('.content-table .mat-mdc-footer-cell').should($elements => {
-      expect($elements).to.have.length(3);
+      expect($elements).to.have.length(4); // 4 cells in row
       expect($elements.eq(0)).to.contain('filtered 103 / total 103');
     });
 

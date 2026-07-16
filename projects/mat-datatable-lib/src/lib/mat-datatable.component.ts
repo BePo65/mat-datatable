@@ -43,7 +43,7 @@ import {
 import { MatMultiSortHeader } from '../directives/datatable-sort/mat-multi-sort-header.component';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
 import { FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
-import { ColumnAlignmentType, MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
+import { ColumnAlignmentType, MatColumnDefinition, CastPipe, CellValueString, CellValueImage, CellValueMailTo } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
@@ -55,41 +55,42 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
  * @template TRowData - type / interface definition for data of a single row
  */
 @Component({
-    selector: 'mat-datatable',
-    templateUrl: './mat-datatable.component.html',
-    styleUrls: [
-        './mat-datatable.component.scss',
-        '../directives/datatable-resizable.directive.scss'
-    ],
-    standalone: true,
-    imports: [
-      AsyncPipe,
-      CdkVirtualScrollViewport,
-      MatCell,
-      MatCellDef,
-      MatColumnDef,
-      MatDatatableHeaderAlignDirective,
-      MatDatatableResizableDirective,
-      MatFooterCell,
-      MatFooterCellDef,
-      MatFooterRow,
-      MatFooterRowDef,
-      MatHeaderCell,
-      MatHeaderCellDef,
-      MatHeaderRow,
-      MatHeaderRowDef,
-      MatMultiSort,
-      MatMultiSortHeader,
-      MatProgressBar,
-      MatRow,
-      MatRowDef,
-      MatTable,
-      NgClass,
-      NgFor,
-      NgIf,
-      NgStyle,
-      TableItemSizeDirective
-    ]
+  selector: 'mat-datatable',
+  templateUrl: './mat-datatable.component.html',
+  styleUrls: [
+    './mat-datatable.component.scss',
+    '../directives/datatable-resizable.directive.scss'
+  ],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    CdkVirtualScrollViewport,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatDatatableHeaderAlignDirective,
+    MatDatatableResizableDirective,
+    MatFooterCell,
+    MatFooterCellDef,
+    MatFooterRow,
+    MatFooterRowDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatMultiSort,
+    MatMultiSortHeader,
+    MatProgressBar,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    NgClass,
+    NgFor,
+    NgIf,
+    NgStyle,
+    TableItemSizeDirective,
+    CastPipe
+  ]
 })
 export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
@@ -121,6 +122,11 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
   @ViewChild(MatTable) protected table!: MatTable<TRowData>;
   @ViewChild(CdkVirtualScrollViewport) protected viewport!: CdkVirtualScrollViewport;
   @ViewChild(MatMultiSort) protected sort!: MatMultiSort;
+
+  // publish the CellValueXXX interfaces for the html template
+  protected StringCell!: CellValueString;
+  protected MailToCell!: CellValueMailTo;
+  protected ImageCell!: CellValueImage;
 
   protected displayedFooterColumns: string[] = [];
   protected dataSource!: TableVirtualScrollDataSource<TRowData>;
@@ -201,10 +207,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
           this.currentSelectedRows = newSelection;
           break;
         case 'single':
-          this.currentSelectedRows = [ newSelection[0] ];
+          this.currentSelectedRows = [newSelection[0]];
           break;
-        }
-        this.onRowSelectionChanged();
+      }
+      this.onRowSelectionChanged();
     } else {
       throw new Error('\'newSelection\' must be an array.');
     }
@@ -225,10 +231,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     this.sort.sortDefinitions = sortables;
   }
 
-  get filterDefinitions() : FieldFilterDefinition<TRowData>[] {
+  get filterDefinitions(): FieldFilterDefinition<TRowData>[] {
     return this.dataSource.filters;
   }
-  set filterDefinitions(newFilters : FieldFilterDefinition<TRowData>[]) {
+  set filterDefinitions(newFilters: FieldFilterDefinition<TRowData>[]) {
     if (newFilters && Array.isArray(newFilters)) {
       this.dataSource.filters = newFilters;
     }
@@ -280,7 +286,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       result = {
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
-        'overflow':'hidden'
+        'overflow': 'hidden'
       };
     }
 
@@ -288,7 +294,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       const singleLineResult = {
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
-        'overflow':'hidden'
+        'overflow': 'hidden'
       };
       result = Object.assign({}, result, singleLineResult);
     }
@@ -346,7 +352,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       if (!this.currentSelectedRows.includes(row)) {
         switch (this.rowSelectionMode) {
           case 'single':
-            this.currentSelectedRows = [ row ];
+            this.currentSelectedRows = [row];
             break;
           case 'multi':
             this.currentSelectedRows.push(row);
@@ -357,7 +363,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       } else {
         switch (this.rowSelectionMode) {
           case 'single':
-            this.currentSelectedRows = [ ];
+            this.currentSelectedRows = [];
             break;
           case 'multi':
             this.currentSelectedRows = this.currentSelectedRows.filter(e => e !== row);

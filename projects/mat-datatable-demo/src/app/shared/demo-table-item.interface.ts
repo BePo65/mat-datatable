@@ -8,4 +8,5 @@ export interface DemoTableItem {
   email: string;
   birthday: Date;
   description: string;
+  remoteAccess?: boolean;
 }

@@ -202,7 +202,7 @@ describe('MatDatatableComponent', () => {
         ['6', 'Carbon', '12.0107', 'C'],
         ['9', 'Fluorine', '18.9984', 'F'],
         ['3', 'Helium', '4.0026', 'He'],
-        ['2', 'Helium', '6.1234','He'],
+        ['2', 'Helium', '6.1234', 'He'],
         ['1', 'Hydrogen', '1.0079', 'H'],
         ['4', 'Lithium', '6.941', 'Li'],
         ['10', 'Neon', '20.1797', 'Ne'],
@@ -248,7 +248,7 @@ describe('MatDatatableComponent', () => {
         ['4', 'Lithium', '6.941', 'Li'],
         ['1', 'Hydrogen', '1.0079', 'H'],
         ['3', 'Helium', '4.0026', 'He'],
-        ['2', 'Helium', '6.1234','He'],
+        ['2', 'Helium', '6.1234', 'He'],
         ['9', 'Fluorine', '18.9984', 'F'],
         ['6', 'Carbon', '12.0107', 'C'],
         ['5', 'Beryllium', '9.0122', 'Be']
@@ -286,7 +286,7 @@ describe('MatDatatableComponent', () => {
         ['4', 'Lithium', '6.941', 'Li'],
         ['1', 'Hydrogen', '1.0079', 'H'],
         ['3', 'Helium', '4.0026', 'He'],
-        ['2', 'Helium', '6.1234','He'],
+        ['2', 'Helium', '6.1234', 'He'],
         ['9', 'Fluorine', '18.9984', 'F'],
         ['6', 'Carbon', '12.0107', 'C'],
         ['5', 'Beryllium', '9.0122', 'Be']
@@ -378,8 +378,8 @@ describe('MatDatatableComponent', () => {
       loader = TestbedHarnessEnvironment.loader(fixture);
     });
 
-    it('should filter a table for a single string value', async() => {
-      const currentFilter = { fieldName:'name', value:'Helium' };
+    it('should filter a table for a single string value', async () => {
+      const currentFilter = { fieldName: 'name', value: 'Helium' };
       component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
       fixture.detectChanges();
       const expectedRows = singlePageDataAsStrings.filter(element => element[1] === currentFilter.value);
@@ -392,12 +392,12 @@ describe('MatDatatableComponent', () => {
       expect(rowContent).toEqual(expectedRows);
     });
 
-    it('should filter a table for a range of numeric values', async() => {
-      const currentFilter = { fieldName:'position', valueFrom:5, valueTo:7 };
+    it('should filter a table for a range of numeric values', async () => {
+      const currentFilter = { fieldName: 'position', valueFrom: 5, valueTo: 7 };
       component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
       fixture.detectChanges();
       const expectedRows = singlePageDataAsStrings.filter(element => (parseInt(element[0]) >= currentFilter.valueFrom) &&
-      (parseInt(element[0]) <= currentFilter.valueTo));
+        (parseInt(element[0]) <= currentFilter.valueTo));
 
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
@@ -942,7 +942,7 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'position',
     header: 'No.',
-    cell: (row: DatatableTestRow) => row.position.toString(),
+    cell: (row: DatatableTestRow) => { return { type: 'string', text: row?.position.toString() }; },
     headerAlignment: 'right',
     cellAlignment: 'right',
     width: '5em',
@@ -952,7 +952,7 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'name',
     header: 'Name',
-    cell: (row: DatatableTestRow) => row.name,
+    cell: (row: DatatableTestRow) => { return { type: 'string', text: row.name }; },
     headerAlignment: 'left',
     cellAlignment: 'left',
     width: '20em',
@@ -965,7 +965,7 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'weight',
     header: 'Weight',
-    cell: (row: DatatableTestRow) => row.weight.toString(),
+    cell: (row: DatatableTestRow) => { return { type: 'string', text: row.weight.toString() }; },
     headerAlignment: 'right',
     cellAlignment: 'right',
     width: '10em',
@@ -975,11 +975,10 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'symbol',
     header: 'Symbol',
-    cell: (row: DatatableTestRow) => row.symbol,
+    cell: (row: DatatableTestRow) => { return { type: 'mailtoLink', text: row.symbol, url: `mailto:${row.symbol}` }; },
     headerAlignment: 'center',
     cellAlignment: 'center',
     tooltip: (row: DatatableTestRow) => `Hint: ${row.symbol}`,
-    showAsMailtoLink: true,
     footer: 'f4'
   }
 ];
@@ -1022,10 +1021,10 @@ class DatatableTestComponent {
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
 
-  public get currentFilters() : FieldFilterDefinition<DatatableTestRow>[] {
+  public get currentFilters(): FieldFilterDefinition<DatatableTestRow>[] {
     return this.matDataTable.filterDefinitions;
   }
-  public set currentFilters(newFilters : FieldFilterDefinition<DatatableTestRow>[]) {
+  public set currentFilters(newFilters: FieldFilterDefinition<DatatableTestRow>[]) {
     if (newFilters && Array.isArray(newFilters)) {
       this.matDataTable.filterDefinitions = newFilters;
     }
@@ -1056,7 +1055,7 @@ class DatatableTestComponent {
     let result = '-';
     if ($event.length > 0) {
       result = $event
-        .sort((a: DatatableTestRow, b: DatatableTestRow) => a.position - b.position )
+        .sort((a: DatatableTestRow, b: DatatableTestRow) => a.position - b.position)
         .map(row => row.name)
         .join('; ') || '-';
     }
