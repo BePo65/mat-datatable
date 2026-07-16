@@ -17,6 +17,8 @@ import { DemoTableDataStore } from './services/demo-table-datastore.class';
 import { DemoTableItem } from './shared/demo-table-item.interface';
 
 import {
+  CastPipe,
+  CellValueImage,
   FieldFilterDefinition,
   MatColumnDefinition,
   MatDatatableComponent,
@@ -25,51 +27,75 @@ import {
 } from 'mat-datatable';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    animations: [
-      trigger('slideInBottom', [
-        transition(':enter', [
-          style({ transform: 'translateY(100%)' }),
-          animate('500ms ease-out', style({ transform: 'translateY(0)' }))
-        ]),
-        transition(':leave', [
-          animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
-        ])
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('slideInBottom', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('500ms ease-out', style({ transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
       ])
-    ],
-    standalone: true,
-    imports: [
-      AsyncPipe,
-      MatButton,
-      MatChip,
-      MatChipListbox,
-      MatChipRemove,
-      MatDatatableComponent,
-      MatFormField,
-      MatIcon,
-      MatLabel,
-      MatMiniFabButton,
-      MatOption,
-      MatSelect,
-      MatSlideToggle,
-      NgIf,
-      NgFor,
-      NgxRerenderModule
-    ]
+    ])
+  ],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    CastPipe,
+    MatButton,
+    MatChip,
+    MatChipListbox,
+    MatChipRemove,
+    MatDatatableComponent,
+    MatFormField,
+    MatIcon,
+    MatLabel,
+    MatMiniFabButton,
+    MatOption,
+    MatSelect,
+    MatSlideToggle,
+    NgIf,
+    NgFor,
+    NgxRerenderModule
+  ]
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('datatable') table!: MatDatatableComponent<DemoTableItem>;
 
   title = 'Mat-Datatable-Demo';
 
+  // Example for formatting boolean values in a column as images.
+  // The function is used in the column definition for the 'remoteAccess' column.
+  protected formatBool = (row: DemoTableItem) => {
+    const cellContentDefinition: CellValueImage = { type: 'image', url: '', altText: '' };
+    switch (row?.remoteAccess) {
+      case true:
+        cellContentDefinition.url = 'assets/images/circle-green.png';
+        cellContentDefinition.altText = 'with remote access';
+        cellContentDefinition.title = 'with remote access';
+        break;
+      case false:
+        cellContentDefinition.url = 'assets/images/circle-red.png';
+        cellContentDefinition.altText = 'without remote access';
+        cellContentDefinition.title = 'without remote access';
+        break;
+      default:
+        cellContentDefinition.url = 'assets/images/circle-gray.png';
+        cellContentDefinition.altText = 'unknown remote access';
+        cellContentDefinition.title = 'unknown remote access';
+    }
+    return cellContentDefinition;
+  };
+
   protected dataStore = new DemoTableDataStore<DemoTableItem>(this.trackBy);
   protected columnDefinitions: MatColumnDefinition<DemoTableItem>[] = [
     {
       columnId: 'userId',
       header: 'ID',
-      cell: (row: DemoTableItem) => row?.userId?.toString(),
+      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.userId?.toString() }; },
       headerAlignment: 'right',
       cellAlignment: 'right',
       width: '5em',
@@ -82,7 +108,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       resizable: true,
       header: 'First Name',
       headerAlignment: 'left',
-      cell: (row: DemoTableItem) => row?.firstName,
+      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.firstName }; },
       cellAlignment: 'left',
       width: '10em'
     },
@@ -91,7 +117,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       sortable: true,
       header: 'Last Name',
       headerAlignment: 'right',
-      cell: (row: DemoTableItem) => row?.lastName,
+      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.lastName }; },
       cellAlignment: 'right',
       width: '10em',
       footer: 'Filter: -',
@@ -101,10 +127,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       columnId: 'email',
       resizable: true,
       header: 'EMail',
-      cell: (row: DemoTableItem) => row?.email,
+      cell: (row: DemoTableItem) => { return { type: 'mailtoLink', text: row?.email, url: `mailto:${row?.email}` }; },
       width: '20em',
-      tooltip: (row: DemoTableItem) => row?.email,
-      showAsMailtoLink: true
+      tooltip: (row: DemoTableItem) => row?.email
     },
     {
       columnId: 'birthday',
@@ -112,22 +137,30 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       resizable: false,
       header: 'Birthday',
       headerAlignment: 'center',
-      cell: (row: DemoTableItem) => row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }),
+      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }) }; },
       cellAlignment: 'center',
       width: '8em'
     },
     {
       columnId: 'description',
       header: 'Description',
-      cell: (row: DemoTableItem) => row?.description,
+      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.description }; },
       tooltip: (row: DemoTableItem) => row?.description,
       showAsSingleLine: true,
       footer: 'First visible row: -',
       footerAlignment: 'right'
+    },
+    {
+      columnId: 'remoteAccess',
+      sortable: true,
+      header: 'Remote Access?',
+      cell: this.formatBool,
+      cellAlignment: 'center',
+      width: '8em'
     }
   ];
   protected withFooter = true;
-  protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'description'];
+  protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'remoteAccess', 'description'];
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
@@ -160,34 +193,34 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.table.totalRowsChanged
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      delay(0)
-    )
-    .subscribe(numberOfRows => {
-      this.numberOfRows = numberOfRows.toString();
-      this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
-    });
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        delay(0)
+      )
+      .subscribe(numberOfRows => {
+        this.numberOfRows = numberOfRows.toString();
+        this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+      });
 
     this.table.filteredRowsChanged
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      delay(0)
-    )
-    .subscribe(numberOfRows => {
-      this.numberOfFilteredRows = numberOfRows.toString();
-      this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
-    });
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        delay(0)
+      )
+      .subscribe(numberOfRows => {
+        this.numberOfFilteredRows = numberOfRows.toString();
+        this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+      });
 
     this.table.firstVisibleIndexChanged
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      delay(0)
-    )
-    .subscribe(firstVisibleRow => {
-      this.firstVisibleRow = firstVisibleRow.toString();
-      this.columnDefinitions[5].footer = this.formatString(this.formattedFirstVisibleRow, this.firstVisibleRow.toString());
-    });
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        delay(0)
+      )
+      .subscribe(firstVisibleRow => {
+        this.firstVisibleRow = firstVisibleRow.toString();
+        this.columnDefinitions[5].footer = this.formatString(this.formattedFirstVisibleRow, this.firstVisibleRow.toString());
+      });
   }
 
   ngOnDestroy(): void {
@@ -212,7 +245,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     let result = '-';
     if ($event.length > 0) {
       result = $event
-        .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId )
+        .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId)
         .map(row => row?.userId)
         .join('; ') || '-';
     }
@@ -247,41 +280,41 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   // Demo to show sorting by code
   protected onSortId() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'userId', direction:'asc' }
+      { columnId: 'userId', direction: 'asc' }
     ];
     this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameFirstNameBirthday() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc' },
-      { columnId:'firstName', direction:'asc' },
-      { columnId:'birthday', direction:'asc' }
+      { columnId: 'lastName', direction: 'asc' },
+      { columnId: 'firstName', direction: 'asc' },
+      { columnId: 'birthday', direction: 'asc' }
     ];
     this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc' },
-      { columnId:'birthday', direction:'asc' }
+      { columnId: 'lastName', direction: 'asc' },
+      { columnId: 'birthday', direction: 'asc' }
     ];
     this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'lastName', direction:'asc' },
-      { columnId:'birthday', direction:'desc' }
+      { columnId: 'lastName', direction: 'asc' },
+      { columnId: 'birthday', direction: 'desc' }
     ];
     this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayAsc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'birthday', direction:'asc' }
+      { columnId: 'birthday', direction: 'asc' }
     ];
     this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayDesc() {
     const newSort: MatSortDefinition[] = [
-      { columnId:'birthday', direction:'desc' }
+      { columnId: 'birthday', direction: 'desc' }
     ];
     this.table.sortDefinitions = newSort;
   }
@@ -302,7 +335,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo to show setting selected rows by code
   protected onSetSelection() {
-    this.table.selectedRows = this.selectRowsByUserId([ 1, 3, 66 ]);
+    this.table.selectedRows = this.selectRowsByUserId([1, 3, 66]);
   }
   protected onClearSelection() {
     this.table.selectedRows = [];
@@ -319,19 +352,19 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo to show filtering by code
   protected onFilterByValue() {
-    const currentFilter = [{ fieldName:'lastName', value:'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
+    const currentFilter = [{ fieldName: 'lastName', value: 'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
   protected onFilterByRange() {
-    const currentFilter = [{ fieldName:'userId', valueFrom:50, valueTo:67 }] as FieldFilterDefinition<DemoTableItem>[];
+    const currentFilter = [{ fieldName: 'userId', valueFrom: 50, valueTo: 67 }] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
   protected onClearFilter() {
-    const currentFilter = []  as FieldFilterDefinition<DemoTableItem>[];
+    const currentFilter = [] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
@@ -478,11 +511,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    */
   private filterDefinitionToString(filterDefinition: FieldFilterDefinition<DemoTableItem>[]): string {
     let filterAsString = '-';
-    if(filterDefinition && Array.isArray(filterDefinition) && (filterDefinition.length > 0)) {
+    if (filterDefinition && Array.isArray(filterDefinition) && (filterDefinition.length > 0)) {
       const filter = filterDefinition[0];
       if (filter.value !== undefined) {
         filterAsString = `'${filter.fieldName}' = '${filter.value.toString()}' `;
-      } else  if (filter.valueFrom !== undefined) {
+      } else if (filter.valueFrom !== undefined) {
         filterAsString = `'${filter.fieldName}' = ${filter.valueFrom.toString()}-${filter.valueTo.toString()}`;
       }
     }
