@@ -30,6 +30,8 @@ updates:
         versions: ['4.x', '5.x']
       - dependency-name: '@cypress/webpack-preprocessor'
         versions: ['7.x']
+      - dependency-name: '@types/node'
+        versions: ['21.x', '22.x', '23.x', '24.x', '25.x', '26.x']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
