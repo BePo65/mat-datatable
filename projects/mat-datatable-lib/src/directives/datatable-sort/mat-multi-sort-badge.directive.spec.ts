@@ -14,9 +14,7 @@ describe('MatMultiSortBadgeDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-    imports: [
-      BadgeTestApp
-    ]
+      imports: [BadgeTestApp]
     }).createComponent(BadgeTestApp);
     testComponent = fixture.debugElement.componentInstance as BadgeTestApp;
     fixture.detectChanges(); // initial binding
@@ -26,7 +24,9 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should update the badge based on attribute', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
+    const badgeElement =
+      badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ??
+      document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -37,7 +37,9 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should be able to pass in falsy values to the badge content', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
+    const badgeElement =
+      badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ??
+      document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -48,7 +50,9 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should treat null and undefined as empty strings in the badge content', () => {
-    const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
+    const badgeElement =
+      badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ??
+      document.createElement('div');
 
     expect(badgeElement.textContent).toContain('1');
 
@@ -136,7 +140,9 @@ describe('MatMultiSortBadgeDirective', () => {
   });
 
   it('should apply view encapsulation on create badge content', () => {
-    const badge = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ?? document.createElement('div');
+    const badge =
+      badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content') ??
+      document.createElement('div');
     let encapsulationAttr: Attr | undefined;
 
     for (let i = 0; i < badge.attributes.length; i++) {
@@ -164,13 +170,19 @@ describe('MatMultiSortBadgeDirective', () => {
     const preExistingFixture = TestBed.createComponent(PreExistingBadge);
     preExistingFixture.detectChanges();
 
-    expect((preExistingFixture.nativeElement as HTMLElement).querySelectorAll('.mat-multi-sort-badge-content').length).toBe(1);
+    expect(
+      (preExistingFixture.nativeElement as HTMLElement).querySelectorAll(
+        '.mat-multi-sort-badge-content'
+      ).length
+    ).toBe(1);
   });
 
   it('should expose the badge element', () => {
     const badgeElement = badgeHostNativeElement.querySelector('.mat-multi-sort-badge-content');
 
-    expect(fixture.componentInstance.badgeInstance.getBadgeElement()).toBe(badgeElement as HTMLElement);
+    expect(fixture.componentInstance.badgeInstance.getBadgeElement()).toBe(
+      badgeElement as HTMLElement
+    );
   });
 });
 
@@ -180,19 +192,19 @@ describe('MatMultiSortBadgeDirective', () => {
   encapsulation: ViewEncapsulation.Emulated,
   styles: ['span { color: hotpink; }'],
   template: `
-<span [matMultiSortBadge]="badgeContent"
+    <span
+      [matMultiSortBadge]="badgeContent"
       [matMultiSortBadgeArrowDirection]="badgeDirection"
       [matMultiSortBadgePosition]="badgePosition"
       [matMultiSortBadgeHidden]="badgeHidden"
       [matMultiSortBadgeDescription]="badgeDescription"
-      [matMultiSortBadgeDisabled]="badgeDisabled">
-  home
-</span>
+      [matMultiSortBadgeDisabled]="badgeDisabled"
+    >
+      home
+    </span>
   `,
   standalone: true,
-  imports: [
-    MatMultiSortBadgeDirective
-  ]
+  imports: [MatMultiSortBadgeDirective]
 })
 class BadgeTestApp {
   @ViewChild(MatMultiSortBadgeDirective) badgeInstance!: MatMultiSortBadgeDirective;
@@ -206,10 +218,10 @@ class BadgeTestApp {
 
 @Component({
   template: `
-<span matMultiSortBadge="Hello">
-  home
-  <div class="mat-multi-sort-badge-content">Pre-existing badge</div>
-</span>
+    <span matMultiSortBadge="Hello">
+      home
+      <div class="mat-multi-sort-badge-content">Pre-existing badge</div>
+    </span>
   `
 })
 class PreExistingBadge {}

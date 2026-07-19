@@ -86,16 +86,16 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     if (!this.viewport || !this.rowHeight) {
       return;
     }
-    this.viewport.scrollToOffset((index - 1 ) * this.rowHeight + this.headerHeight, behavior);
+    this.viewport.scrollToOffset((index - 1) * this.rowHeight + this.headerHeight, behavior);
   }
 
   public setConfig(configs: TableVirtualScrollStrategyConfigs) {
     const { rowHeight, headerHeight, footerHeight, bufferMultiplier } = configs;
     if (
-      this.rowHeight === rowHeight
-      && this.headerHeight === headerHeight
-      && this.footerHeight === footerHeight
-      && this.bufferMultiplier === bufferMultiplier
+      this.rowHeight === rowHeight &&
+      this.headerHeight === headerHeight &&
+      this.footerHeight === footerHeight &&
+      this.bufferMultiplier === bufferMultiplier
     ) {
       return;
     }
@@ -112,7 +112,8 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     }
 
     const renderedOffset = this.viewport.getOffsetToRenderedContentStart() || 0;
-    const viewportSizeForRows = this.viewport.getViewportSize() - this.headerHeight - this.footerHeight;
+    const viewportSizeForRows =
+      this.viewport.getViewportSize() - this.headerHeight - this.footerHeight;
     const itemsDisplayed = Math.ceil(viewportSizeForRows / this.rowHeight);
     const bufferItems = Math.ceil(itemsDisplayed * this.bufferMultiplier);
     const start = Math.floor(renderedOffset / this.rowHeight);

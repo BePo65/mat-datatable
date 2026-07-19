@@ -1,14 +1,9 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": [
-    "!**/*",
-    "**/.angular/**"
-  ],
+  "ignorePatterns": ["!**/*", "**/.angular/**"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",

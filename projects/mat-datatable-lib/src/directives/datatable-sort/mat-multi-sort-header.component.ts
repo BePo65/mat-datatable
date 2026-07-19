@@ -48,17 +48,14 @@ interface MatSortHeaderColumnDef {
   templateUrl: './mat-multi-sort-header.component.html',
   styleUrls: ['./mat-multi-sort-header.component.scss'],
   host: {
-    'class': 'mat-multi-sort-header'
+    class: 'mat-multi-sort-header'
   },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled'],
   standalone: true,
-  imports: [
-    MatMultiSortBadgeDirective,
-    NgIf
-  ],
+  imports: [MatMultiSortBadgeDirective, NgIf],
   animations: [
     matSortAnimations.indicator,
     matSortAnimations.leftPointer,
@@ -68,7 +65,10 @@ interface MatSortHeaderColumnDef {
     matSortAnimations.allowChildren
   ]
 })
-export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, CanDisable, OnDestroy {
+export class MatMultiSortHeader
+  extends MatSortHeader
+  implements AfterViewInit, CanDisable, OnDestroy
+{
   @Input('mat-multi-sort-header') override id!: string;
 
   sortingPosition = '';
@@ -80,17 +80,20 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
     changeDetectorRef: ChangeDetectorRef,
     @Optional() public override _sort: MatMultiSort,
     @Inject('MAT_SORT_HEADER_COLUMN_DEF')
-    @Optional() public override _columnDef: MatSortHeaderColumnDef,
+    @Optional()
+    public override _columnDef: MatSortHeaderColumnDef,
     _focusMonitor: FocusMonitor,
     _elementRef: ElementRef<HTMLElement>,
     @Optional() _ariaDescriber?: AriaDescriber | null,
-    @Optional() @Inject(MAT_SORT_DEFAULT_OPTIONS)
-    defaultOptions?: MatSortDefaultOptions) {
-      if (!_sort && isDevMode()) {
-        throw getMultiSortHeaderNotContainedWithinMultiSortError();
-      }
+    @Optional()
+    @Inject(MAT_SORT_DEFAULT_OPTIONS)
+    defaultOptions?: MatSortDefaultOptions
+  ) {
+    if (!_sort && isDevMode()) {
+      throw getMultiSortHeaderNotContainedWithinMultiSortError();
+    }
 
-      super(
+    super(
       _intl,
       changeDetectorRef,
       _sort,
@@ -104,18 +107,14 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
 
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    this._sort.multiSortChange
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((sorts: Sort[]) => {
-        const sortIndex = sorts.findIndex(sort => sort.active === this.id);
-        if (sortIndex >= 0) {
-          this.sortingPosition = (sortIndex + 1).toString();
-        } else {
-          this.sortingPosition = '';
-        }
-      });
+    this._sort.multiSortChange.pipe(takeUntil(this.unsubscribe$)).subscribe((sorts: Sort[]) => {
+      const sortIndex = sorts.findIndex((sort) => sort.active === this.id);
+      if (sortIndex >= 0) {
+        this.sortingPosition = (sortIndex + 1).toString();
+      } else {
+        this.sortingPosition = '';
+      }
+    });
   }
 
   override ngOnDestroy(): void {
@@ -126,7 +125,7 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
 
   // Whether this MatMultiSortHeader is currently sorted in either ascending or descending order.
   override _isSorted() {
-    return this._sort.sortDefinitions.findIndex(sort => sort.active === this.id) > -1;
+    return this._sort.sortDefinitions.findIndex((sort) => sort.active === this.id) > -1;
   }
 
   /**
@@ -155,12 +154,14 @@ export class MatMultiSortHeader extends MatSortHeader implements AfterViewInit, 
       return 'none';
     }
 
-    const sortingDefinition = this._sort.sortDefinitions.find(sort => sort.active === this.id);
+    const sortingDefinition = this._sort.sortDefinitions.find((sort) => sort.active === this.id);
     return sortingDefinition?.direction == 'asc' ? 'ascending' : 'descending';
   }
 
   _getSortDirection(): SortDirection {
-    const i = this._sort.sortDefinitions.findIndex(sort => sort.active === this.id);
-    return this._isSorted() ? this._sort.sortDefinitions[i].direction : (this.start || this._sort.start);
+    const i = this._sort.sortDefinitions.findIndex((sort) => sort.active === this.id);
+    return this._isSorted()
+      ? this._sort.sortDefinitions[i].direction
+      : this.start || this._sort.start;
   }
 }

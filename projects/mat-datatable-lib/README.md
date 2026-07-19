@@ -55,19 +55,21 @@ A simple data table with virtual scrolling using Angular Material.
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 This project extends 'angular material table' so that it can be used as a replacement for [ngx-datatable](https://github.com/swimlane/ngx-datatable) in one of my projects. Unluckily ngx-datatable seems to be dead as it is still on angular v12 and an update to a more recent angular version is not in sight.
 
 Nat-Datatable implements a table with virtual scrolling, sorting and filtering. Only a minimal set of the functionality of ngx-datatable is implemented.
 
-![Screenshot](assets/screenshot.jpg "Screenshot of the demo page")
+![Screenshot](assets/screenshot.jpg 'Screenshot of the demo page')
 
 Try out the [live demo](https://bepo65.github.io/mat-datatable/).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To use this package in your project just follow these simple steps.
@@ -79,13 +81,15 @@ The package can be used in Angular apps with Angular Material installed.
 ### Installation
 
 Install the package from npmjs
-   ```sh
-   npm install @bepo65/mat-datatable
-   ```
+
+```sh
+npm install @bepo65/mat-datatable
+```
 
 ### Embed Mat-Datatable In Your Project
 
 Configure your angular application module (e.g: app.module.ts):
+
 ```ts
 ...
 import { MatDatatableModule } from 'mat-datatable';
@@ -100,19 +104,23 @@ import { MatDatatableModule } from 'mat-datatable';
 ```
 
 Add Mat-Datatable to your html file (e.g: app.component.html):
+
 ```html
 <div class="content-table">
-  <mat-datatable #datatable
+  <mat-datatable
+    #datatable
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [dataStoreProvider]="dataStore"
-    [trackBy]="trackBy">
+    [trackBy]="trackBy"
+  >
     loading...
   </mat-datatable>
 </div>
 ```
 
 The height of the element containing the mat-datatable must be set explicitly (e.g: app.component.scss):
+
 ```css
 .content-table {
   height: 400px;
@@ -122,6 +130,7 @@ The height of the element containing the mat-datatable must be set explicitly (e
 ```
 
 Some properties of mat-datatable must be configured in the component class (e,g, app.component.ts):
+
 ```ts
 export class AppComponent {
   ...
@@ -150,6 +159,7 @@ export class AppComponent {
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USED ASSETS -->
+
 ## Used Assets
 
 The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and the [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web) font.
@@ -158,6 +168,7 @@ Both fonts are part of the project and not fetched via https.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- MAT-DATATABLE DEMO -->
+
 ## Mat-Datatable Demo
 
 Demo project to show all features of Mat-Datatable.
@@ -173,6 +184,7 @@ Navigate to http://localhost:4200
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- API REFERENCE -->
+
 ## API Reference
 
 `import { MatDatatable } from '@bepo65/mat-datatable';`
@@ -435,6 +447,7 @@ The direction of a sort.
 |                                       |
 
 <!-- API TESTING REFERENCE -->
+
 ## API Testing Harnesses
 
 `import { MatDatatableHarness } from '@bepo65/mat-datatable/testing';`
@@ -445,7 +458,7 @@ The direction of a sort.
 
 <a id="_matrowcellharnessbase"></a>
 
-#### **_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
+#### **\_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
 
 ##### **Methods**
 
@@ -482,7 +495,7 @@ The direction of a sort.
 
 <a id="_matrowharnessbase"></a>
 
-#### **_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+#### **\_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
 
 Abstract class used as base for harnesses that interact with a mat-datatable row.
 
@@ -1018,6 +1031,7 @@ A set of criteria that can be used to filter a list of row harness instances.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full list of proposed features (and known issues).
@@ -1025,13 +1039,15 @@ See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS ON POSSIBLE EXTENSIONS -->
+
 ## Hints On Possible Extensions
 
-+ to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
+- to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -1046,15 +1062,18 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 ### Changelog
+
 The project uses 'standard-version' to create the changelog. To enable this system, commit messages are linted before commits are executed by git.
 
 To enable this system you have to run the following scripts in your local repository home directory:
+
 ```
 npx husky install
 npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **The structure of commit messages is**:
+
 ```
   <header>
   <BLANK LINE>
@@ -1064,30 +1083,33 @@ npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **header**
+
 ```
   <type>(<scope>): <short summary>
 ```
-  
+
 type and scope
-  - build: Changes that affect the build system or external dependencies (example scope: npm)
-  - docs: Documentation only changes
-  - feat: A new feature
-  - fix: A bug fix
-  - perf: A code change that improves performance
-  - refactor: A code change that neither fixes a bug nor adds a feature
-  - test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
+
+- build: Changes that affect the build system or external dependencies (example scope: npm)
+- docs: Documentation only changes
+- feat: A new feature
+- fix: A bug fix
+- perf: A code change that improves performance
+- refactor: A code change that neither fixes a bug nor adds a feature
+- test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
 
 **footer**
+
 ```
   BREAKING CHANGE: ... (requires MAJOR in Semantic Versioning)
 ```
 
 For details of the commit messages format see [Contributing to Angular](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).
 
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Copyright © 2025 [Bernhard Pottler](https://github.com/BePo65).
@@ -1099,7 +1121,9 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS -->
+
 ## Hints
+
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
 As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x or 5.x (as this version has a peerDependency of eslint >= 9).

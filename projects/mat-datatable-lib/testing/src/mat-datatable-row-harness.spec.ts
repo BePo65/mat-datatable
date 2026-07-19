@@ -5,7 +5,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
-import { MatFooterRowHarness, MatHeaderRowHarness, MatRowHarness } from './mat-datatable-row-harness';
+import {
+  MatFooterRowHarness,
+  MatHeaderRowHarness,
+  MatRowHarness
+} from './mat-datatable-row-harness';
 
 import {
   DataStoreProvider,
@@ -26,18 +30,12 @@ describe('MatRowHarness', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [
-        MatDatatableModule,
-        NoopAnimationsModule
-      ],
-      declarations: [
-        TableWithoutFooterHarnessTestComponent
-      ]
-    })
-    .compileComponents();
+      imports: [MatDatatableModule, NoopAnimationsModule],
+      declarations: [TableWithoutFooterHarnessTestComponent]
+    }).compileComponents();
   }));
 
-  beforeEach( async () => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(TableWithoutFooterHarnessTestComponent);
     fixture.autoDetectChanges();
 
@@ -48,7 +46,7 @@ describe('MatRowHarness', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
- it('should get array of MatRowCellHarness of cells in first row', async () => {
+  it('should get array of MatRowCellHarness of cells in first row', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
     const cellsHarnesses = await rowHarness.getCells();
 
@@ -104,7 +102,7 @@ describe('MatRowHarness', () => {
 
   it('should get array of content of selected cells in 1st row - filter with regex', async () => {
     const rowHarness = await loader.getHarness(MatRowHarness);
-  const rowContent = await rowHarness.getCellTextByIndex({ text: /H.*/ });
+    const rowContent = await rowHarness.getCellTextByIndex({ text: /H.*/ });
 
     expect(rowContent.length).toEqual(2);
     expect(rowContent).toEqual(['Hydrogen', 'H']);
@@ -130,42 +128,50 @@ describe('MatRowHarness', () => {
   });
 
   it('should get array of MatRowHarness - filter by element content with string', async () => {
-    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
-      { rowCellsContent: {
-        weight: '9.0122'
-      }}
-    ));
+    const filteredRowHarnesses = await loader.getAllHarnesses(
+      MatRowHarness.with({
+        rowCellsContent: {
+          weight: '9.0122'
+        }
+      })
+    );
 
     expect(filteredRowHarnesses.length).toEqual(1);
   });
 
   it('should get array of MatRowHarness - filter by element content without match', async () => {
-    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
-      { rowCellsContent: {
-        weight: '12'
-      }}
-    ));
+    const filteredRowHarnesses = await loader.getAllHarnesses(
+      MatRowHarness.with({
+        rowCellsContent: {
+          weight: '12'
+        }
+      })
+    );
 
     expect(filteredRowHarnesses.length).toEqual(0);
   });
 
   it('should get array of MatRowHarness - filter by element content with regexp', async () => {
-    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
-      { rowCellsContent: {
-        name: /(H.+|Boron)/
-      }}
-    ));
+    const filteredRowHarnesses = await loader.getAllHarnesses(
+      MatRowHarness.with({
+        rowCellsContent: {
+          name: /(H.+|Boron)/
+        }
+      })
+    );
 
     expect(filteredRowHarnesses.length).toEqual(3);
   });
 
   it('should get array of MatRowHarness - filter by element content with mixed filters', async () => {
-    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
-      { rowCellsContent: {
-        name: /(H.+|Boron)/,
-        weight: '4.0026'
-      }}
-    ));
+    const filteredRowHarnesses = await loader.getAllHarnesses(
+      MatRowHarness.with({
+        rowCellsContent: {
+          name: /(H.+|Boron)/,
+          weight: '4.0026'
+        }
+      })
+    );
 
     expect(filteredRowHarnesses.length).toEqual(1);
 
@@ -175,11 +181,13 @@ describe('MatRowHarness', () => {
   });
 
   it('should get array of MatRowHarness - filter by element content with illegal column name', async () => {
-    const filteredRowHarnesses = await loader.getAllHarnesses(MatRowHarness.with(
-      { rowCellsContent: {
-        illegalCol: 'any value'
-      }}
-    ));
+    const filteredRowHarnesses = await loader.getAllHarnesses(
+      MatRowHarness.with({
+        rowCellsContent: {
+          illegalCol: 'any value'
+        }
+      })
+    );
 
     expect(filteredRowHarnesses.length).toEqual(0);
   });
@@ -209,15 +217,9 @@ describe('MatHeaderRowHarness', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [
-        MatDatatableModule,
-        NoopAnimationsModule
-      ],
-      declarations: [
-        TableWithoutFooterHarnessTestComponent
-      ]
-    })
-    .compileComponents();
+      imports: [MatDatatableModule, NoopAnimationsModule],
+      declarations: [TableWithoutFooterHarnessTestComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -317,15 +319,9 @@ describe('MatFooterRowHarness', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [
-        MatDatatableModule,
-        NoopAnimationsModule
-      ],
-      declarations: [
-        TableWithoutFooterHarnessTestComponent
-      ]
-    })
-    .compileComponents();
+      imports: [MatDatatableModule, NoopAnimationsModule],
+      declarations: [TableWithoutFooterHarnessTestComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -392,7 +388,7 @@ type TableHarnessTestRow = {
   name: string;
   weight: number;
   symbol: string;
-}
+};
 
 class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<DatatableItem> {
   private trackBy: TrackByFunction<DatatableItem>;
@@ -450,7 +446,11 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
     filters?: FieldFilterDefinition<DatatableItem>[]
   ): Observable<number> {
     const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
-    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
+    return of(
+      selectedDataset.findIndex(
+        (currentRow) => this.trackBy(0, row) === this.trackBy(0, currentRow)
+      )
+    );
   }
 
   private getRawDataSortedFiltered(
@@ -460,26 +460,31 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
     let selectedDataset = structuredClone(this.unsortedData);
 
     // Filter data
-    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
+    if (filters !== undefined && Array.isArray(filters) && filters.length > 0) {
       selectedDataset = selectedDataset.filter((row: DatatableItem) => {
-        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
-          if (currentFilter.value !== undefined) {
-            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
-          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
-            isSelected ||= (
-              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
-              (row[currentFilter.fieldName] <= currentFilter.valueTo)
-            );
-          }
-          return isSelected;
-        }, false);
+        return filters.reduce(
+          (isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
+            if (currentFilter.value !== undefined) {
+              isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
+            } else if (
+              currentFilter.valueFrom !== undefined &&
+              currentFilter.valueTo !== undefined
+            ) {
+              isSelected ||=
+                row[currentFilter.fieldName] >= currentFilter.valueFrom &&
+                row[currentFilter.fieldName] <= currentFilter.valueTo;
+            }
+            return isSelected;
+          },
+          false
+        );
       });
     }
 
     // Sort data - only the first entry of the definitions is used
-    if ((sorts !== undefined) && Array.isArray(sorts)) {
+    if (sorts !== undefined && Array.isArray(sorts)) {
       this.currentSortingDefinitions = sorts;
-      if ((sorts.length > 0)) {
+      if (sorts.length > 0) {
         selectedDataset.sort(this.compareFn);
       }
     }
@@ -510,7 +515,7 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
     let result = 0;
     for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
       const fieldName = this.currentSortingDefinitions[i].fieldName;
-      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const isAsc = this.currentSortingDefinitions[i].sortDirection === 'asc';
       const valueA = a[fieldName] as string | number;
       const valueB = b[fieldName] as string | number;
       result = this.compare(valueA, valueB, isAsc);
@@ -529,27 +534,28 @@ class TableHarnessTestDataStore<DatatableItem> implements DataStoreProvider<Data
    * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
    */
   private compare(a: string | number, b: string | number, isAsc: boolean): number {
-    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+    return (a === b ? 0 : a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }
 
 // HTML for mat-datatable requires surrounding div with height set
 @Component({
   template: `
-  <div class="content-table">
-    <mat-datatable #testTable
-      [columnDefinitions]="columnDefinitions"
-      [displayedColumns]="displayedColumns"
-      [rowSelectionMode]="currentSelectionMode"
-      [withFooter]="true"
-      [dataStoreProvider]="dataStore"
-      [trackBy]="trackBy"
-      (rowClick)="onRowClick($event)"
-      (sortChange)="onSortChanged($event)"
+    <div class="content-table">
+      <mat-datatable
+        #testTable
+        [columnDefinitions]="columnDefinitions"
+        [displayedColumns]="displayedColumns"
+        [rowSelectionMode]="currentSelectionMode"
+        [withFooter]="true"
+        [dataStoreProvider]="dataStore"
+        [trackBy]="trackBy"
+        (rowClick)="onRowClick($event)"
+        (sortChange)="onSortChanged($event)"
       >
-      loading...
-    </mat-datatable>
-  </div>
+        loading...
+      </mat-datatable>
+    </div>
   `,
   styles: ['.content-table { height: 400px; }']
 })

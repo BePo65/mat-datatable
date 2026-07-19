@@ -55,19 +55,21 @@ A simple data table with virtual scrolling using Angular Material.
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 This project extends 'angular material table' so that it can be used as a replacement for [ngx-datatable](https://github.com/swimlane/ngx-datatable) in one of my projects. Unluckily ngx-datatable seems to be dead as it is still on angular v12 and an update to a more recent angular version is not in sight.
 
 Mat-Datatable implements a table with virtual scrolling, sorting and filtering. Only a minimal set of the functionality of ngx-datatable is implemented.
 
-![Screenshot](assets/screenshot.jpg "Screenshot of the demo page")
+![Screenshot](assets/screenshot.jpg 'Screenshot of the demo page')
 
 Try out the [live demo](https://bepo65.github.io/mat-datatable/).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To use this package in your project just follow these simple steps.
@@ -78,41 +80,73 @@ The package can be used in Angular apps with Angular Material installed.
 
 ### Installation
 
-Install the package from npmjs
-   ```sh
-   npm install @bepo65/mat-datatable
-   ```
+Install the package from npmjs:
+
+```sh
+npm install mat-datatable
+```
 
 ### Embed Mat-Datatable In Your Project
 
-Configure your angular application module (e.g: app.module.ts):
-```ts
-...
-import { MatDatatableModule } from 'mat-datatable';
+Use the component as a standalone Angular component. Some properties of mat-datatable must be configured in the component class (for example in app.component.ts):
 
-@NgModule({
-  ...
-  imports: [
-    ...
-    MatDatatableModule
-  ]
+```ts
+import { Component } from '@angular/core';
+import { MatDatatableComponent, MatColumnDefinition } from 'mat-datatable';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [MatDatatableComponent],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
+export class AppComponent {
+  protected dataStore = new MyTableDataStore<MyTableItem>();
+
+  protected columnDefinitions: MatColumnDefinition<MyTableItem>[] = [
+    {
+      columnId: 'id',
+      header: 'ID',
+      cell: (row) => ({ type: 'string', text: row.id.toString() })
+    },
+    {
+      columnId: 'name',
+      sortable: true,
+      resizable: true,
+      header: 'Name',
+      cell: (row) => ({ type: 'string', text: row.name })
+    }
+  ];
+
+  protected displayedColumns: string[] = ['id', 'name'];
+}
 ```
 
-Add Mat-Datatable to your html file (e.g: app.component.html):
+The `cell` callback returns a typed content descriptor, so you can render plain strings, mailto links or images without changing the table API:
+
+```ts
+cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` });
+```
+
+Add Mat-Datatable to your HTML file (for example app.component.html):
+
 ```html
 <div class="content-table">
-  <mat-datatable #datatable
+  <mat-datatable
     [columnDefinitions]="columnDefinitions"
     [displayedColumns]="displayedColumns"
     [dataStoreProvider]="dataStore"
-    [trackBy]="trackBy">
-    loading...
+    [trackBy]="trackBy"
+    [withFooter]="true"
+  >
+    Loading...
   </mat-datatable>
 </div>
 ```
 
-The height of the element containing the mat-datatable must be set explicitly (e.g: app.component.scss):
+The height of the element containing the mat-datatable must be set explicitly (for example app.component.scss):
+
 ```css
 .content-table {
   height: 400px;
@@ -121,35 +155,16 @@ The height of the element containing the mat-datatable must be set explicitly (e
 }
 ```
 
-Some properties of mat-datatable must be configured in the component class (e,g, app.component.ts):
+The `cell` callback returns a typed content descriptor, so you can render plain strings, mailto links or images without changing the table API:
+
 ```ts
-export class AppComponent {
-  ...
-    protected dataStore = new MyTableDataStore<MyTableItem>();
-    protected columnDefinitions: MatColumnDefinition<MyTableItem>[] = [
-      {
-        columnId: 'id',
-        header: 'ID',
-        cell: (row: DemoTableItem) => row?.userId?.toString(),
-        footer: 'id'
-      },
-      {
-        columnId: 'name',
-        sortable: true,
-        resizable: true,
-        header: 'Name',
-        cell: (row: DemoTableItem) => row?.firstName,
-        footer: 'name'
-      }
-
-    ];
-    protected displayedColumns: string[] = ['id', 'name'];
-
+cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` });
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USED ASSETS -->
+
 ## Used Assets
 
 The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and the [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web) font.
@@ -158,6 +173,7 @@ Both fonts are part of the project and not fetched via https.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- MAT-DATATABLE DEMO -->
+
 ## Mat-Datatable Demo
 
 Demo project to show all features of Mat-Datatable.
@@ -173,114 +189,68 @@ Navigate to http://localhost:4200
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- API REFERENCE -->
+
 ## API Reference
 
-`import { MatDatatable } from '@bepo65/mat-datatable';`
+```ts
+import {
+  MatDatatableComponent,
+  MatColumnDefinition,
+  CellValueString,
+  CellValueImage,
+  CellValueMailTo,
+  MatSortDefinition,
+  DataStoreProvider,
+  FieldFilterDefinition,
+  RowSelectionType
+} from 'mat-datatable';
+```
 
 <a id="classes-api"></a>
 
 ### Classes
 
-#### **MatDatatable**
+#### MatDatatableComponent
 
-Component to create an angular material table based datatable.
-The component is generic; the given type is used to define the object for the row data.
+Standalone Angular component for rendering a virtualized Material table. The component is generic so the row type can be provided with the template parameter.
 
-##### **Properties**
+##### Inputs
 
-| Name                                                   | Description                                                                                                                                                          |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@Input() columnDefinitions: MatColumnDefinition<T>[]` | The definition of the columns used in the table. The order of the definitions needs not to correspond to the order of the columns in the table. Default value: `[]`. |
-|                                                        |                                                                                                                                                                      |
+| Name                                          | Description                                                                                                     |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `columnDefinitions: MatColumnDefinition<T>[]` | Column definitions for the table. The order of the definitions does not need to match the visible column order. |
+| `displayedColumns: string[]`                  | List of visible column IDs in the order they should be rendered.                                                |
+| `rowSelectionMode: RowSelectionType`          | Controls row selection behaviour. Supported values are `none`, `single` and `multi`.                            |
+| `dataStoreProvider: DataStoreProvider<T>`     | Data source implementation for the table.                                                                       |
+| `trackBy: TrackByFunction<T>`                 | Optional row identity function.                                                                                 |
+| `withFooter: boolean`                         | Enables the footer row.                                                                                         |
 
-| Name                                  | Description                                                                                                                                       |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@Input() displayedColumns: string[]` | A list with the names of the columns in the table. The array contains the 'columnId' of the corresponding column definition. Default value: `[]`. |
-|                                       |                                                                                                                                                   |
+##### Outputs
 
-| Name                                          | Description                                         |
-| --------------------------------------------- | --------------------------------------------------- |
-| `@Input() rowSelectionMode: RowSelectionType` | The type of row selection. Default value: `'none'`. |
-|                                               |                                                     |
+| Name                                            | Description                                      |
+| ----------------------------------------------- | ------------------------------------------------ |
+| `rowClick: EventEmitter<T>`                     | Emitted when a row is clicked.                   |
+| `rowSelectionChange: EventEmitter<T[]>`         | Emitted when the current selection changes.      |
+| `sortChange: EventEmitter<MatSortDefinition[]>` | Emitted when the active sort definition changes. |
 
-| Name                                               | Description                                                                                                                                                                                              |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@Input() dataStoreProvider: DataStoreProvider<T>` | An object that connects the mat-datatable with the data source. The object must be the instance of a class implementing the DataStoreProvider interface. Default value: `new EmptyDataStoreProvider<T>`. |
-|                                                    |                                                                                                                                                                                                          |
+##### Properties
 
-| Name                                     | Description                                                                                                                      |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `@Input() trackBy(): TrackByFunction<T>` | A function that returns a value that identifies a single row. Default value: `(index: number, item: T) => JSON.stringify(item)`. |
-|                                          |                                                                                                                                  |
+| Name                                            | Description                                      |
+| ----------------------------------------------- | ------------------------------------------------ |
+| `activatedRow: T \| undefined`                  | Marks a row as active.                           |
+| `selectedRows: T[]`                             | Contains the current selection.                  |
+| `sortDefinitions: MatSortDefinition[]`          | Gets or sets the current sort definition.        |
+| `filterDefinitions: FieldFilterDefinition<T>[]` | Gets or sets the active filter definition.       |
+| `firstVisibleIndexChanged: Observable<number>`  | Emits the index of the first visible row.        |
+| `totalRowsChanged: Observable<number>`          | Emits the total number of rows in the datastore. |
+| `filteredRowsChanged: Observable<number>`       | Emits the number of rows after filtering.        |
 
-| Name                | Description                                                |
-| ------------------- | ---------------------------------------------------------- |
-| withFooter: boolean | Whether the table has a footer row. Default value: `true`. |
-|                     |                                                            |
+##### Methods
 
-| Name                                  | Description                    |
-| ------------------------------------- | ------------------------------ |
-| `@Output() rowClick: EventEmitter<T>` | Emitted when a row is clicked. |
-|                                       |                                |
-
-| Name                                            | Description                                     |
-| ----------------------------------------------- | ----------------------------------------------- |
-| @Output() rowSelectionChange: EventEmitter<T[]> | Emitted when the list of selected rows changes. |
-|                                                 |                                                 |
-
-| Name                                                      | Description                               |
-| --------------------------------------------------------- | ----------------------------------------- |
-| `@Output() sortChange: EventEmitter<MatSortDefinition[]>` | Emitted when the sort definition changes. |
-|                                                           |                                           |
-
-| Name                                           | Description                                              |
-| ---------------------------------------------- | -------------------------------------------------------- |
-| `firstVisibleIndexChanged: Observable<number>` | Emitted when the index of the first visible row changes. |
-|                                                |                                                          |
-
-| Name                                   | Description                                                                                            |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `totalRowsChanged: Observable<number>` | Emitted when the total number of rows in the datastore changes (does not depend on any active filter). |
-|                                        |                                                                                                        |
-
-| Name                                      | Description                                       |
-| ----------------------------------------- | ------------------------------------------------- |
-| `filteredRowsChanged: Observable<number>` | Emitted when the number of filtered rows changes. |
-|                                           |                                                   |
-
-| Name                           | Description              |
-| ------------------------------ | ------------------------ |
-| `activatedRow: T \| undefined` | Marks a row as 'active'. |
-|                                |                          |
-
-| Name                | Description               |
-| ------------------- | ------------------------- |
-| `selectedRows: T[]` | Marks rows as 'selected'. |
-|                     |                           |
-
-| Name                                   | Description                              |
-| -------------------------------------- | ---------------------------------------- |
-| `sortDefinitions: MatSortDefinition[]` | Gets / sets the current sort definition. |
-|                                        |                                          |
-
-| Name                                            | Description                                |
-| ----------------------------------------------- | ------------------------------------------ |
-| `filterDefinitions: FieldFilterDefinition<T>[]` | Gets / sets the current filter definition. |
-|                                                 |                                            |
-
-##### **Methods**
-
-|                |                                                 |
-| -------------- | ----------------------------------------------- |
-| `scrollToRow`  | Scrolls to the given row.                       |
-| **Parameters** |
-| row: T         | Row to show on the top of the current viewport. |
-|                |                                                 |
-
-|               |                                |
-| ------------- | ------------------------------ |
-| `reloadTable` | Reloads the rows of the table. |
-|               |                                |
+| Name                  | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `scrollToRow(row: T)` | Scrolls the viewport so the given row becomes visible. |
+| `reloadTable()`       | Reloads the table from its datastore.                  |
 
 <a id="interfaces-api"></a>
 
@@ -288,84 +258,81 @@ The component is generic; the given type is used to define the object for the ro
 
 #### DataStoreProvider
 
-Interface for a component that fetches data from the datastore respecting sorting and filtering.
-The component is generic; the given type is used to define the object for the row data.
+Interface for a component that fetches data from the datastore while respecting sorting and filtering.
 
-##### **Methods**
+##### Methods
 
-|                                     |                                                                   |
-| ----------------------------------- | ----------------------------------------------------------------- |
-| `getPagedData`                      | Fetches data from the datastore respecting sorting and filtering. |
-| **Parameters**                      |
-| rowsRange: RequestRowsRange         | The range of rows to fetch.                                       |
-| sorts: FieldSortDefinition<T>[]     | The sort definitions to use.                                      |
-| filters: FieldFilterDefinition<T>[] | The filter definitions to use.                                    |
-| **Returns**                         |
-| Observable<Page<T>>                 | Emitting fetched data from the datastore.                         |
-|                                     |                                                                   |
+| Name                                      | Description                         |
+| ----------------------------------------- | ----------------------------------- |
+| `getPagedData(rowsRange, sorts, filters)` | Fetches the requested page of data. |
+
+| **Parameters**                      |                                |
+| ----------------------------------- | ------------------------------ |
+| rowsRange: RequestRowsRange         | The range of rows to fetch.    |
+| sorts: FieldSortDefinition<T>[]     | The sort definitions to use.   |
+| filters: FieldFilterDefinition<T>[] | The filter definitions to use. |
+
+| **Return value**    |                                           |
+| ------------------- | ----------------------------------------- |
+| Observable<Page<T>> | Emitting fetched data from the datastore. |
 
 #### MatColumnDefinition
 
 Interface for the definition of a single table column.
 
-##### **Properties**
+##### Properties
 
-| Name                                     | Description                                                                                                                  |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `columnId: string`                       | The ID of the column.                                                                                                        |
-| `sortable: boolean`                      | Whether this column can be used for sorting. By default a column is not sortable.                                            |
-| `resizable: boolean`                     | Whether this column can be resized. By default a column is not resizable.                                                    |
-| `header: string`                         | The text in the header row of a column.                                                                                      |
-| `headerAlignment: ColumnAlignmentType`   | The alignment of the header row of a column.                                                                                 |
-| `cell: (element: TRowData) => string`    | The function to get the content of a cell.                                                                                   |
-| `cellAlignment: ColumnAlignmentType`     | The alignment of a data row in a column.                                                                                     |
-| `width: string`                          | The width of the column.                                                                                                     |
-| `tooltip: (element: TRowData) => string` | The function to get the tooltip for a cell.                                                                                  |
-| `showAsMailtoLink: boolean`              | Whether this cell should be shown a 'mailto' link. By default a column is not shown as mailto link.                          |
-| `showAsSingleLine: boolean`              | Whether this cell should be truncated to a single line. By default multiline text in a column is not shown as a single line. |
-| `footer: string`                         | The text in the footer row of a column.                                                                                      |
-| `footerAlignment: ColumnAlignmentType`   | The alignment of the footer row of a column.                                                                                 |
-| `footerColumnSpan: number`               | The number of columns a footer should span. By default a footer spans 1 column.                                              |
-|                                          |                                                                                                                              |
+| Name                                            | Description                                            |
+| ----------------------------------------------- | ------------------------------------------------------ |
+| `columnId: string`                              | The unique ID of the column.                           |
+| `sortable?: boolean`                            | Enables sorting for the column.                        |
+| `resizable?: boolean`                           | Enables resizing of the column.                        |
+| `header: string`                                | The text shown in the header row.                      |
+| `headerAlignment?: ColumnAlignmentType`         | Header alignment.                                      |
+| `cell: (element: TRowData) => CellContentValue` | Returns the rendered cell content for the current row. |
+| `cellAlignment?: ColumnAlignmentType`           | Alignment of the cell content.                         |
+| `width?: string`                                | Optional column width, for example `8em`.              |
+| `tooltip?: (element: TRowData) => string`       | Optional tooltip callback.                             |
+| `showAsSingleLine?: boolean`                    | Truncates the content to a single line.                |
+| `footer?: string`                               | Optional footer text.                                  |
+| `footerAlignment?: ColumnAlignmentType`         | Footer alignment.                                      |
+| `footerColumnSpan?: number`                     | Optional number of columns the footer should span.     |
 
 #### MatSortDefinition
 
-Interface for the definition of the sorting of 1 table column.
+Interface for the definition of sorting for one column.
 
-##### **Properties**
+##### Properties
 
-| Name                       | Description                                      |
-| -------------------------- | ------------------------------------------------ |
-| `columnId: string`         | The 'columnId' of the column to use for sorting. |
-| `direction: SortDirection` | The direction used to sort the column.           |
-|                            |                                                  |
+| Name                       | Description                           |
+| -------------------------- | ------------------------------------- |
+| `columnId: string`         | The `columnId` of the column to sort. |
+| `direction: SortDirection` | The sort direction.                   |
 
 #### RequestRowsRange
 
-Interface defining the properties of a requests for a range of rows.
+Interface defining the properties of a request for a range of rows.
 
-##### **Properties**
+##### Properties
 
 | Name                    | Description                           |
 | ----------------------- | ------------------------------------- |
 | `startRowIndex: number` | The index of the first row to return. |
 | `numberOfRows: number`  | The number of rows to return.         |
-|                         |                                       |
 
 #### Page
 
 Interface defining the properties of a page of rows returned from the datastore.
 
-##### **Properties**
+##### Properties
 
-| Name                    | Description                                      |
-| ----------------------- | ------------------------------------------------ |
-| `content:T[]`           | The array of the requested rows.                 |
-| `startRowIndex`         | The index of the first row returned.             |
-| `returnedElements`      | The number of rows in 'content'.                 |
-| `totalElements`         | The number of rows in the unfiltered data store. |
-| `totalFilteredElements` | The number of rows after filtering.              |
-|                         |                                                  |
+| Name                            | Description                                     |
+| ------------------------------- | ----------------------------------------------- |
+| `content: T[]`                  | The array of requested rows.                    |
+| `startRowIndex: number`         | The index of the first row returned.            |
+| `returnedElements: number`      | The number of rows in `content`.                |
+| `totalElements: number`         | The number of rows in the unfiltered datastore. |
+| `totalFilteredElements: number` | The number of rows after filtering.             |
 
 <a id="type-aliases-api"></a>
 
@@ -373,68 +340,146 @@ Interface defining the properties of a page of rows returned from the datastore.
 
 #### ColumnAlignmentType
 
-The alignment of the content of a column
+```ts
+type ColumnAlignmentType = 'left' | 'center' | 'right';
+```
 
-|                                                           |
-| --------------------------------------------------------- |
-| type ColumnAlignmentType = "left" \| "center" \| "right"; |
-|                                                           |
+#### ColumnDisplayType
+
+How the column should be rendered (as text, mail-to link or as image).
+
+```ts
+type ColumnDisplayType = 'string' | 'mailtoLink' | 'image';
+```
+
+#### CellValueString
+
+Type for a literal object containing the values to be used to render a cell as plain text.
+
+```ts
+interface CellValueString extends CellValueBase {
+  type: 'string';
+  text: string;
+}
+```
+
+##### Properties
+
+| Name             | Description                                    |
+| ---------------- | ---------------------------------------------- |
+| `type: 'string'` | Indicates that the cell content is plain text. |
+| `text: string`   | The text displayed in the cell.                |
+
+#### CellValueMailTo
+
+Type for a literal object containing the values to be used to render a cell as a mail-to link.
+
+```ts
+interface CellValueMailTo extends CellValueBase {
+  type: 'mailtoLink';
+  url: string;
+  text: string;
+}
+```
+
+##### Properties
+
+| Name                 | Description                                            |
+| -------------------- | ------------------------------------------------------ |
+| `type: 'mailtoLink'` | Indicates that the cell content is rendered as a link. |
+| `url: string`        | The mail address or URL used for the link target.      |
+| `text: string`       | The visible text shown for the link.                   |
+
+#### CellValueImage
+
+Type for a literal object containing the values to be used to render a cell as an image.
+
+```ts
+interface CellValueImage extends CellValueBase {
+  type: 'image';
+  url: string;
+  altText: string;
+  title?: string;
+}
+```
+
+##### Properties
+
+| Name              | Description                                              |
+| ----------------- | -------------------------------------------------------- |
+| `type: 'image'`   | Indicates that the cell content is rendered as an image. |
+| `url: string`     | The URL of the image to display.                         |
+| `altText: string` | The alternative text for the image.                      |
+| `title?: string`  | An optional title shown for the image.                   |
+
+#### CellContentValue
+
+Type of the literal object returned by the function of type CellContentDefType.
+
+```ts
+type CellContentValue = CellValueString | CellValueMailTo | CellValueImage;
+```
+
+#### CellContentDefType
+
+Type of the function of the field `cell` of the MatColumnDefinition.
+
+```ts
+type CellContentDefType<TRowData> = (element: TRowData) => CellContentValue;
+```
 
 #### FieldFilterDefinition
 
-The definition of a parameter filtering for the column identified by the given 'fieldName'.
+The definition of a parameter for filtering the displayed data using the column identified by the given 'fieldName'.
 
-|                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------ |
-| type FieldFilterDefinition<T> = StrictUnion\<(FieldFilterDefinitionSimple\<T> \| FieldFilterDefinitionRange\<T>)>; |
-|                                                                                                                    |
+```ts
+type FieldFilterDefinition<T> = StrictUnion<
+  FieldFilterDefinitionSimple<T> | FieldFilterDefinitionRange<T>
+>;
+```
 
 #### FieldFilterDefinitionRange
 
-The definition of a parameter filtering for a range of values.
-
-|                                                                                                                                                                                     |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;valueFrom: string \| number \| Date<br>&nbsp;&nbsp;valueTo: string \| number \| Date<br>}; |
-|                                                                                                                                                                                     |
+```ts
+type FieldFilterDefinitionRange<T> = {
+  fieldName: keyof T;
+  valueFrom: string | number | Date;
+  valueTo: string | number | Date;
+};
+```
 
 #### FieldFilterDefinitionSimple
 
-The definition of a parameter filtering for a single value.
-
-|                                                                                                                                |
-| ------------------------------------------------------------------------------------------------------------------------------ |
-| type FieldFilterDefinitionSimple<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;value: string \| number \| Date<br>}; |
-|                                                                                                                                |
+```ts
+type FieldFilterDefinitionSimple<T> = {
+  fieldName: keyof T;
+  value: string | number | Date;
+};
+```
 
 #### FieldSortDefinition
 
-The definition of a single sort parameter.
-
-|                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------- |
-| type FieldSortDefinition<T> = {<br>&nbsp;&nbsp;fieldName: keyof T<br>&nbsp;&nbsp;sortDirection: SortDirectionAscDesc<br>}; |
-|                                                                                                                            |
+```ts
+type FieldSortDefinition<T> = {
+  fieldName: keyof T;
+  sortDirection: SortDirectionAscDesc;
+};
+```
 
 #### RowSelectionType
 
-How many rows can be selected.
-
-|                                                        |
-| ------------------------------------------------------ |
-| type RowSelectionType = 'none' \| 'single' \| 'multi'; |
-|                                                        |
+```ts
+type RowSelectionType = 'none' | 'single' | 'multi';
+```
 
 #### SortDirectionAscDesc
 
-The direction of a sort.
-
-|                                       |
-| ------------------------------------- |
-| type SortDirection = 'asc' \| 'desc'; |
-|                                       |
+```ts
+type SortDirectionAscDesc = 'asc' | 'desc';
+```
 
 <!-- API TESTING REFERENCE -->
+
 ## API Testing Harnesses
 
 `import { MatDatatableHarness } from '@bepo65/mat-datatable/testing';`
@@ -445,7 +490,7 @@ The direction of a sort.
 
 <a id="_matrowcellharnessbase"></a>
 
-#### **_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
+#### **\_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
 
 ##### **Methods**
 
@@ -482,7 +527,7 @@ The direction of a sort.
 
 <a id="_matrowharnessbase"></a>
 
-#### **_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+#### **\_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
 
 Abstract class used as base for harnesses that interact with a mat-datatable row.
 
@@ -1018,6 +1063,7 @@ A set of criteria that can be used to filter a list of row harness instances.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full list of proposed features (and known issues).
@@ -1025,13 +1071,15 @@ See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS ON POSSIBLE EXTENSIONS -->
+
 ## Hints On Possible Extensions
 
-+ to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
+- to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -1046,15 +1094,18 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 ### Changelog
+
 The project uses 'standard-version' to create the changelog. To enable this system, commit messages are linted before commits are executed by git.
 
 To enable this system you have to run the following scripts in your local repository home directory:
+
 ```
 npx husky install
 npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **The structure of commit messages is**:
+
 ```
   <header>
   <BLANK LINE>
@@ -1064,30 +1115,33 @@ npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **header**
+
 ```
   <type>(<scope>): <short summary>
 ```
-  
+
 type and scope
-  - build: Changes that affect the build system or external dependencies (example scope: npm)
-  - docs: Documentation only changes
-  - feat: A new feature
-  - fix: A bug fix
-  - perf: A code change that improves performance
-  - refactor: A code change that neither fixes a bug nor adds a feature
-  - test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
+
+- build: Changes that affect the build system or external dependencies (example scope: npm)
+- docs: Documentation only changes
+- feat: A new feature
+- fix: A bug fix
+- perf: A code change that improves performance
+- refactor: A code change that neither fixes a bug nor adds a feature
+- test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
 
 **footer**
+
 ```
   BREAKING CHANGE: ... (requires MAJOR in Semantic Versioning)
 ```
 
 For details of the commit messages format see [Contributing to Angular](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).
 
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Copyright © 2025 [Bernhard Pottler](https://github.com/BePo65).
@@ -1099,7 +1153,9 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS -->
-## Hints
+
+## Hints on dependencies
+
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
 As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x or 5.x (as this version has a peerDependency of eslint >= 9).

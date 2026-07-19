@@ -13,7 +13,9 @@ export function getMultiSortDuplicateSortableIdError(id: string): Error {
 
 /** Error - header column not contained in a mat-multi-sort element */
 export function getMultiSortHeaderNotContainedWithinMultiSortError(): Error {
-  return Error('MatMultiSortHeader must be placed within a parent element with the MatMultiSort directive.');
+  return Error(
+    'MatMultiSortHeader must be placed within a parent element with the MatMultiSort directive.'
+  );
 }
 
 /** Error - header column without id */

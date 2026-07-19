@@ -1,14 +1,9 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": [
-    "!**/*",
-    "**/.angular/**"
-  ],
+  "ignorePatterns": ["!**/*", "**/.angular/**"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "excludedFiles": "cypress.config.ts",
       "rules": {
         "@angular-eslint/directive-selector": [
@@ -30,9 +25,7 @@
       }
     },
     {
-      "files": [
-        "cypress.config.ts"
-      ],
+      "files": ["cypress.config.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": "projects/mat-datatable-demo/cypress/tsconfig.json",
@@ -41,16 +34,12 @@
       },
       "settings": {
         "import/parsers": {
-          "@typescript-eslint/parser": [
-            ".ts"
-          ]
+          "@typescript-eslint/parser": [".ts"]
         },
         "import/resolver": {
           "node": true,
           "typescript": {
-            "project": [
-              "projects/mat-datatable-demo/cypress/tsconfig.json"
-            ]
+            "project": ["projects/mat-datatable-demo/cypress/tsconfig.json"]
           }
         }
       },
@@ -61,18 +50,12 @@
             "ignoreStatic": true
           }
         ],
-        "arrow-parens": [
-          "error",
-          "as-needed"
-        ],
         "comma-dangle": "error",
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": [
           "off",
           {
-            "contexts": [
-              "any"
-            ]
+            "contexts": ["any"]
           }
         ],
         "no-multiple-empty-lines": [
@@ -99,10 +82,7 @@
             "classPropertiesAllowed": false
           }
         ],
-        "semi": [
-          "error",
-          "always"
-        ]
+        "semi": ["error", "always"]
       }
     }
   ]

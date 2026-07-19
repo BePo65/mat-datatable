@@ -1,8 +1,6 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
+  "ignorePatterns": ["**/*"],
   "reportUnusedDisableDirectives": true,
   "env": {
     "browser": true,
@@ -10,16 +8,8 @@
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
-      "plugins": [
-        "@typescript-eslint",
-        "prefer-arrow",
-        "import",
-        "jsdoc",
-        "jasmine"
-      ],
+      "files": ["*.ts"],
+      "plugins": ["@typescript-eslint", "prefer-arrow", "import", "jsdoc", "jasmine"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended-type-checked",
@@ -28,7 +18,8 @@
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:import/typescript",
-        "plugin:jsdoc/recommended"
+        "plugin:jsdoc/recommended",
+        "prettier"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
@@ -38,16 +29,12 @@
       },
       "settings": {
         "import/parsers": {
-          "@typescript-eslint/parser": [
-            ".ts"
-          ]
+          "@typescript-eslint/parser": [".ts"]
         },
         "import/resolver": {
           "node": true,
           "typescript": {
-            "project": [
-              "./tsconfig.json"
-            ]
+            "project": ["./tsconfig.json"]
           }
         }
       },
@@ -58,23 +45,11 @@
             "ignoreStatic": true
           }
         ],
-        "arrow-parens": [
-          "error",
-          "as-needed"
-        ],
         "comma-dangle": "error",
         "import/order": [
           "error",
           {
-            "groups": [
-              [
-                "builtin",
-                "external"
-              ],
-              "parent",
-              "sibling",
-              "internal"
-            ],
+            "groups": [["builtin", "external"], "parent", "sibling", "internal"],
             "pathGroups": [
               {
                 "pattern": "@lib/**",
@@ -113,9 +88,7 @@
         "jsdoc/require-returns-type": [
           "off",
           {
-            "contexts": [
-              "any"
-            ]
+            "contexts": ["any"]
           }
         ],
         "no-multiple-empty-lines": [
@@ -142,36 +115,23 @@
             "classPropertiesAllowed": false
           }
         ],
-        "semi": [
-          "error",
-          "always"
-        ]
+        "semi": ["error", "always"]
       }
     },
     {
-      "files": [
-        "*.spec.ts"
-      ],
+      "files": ["*.spec.ts"],
       "env": {
         "jasmine": true
       },
-      "plugins": [
-        "jasmine"
-      ],
-      "extends": [
-        "plugin:jasmine/recommended"
-      ],
+      "plugins": ["jasmine"],
+      "extends": ["plugin:jasmine/recommended"],
       "rules": {
         "jasmine/missing-expect": "warn"
       }
     },
     {
-      "files": [
-        "*.json"
-      ],
-      "extends": [
-        "plugin:json/recommended-legacy"
-      ],
+      "files": ["*.json"],
+      "extends": ["plugin:json/recommended-legacy"],
       "rules": {
         "json/*": [
           "error",
@@ -182,12 +142,8 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     }
   ]
