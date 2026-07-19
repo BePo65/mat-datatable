@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [17.3.0](https://github.com/BePo65/mat-datatable/compare/v17.2.13...v17.3.0) (2026-07-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* field 'cell' in MatColumnDefinition changed, 'remoteAccess' removed
+
+### Features
+
+* add boolean value formatted as img-Column ([bf0bd39](https://github.com/BePo65/mat-datatable/commit/bf0bd397da836f9d651df234c3180b5610824fca))
+
+
+### Bug Fixes
+
+* resolve errors shown by eslint ([7f9c6da](https://github.com/BePo65/mat-datatable/commit/7f9c6da956188792907346398f2304e15e83b4b3))
+* update packages to latest versions ([7765736](https://github.com/BePo65/mat-datatable/commit/7765736d7484533452f75654b51ab8854d335c61))
+
 ## [17.2.13](https://github.com/BePo65/mat-datatable/compare/v17.2.12...v17.2.13) (2026-04-03)
 
 ### Bug Fixes
