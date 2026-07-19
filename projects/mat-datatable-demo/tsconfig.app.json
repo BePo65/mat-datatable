@@ -5,15 +5,7 @@
     "outDir": "../../out-tsc/app",
     "types": []
   },
-  "files": [
-    "src/main.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts",
-    "cypress"
-  ],
-  "exclude": [
-    "**/*.spec.ts",
-    "cypress"
-  ]
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts", "cypress"],
+  "exclude": ["**/*.spec.ts", "cypress"]
 }

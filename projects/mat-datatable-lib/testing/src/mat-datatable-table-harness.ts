@@ -5,10 +5,7 @@ import {
   parallel
 } from '@angular/cdk/testing';
 
-import {
-  MatDatatableHarnessFilters,
-  RowHarnessFilters
-} from './mat-datatable-harness-filters';
+import { MatDatatableHarnessFilters, RowHarnessFilters } from './mat-datatable-harness-filters';
 import {
   MatFooterRowHarness,
   MatHeaderRowHarness,
@@ -44,13 +41,13 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
     return new HarnessPredicate(this, options);
   }
 
- /**
-  * Gets a list of the header rows of a mat-datatable.
-  * @returns array of the header rows of the mat-datatable (length is always 1).
-  */
- async getHeaderRows(): Promise<MatHeaderRowHarness[]> {
-  return this.locatorForAll(MatHeaderRowHarness)();
- }
+  /**
+   * Gets a list of the header rows of a mat-datatable.
+   * @returns array of the header rows of the mat-datatable (length is always 1).
+   */
+  async getHeaderRows(): Promise<MatHeaderRowHarness[]> {
+    return this.locatorForAll(MatHeaderRowHarness)();
+  }
 
   /**
    * Gets all of the regular data rows in a mat-datatable.
@@ -75,7 +72,7 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
    */
   async getCellTextByIndex(): Promise<string[][]> {
     const rows = await this.getRows();
-    return parallel(() => rows.map(row => row.getCellTextByIndex()));
+    return parallel(() => rows.map((row) => row.getCellTextByIndex()));
   }
 
   /**
@@ -92,18 +89,21 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
     const text: MatDatatableHarnessColumnsText = {};
     const [headerData, footerData, rowsData] = await parallel(() => [
       headerRows[0].getCellTextByColumnName(),
-      (footerRows.length === 1) ? footerRows[0].getCellTextByColumnName() : undefined,
-      parallel(() => dataRows.map(row => row.getCellTextByColumnName()))
+      footerRows.length === 1 ? footerRows[0].getCellTextByColumnName() : undefined,
+      parallel(() => dataRows.map((row) => row.getCellTextByColumnName()))
     ]);
 
-    rowsData.forEach(data => {
-      Object.keys(data).forEach(columnName => {
+    rowsData.forEach((data) => {
+      Object.keys(data).forEach((columnName) => {
         const cellText = data[columnName];
 
         if (!text[columnName]) {
           text[columnName] = {
             headerText: getHeaderCellTextByColumn(headerData, columnName),
-            footerText: (footerData !== undefined) ? getFooterCellTextByColumn(footerData, columnName) : undefined,
+            footerText:
+              footerData !== undefined
+                ? getFooterCellTextByColumn(footerData, columnName)
+                : undefined,
             text: []
           };
         }
@@ -122,10 +122,13 @@ export class MatDatatableHarness extends ContentContainerComponentHarness<string
  * @param column - Name of the column to get the text from.
  * @returns the selected cell text.
  */
-const getHeaderCellTextByColumn = (headerRowData: MatRowHarnessColumnsText, column: string): string => {
+const getHeaderCellTextByColumn = (
+  headerRowData: MatRowHarnessColumnsText,
+  column: string
+): string => {
   let columnText = '';
 
-  Object.keys(headerRowData).forEach(columnName => {
+  Object.keys(headerRowData).forEach((columnName) => {
     if (columnName === column) {
       columnText = headerRowData[columnName];
     }
@@ -140,10 +143,13 @@ const getHeaderCellTextByColumn = (headerRowData: MatRowHarnessColumnsText, colu
  * @param column - Name of the column to get the text from.
  * @returns the selected footer cell text (or undefined, if no footer is defined).
  */
-const getFooterCellTextByColumn = (footerRowData: MatRowHarnessColumnsText, column: string): string | undefined => {
+const getFooterCellTextByColumn = (
+  footerRowData: MatRowHarnessColumnsText,
+  column: string
+): string | undefined => {
   let columnText: string | undefined;
 
-  Object.keys(footerRowData).forEach(columnName => {
+  Object.keys(footerRowData).forEach((columnName) => {
     if (columnName === column) {
       columnText = footerRowData[columnName];
     }

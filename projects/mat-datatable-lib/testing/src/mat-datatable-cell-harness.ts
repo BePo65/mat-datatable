@@ -1,9 +1,10 @@
-import {
-  ContentContainerComponentHarness,
-  HarnessPredicate
-} from '@angular/cdk/testing';
+import { ContentContainerComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 
-import { CellHarnessFilters, HeaderCellHarnessFilters, RowCellHarnessFilters } from './mat-datatable-harness-filters';
+import {
+  CellHarnessFilters,
+  HeaderCellHarnessFilters,
+  RowCellHarnessFilters
+} from './mat-datatable-harness-filters';
 
 export abstract class _MatCellHarnessBase extends ContentContainerComponentHarness {
   /**
@@ -47,8 +48,8 @@ export abstract class _MatCellHarnessBase extends ContentContainerComponentHarne
       const prefix = 'mat-column-';
       const name = classAttribute
         .split(' ')
-        .map(c => c.trim())
-        .find(c => c.startsWith(prefix));
+        .map((c) => c.trim())
+        .find((c) => c.startsWith(prefix));
 
       if (name) {
         return name.split(prefix)[1];
@@ -93,7 +94,7 @@ export class MatRowCellHarness extends _MatCellHarnessBase {
         HarnessPredicate.stringMatches(harness.getColumnName(), name)
       )
       .addOption('isSingleLine', options.isSingleLine, (harness, isSingleLine) =>
-      _MatCellHarnessBase.booleanMatches(harness.isSingleLine(), isSingleLine)
+        _MatCellHarnessBase.booleanMatches(harness.isSingleLine(), isSingleLine)
       );
   }
 
@@ -128,7 +129,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
         HarnessPredicate.stringMatches(harness.getColumnName(), name)
       )
       .addOption('isResizable', options.isResizable, (harness, isResizable) =>
-      _MatCellHarnessBase.booleanMatches(harness.isResizable(), isResizable)
+        _MatCellHarnessBase.booleanMatches(harness.isResizable(), isResizable)
       );
   }
 
@@ -147,7 +148,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
    * @returns true, if cell is resizable
    */
   async isResizable(): Promise<boolean> {
-    return (await this.resizerElement() !== null);
+    return (await this.resizerElement()) !== null;
   }
 
   /**
@@ -163,7 +164,7 @@ export class MatHeaderCellHarness extends _MatCellHarnessBase {
       const originalWidth = await this.getColumnWidth();
       const startPosition = 0;
       const endPosition = startPosition + (newWidth - originalWidth);
-      await (element).dispatchEvent('mousedown', { pageX: startPosition });
+      await element.dispatchEvent('mousedown', { pageX: startPosition });
       document.dispatchEvent(new MouseEvent('mousemove', { buttons: 1, clientX: endPosition }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: endPosition }));
     }

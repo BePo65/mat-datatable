@@ -6,20 +6,20 @@ import { MatDatatableHeaderAlignDirective } from './datatable-header-align.direc
 
 describe('MatDatatableHeaderAlignDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  let directiveElements: DebugElement[];  // the elements with the directive
+  let directiveElements: DebugElement[]; // the elements with the directive
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [
-        TestComponent
-      ]
+      imports: [TestComponent]
     }).createComponent(TestComponent);
 
     // initial binding
     fixture.detectChanges();
 
     // all elements with an attached MatDatatableHeaderAlignDirective
-    directiveElements = fixture.debugElement.queryAll(By.directive(MatDatatableHeaderAlignDirective));
+    directiveElements = fixture.debugElement.queryAll(
+      By.directive(MatDatatableHeaderAlignDirective)
+    );
   });
 
   it('should create an instance', () => {
@@ -57,50 +57,57 @@ describe('MatDatatableHeaderAlignDirective', () => {
 
 @Component({
   template: `
-<div>
-  <table class="mat-mdc-table mat-sort mat-datatable">
-    <thead>
-      <tr class="mat-mdc-header-row">
-        <th class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-id">
-          <div class="mat-sort-header-container"></div>
-          <span class="resize-holder"></span>
-        </th>
-        <th matHeaderAlignment="left" class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-firstName">
-          <div class="mat-sort-header-container"></div>
-          <span class="resize-holder"></span>
-        </th>
-        <th matHeaderAlignment="center" class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-lastName">
-          <div class="mat-sort-header-container"></div>
-          <span class="resize-holder"></span>
-        </th>
-        <th matHeaderAlignment="right" class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-email">
-          <div class="mat-sort-header-container"></div>
-          <span class="resize-holder"></span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="mat-mdc-row">
-        <td class="mat-mdc-cell mat-datatable-cell mat-column-id">
-          <span>1</span>
-        </td>
-        <td class="mat-mdc-cell mat-datatable-cell mat-column-firstName">
-          <span>Rashawn</span>
-        </td>
-        <td class="mat-mdc-cell mat-datatable-cell mat-column-lastName">
-          <span>Goyette</span>
-        </td>
-        <td class="mat-mdc-cell mat-datatable-cell mat-column-email">
-          <span>Alexa1&#64;gmail.com</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <div>
+      <table class="mat-mdc-table mat-sort mat-datatable">
+        <thead>
+          <tr class="mat-mdc-header-row">
+            <th class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-id">
+              <div class="mat-sort-header-container"></div>
+              <span class="resize-holder"></span>
+            </th>
+            <th
+              matHeaderAlignment="left"
+              class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-firstName"
+            >
+              <div class="mat-sort-header-container"></div>
+              <span class="resize-holder"></span>
+            </th>
+            <th
+              matHeaderAlignment="center"
+              class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-lastName"
+            >
+              <div class="mat-sort-header-container"></div>
+              <span class="resize-holder"></span>
+            </th>
+            <th
+              matHeaderAlignment="right"
+              class="mat-sort-header mat-mdc-header-cell mat-datatable-header-cell mat-header-email"
+            >
+              <div class="mat-sort-header-container"></div>
+              <span class="resize-holder"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mat-mdc-row">
+            <td class="mat-mdc-cell mat-datatable-cell mat-column-id">
+              <span>1</span>
+            </td>
+            <td class="mat-mdc-cell mat-datatable-cell mat-column-firstName">
+              <span>Rashawn</span>
+            </td>
+            <td class="mat-mdc-cell mat-datatable-cell mat-column-lastName">
+              <span>Goyette</span>
+            </td>
+            <td class="mat-mdc-cell mat-datatable-cell mat-column-email">
+              <span>Alexa1&#64;gmail.com</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatDatatableHeaderAlignDirective
-  ]
+  imports: [MatDatatableHeaderAlignDirective]
 })
-class TestComponent { }
+class TestComponent {}

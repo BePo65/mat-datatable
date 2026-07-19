@@ -41,7 +41,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have as title \'Mat-Datatable-Demo\'', () => {
+  it("should have as title 'Mat-Datatable-Demo'", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 

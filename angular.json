@@ -20,18 +20,14 @@
             "outputPath": "dist/mat-datatable-demo",
             "index": "projects/mat-datatable-demo/src/index.html",
             "main": "projects/mat-datatable-demo/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/mat-datatable-demo/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/mat-datatable-demo/src/favicon.ico",
               "projects/mat-datatable-demo/src/assets"
             ],
-            "styles": [
-              "projects/mat-datatable-demo/src/styles.scss"
-            ],
+            "styles": ["projects/mat-datatable-demo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -82,10 +78,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/mat-datatable-demo/tsconfig.spec.json",
             "karmaConfig": "projects/mat-datatable-demo/karma.conf.js",
             "inlineStyleLanguage": "scss",
@@ -93,9 +86,7 @@
               "projects/mat-datatable-demo/src/favicon.ico",
               "projects/mat-datatable-demo/src/assets"
             ],
-            "styles": [
-              "projects/mat-datatable-demo/src/styles.scss"
-            ],
+            "styles": ["projects/mat-datatable-demo/src/styles.scss"],
             "scripts": []
           }
         },
@@ -137,10 +128,7 @@
           "options": {
             "tsConfig": "projects/mat-datatable-lib/tsconfig.spec.json",
             "karmaConfig": "projects/mat-datatable-lib/karma.conf.js",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         },
         "lint": {

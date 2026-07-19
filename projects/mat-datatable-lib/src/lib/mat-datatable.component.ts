@@ -32,18 +32,28 @@ import {
 } from '@angular/material/table';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { EmptyDataStoreProvider, TableVirtualScrollDataSource } from '../components/data-source.class';
+import {
+  EmptyDataStoreProvider,
+  TableVirtualScrollDataSource
+} from '../components/data-source.class';
 import { MatDatatableHeaderAlignDirective } from '../directives/datatable-header-align.directive';
 import { MatDatatableResizableDirective } from '../directives/datatable-resizable.directive';
-import {
-  MatMultiSort,
-  Sort,
-  SortHeaderArrowPosition
-} from '../directives/datatable-sort';
+import { MatMultiSort, Sort, SortHeaderArrowPosition } from '../directives/datatable-sort';
 import { MatMultiSortHeader } from '../directives/datatable-sort/mat-multi-sort-header.component';
 import { TableItemSizeDirective } from '../directives/virtual-scroll/table-item-size.directive';
-import { FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
-import { ColumnAlignmentType, MatColumnDefinition, CastPipe, CellValueString, CellValueImage, CellValueMailTo } from '../interfaces/datatable-column-definition.interface';
+import {
+  FieldSortDefinition,
+  FieldFilterDefinition,
+  DataStoreProvider
+} from '../interfaces/datastore-provider.interface';
+import {
+  ColumnAlignmentType,
+  MatColumnDefinition,
+  CastPipe,
+  CellValueString,
+  CellValueImage,
+  CellValueMailTo
+} from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
 export type RowSelectionType = 'none' | 'single' | 'multi';
@@ -57,10 +67,7 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
 @Component({
   selector: 'mat-datatable',
   templateUrl: './mat-datatable.component.html',
-  styleUrls: [
-    './mat-datatable.component.scss',
-    '../directives/datatable-resizable.directive.scss'
-  ],
+  styleUrls: ['./mat-datatable.component.scss', '../directives/datatable-resizable.directive.scss'],
   standalone: true,
   imports: [
     AsyncPipe,
@@ -92,11 +99,13 @@ export type RowSelectionType = 'none' | 'single' | 'multi';
     CastPipe
   ]
 })
-export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
+export class MatDatatableComponent<TRowData>
+  implements AfterViewInit, OnChanges, OnDestroy, OnInit
+{
   @Input() columnDefinitions: MatColumnDefinition<TRowData>[] = [];
   @Input() displayedColumns: string[] = [];
   @Input() rowSelectionMode: RowSelectionType = 'none';
-  @Input() dataStoreProvider: DataStoreProvider<TRowData> = new EmptyDataStoreProvider<TRowData>;
+  @Input() dataStoreProvider: DataStoreProvider<TRowData> = new EmptyDataStoreProvider<TRowData>();
   @Input()
   get trackBy(): TrackByFunction<TRowData> {
     return this._trackByFn;
@@ -144,16 +153,12 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     // Set DataStoreProvider to value defined in parent element
     this.dataSource.dataStoreProvider = this.dataStoreProvider;
 
-    this.sort.multiSortChange
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((newSort: Sort[]) => {
-        this.dataSource.sorts = this.requestSortDefinitionFromSortArray(newSort);
+    this.sort.multiSortChange.pipe(takeUntil(this.unsubscribe$)).subscribe((newSort: Sort[]) => {
+      this.dataSource.sorts = this.requestSortDefinitionFromSortArray(newSort);
 
-        // Scroll to start of list
-        this.viewport.scrollToIndex(0);
-      });
+      // Scroll to start of list
+      this.viewport.scrollToIndex(0);
+    });
 
     this.firstVisibleIndexChanged = this.tvs.firstVisibleIndexChanged;
     this.totalRowsChanged = this.tvs.totalRowsChanged;
@@ -169,14 +174,15 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
 
   ngOnChanges(changes: SimpleChanges): void {
     const displayedColumnsChanges = changes['displayedColumns'];
-    if (this.withFooter && (displayedColumnsChanges !== undefined)) {
+    if (this.withFooter && displayedColumnsChanges !== undefined) {
       if (Array.isArray(displayedColumnsChanges.currentValue)) {
         const displayedColumns = displayedColumnsChanges.currentValue as string[];
         this.displayedFooterColumns = this.footerColumnsFromColumns(displayedColumns);
       } else {
-        console.error(`'displayedColumns' is not an array of strings ('${typeof displayedColumnsChanges.currentValue}')`);
+        console.error(
+          `'displayedColumns' is not an array of strings ('${typeof displayedColumnsChanges.currentValue}')`
+        );
       }
-
     }
   }
 
@@ -212,7 +218,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       }
       this.onRowSelectionChanged();
     } else {
-      throw new Error('\'newSelection\' must be an array.');
+      throw new Error("'newSelection' must be an array.");
     }
   }
 
@@ -242,11 +248,10 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
 
   scrollToRow(row: TRowData) {
     if (row !== undefined) {
-      this.dataSource.rowToIndex(row)
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe(index => {
+      this.dataSource
+        .rowToIndex(row)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((index) => {
           const indexOfRow = Math.max(index, 0);
           this.viewport.scrollToIndex(indexOfRow);
         });
@@ -263,11 +268,13 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
    * @param columnDefinition - object defining a table cell
    * @returns object with properties that reflect the css styles of the header cell
    */
-  protected headerFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
+  protected headerFormat(
+    columnDefinition: MatColumnDefinition<TRowData>
+  ): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
       result = {
-        'width': columnDefinition.width
+        width: columnDefinition.width
       };
     }
 
@@ -280,13 +287,15 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
    * @param columnDefinition - object defining a table cell
    * @returns object with properties that reflect the css styles of the data cell
    */
-  protected columnFormat(columnDefinition: MatColumnDefinition<TRowData>): Record<string, string> | undefined {
+  protected columnFormat(
+    columnDefinition: MatColumnDefinition<TRowData>
+  ): Record<string, string> | undefined {
     let result: Record<string, string> | undefined;
     if (columnDefinition.width !== undefined) {
       result = {
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
-        'overflow': 'hidden'
+        overflow: 'hidden'
       };
     }
 
@@ -294,7 +303,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       const singleLineResult = {
         'text-overflow': 'ellipsis',
         'white-space': 'nowrap',
-        'overflow': 'hidden'
+        overflow: 'hidden'
       };
       result = Object.assign({}, result, singleLineResult);
     }
@@ -324,7 +333,9 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
    * @param footerCellAlignment - definition of the footer cell
    * @returns object with properties that reflect the css styles of the footer cell
    */
-  protected footerColumnFormat(footerCellAlignment?: ColumnAlignmentType): Record<string, string> | undefined {
+  protected footerColumnFormat(
+    footerCellAlignment?: ColumnAlignmentType
+  ): Record<string, string> | undefined {
     const result: Record<string, string> = {};
     if (footerCellAlignment !== undefined) {
       switch (footerCellAlignment) {
@@ -343,7 +354,9 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
     return result;
   }
 
-  protected sortArrowPosition(columnDefinition: MatColumnDefinition<TRowData>): SortHeaderArrowPosition {
+  protected sortArrowPosition(
+    columnDefinition: MatColumnDefinition<TRowData>
+  ): SortHeaderArrowPosition {
     return columnDefinition.headerAlignment === 'right' ? 'before' : 'after';
   }
 
@@ -366,7 +379,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
             this.currentSelectedRows = [];
             break;
           case 'multi':
-            this.currentSelectedRows = this.currentSelectedRows.filter(e => e !== row);
+            this.currentSelectedRows = this.currentSelectedRows.filter((e) => e !== row);
             break;
         }
         this.rowClick.emit(row);
@@ -401,7 +414,7 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
    * @returns true = given row is part of the selectedRows
    */
   protected selectedRowsIncludes(row: TRowData): boolean {
-    return this.selectedRows.some(selectedRow => this.areRowsEqual(row, selectedRow));
+    return this.selectedRows.some((selectedRow) => this.areRowsEqual(row, selectedRow));
   }
 
   /**
@@ -419,10 +432,12 @@ export class MatDatatableComponent<TRowData> implements AfterViewInit, OnChanges
       displayedFooterColumns.push(newDisplayedColumns[i]);
 
       // Do we have a footer columnSpan for this column?
-      const columnDefinition = this.columnDefinitions.find(element => element.columnId === newDisplayedColumns[i]);
+      const columnDefinition = this.columnDefinitions.find(
+        (element) => element.columnId === newDisplayedColumns[i]
+      );
       if (columnDefinition !== undefined) {
         const colSpan = columnDefinition.footerColumnSpan;
-        if ((colSpan !== undefined) && Number.isInteger(colSpan) && (colSpan > 1)) {
+        if (colSpan !== undefined && Number.isInteger(colSpan) && colSpan > 1) {
           i += colSpan;
         } else {
           i++;

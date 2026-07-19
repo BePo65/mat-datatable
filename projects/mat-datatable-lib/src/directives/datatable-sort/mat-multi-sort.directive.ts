@@ -2,15 +2,7 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 /* eslint-disable @angular-eslint/no-output-rename */
 
-import {
-  Directive,
-  EventEmitter,
-  Inject,
-  Input,
-  Optional,
-  Output,
-  isDevMode
-} from '@angular/core';
+import { Directive, EventEmitter, Inject, Input, Optional, Output, isDevMode } from '@angular/core';
 import {
   MatSort,
   MatSortable,
@@ -27,12 +19,12 @@ import {
 
 // Container for MatSortables to manage the sort state and provide default sort parameters.
 @Directive({
-    selector: '[matMultiSort]',
-    exportAs: 'matMultiSort',
-    host: {
-        'class': 'mat-multi-sort'
-    },
-    standalone: true
+  selector: '[matMultiSort]',
+  exportAs: 'matMultiSort',
+  host: {
+    class: 'mat-multi-sort'
+  },
+  standalone: true
 })
 export class MatMultiSort extends MatSort {
   // The currently active sort definition.
@@ -50,7 +42,9 @@ export class MatMultiSort extends MatSort {
   private _sortDefinitions: Sort[] = [];
 
   // Event emitted when the user changes the sort definition.
-  @Output('matMultiSortChange') readonly multiSortChange: EventEmitter<Sort[]> = new EventEmitter<Sort[]>();
+  @Output('matMultiSortChange') readonly multiSortChange: EventEmitter<Sort[]> = new EventEmitter<
+    Sort[]
+  >();
 
   constructor(
     @Optional() @Inject(MAT_SORT_DEFAULT_OPTIONS) private __defaultOptions?: MatSortDefaultOptions
@@ -92,7 +86,7 @@ export class MatMultiSort extends MatSort {
   }
 
   updateSortDefinitions(sortable: MatSortable): void {
-    const sortIndex = this.sortDefinitions.findIndex(sort => sort.active === sortable.id);
+    const sortIndex = this.sortDefinitions.findIndex((sort) => sort.active === sortable.id);
 
     if (sortIndex >= 0) {
       const newSort: Sort = {
@@ -120,12 +114,14 @@ export class MatMultiSort extends MatSort {
     }
 
     // Get the sort direction cycle with the potential sortable overrides.
-    const disableClear = sortable?.disableClear ?? this.disableClear ?? !!this.__defaultOptions?.disableClear;
+    const disableClear =
+      sortable?.disableClear ?? this.disableClear ?? !!this.__defaultOptions?.disableClear;
     const sortDirectionCycle = getSortDirectionCycle(sortable.start || this.start, disableClear);
-    const sortIndex = this.sortDefinitions.findIndex(sort => sort.active === sortable.id);
+    const sortIndex = this.sortDefinitions.findIndex((sort) => sort.active === sortable.id);
 
     // Get and return the next direction in the cycle
-    let nextDirectionIndex = sortDirectionCycle.indexOf(this.sortDefinitions[sortIndex].direction) + 1;
+    let nextDirectionIndex =
+      sortDirectionCycle.indexOf(this.sortDefinitions[sortIndex].direction) + 1;
     if (nextDirectionIndex >= sortDirectionCycle.length) {
       nextDirectionIndex = 0;
     }

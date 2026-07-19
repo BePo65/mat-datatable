@@ -69,8 +69,11 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
   ) {
     const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
     const simulatedResponseTime = Math.round((Math.random() * 2000 + 500) * 100) / 100;
-    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)))
-      .pipe(delay(simulatedResponseTime));
+    return of(
+      selectedDataset.findIndex(
+        (currentRow) => this.trackBy(0, row) === this.trackBy(0, currentRow)
+      )
+    ).pipe(delay(simulatedResponseTime));
   }
 
   /**
@@ -124,26 +127,31 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     let selectedDataset = structuredClone(this.baseData);
 
     // Filter data
-    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
+    if (filters !== undefined && Array.isArray(filters) && filters.length > 0) {
       selectedDataset = selectedDataset.filter((row: DatatableItem) => {
-        return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
-          if (currentFilter.value !== undefined) {
-            isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
-          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
-            isSelected ||= (
-              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
-              (row[currentFilter.fieldName] <= currentFilter.valueTo)
-            );
-          }
-          return isSelected;
-        }, false);
+        return filters.reduce(
+          (isSelected: boolean, currentFilter: FieldFilterDefinition<DatatableItem>) => {
+            if (currentFilter.value !== undefined) {
+              isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
+            } else if (
+              currentFilter.valueFrom !== undefined &&
+              currentFilter.valueTo !== undefined
+            ) {
+              isSelected ||=
+                row[currentFilter.fieldName] >= currentFilter.valueFrom &&
+                row[currentFilter.fieldName] <= currentFilter.valueTo;
+            }
+            return isSelected;
+          },
+          false
+        );
       });
     }
 
     // Sort data
-    if ((sorts !== undefined) && Array.isArray(sorts)) {
+    if (sorts !== undefined && Array.isArray(sorts)) {
       this.currentSortingDefinitions = sorts;
-      if ((sorts.length > 0)) {
+      if (sorts.length > 0) {
         selectedDataset.sort(this.compareFn);
       }
     }
@@ -161,7 +169,7 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
     let result = 0;
     for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
       const fieldName = this.currentSortingDefinitions[i].fieldName;
-      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const isAsc = this.currentSortingDefinitions[i].sortDirection === 'asc';
       const valueA = a[fieldName] as string | number;
       const valueB = b[fieldName] as string | number;
       result = this.compare(valueA, valueB, isAsc);
@@ -180,6 +188,6 @@ export class DemoTableDataStore<DatatableItem> implements DataStoreProvider<Data
    * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
    */
   private compare(a: string | number, b: string | number, isAsc: boolean): number {
-    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+    return (a === b ? 0 : a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

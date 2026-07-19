@@ -2,11 +2,17 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, take, takeUntil, filter, switchMap, tap } from 'rxjs/operators';
 
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
+import {
+  Page,
+  RequestRowsRange,
+  FieldSortDefinition,
+  FieldFilterDefinition,
+  DataStoreProvider
+} from '../interfaces/datastore-provider.interface';
 
 export interface TableVirtualScrollDataStoreSizes {
-  totalElements: number
-  totalFilteredElements: number
+  totalElements: number;
+  totalFilteredElements: number;
 }
 
 export interface TVSDataSource {
@@ -18,7 +24,9 @@ export interface TVSDataSource {
    * @param rangeToDisplay$ - Observable emitting objects defining the rows required by the TableItemSizeDirective
    * @returns Observable emitting the absolute and the filtered size of the content of the data store
    */
-  attachVirtualScroller(rangeToDisplay$: Observable<RequestRowsRange>): Observable<TableVirtualScrollDataStoreSizes>;
+  attachVirtualScroller(
+    rangeToDisplay$: Observable<RequestRowsRange>
+  ): Observable<TableVirtualScrollDataStoreSizes>;
 }
 
 /**
@@ -40,7 +48,10 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
   private readonly rangeToDisplayChanges$ = new Subject<void>();
 
   /** Stream that emits when the number of the entries in the data source changes (e.g. by filtering or adding/deleting data). */
-  private readonly dataStoreSizes$ = new BehaviorSubject<TableVirtualScrollDataStoreSizes>({ totalElements: 0, totalFilteredElements: 0 });
+  private readonly dataStoreSizes$ = new BehaviorSubject<TableVirtualScrollDataStoreSizes>({
+    totalElements: 0,
+    totalFilteredElements: 0
+  });
 
   /** Stream that emits to request the number of entries the data source. */
   private readonly requestDataStoreSizes$ = new Subject<void>();
@@ -97,9 +108,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
   }
   private _dataStoreProvider!: DataStoreProvider<T>;
 
-  constructor(
-    private datastoreProviderObject?: DataStoreProvider<T>
-    ) {
+  constructor(private datastoreProviderObject?: DataStoreProvider<T>) {
     super();
 
     // Get the number of rows in the data store;
@@ -107,31 +116,31 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     this.requestDataStoreSizes$
       .pipe(
         takeUntil(this.unsubscribe$),
-        switchMap(() => this.dataStoreProvider.getPagedData(this.requestForSizesOnly, this.sorts, this.filters)
-          .pipe(
-            take(1),
-            map((page: Page<T>) => {
-              return {
-                totalElements: page.totalElements,
-                totalFilteredElements: page.totalFilteredElements
-              };
-            })
-          )
+        switchMap(() =>
+          this.dataStoreProvider
+            .getPagedData(this.requestForSizesOnly, this.sorts, this.filters)
+            .pipe(
+              take(1),
+              map((page: Page<T>) => {
+                return {
+                  totalElements: page.totalElements,
+                  totalFilteredElements: page.totalFilteredElements
+                };
+              })
+            )
         )
       )
-      .subscribe(
-        sizes => {
-          this.filteredSizeOfDataStore = sizes.totalFilteredElements;
-          this.dataStoreSizes$.next(sizes);
-        }
-      );
+      .subscribe((sizes) => {
+        this.filteredSizeOfDataStore = sizes.totalFilteredElements;
+        this.dataStoreSizes$.next(sizes);
+      });
 
     // dataStoreProvider is set after 'this.requestDataStoreSizes$' because setter
     // triggers 'this.reloadSizeOfDatastore()'
     if (this.datastoreProviderObject !== undefined) {
       this.dataStoreProvider = this.datastoreProviderObject;
     } else {
-      this.dataStoreProvider = new EmptyDataStoreProvider<T>;
+      this.dataStoreProvider = new EmptyDataStoreProvider<T>();
     }
   }
 
@@ -159,7 +168,9 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
    * @param rangeToDisplay - observable emitting range of rows to display
    * @returns observable emitting size of data store
    */
-  attachVirtualScroller(rangeToDisplay: Subject<RequestRowsRange>): Observable<TableVirtualScrollDataStoreSizes> {
+  attachVirtualScroller(
+    rangeToDisplay: Subject<RequestRowsRange>
+  ): Observable<TableVirtualScrollDataStoreSizes> {
     this.rangeToDisplay$ = rangeToDisplay;
     this.rangeToDisplayChanges$.next();
     this._updateRangeToDisplaySubscription();
@@ -184,11 +195,10 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
     setTimeout(() => this.loadingSubject.next(true), 0);
 
-    return this.dataStoreProvider.indexOfRow(row, this.sorts, this.filters)
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        tap(() => this.loadingSubject.next(false))
-      );
+    return this.dataStoreProvider.indexOfRow(row, this.sorts, this.filters).pipe(
+      takeUntil(this.unsubscribe$),
+      tap(() => this.loadingSubject.next(false))
+    );
   }
 
   /**
@@ -207,37 +217,37 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
     // Send preliminary data evaluated from last list of rows to table to
     // satisfy virtual scroller.
     this.rangeToDisplaySubscription.add(
-    this.rangeToDisplay$
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        takeUntil(this.rangeToDisplayChanges$),
-        filter(() => this.isConnectedToTable)
-      )
-      .subscribe(range => {
-        const preliminaryData = this.preliminaryRowsToDisplay(range);
-        this.renderData.next(preliminaryData);
-      })
+      this.rangeToDisplay$
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          takeUntil(this.rangeToDisplayChanges$),
+          filter(() => this.isConnectedToTable)
+        )
+        .subscribe((range) => {
+          const preliminaryData = this.preliminaryRowsToDisplay(range);
+          this.renderData.next(preliminaryData);
+        })
     );
 
     // Emit rows from data source to table
     this.rangeToDisplaySubscription.add(
-    this.rangeToDisplay$
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        takeUntil(this.rangeToDisplayChanges$),
-        filter(() => this.isConnectedToTable),
-        tap(() => {
-          // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
-          setTimeout(() => this.loadingSubject.next(true), 0);
-        }),
-        switchMap(range => this.dataStoreProvider.getPagedData(range, this.sorts, this.filters)
-          .pipe(
-            take(1),
-            tap(() => this.loadingSubject.next(false))
+      this.rangeToDisplay$
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          takeUntil(this.rangeToDisplayChanges$),
+          filter(() => this.isConnectedToTable),
+          tap(() => {
+            // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
+            setTimeout(() => this.loadingSubject.next(true), 0);
+          }),
+          switchMap((range) =>
+            this.dataStoreProvider.getPagedData(range, this.sorts, this.filters).pipe(
+              take(1),
+              tap(() => this.loadingSubject.next(false))
+            )
           )
         )
-      )
-      .subscribe(page => {
+        .subscribe((page) => {
           this.renderData.next(page.content);
           this.lastRangeToDisplay = {
             startRowIndex: page.startRowIndex,
@@ -251,8 +261,7 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
               totalFilteredElements: page.totalFilteredElements
             });
           }
-        }
-      )
+        })
     );
   }
 
@@ -280,17 +289,26 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
       const copyLength = Math.max(Math.min(oldContentLength - offset, range.numberOfRows), 0);
       const copyEndIndex = offset + copyLength;
       // handle case, when we request data beyond the end of the datastore
-      const filteredSizeOfDataStore= this.filteredSizeOfDataStore || 0;
-      const numberOfExcessRows =  Math.max((range.startRowIndex + range.numberOfRows) - filteredSizeOfDataStore, 0);
+      const filteredSizeOfDataStore = this.filteredSizeOfDataStore || 0;
+      const numberOfExcessRows = Math.max(
+        range.startRowIndex + range.numberOfRows - filteredSizeOfDataStore,
+        0
+      );
       const emptyRowsToAdd = Math.max(range.numberOfRows - copyLength - numberOfExcessRows, 0);
-      result = this.lastRowsContent.slice(offset, copyEndIndex)
-        .concat(Array(emptyRowsToAdd));
+      result = this.lastRowsContent.slice(offset, copyEndIndex).concat(Array(emptyRowsToAdd));
     } else {
       // we take only rows that overlap between the lastRange and the requested range
-      const copyLength = Math.max(Math.min(oldContentLength - offset, range.startRowIndex + range.numberOfRows - lastRange.startRowIndex), 0);
+      const copyLength = Math.max(
+        Math.min(
+          oldContentLength - offset,
+          range.startRowIndex + range.numberOfRows - lastRange.startRowIndex
+        ),
+        0
+      );
       const copyEndIndex = copyLength;
-      result = Array<T>(Math.min(offset, range.numberOfRows))
-        .concat(this.lastRowsContent.slice(0, copyEndIndex));
+      result = Array<T>(Math.min(offset, range.numberOfRows)).concat(
+        this.lastRowsContent.slice(0, copyEndIndex)
+      );
     }
     return result;
   }
@@ -301,8 +319,10 @@ export class TableVirtualScrollDataSource<T> extends DataSource<T> implements TV
    * @returns true, if the totalElements or the totalFilteredElements changed
    */
   private datastoreSizesChanged(page: Page<T>): boolean {
-    return (page.totalElements !== this.dataStoreSizes$.value.totalElements) ||
-    (page.totalFilteredElements !== this.dataStoreSizes$.value.totalFilteredElements);
+    return (
+      page.totalElements !== this.dataStoreSizes$.value.totalElements ||
+      page.totalFilteredElements !== this.dataStoreSizes$.value.totalFilteredElements
+    );
   }
 }
 
@@ -317,23 +337,20 @@ export class EmptyDataStoreProvider<T> implements DataStoreProvider<T> {
   getPagedData(
     rowsRange: RequestRowsRange,
     sorts?: FieldSortDefinition<T>[],
-    filters?: FieldFilterDefinition<T>[]) {
-      return of(
-        {
-          content: [] as T[],
-          startRowIndex: 0,
-          returnedElements: 0,
-          totalElements: 0,
-          totalFilteredElements: 0
-        } as Page<T>);
-    }
+    filters?: FieldFilterDefinition<T>[]
+  ) {
+    return of({
+      content: [] as T[],
+      startRowIndex: 0,
+      returnedElements: 0,
+      totalElements: 0,
+      totalFilteredElements: 0
+    } as Page<T>);
+  }
 
-  indexOfRow(
-    row: T,
-    sorts?: FieldSortDefinition<T>[],
-    filters?: FieldFilterDefinition<T>[]) {
-      return of(-1);
-    }
+  indexOfRow(row: T, sorts?: FieldSortDefinition<T>[], filters?: FieldFilterDefinition<T>[]) {
+    return of(-1);
+  }
 }
 
 /* eslint-enable @typescript-eslint/no-unused-vars */

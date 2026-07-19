@@ -1,15 +1,12 @@
 {
-  "extends": [
-    "stylelint-config-standard",
-    "stylelint-config-recommended-scss"
+  "extends": ["stylelint-config-standard", "stylelint-config-recommended-scss"],
+  "rules": {
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreKeywords": ["/A\\d00/"]
+      }
     ],
-    "rules": {
-      "value-keyword-case": [
-        "lower",
-        {
-          "ignoreKeywords": [ "/A\\d00/" ]
-        }
-      ],
-      "declaration-property-value-no-unknown": null
-    }
+    "declaration-property-value-no-unknown": null
+  }
 }
