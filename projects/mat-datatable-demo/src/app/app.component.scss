@@ -1,7 +1,7 @@
 .main {
   display: flex;
   flex-flow: column;
-  height: 100vH;
+  height: 100vh;
   overflow: hidden;
   width: 100vw;
 }
@@ -23,7 +23,7 @@
 }
 
 .content-table {
-  flex-grow : 1;
+  flex-grow: 1;
   margin: 0 1em 1.5em;
   overflow: auto;
 }
@@ -38,7 +38,7 @@
 
 .current-sort {
   margin: 0 0 0 1em;
-  min-height: 40px;;
+  min-height: 40px;
 }
 
 .current-sort-label {
@@ -56,7 +56,7 @@
 }
 
 .activate-row-container {
-  margin: .5em 0 0 1em;
+  margin: 0.5em 0 0 1em;
 }
 
 .activation-button-container,
@@ -73,7 +73,7 @@
   margin: 0 0.75em 0 1em;
 }
 
- .activated-row-label {
+.activated-row-label {
   margin: 0 0.25em 0 0;
 }
 
@@ -101,7 +101,7 @@
   margin: 1em 0 0 1em;
 }
 
-.selected-rows-label  {
+.selected-rows-label {
   margin: 0 0.25em 0 1em;
 }
 
@@ -121,8 +121,8 @@
   margin: 0 0.25em 0 1em;
 }
 
-.change-content-container{
-  margin: .5em 0 0 1em;
+.change-content-container {
+  margin: 0.5em 0 0 1em;
 }
 
 .toggle-buttons-pane-button {

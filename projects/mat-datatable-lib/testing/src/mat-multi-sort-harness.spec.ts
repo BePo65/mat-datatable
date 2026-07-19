@@ -15,13 +15,8 @@ describe('MatSortHarness', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [
-        MatMultiSortModule,
-        NoopAnimationsModule
-      ],
-      declarations: [
-        SortHarnessTestComponent
-      ]
+      imports: [MatMultiSortModule, NoopAnimationsModule],
+      declarations: [SortHarnessTestComponent]
     }).compileComponents();
   }));
 
@@ -56,7 +51,7 @@ describe('MatSortHarness', () => {
   it('should be able to filter headers by their labels via a regex', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders({ label: /^C/ });
-    const labels = await parallel(() => headers.map(header => header.getLabel()));
+    const labels = await parallel(() => headers.map((header) => header.getLabel()));
 
     expect(headers).toHaveSize(2);
     expect(labels).toEqual(['Calories', 'Carbs']);
@@ -82,9 +77,9 @@ describe('MatSortHarness', () => {
     expect(headers).toHaveSize(5);
 
     const sortDefinitions: Sort[] = [
-      { active:'protein', direction:'desc' },
-      { active:'calories', direction:'asc' },
-      { active:'name', direction:'asc' }
+      { active: 'protein', direction: 'desc' },
+      { active: 'calories', direction: 'asc' },
+      { active: 'name', direction: 'asc' }
     ];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
@@ -99,17 +94,21 @@ describe('MatSortHarness', () => {
     const headers = await matMultiSort.getSortHeaders({ sortDirection: '' });
 
     const sortDefinitions: Sort[] = [
-      { active:'protein', direction:'desc' },
-      { active:'name', direction:'asc' }
+      { active: 'protein', direction: 'desc' },
+      { active: 'name', direction: 'asc' }
     ];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
     const activeHeaders = await matMultiSort.getActiveHeaders();
-    const activeIds = await parallel(() => activeHeaders.map(header => header.getId()));
-    const activeLabels = await parallel(() => activeHeaders.map(header => header.getLabel()));
-    const activeSortDirections = await parallel(() => activeHeaders.map(header => header.getSortDirection()));
-    const activeSortPositions = await parallel(() => activeHeaders.map(header => header.getSortPosition()));
+    const activeIds = await parallel(() => activeHeaders.map((header) => header.getId()));
+    const activeLabels = await parallel(() => activeHeaders.map((header) => header.getLabel()));
+    const activeSortDirections = await parallel(() =>
+      activeHeaders.map((header) => header.getSortDirection())
+    );
+    const activeSortPositions = await parallel(() =>
+      activeHeaders.map((header) => header.getSortPosition())
+    );
 
     expect(headers).toHaveSize(5);
 
@@ -137,9 +136,9 @@ describe('MatSortHarness', () => {
   it('should be able to get header by the sorting position', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const sortDefinitions: Sort[] = [
-      { active:'protein', direction:'desc' },
-      { active:'calories', direction:'asc' },
-      { active:'name', direction:'asc' }
+      { active: 'protein', direction: 'desc' },
+      { active: 'calories', direction: 'asc' },
+      { active: 'name', direction: 'asc' }
     ];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
@@ -156,7 +155,7 @@ describe('MatSortHarness', () => {
   it('should be able to get the label of a header', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
-    const labels = await parallel(() => headers.map(header => header.getLabel()));
+    const labels = await parallel(() => headers.map((header) => header.getLabel()));
 
     expect(labels).toEqual(['Dessert', 'Calories', 'Fat', 'Carbs', 'Protein']);
   });
@@ -221,17 +220,21 @@ describe('MatSortHarness', () => {
     const headers = await matMultiSort.getSortHeaders({ sortDirection: '' });
 
     const sortDefinitions: Sort[] = [
-      { active:'protein', direction:'desc' },
-      { active:'name', direction:'asc' }
+      { active: 'protein', direction: 'desc' },
+      { active: 'name', direction: 'asc' }
     ];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
     const activeHeaders = await matMultiSort.getActiveHeaders();
-    const activeIds = await parallel(() => activeHeaders.map(header => header.getId()));
-    const activeLabels = await parallel(() => activeHeaders.map(header => header.getLabel()));
-    const activeSortDirections = await parallel(() => activeHeaders.map(header => header.getSortDirection()));
-    const activeSortPositions = await parallel(() => activeHeaders.map(header => header.getSortPosition()));
+    const activeIds = await parallel(() => activeHeaders.map((header) => header.getId()));
+    const activeLabels = await parallel(() => activeHeaders.map((header) => header.getLabel()));
+    const activeSortDirections = await parallel(() =>
+      activeHeaders.map((header) => header.getSortDirection())
+    );
+    const activeSortPositions = await parallel(() =>
+      activeHeaders.map((header) => header.getSortPosition())
+    );
 
     expect(headers).toHaveSize(5);
 
@@ -260,9 +263,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'asc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'asc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -275,9 +276,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'asc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'asc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -290,9 +289,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'calories', direction:'desc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'calories', direction: 'desc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -305,9 +302,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'asc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'asc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -320,9 +315,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'desc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'desc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -335,9 +328,7 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
 
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'asc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'asc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
 
@@ -349,9 +340,7 @@ describe('MatSortHarness', () => {
   it('should get the sortingData for 1 header', async () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
     const headers = await sort.getSortHeaders();
-    const sortDefinitions: Sort[] = [
-      { active:'name', direction:'asc' }
-    ];
+    const sortDefinitions: Sort[] = [{ active: 'name', direction: 'asc' }];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
     const sortData = await headers[0].getAllSortData();
@@ -368,8 +357,8 @@ describe('MatSortHarness', () => {
     const sort = await loader.getHarness(MatMultiSortHarness);
 
     const sortDefinitions: Sort[] = [
-      { active:'protein', direction:'desc' },
-      { active:'name', direction:'asc' }
+      { active: 'protein', direction: 'desc' },
+      { active: 'name', direction: 'asc' }
     ];
     component.matMultiSort.sortDefinitions = sortDefinitions;
     fixture.detectChanges();
@@ -412,11 +401,11 @@ type Dessert = {
       </tr>
 
       <tr *ngFor="let dessert of sortedData">
-        <td>{{dessert.name}}</td>
-        <td>{{dessert.calories}}</td>
-        <td>{{dessert.fat}}</td>
-        <td>{{dessert.carbs}}</td>
-        <td>{{dessert.protein}}</td>
+        <td>{{ dessert.name }}</td>
+        <td>{{ dessert.calories }}</td>
+        <td>{{ dessert.fat }}</td>
+        <td>{{ dessert.carbs }}</td>
+        <td>{{ dessert.protein }}</td>
       </tr>
     </table>
   `
@@ -446,7 +435,7 @@ class SortHarnessTestComponent {
         let result = 0;
         for (let i = 0; i < sorts.length; i++) {
           const fieldName = sorts[i].active;
-          const isAsc = (sorts[i].direction === 'asc');
+          const isAsc = sorts[i].direction === 'asc';
           const valueA = a[fieldName as keyof Dessert];
           const valueB = b[fieldName as keyof Dessert];
           result = compare(valueA, valueB, isAsc);
@@ -469,5 +458,5 @@ class SortHarnessTestComponent {
  */
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 function compare(a: string | number, b: string | number, isAsc: boolean): number {
-  return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+  return (a === b ? 0 : a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

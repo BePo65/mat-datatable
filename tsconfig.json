@@ -9,10 +9,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
+    "lib": ["ES2022", "dom"],
     "module": "ES2022",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -21,12 +18,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "outDir": "./dist/out-tsc",
     "paths": {
-      "mat-datatable": [
-        "projects/mat-datatable-lib/src"
-      ],
-      "mat-datatable/testing": [
-        "projects/mat-datatable-lib/testing/src"
-      ]
+      "mat-datatable": ["projects/mat-datatable-lib/src"],
+      "mat-datatable/testing": ["projects/mat-datatable-lib/testing/src"]
     },
     "sourceMap": true,
     "strict": true,
@@ -40,11 +33,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "include": [
-    "**/src/**/*.ts",
-    "node_modules/cypress"
-  ],
-  "exclude": [
-    "node_modules/cypress"
-  ]
+  "include": ["**/src/**/*.ts", "node_modules/cypress"],
+  "exclude": ["node_modules/cypress"]
 }

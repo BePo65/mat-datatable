@@ -8,8 +8,5 @@
     "inlineSources": true,
     "types": []
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "cypress"
-  ]
+  "exclude": ["**/*.spec.ts", "cypress"]
 }

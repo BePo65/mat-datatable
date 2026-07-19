@@ -55,19 +55,21 @@ A simple data table with virtual scrolling using Angular Material.
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 This project extends 'angular material table' so that it can be used as a replacement for [ngx-datatable](https://github.com/swimlane/ngx-datatable) in one of my projects. Unluckily ngx-datatable seems to be dead as it is still on angular v12 and an update to a more recent angular version is not in sight.
 
 Mat-Datatable implements a table with virtual scrolling, sorting and filtering. Only a minimal set of the functionality of ngx-datatable is implemented.
 
-![Screenshot](assets/screenshot.jpg "Screenshot of the demo page")
+![Screenshot](assets/screenshot.jpg 'Screenshot of the demo page')
 
 Try out the [live demo](https://bepo65.github.io/mat-datatable/).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To use this package in your project just follow these simple steps.
@@ -79,9 +81,10 @@ The package can be used in Angular apps with Angular Material installed.
 ### Installation
 
 Install the package from npmjs:
-   ```sh
-   npm install mat-datatable
-   ```
+
+```sh
+npm install mat-datatable
+```
 
 ### Embed Mat-Datatable In Your Project
 
@@ -121,13 +124,13 @@ export class AppComponent {
 ```
 
 The `cell` callback returns a typed content descriptor, so you can render plain strings, mailto links or images without changing the table API:
- 
-```ts
-cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` })
- ```
 
+```ts
+cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` });
+```
 
 Add Mat-Datatable to your HTML file (for example app.component.html):
+
 ```html
 <div class="content-table">
   <mat-datatable
@@ -135,13 +138,15 @@ Add Mat-Datatable to your HTML file (for example app.component.html):
     [displayedColumns]="displayedColumns"
     [dataStoreProvider]="dataStore"
     [trackBy]="trackBy"
-    [withFooter]="true">
+    [withFooter]="true"
+  >
     Loading...
   </mat-datatable>
 </div>
 ```
 
 The height of the element containing the mat-datatable must be set explicitly (for example app.component.scss):
+
 ```css
 .content-table {
   height: 400px;
@@ -153,12 +158,13 @@ The height of the element containing the mat-datatable must be set explicitly (f
 The `cell` callback returns a typed content descriptor, so you can render plain strings, mailto links or images without changing the table API:
 
 ```ts
-cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` })
+cell: (row) => ({ type: 'mailtoLink', text: row.email, url: `mailto:${row.email}` });
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USED ASSETS -->
+
 ## Used Assets
 
 The component is based on Angular Material and uses [Google Fonts](https://fonts.google.com/specimen/Roboto) and the [Google Material Icons](https://google.github.io/material-design-icons/#icon-font-for-the-web) font.
@@ -167,6 +173,7 @@ Both fonts are part of the project and not fetched via https.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- MAT-DATATABLE DEMO -->
+
 ## Mat-Datatable Demo
 
 Demo project to show all features of Mat-Datatable.
@@ -182,6 +189,7 @@ Navigate to http://localhost:4200
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- API REFERENCE -->
+
 ## API Reference
 
 ```ts
@@ -258,15 +266,15 @@ Interface for a component that fetches data from the datastore while respecting 
 | ----------------------------------------- | ----------------------------------- |
 | `getPagedData(rowsRange, sorts, filters)` | Fetches the requested page of data. |
 
-| **Parameters**                      |                                 |
-| ----------------------------------- | ------------------------------- |
-| rowsRange: RequestRowsRange         | The range of rows to fetch.     |
-| sorts: FieldSortDefinition<T>[]     | The sort definitions to use.    |
-| filters: FieldFilterDefinition<T>[] | The filter definitions to use.  |
+| **Parameters**                      |                                |
+| ----------------------------------- | ------------------------------ |
+| rowsRange: RequestRowsRange         | The range of rows to fetch.    |
+| sorts: FieldSortDefinition<T>[]     | The sort definitions to use.   |
+| filters: FieldFilterDefinition<T>[] | The filter definitions to use. |
 
-| **Return value**                    |                                           |
-| ----------------------------------- | ----------------------------------------- |
-| Observable<Page<T>>                 | Emitting fetched data from the datastore. |
+| **Return value**    |                                           |
+| ------------------- | ----------------------------------------- |
+| Observable<Page<T>> | Emitting fetched data from the datastore. |
 
 #### MatColumnDefinition
 
@@ -278,7 +286,7 @@ Interface for the definition of a single table column.
 | ----------------------------------------------- | ------------------------------------------------------ |
 | `columnId: string`                              | The unique ID of the column.                           |
 | `sortable?: boolean`                            | Enables sorting for the column.                        |
-| `resizable?: boolean`                           | Enables resizing of the column.                       |
+| `resizable?: boolean`                           | Enables resizing of the column.                        |
 | `header: string`                                | The text shown in the header row.                      |
 | `headerAlignment?: ColumnAlignmentType`         | Header alignment.                                      |
 | `cell: (element: TRowData) => CellContentValue` | Returns the rendered cell content for the current row. |
@@ -288,7 +296,7 @@ Interface for the definition of a single table column.
 | `showAsSingleLine?: boolean`                    | Truncates the content to a single line.                |
 | `footer?: string`                               | Optional footer text.                                  |
 | `footerAlignment?: ColumnAlignmentType`         | Footer alignment.                                      |
-| `footerColumnSpan?: number`                     | Optional number of columns the footer should span.                           |
+| `footerColumnSpan?: number`                     | Optional number of columns the footer should span.     |
 
 #### MatSortDefinition
 
@@ -349,48 +357,60 @@ type ColumnDisplayType = 'string' | 'mailtoLink' | 'image';
 Type for a literal object containing the values to be used to render a cell as plain text.
 
 ```ts
-interface CellValueString extends CellValueBase { type: 'string'; text: string }
+interface CellValueString extends CellValueBase {
+  type: 'string';
+  text: string;
+}
 ```
 
 ##### Properties
 
-| Name          | Description                                 |
-| ------------- | ------------------------------------------- |
+| Name             | Description                                    |
+| ---------------- | ---------------------------------------------- |
 | `type: 'string'` | Indicates that the cell content is plain text. |
-| `text: string` | The text displayed in the cell.             |
+| `text: string`   | The text displayed in the cell.                |
 
 #### CellValueMailTo
 
 Type for a literal object containing the values to be used to render a cell as a mail-to link.
 
 ```ts
-interface CellValueMailTo extends CellValueBase { type: 'mailtoLink'; url: string, text: string }
+interface CellValueMailTo extends CellValueBase {
+  type: 'mailtoLink';
+  url: string;
+  text: string;
+}
 ```
 
 ##### Properties
 
-| Name              | Description                                             |
-| ----------------- | ------------------------------------------------------- |
+| Name                 | Description                                            |
+| -------------------- | ------------------------------------------------------ |
 | `type: 'mailtoLink'` | Indicates that the cell content is rendered as a link. |
-| `url: string`     | The mail address or URL used for the link target.       |
-| `text: string`    | The visible text shown for the link.                   |
+| `url: string`        | The mail address or URL used for the link target.      |
+| `text: string`       | The visible text shown for the link.                   |
 
 #### CellValueImage
 
 Type for a literal object containing the values to be used to render a cell as an image.
 
 ```ts
-interface CellValueImage extends CellValueBase { type: 'image'; url: string, altText: string, title?: string }
+interface CellValueImage extends CellValueBase {
+  type: 'image';
+  url: string;
+  altText: string;
+  title?: string;
+}
 ```
 
 ##### Properties
 
-| Name                | Description                                              |
-| ------------------- | -------------------------------------------------------- |
-| `type: 'image'`     | Indicates that the cell content is rendered as an image. |
-| `url: string`       | The URL of the image to display.                         |
-| `altText: string`   | The alternative text for the image.                     |
-| `title?: string`    | An optional title shown for the image.                  |
+| Name              | Description                                              |
+| ----------------- | -------------------------------------------------------- |
+| `type: 'image'`   | Indicates that the cell content is rendered as an image. |
+| `url: string`     | The URL of the image to display.                         |
+| `altText: string` | The alternative text for the image.                      |
+| `title?: string`  | An optional title shown for the image.                   |
 
 #### CellContentValue
 
@@ -413,7 +433,9 @@ type CellContentDefType<TRowData> = (element: TRowData) => CellContentValue;
 The definition of a parameter for filtering the displayed data using the column identified by the given 'fieldName'.
 
 ```ts
-type FieldFilterDefinition<T> = StrictUnion<FieldFilterDefinitionSimple<T> | FieldFilterDefinitionRange<T>>;
+type FieldFilterDefinition<T> = StrictUnion<
+  FieldFilterDefinitionSimple<T> | FieldFilterDefinitionRange<T>
+>;
 ```
 
 #### FieldFilterDefinitionRange
@@ -457,6 +479,7 @@ type SortDirectionAscDesc = 'asc' | 'desc';
 ```
 
 <!-- API TESTING REFERENCE -->
+
 ## API Testing Harnesses
 
 `import { MatDatatableHarness } from '@bepo65/mat-datatable/testing';`
@@ -467,7 +490,7 @@ type SortDirectionAscDesc = 'asc' | 'desc';
 
 <a id="_matrowcellharnessbase"></a>
 
-#### **_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
+#### **\_MatRowCellHarnessBase** extends [ContentContainerComponentHarness\<string>](https://material.angular.io/cdk/test-harnesses/api#ContentContainerComponentHarness)
 
 ##### **Methods**
 
@@ -504,7 +527,7 @@ type SortDirectionAscDesc = 'asc' | 'desc';
 
 <a id="_matrowharnessbase"></a>
 
-#### **_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
+#### **\_MatRowHarnessBase** extends [ComponentHarness](https://material.angular.io/cdk/test-harnesses/api#ComponentHarness)
 
 Abstract class used as base for harnesses that interact with a mat-datatable row.
 
@@ -1040,6 +1063,7 @@ A set of criteria that can be used to filter a list of row harness instances.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full list of proposed features (and known issues).
@@ -1047,13 +1071,15 @@ See the [open issues](https://github.com/BePo65/mat-datatable/issues) for a full
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS ON POSSIBLE EXTENSIONS -->
+
 ## Hints On Possible Extensions
 
-+ to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
+- to make footer turn on / off dynamically it is not sufficient to wrap the footer cell and row definitions in ng-container. Details see [stackoverflow](https://stackoverflow.com/questions/63644938/angular-material-mat-table-dynamic-footer-header-rowdef/63648914#63648914). The demo uses [ngx-rerender](https://www.npmjs.com/package/ngx-rerender).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -1068,15 +1094,18 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 ### Changelog
+
 The project uses 'standard-version' to create the changelog. To enable this system, commit messages are linted before commits are executed by git.
 
 To enable this system you have to run the following scripts in your local repository home directory:
+
 ```
 npx husky install
 npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **The structure of commit messages is**:
+
 ```
   <header>
   <BLANK LINE>
@@ -1086,30 +1115,33 @@ npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
 **header**
+
 ```
   <type>(<scope>): <short summary>
 ```
-  
+
 type and scope
-  - build: Changes that affect the build system or external dependencies (example scope: npm)
-  - docs: Documentation only changes
-  - feat: A new feature
-  - fix: A bug fix
-  - perf: A code change that improves performance
-  - refactor: A code change that neither fixes a bug nor adds a feature
-  - test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
+
+- build: Changes that affect the build system or external dependencies (example scope: npm)
+- docs: Documentation only changes
+- feat: A new feature
+- fix: A bug fix
+- perf: A code change that improves performance
+- refactor: A code change that neither fixes a bug nor adds a feature
+- test: Adding missing tests or correcting existing tests (example scopes: demo, lib, e2e)
 
 **footer**
+
 ```
   BREAKING CHANGE: ... (requires MAJOR in Semantic Versioning)
 ```
 
 For details of the commit messages format see [Contributing to Angular](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).
 
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Copyright © 2025 [Bernhard Pottler](https://github.com/BePo65).
@@ -1121,7 +1153,9 @@ This project uses the fonts '[Roboto](https://fonts.google.com/specimen/Roboto/a
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- HINTS -->
+
 ## Hints on dependencies
+
 As `eslint` V9 requires a fundamental change to the configuration files, the update will be done in a later version.
 
 As a consequence the package `eslint-plugin-cypress` cannot be updated to a version 4.x or 5.x (as this version has a peerDependency of eslint >= 9).

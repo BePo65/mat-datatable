@@ -3,13 +3,16 @@ import { AfterViewInit, Directive, ElementRef, Input, Renderer2 } from '@angular
 import { ColumnAlignmentType } from '../interfaces/datatable-column-definition.interface';
 
 @Directive({
-    selector: '[matHeaderAlignment]',
-    standalone: true
+  selector: '[matHeaderAlignment]',
+  standalone: true
 })
 export class MatDatatableHeaderAlignDirective implements AfterViewInit {
   @Input() matHeaderAlignment: ColumnAlignmentType | undefined;
 
-  constructor(private el: ElementRef<HTMLElement>, private renderer: Renderer2) { }
+  constructor(
+    private el: ElementRef<HTMLElement>,
+    private renderer: Renderer2
+  ) {}
 
   ngAfterViewInit(): void {
     const hostElem = this.el.nativeElement;
@@ -37,7 +40,11 @@ export class MatDatatableHeaderAlignDirective implements AfterViewInit {
           this.renderer.setStyle(children[indexOfHeaderContainerChild], 'justify-content', 'left');
           break;
         case 'center':
-          this.renderer.setStyle(children[indexOfHeaderContainerChild], 'justify-content', 'center');
+          this.renderer.setStyle(
+            children[indexOfHeaderContainerChild],
+            'justify-content',
+            'center'
+          );
           this.renderer.setStyle(children[indexOfHeaderContainerChild], 'margin-right', '-18px');
           break;
         case 'right':

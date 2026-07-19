@@ -48,7 +48,7 @@ type SwitchDataSource<T> = (dataSource: TableVirtualScrollDataSource<T>) => void
  * @returns combined selectors
  */
 const combineSelectors = (...pairs: string[][]): string =>
-  pairs.map(selectors => `${selectors.join(' ')}, ${selectors.join('')}`).join(', ');
+  pairs.map((selectors) => `${selectors.join(' ')}, ${selectors.join('')}`).join(', ');
 
 const stickyHeaderSelector = combineSelectors(
   ['.mat-mdc-header-row', '.mat-mdc-table-sticky'],
@@ -78,14 +78,16 @@ const defaults = {
 };
 
 @Directive({
-    // eslint-disable-next-line @angular-eslint/directive-selector
-    selector: 'cdk-virtual-scroll-viewport[tvsItemSize]',
-    exportAs: 'table-virtual-scroll',
-    standalone: true,
-    providers: [{
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: 'cdk-virtual-scroll-viewport[tvsItemSize]',
+  exportAs: 'table-virtual-scroll',
+  standalone: true,
+  providers: [
+    {
       provide: VIRTUAL_SCROLL_STRATEGY,
       useFactory: () => new FixedSizeTableVirtualScrollStrategy()
-    }]
+    }
+  ]
 })
 export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterContentInit, OnDestroy {
   @HostListener('window:keyup', ['$event'])
@@ -99,11 +101,15 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
         break;
       case 'PageDown':
         // show the 'old' last line as 'new' first line
-        this.scrollToIndex((this.firstVisibleIndexChanged$.value + this.visibleRowsChanged$.value - 1));
+        this.scrollToIndex(
+          this.firstVisibleIndexChanged$.value + this.visibleRowsChanged$.value - 1
+        );
         break;
       case 'PageUp':
         // show the 'old' first line as 'new' last line
-        this.scrollToIndex(Math.max(this.firstVisibleIndexChanged$.value - this.visibleRowsChanged$.value + 1, 0));
+        this.scrollToIndex(
+          Math.max(this.firstVisibleIndexChanged$.value - this.visibleRowsChanged$.value + 1, 0)
+        );
         break;
       case 'End':
         this.scrollToIndex(this.scrollStrategy.dataLength - 1);
@@ -186,7 +192,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
         // used to avoid "ExpressionChangedAfterItHasBeenCheckedError"
         delay(0)
       )
-      .subscribe(index =>
+      .subscribe((index) =>
         /**
          * In order to avoid hitting change detection for every scroll event, all of the events
          * emitted from the scrolledIndexChange stream will be run outside the Angular zone.
@@ -197,12 +203,8 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
       );
 
     virtualScrollStrategy.visibleRowsChange
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe(visibleRows =>
-        setTimeout(() => this.visibleRowsChanged$.next(visibleRows), 0)
-      );
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((visibleRows) => setTimeout(() => this.visibleRowsChanged$.next(visibleRows), 0));
   }
 
   ngOnDestroy() {
@@ -234,16 +236,13 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
     // Handle changes to sticky rows
     combineLatest([
       this.scrollStrategy.stickyChange,
-      this.resetStickyPositions
-        .pipe(
-          startWith(void 0),
-          delayWhen(() => this.getScheduleObservable()),
-          tap(() => this.stickyPositions = null)
-        )
-    ])
-      .pipe(
-        takeUntil(this.unsubscribe$)
+      this.resetStickyPositions.pipe(
+        startWith(void 0),
+        delayWhen(() => this.getScheduleObservable()),
+        tap(() => (this.stickyPositions = null))
       )
+    ])
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(([stickyOffset]) => {
         if (!this.stickyPositions) {
           this.initStickyPositions();
@@ -290,7 +289,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
    * @param index - index of entry to scroll to (zero based)
    */
   scrollToIndexCentered(index: number) {
-    const rowsBefore = Math.floor(Math.max(((this.visibleRowsChanged$.value + 1) / 2) - 1, 0));
+    const rowsBefore = Math.floor(Math.max((this.visibleRowsChanged$.value + 1) / 2 - 1, 0));
     this.scrollStrategy.scrollToIndex(index - rowsBefore, 'smooth');
   }
 
@@ -300,7 +299,9 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
    */
   private connectDataSource(dataSource: TableVirtualScrollDataSource<T>) {
     if (!isTVSDataSource(dataSource)) {
-      throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of the table');
+      throw new Error(
+        '[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of the table'
+      );
     }
     if (!isMatTable(this.table)) {
       throw new Error('[tvsItemSize] requires the table to be an angular material table');
@@ -310,18 +311,19 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
     this.dataSourceChanges$.next();
 
     // Emit new row range, when base data changes e.g. on sorting or filtering the data
-    dataSource.attachVirtualScroller(this.rangeToDisplay$)
+    dataSource
+      .attachVirtualScroller(this.rangeToDisplay$)
       .pipe(
         distinctUntilChanged(),
         takeUntil(this.dataSourceChanges$),
         takeUntil(this.unsubscribe$),
-        tap(sizes => {
+        tap((sizes) => {
           this.scrollStrategy.dataLength = sizes.totalFilteredElements;
           this.totalRowsChanged$.next(sizes.totalElements);
           this.filteredRowsChanged$.next(sizes.totalFilteredElements);
         }),
-        switchMap(sizes => this.scrollStrategy.renderedRangeStream
-          .pipe(
+        switchMap((sizes) =>
+          this.scrollStrategy.renderedRangeStream.pipe(
             // Reduce data array to range defined by virtual scroll viewport
             map(({ start, end }) => {
               const result = {
@@ -339,7 +341,7 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
           )
         )
       )
-      .subscribe(range => {
+      .subscribe((range) => {
         // Emit range of data requested by virtual scroll viewport
         this.ngZone.run(() => this.rangeToDisplay$.next(range));
       });
@@ -354,9 +356,8 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
       return;
     }
 
-    const isEnabled = (rowDefs: CanStick[]) => rowDefs
-      .map(def => def.sticky)
-      .reduce((prevState, state) => prevState && state, true);
+    const isEnabled = (rowDefs: CanStick[]) =>
+      rowDefs.map((def) => def.sticky).reduce((prevState, state) => prevState && state, true);
 
     this.stickyEnabled = {
       header: isEnabled(this.table['_headerRowDefs'] as CanStick[]),
@@ -365,11 +366,12 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
   }
 
   private setStickyHeader(offset: number) {
-    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
+    this.scrollStrategy.viewport.elementRef.nativeElement
+      .querySelectorAll(stickyHeaderSelector)
       .forEach((el: Element) => {
         const parent = el.parentElement;
         let baseOffset = 0;
-        if ((this.stickyPositions !== null) && (parent !== null) && this.stickyPositions.has(parent)) {
+        if (this.stickyPositions !== null && parent !== null && this.stickyPositions.has(parent)) {
           baseOffset = this.stickyPositions.get(parent) || 0;
         }
         (el as HTMLElement).style.top = `${baseOffset - offset}px`;
@@ -377,11 +379,12 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
   }
 
   private setStickyFooter(offset: number) {
-    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyFooterSelector)
+    this.scrollStrategy.viewport.elementRef.nativeElement
+      .querySelectorAll(stickyFooterSelector)
       .forEach((el: Element) => {
         const parent = el.parentElement;
         let baseOffset = 0;
-        if ((this.stickyPositions !== null) && (parent !== null) && this.stickyPositions.has(parent)) {
+        if (this.stickyPositions !== null && parent !== null && this.stickyPositions.has(parent)) {
           baseOffset = this.stickyPositions.get(parent) || 0;
         }
         (el as HTMLElement).style.bottom = `${-baseOffset + offset}px`;
@@ -393,20 +396,30 @@ export class TableItemSizeDirective<T = unknown> implements OnChanges, AfterCont
     this.setStickyEnabled();
 
     if (this.stickyEnabled.header) {
-      this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
+      this.scrollStrategy.viewport.elementRef.nativeElement
+        .querySelectorAll(stickyHeaderSelector)
         .forEach((el: Element) => {
           const parent = el.parentElement;
-          if ((this.stickyPositions !== null) && (parent !== null) && !this.stickyPositions.has(parent)) {
+          if (
+            this.stickyPositions !== null &&
+            parent !== null &&
+            !this.stickyPositions.has(parent)
+          ) {
             this.stickyPositions.set(parent, parent.offsetTop);
           }
         });
     }
 
     if (this.stickyEnabled.footer) {
-      this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyFooterSelector)
+      this.scrollStrategy.viewport.elementRef.nativeElement
+        .querySelectorAll(stickyFooterSelector)
         .forEach((el: Element) => {
           const parent = el.parentElement;
-          if ((this.stickyPositions !== null) && (parent !== null) && !this.stickyPositions.has(parent)) {
+          if (
+            this.stickyPositions !== null &&
+            parent !== null &&
+            !this.stickyPositions.has(parent)
+          ) {
             this.stickyPositions.set(parent, -parent.offsetTop);
           }
         });

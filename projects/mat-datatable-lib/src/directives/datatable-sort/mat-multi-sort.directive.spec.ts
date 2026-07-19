@@ -4,10 +4,7 @@ import { CollectionViewer } from '@angular/cdk/collections';
 import { CdkTableModule, DataSource } from '@angular/cdk/table';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MAT_SORT_DEFAULT_OPTIONS ,
-  Sort,
-  SortDirection
-} from '@angular/material/sort';
+import { MAT_SORT_DEFAULT_OPTIONS, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -26,18 +23,14 @@ import { createFakeEvent, createMouseEvent } from './testbed/fake-events/event-o
 import { wrappedErrorMessage } from './wrapped-error-message';
 
 describe('MatMultiSorDirective', () => {
-  describe('without default options', () =>  {
+  describe('without default options', () => {
     let fixture: ComponentFixture<SimpleMatMultiSortApp>;
     let component: SimpleMatMultiSortApp;
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          SimpleMatMultiSortApp
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [SimpleMatMultiSortApp],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -97,12 +90,12 @@ describe('MatMultiSorDirective', () => {
     });
 
     describe('checking correct arrow direction and view state for its various states', () => {
-      let expectedStates: Map<string, {viewState: string; arrowDirection: string}>;
+      let expectedStates: Map<string, { viewState: string; arrowDirection: string }>;
 
       beforeEach(() => {
         // Starting state for the view and directions - note that overrideStart is reversed to be
         // desc
-        expectedStates = new Map<string, {viewState: string; arrowDirection: string}>([
+        expectedStates = new Map<string, { viewState: string; arrowDirection: string }>([
           ['defaultA', { viewState: 'asc', arrowDirection: 'asc' }],
           ['defaultB', { viewState: 'asc', arrowDirection: 'asc' }],
           ['overrideStart', { viewState: 'desc', arrowDirection: 'desc' }],
@@ -147,7 +140,10 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when cycling through a default sort header', () => {
         // Sort the header to set it to the active start state
         component.sort('defaultA');
-        expectedStates.set('defaultA', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
+        expectedStates.set('defaultA', {
+          viewState: 'asc-to-active',
+          arrowDirection: 'active-asc'
+        });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sorting again will reverse its direction
@@ -180,13 +176,19 @@ describe('MatMultiSorDirective', () => {
       it('should be correct when adding sort for second header', () => {
         // Sort the first header to set up
         component.sort('defaultA');
-        expectedStates.set('defaultA', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
+        expectedStates.set('defaultA', {
+          viewState: 'asc-to-active',
+          arrowDirection: 'active-asc'
+        });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Sort the second header and verify that the first header did not change
         component.dispatchMouseEvent('defaultB', 'click');
         expectedStates.set('defaultA', { viewState: 'active', arrowDirection: 'active-asc' });
-        expectedStates.set('defaultB', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
+        expectedStates.set('defaultB', {
+          viewState: 'asc-to-active',
+          arrowDirection: 'active-asc'
+        });
         component.expectViewAndDirectionStates(expectedStates);
       });
 
@@ -202,24 +204,28 @@ describe('MatMultiSorDirective', () => {
 
       // eslint-disable-next-line jasmine/missing-expect
       it('should be correct when sorting programmatically', () => {
-        const newSort1: Sort[] = [
-          { active:'defaultB', direction:'desc' }
-        ];
+        const newSort1: Sort[] = [{ active: 'defaultB', direction: 'desc' }];
         component.matMultiSort.sortDefinitions = newSort1;
         fixture.detectChanges();
 
-        expectedStates.set('defaultB', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
+        expectedStates.set('defaultB', {
+          viewState: 'desc-to-active',
+          arrowDirection: 'active-desc'
+        });
         component.expectViewAndDirectionStates(expectedStates);
 
         // Change sort definition
         const newSort2: Sort[] = [
-          { active:'defaultA', direction:'desc' },
-          { active:'defaultB', direction:'asc' }
+          { active: 'defaultA', direction: 'desc' },
+          { active: 'defaultB', direction: 'asc' }
         ];
         component.matMultiSort.sortDefinitions = newSort2;
         fixture.detectChanges();
 
-        expectedStates.set('defaultA', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
+        expectedStates.set('defaultA', {
+          viewState: 'desc-to-active',
+          arrowDirection: 'active-desc'
+        });
         expectedStates.set('defaultB', { viewState: 'active', arrowDirection: 'active-asc' });
         component.expectViewAndDirectionStates(expectedStates);
       });
@@ -227,14 +233,20 @@ describe('MatMultiSorDirective', () => {
       // eslint-disable-next-line jasmine/missing-expect
       it('should be correct when setting sort programmatically twice', () => {
         const newSort: Sort[] = [
-          { active:'defaultA', direction:'desc' },
-          { active:'defaultB', direction:'asc' }
+          { active: 'defaultA', direction: 'desc' },
+          { active: 'defaultB', direction: 'asc' }
         ];
         component.matMultiSort.sortDefinitions = newSort;
         fixture.detectChanges();
 
-        expectedStates.set('defaultA', { viewState: 'desc-to-active', arrowDirection: 'active-desc' });
-        expectedStates.set('defaultB', { viewState: 'asc-to-active', arrowDirection: 'active-asc' });
+        expectedStates.set('defaultA', {
+          viewState: 'desc-to-active',
+          arrowDirection: 'active-desc'
+        });
+        expectedStates.set('defaultB', {
+          viewState: 'asc-to-active',
+          arrowDirection: 'active-asc'
+        });
         component.expectViewAndDirectionStates(expectedStates);
 
         // apply sorting definition again
@@ -253,8 +265,8 @@ describe('MatMultiSorDirective', () => {
         expect(startSortDefinitions.length).toBe(0);
 
         const newSort: Sort[] = [
-          { active:'defaultA', direction:'desc' },
-          { active:'defaultB', direction:'asc' }
+          { active: 'defaultA', direction: 'desc' },
+          { active: 'defaultB', direction: 'asc' }
         ];
         component.matMultiSort.sortDefinitions = newSort;
         fixture.detectChanges();
@@ -290,7 +302,9 @@ describe('MatMultiSorDirective', () => {
     });
 
     it('should allow for the cycling the sort direction to be disabled per column', () => {
-      const container = (fixture.nativeElement as HTMLElement).querySelector('#defaultA .mat-sort-header-container');
+      const container = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultA .mat-sort-header-container'
+      );
 
       component.sort('defaultA');
 
@@ -313,7 +327,9 @@ describe('MatMultiSorDirective', () => {
     });
 
     it('should allow for the cycling the sort direction to be disabled for all columns', () => {
-      const container = (fixture.nativeElement as HTMLElement).querySelector('#defaultA .mat-sort-header-container');
+      const container = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultA .mat-sort-header-container'
+      );
 
       component.sort('defaultA');
 
@@ -361,11 +377,10 @@ describe('MatMultiSorDirective', () => {
     });
 
     it('should throw an error if an MatMultiSortable is not contained within an MatMultiSort directive', () => {
-        expect(() =>
-          TestBed.createComponent(MatMultiSortHeaderMissingMatMultiSortApp).detectChanges()
-        ).toThrowError(wrappedErrorMessage(getMultiSortHeaderNotContainedWithinMultiSortError()));
-      }
-    );
+      expect(() =>
+        TestBed.createComponent(MatMultiSortHeaderMissingMatMultiSortApp).detectChanges()
+      ).toThrowError(wrappedErrorMessage(getMultiSortHeaderNotContainedWithinMultiSortError()));
+    });
 
     it('should throw an error if two MatSortables have the same id', () => {
       expect(() =>
@@ -396,7 +411,9 @@ describe('MatMultiSorDirective', () => {
 
     it('should toggle indicator hint on button focus/blur and hide on click', () => {
       const header = fixture.componentInstance.defaultA;
-      const container = (fixture.nativeElement as HTMLElement).querySelector('#defaultA .mat-sort-header-container');
+      const container = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultA .mat-sort-header-container'
+      );
       const focusEvent = createFakeEvent('focus');
       const blurEvent = createFakeEvent('blur');
 
@@ -497,16 +514,17 @@ describe('MatMultiSorDirective', () => {
     }));
 
     it('should have a focus indicator', () => {
-      const headerNativeElement = fixture.debugElement.query(
-        By.directive(MatMultiSortHeader)
-      ).nativeElement as HTMLElement;
+      const headerNativeElement = fixture.debugElement.query(By.directive(MatMultiSortHeader))
+        .nativeElement as HTMLElement;
       const container = headerNativeElement.querySelector('.mat-sort-header-container');
 
       expect(container?.classList.contains('mat-focus-indicator')).toBe(true);
     });
 
     it('should add a default aria description to sort buttons', () => {
-      const sortButton = (fixture.nativeElement as HTMLElement).querySelector('.mat-sort-header-container');
+      const sortButton = (fixture.nativeElement as HTMLElement).querySelector(
+        '.mat-sort-header-container'
+      );
       const descriptionId = sortButton?.getAttribute('aria-describedby') || '';
 
       expect(descriptionId).toBeDefined();
@@ -538,30 +556,38 @@ describe('MatMultiSorDirective', () => {
 
     it('should render arrows after sort header by default', () => {
       // create component with 'arrowPosition = undefined'
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const containerA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-sort-header-container');
-      const containerB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-sort-header-container');
+      const containerA = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultA .mat-sort-header-container');
+      const containerB = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultB .mat-sort-header-container');
 
       expect(containerA?.classList.contains('mat-sort-header-position-before')).toBe(false);
       expect(containerB?.classList.contains('mat-sort-header-position-before')).toBe(false);
     });
 
     it('should render arrows before if appropriate parameter passed', () => {
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
       const matSortWithArrowPositionComponent = matSortWithArrowPositionFixture.componentInstance;
       matSortWithArrowPositionComponent.arrowPosition = 'before';
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const containerA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-sort-header-container');
-      const containerB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-sort-header-container');
+      const containerA = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultA .mat-sort-header-container');
+      const containerB = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultB .mat-sort-header-container');
 
       expect(containerA?.classList.contains('mat-sort-header-position-before')).toBe(true);
       expect(containerB?.classList.contains('mat-sort-header-position-before')).toBe(true);
@@ -569,15 +595,19 @@ describe('MatMultiSorDirective', () => {
 
     it('should render arrows in proper position based on arrowPosition parameter', () => {
       // create component with 'arrowPosition = undefined'
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
       const matSortWithArrowPositionComponent = matSortWithArrowPositionFixture.componentInstance;
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const containerA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-sort-header-container');
-      const containerB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-sort-header-container');
+      const containerA = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultA .mat-sort-header-container');
+      const containerB = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultB .mat-sort-header-container');
 
       expect(containerA?.classList.contains('mat-sort-header-position-before')).toBe(false);
       expect(containerB?.classList.contains('mat-sort-header-position-before')).toBe(false);
@@ -592,30 +622,38 @@ describe('MatMultiSorDirective', () => {
 
     it('should render sorting position badge after sort header by default', () => {
       // create component with 'arrowPosition = undefined'
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const badgeA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-multi-sort-badge');
-      const badgeB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-multi-sort-badge');
+      const badgeA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement).querySelector(
+        '#defaultA .mat-multi-sort-badge'
+      );
+      const badgeB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement).querySelector(
+        '#defaultB .mat-multi-sort-badge'
+      );
 
       expect(badgeA?.classList.contains('mat-multi-sort-badge-after')).toBeTruthy();
       expect(badgeB?.classList.contains('mat-multi-sort-badge-after')).toBeTruthy();
     });
 
     it('should render sorting position badge before if appropriate parameter passed', () => {
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
       const matSortWithArrowPositionComponent = matSortWithArrowPositionFixture.componentInstance;
       matSortWithArrowPositionComponent.arrowPosition = 'before';
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const containerA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-multi-sort-badge');
-      const containerB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-multi-sort-badge');
+      const containerA = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultA .mat-multi-sort-badge');
+      const containerB = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultB .mat-multi-sort-badge');
 
       expect(containerA?.classList.contains('mat-multi-sort-badge-before')).toBeTruthy();
       expect(containerB?.classList.contains('mat-multi-sort-badge-before')).toBeTruthy();
@@ -623,16 +661,20 @@ describe('MatMultiSorDirective', () => {
 
     it('should render sorting position badge in proper position based on arrowPosition parameter', () => {
       // create component with 'arrowPosition = undefined'
-      const matSortWithArrowPositionFixture = TestBed.createComponent(MatMultiSortWithArrowPositionApp);
+      const matSortWithArrowPositionFixture = TestBed.createComponent(
+        MatMultiSortWithArrowPositionApp
+      );
       const matSortWithArrowPositionComponent = matSortWithArrowPositionFixture.componentInstance;
       matSortWithArrowPositionComponent.arrowPosition = 'after';
 
       matSortWithArrowPositionFixture.detectChanges();
 
-      const containerA = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-multi-sort-badge');
-      const containerB = (matSortWithArrowPositionFixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-multi-sort-badge');
+      const containerA = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultA .mat-multi-sort-badge');
+      const containerB = (
+        matSortWithArrowPositionFixture.nativeElement as HTMLElement
+      ).querySelector('#defaultB .mat-multi-sort-badge');
 
       expect(containerA?.classList.contains('mat-multi-sort-badge-after')).toBeTruthy();
       expect(containerB?.classList.contains('mat-multi-sort-badge-after')).toBeTruthy();
@@ -646,16 +688,18 @@ describe('MatMultiSorDirective', () => {
     });
 
     it('should render sorting position badge in proper position based on arrow direction', () => {
-      const badgeB = (fixture.nativeElement as HTMLElement).querySelector('#defaultB .mat-multi-sort-badge');
+      const badgeB = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultB .mat-multi-sort-badge'
+      );
 
-        // Sort the header to set it to the ascending state
-      component.matMultiSort.sortDefinitions = [{ active:'defaultB', direction:'asc' }];
+      // Sort the header to set it to the ascending state
+      component.matMultiSort.sortDefinitions = [{ active: 'defaultB', direction: 'asc' }];
       fixture.detectChanges();
 
       expect(component.defaultB._arrowDirection).toBe('asc');
       expect(badgeB?.classList.contains('mat-multi-sort-badge-below')).toBeTruthy();
 
-      component.matMultiSort.sortDefinitions = [{ active:'defaultB', direction:'desc' }];
+      component.matMultiSort.sortDefinitions = [{ active: 'defaultB', direction: 'desc' }];
       fixture.detectChanges();
 
       expect(component.defaultB._arrowDirection).toBe('desc');
@@ -669,9 +713,7 @@ describe('MatMultiSorDirective', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          MatMultiSortWithoutExplicitInputsApp
-        ],
+        imports: [MatMultiSortWithoutExplicitInputsApp],
         providers: [
           {
             provide: MAT_SORT_DEFAULT_OPTIONS,
@@ -706,9 +748,7 @@ describe('MatMultiSorDirective', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          MatSortWithoutInputsApp
-        ],
+        imports: [MatSortWithoutInputsApp],
         providers: [
           {
             provide: MAT_SORT_DEFAULT_OPTIONS,
@@ -728,10 +768,12 @@ describe('MatMultiSorDirective', () => {
     });
 
     it('should render arrows in proper position', () => {
-      const containerA = (fixture.nativeElement as HTMLElement)
-        .querySelector('#defaultA .mat-sort-header-container');
-      const containerB = (fixture.nativeElement as HTMLElement)
-        .querySelector('#defaultB .mat-sort-header-container');
+      const containerA = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultA .mat-sort-header-container'
+      );
+      const containerB = (fixture.nativeElement as HTMLElement).querySelector(
+        '#defaultB .mat-sort-header-container'
+      );
 
       expect(containerA?.classList.contains('mat-sort-header-position-before')).toBe(true);
       expect(containerB?.classList.contains('mat-sort-header-position-before')).toBe(true);
@@ -759,11 +801,11 @@ function testSingleColumnSortDirectionSequence(
   component.matMultiSort.sortDefinitions = [];
 
   // Run through the sequence to confirm the order
-  const actualSequence = expectedSequence.map(entry => {
+  const actualSequence = expectedSequence.map((entry) => {
     component.sort(id);
 
     // Check that the sort event's active sort is consistent with the MatSort
-    if(entry.length !== 0) {
+    if (entry.length !== 0) {
       expect(component.matMultiSort.sortDefinitions.length).toBe(1);
       expect(component.matMultiSort.sortDefinitions[0].active).toBe(id);
       expect(component.matMultiSort.sortDefinitions[0].direction).toBe(entry);
@@ -771,7 +813,9 @@ function testSingleColumnSortDirectionSequence(
       expect(component.latestSortEvent[0].active).toBe(id);
 
       // Check that the sort event's direction is consistent with the MatSort
-      expect(component.matMultiSort.sortDefinitions[0].direction).toBe(component.latestSortEvent[0].direction);
+      expect(component.matMultiSort.sortDefinitions[0].direction).toBe(
+        component.latestSortEvent[0].direction
+      );
     } else {
       expect(component.matMultiSort.sortDefinitions.length).toBe(0);
       expect(component.latestSortEvent.length).toBe(0);
@@ -790,43 +834,41 @@ type SimpleMatSortAppColumnIds = 'defaultA' | 'defaultB' | 'overrideStart' | 'ov
 
 @Component({
   template: `
-<div matMultiSort
-     [matSortActive]="active"
-     [matSortDisabled]="disableAllSort"
-     [matSortStart]="start"
-     [matSortDirection]="direction"
-     [matSortDisableClear]="disableClear"
-     (matMultiSortChange)="latestSortEvent = $event">
-  <div id="defaultA"
-       #defaultA
-       mat-multi-sort-header="defaultA"
-       [disabled]="disabledColumnSort">
-    A
-  </div>
-  <div id="defaultB"
-       #defaultB
-       mat-multi-sort-header="defaultB"
-       [sortActionDescription]="secondColumnDescription">
-    B
-  </div>
-  <div id="overrideStart"
-       #overrideStart
-       mat-multi-sort-header="overrideStart" start="desc">
-    D
-  </div>
-  <div id="overrideDisableClear"
-       #overrideDisableClear
-       mat-multi-sort-header="overrideDisableClear"
-       disableClear>
-    E
-  </div>
-</div>
+    <div
+      matMultiSort
+      [matSortActive]="active"
+      [matSortDisabled]="disableAllSort"
+      [matSortStart]="start"
+      [matSortDirection]="direction"
+      [matSortDisableClear]="disableClear"
+      (matMultiSortChange)="latestSortEvent = $event"
+    >
+      <div id="defaultA" #defaultA mat-multi-sort-header="defaultA" [disabled]="disabledColumnSort">
+        A
+      </div>
+      <div
+        id="defaultB"
+        #defaultB
+        mat-multi-sort-header="defaultB"
+        [sortActionDescription]="secondColumnDescription"
+      >
+        B
+      </div>
+      <div id="overrideStart" #overrideStart mat-multi-sort-header="overrideStart" start="desc">
+        D
+      </div>
+      <div
+        id="overrideDisableClear"
+        #overrideDisableClear
+        mat-multi-sort-header="overrideDisableClear"
+        disableClear
+      >
+        E
+      </div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class SimpleMatMultiSortApp {
   latestSortEvent!: Sort[];
@@ -853,7 +895,7 @@ class SimpleMatMultiSortApp {
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
     const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
-    if ((sortElement !== undefined) && (sortElement !== null)) {
+    if (sortElement !== undefined && sortElement !== null) {
       dispatchMouseEvent(sortElement, event);
     }
   }
@@ -865,7 +907,7 @@ class SimpleMatMultiSortApp {
    * @param viewStates - Map with ViewStates to be tested
    */
   expectViewAndDirectionStates(
-    viewStates: Map<string, {viewState: string; arrowDirection: string}>
+    viewStates: Map<string, { viewState: string; arrowDirection: string }>
   ) {
     const sortHeaders = new Map([
       ['defaultA', this.defaultA],
@@ -893,32 +935,34 @@ class FakeDataSource extends DataSource<any> {
 
 @Component({
   template: `
-<cdk-table [dataSource]="dataSource" matMultiSort>
-  <ng-container cdkColumnDef="column_a">
-    <cdk-header-cell *cdkHeaderCellDef #sortHeaderA mat-multi-sort-header> Column A </cdk-header-cell>
-    <cdk-cell *cdkCellDef="let row"> {{row.a}} </cdk-cell>
-  </ng-container>
+    <cdk-table [dataSource]="dataSource" matMultiSort>
+      <ng-container cdkColumnDef="column_a">
+        <cdk-header-cell *cdkHeaderCellDef #sortHeaderA mat-multi-sort-header>
+          Column A
+        </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row"> {{ row.a }} </cdk-cell>
+      </ng-container>
 
-  <ng-container cdkColumnDef="column_b">
-    <cdk-header-cell *cdkHeaderCellDef #sortHeaderB mat-multi-sort-header> Column B </cdk-header-cell>
-    <cdk-cell *cdkCellDef="let row"> {{row.b}} </cdk-cell>
-  </ng-container>
+      <ng-container cdkColumnDef="column_b">
+        <cdk-header-cell *cdkHeaderCellDef #sortHeaderB mat-multi-sort-header>
+          Column B
+        </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row"> {{ row.b }} </cdk-cell>
+      </ng-container>
 
-  <ng-container cdkColumnDef="column_c">
-    <cdk-header-cell *cdkHeaderCellDef #sortHeaderC mat-multi-sort-header> Column C </cdk-header-cell>
-    <cdk-cell *cdkCellDef="let row"> {{row.c}} </cdk-cell>
-  </ng-container>
+      <ng-container cdkColumnDef="column_c">
+        <cdk-header-cell *cdkHeaderCellDef #sortHeaderC mat-multi-sort-header>
+          Column C
+        </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row"> {{ row.c }} </cdk-cell>
+      </ng-container>
 
-  <cdk-header-row *cdkHeaderRowDef="columnsToRender"></cdk-header-row>
-  <cdk-row *cdkRowDef="let row; columns: columnsToRender"></cdk-row>
-</cdk-table>
+      <cdk-header-row *cdkHeaderRowDef="columnsToRender"></cdk-header-row>
+      <cdk-row *cdkRowDef="let row; columns: columnsToRender"></cdk-row>
+    </cdk-table>
   `,
   standalone: true,
-  imports: [
-    CdkTableModule,
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [CdkTableModule, MatMultiSort, MatMultiSortHeader]
 })
 class CdkTableMatMultiSortApp {
   @ViewChild(MatMultiSort) matMultiSort: MatMultiSort | undefined;
@@ -929,32 +973,34 @@ class CdkTableMatMultiSortApp {
 
 @Component({
   template: `
-<mat-table [dataSource]="dataSource" matMultiSort>
-  <ng-container matColumnDef="column_a">
-    <mat-header-cell *matHeaderCellDef #sortHeaderA mat-multi-sort-header> Column A </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.a}} </mat-cell>
-  </ng-container>
+    <mat-table [dataSource]="dataSource" matMultiSort>
+      <ng-container matColumnDef="column_a">
+        <mat-header-cell *matHeaderCellDef #sortHeaderA mat-multi-sort-header>
+          Column A
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.a }} </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="column_b">
-    <mat-header-cell *matHeaderCellDef #sortHeaderB mat-multi-sort-header> Column B </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.b}} </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="column_b">
+        <mat-header-cell *matHeaderCellDef #sortHeaderB mat-multi-sort-header>
+          Column B
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.b }} </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="column_c">
-    <mat-header-cell *matHeaderCellDef #sortHeaderC mat-multi-sort-header> Column C </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.c}} </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="column_c">
+        <mat-header-cell *matHeaderCellDef #sortHeaderC mat-multi-sort-header>
+          Column C
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.c }} </mat-cell>
+      </ng-container>
 
-  <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: columnsToRender"></mat-row>
-</mat-table>
+      <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnsToRender"></mat-row>
+    </mat-table>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader,
-    MatTableModule
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader, MatTableModule]
 })
 class MatTableMatMultiSortApp {
   @ViewChild(MatMultiSort) matMultiSort: MatMultiSort | undefined;
@@ -966,24 +1012,19 @@ class MatTableMatMultiSortApp {
 @Component({
   template: '<div mat-multi-sort-header="a"> A </div>',
   standalone: true,
-  imports: [
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSortHeader]
 })
 class MatMultiSortHeaderMissingMatMultiSortApp {}
 
 @Component({
   template: `
-<div matMultiSort>
-  <div mat-multi-sort-header="duplicateId"> A </div>
-  <div mat-multi-sort-header="duplicateId"> B </div>
-</div>
+    <div matMultiSort>
+      <div mat-multi-sort-header="duplicateId">A</div>
+      <div mat-multi-sort-header="duplicateId">B</div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatMultiSortDuplicateMatSortableIdsApp {
   @ViewChild(MatMultiSort) matMultiSort!: MatMultiSort;
@@ -991,51 +1032,41 @@ class MatMultiSortDuplicateMatSortableIdsApp {
 
 @Component({
   template: `
-<div matMultiSort>
-  <div mat-multi-sort-header> A </div>
-</div>
+    <div matMultiSort>
+      <div mat-multi-sort-header>A</div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatSortableMissingIdApp {}
 
 @Component({
   template: `
-<div matMultiSort matSortDirection="ascending">
-  <div mat-multi-sort-header="a"> A </div>
-</div>
+    <div matMultiSort matSortDirection="ascending">
+      <div mat-multi-sort-header="a">A</div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatMultiSortableInvalidDirectionApp {}
 
 @Component({
   template: `
-<div matMultiSort
-     [matSortActive]="active"
-     [matSortStart]="start"
-     (matMultiSortChange)="latestSortEvent = $event">
-  <div id="defaultA" #defaultA mat-multi-sort-header="defaultA">
-    A
-  </div>
-</div>
+    <div
+      matMultiSort
+      [matSortActive]="active"
+      [matSortStart]="start"
+      (matMultiSortChange)="latestSortEvent = $event"
+    >
+      <div id="defaultA" #defaultA mat-multi-sort-header="defaultA">A</div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatMultiSortWithoutExplicitInputsApp {
-
   latestSortEvent!: Sort[];
 
   active!: string;
@@ -1052,7 +1083,7 @@ class MatMultiSortWithoutExplicitInputsApp {
 
   dispatchMouseEvent(id: SimpleMatSortAppColumnIds, event: string) {
     const sortElement = this.elementRef.nativeElement.querySelector(`#${id}`);
-    if ((sortElement !== undefined) && (sortElement !== null)) {
+    if (sortElement !== undefined && sortElement !== null) {
       dispatchMouseEvent(sortElement, event);
     }
   }
@@ -1060,20 +1091,17 @@ class MatMultiSortWithoutExplicitInputsApp {
 
 @Component({
   template: `
-<div matMultiSort>
-  <div id="defaultA" #defaultA mat-multi-sort-header="defaultA" [arrowPosition]="arrowPosition">
-    A
-  </div>
-  <div id="defaultB" #defaultB mat-multi-sort-header="defaultB" [arrowPosition]="arrowPosition">
-    B
-  </div>
-</div>
+    <div matMultiSort>
+      <div id="defaultA" #defaultA mat-multi-sort-header="defaultA" [arrowPosition]="arrowPosition">
+        A
+      </div>
+      <div id="defaultB" #defaultB mat-multi-sort-header="defaultB" [arrowPosition]="arrowPosition">
+        B
+      </div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatMultiSortWithArrowPositionApp {
   // component with default value of 'arrowPosition' = undefined
@@ -1085,20 +1113,13 @@ class MatMultiSortWithArrowPositionApp {
 
 @Component({
   template: `
-<div matMultiSort>
-  <div id="defaultA" #defaultA mat-multi-sort-header="defaultA">
-    A
-  </div>
-  <div id="defaultB" #defaultB mat-multi-sort-header="defaultB">
-    B
-  </div>
-</div>
+    <div matMultiSort>
+      <div id="defaultA" #defaultA mat-multi-sort-header="defaultA">A</div>
+      <div id="defaultB" #defaultB mat-multi-sort-header="defaultB">B</div>
+    </div>
   `,
   standalone: true,
-  imports: [
-    MatMultiSort,
-    MatMultiSortHeader
-  ]
+  imports: [MatMultiSort, MatMultiSortHeader]
 })
 class MatSortWithoutInputsApp {
   @ViewChild(MatMultiSort) matMultiSort!: MatMultiSort;

@@ -57,9 +57,10 @@ export abstract class _MatRowHarnessBase<
       const sourceValue = value[key];
       const targetValueOrPattern = pattern[key];
 
-      result = typeof targetValueOrPattern === 'string' ?
-        sourceValue === targetValueOrPattern :
-        targetValueOrPattern.test(sourceValue);
+      result =
+        typeof targetValueOrPattern === 'string'
+          ? sourceValue === targetValueOrPattern
+          : targetValueOrPattern.test(sourceValue);
 
       if (!result) {
         break;
@@ -84,7 +85,7 @@ export abstract class _MatRowHarnessBase<
    */
   async getCellTextByIndex(filter: CellFilterType = {} as CellFilterType): Promise<string[]> {
     const cells = await this.getCells(filter);
-    return parallel(() => cells.map(cell => cell.getText()));
+    return parallel(() => cells.map((cell) => cell.getText()));
   }
 
   /**
@@ -92,11 +93,13 @@ export abstract class _MatRowHarnessBase<
    * @param filter - filter to select the sut (default; all cells).
    * @returns an object for the selected cells with the columns as properties.
    */
-  async getCellTextByColumnName(filter: CellFilterType = {} as CellFilterType): Promise<MatRowHarnessColumnsText> {
+  async getCellTextByColumnName(
+    filter: CellFilterType = {} as CellFilterType
+  ): Promise<MatRowHarnessColumnsText> {
     const output: MatRowHarnessColumnsText = {};
     const cells = await this.getCells(filter);
     const cellsData = await parallel(() =>
-      cells.map(cell => {
+      cells.map((cell) => {
         return parallel(() => [cell.getColumnName(), cell.getText()]);
       })
     );
@@ -124,14 +127,16 @@ export class MatRowHarness extends _MatRowHarnessBase<
     this: ComponentHarnessConstructor<T>,
     options: RowHarnessFilters = {}
   ): HarnessPredicate<T> {
-    return new HarnessPredicate(this, options)
-    // Filter for content of row cells defined in an object with
-    // `  property name = column name
-    // `  property value = cell value or RegExp to be filtered for
-    .addOption('rowCellsContent', options.rowCellsContent, (harness, cellsContent) =>
-    _MatRowHarnessBase.rowCellsContentMatch(harness.getCellTextByColumnName(), cellsContent)
-  );
-}
+    return (
+      new HarnessPredicate(this, options)
+        // Filter for content of row cells defined in an object with
+        // `  property name = column name
+        // `  property value = cell value or RegExp to be filtered for
+        .addOption('rowCellsContent', options.rowCellsContent, (harness, cellsContent) =>
+          _MatRowHarnessBase.rowCellsContentMatch(harness.getCellTextByColumnName(), cellsContent)
+        )
+    );
+  }
 
   /**
    * Clicks the row.

@@ -2,7 +2,7 @@ name: publish-demo-to-github-pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -20,8 +20,8 @@ jobs:
       - name: Use Node v24
         uses: actions/setup-node@v6.4.0
         with:
-          node-version: "24.x"
-          cache: "npm"
+          node-version: '24.x'
+          cache: 'npm'
 
       - name: npm ci and npm run build files for ghpages
         run: |

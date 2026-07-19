@@ -27,7 +27,9 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
    * @param options - Options for narrowing the search.
    * @returns predicate for identifying the sut
    */
-  static with(options: MultiSortHeaderHarnessFilters = {}): HarnessPredicate<MatMultiSortHeaderHarness> {
+  static with(
+    options: MultiSortHeaderHarnessFilters = {}
+  ): HarnessPredicate<MatMultiSortHeaderHarness> {
     return new HarnessPredicate(MatMultiSortHeaderHarness, options)
       .addOption('label', options.label, (harness, label) =>
         HarnessPredicate.stringMatches(harness.getLabel(), label)
@@ -76,11 +78,11 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
   async getSortPosition(): Promise<number> {
     let result = Number.NaN;
     try {
-      const position = await ((await this._badgeContent()).text());
+      const position = await (await this._badgeContent()).text();
       if (position.length !== 0) {
         result = Number(position);
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       result = Number.NaN;
     }
@@ -174,7 +176,7 @@ export class MatMultiSortHeaderHarness extends ComponentHarness {
  *   the value is expected to be `null`.
  * @returns Whether the value matches the pattern.
  */
-const numberMatches= async (
+const numberMatches = async (
   value: number | null | Promise<number | null>,
   pattern: number | null
 ): Promise<boolean> => {

@@ -36,9 +36,7 @@ import {
         style({ transform: 'translateY(100%)' }),
         animate('500ms ease-out', style({ transform: 'translateY(0)' }))
       ]),
-      transition(':leave', [
-        animate('500ms ease-out', style({ transform: 'translateY(100%)' }))
-      ])
+      transition(':leave', [animate('500ms ease-out', style({ transform: 'translateY(100%)' }))])
     ])
   ],
   standalone: true,
@@ -95,7 +93,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     {
       columnId: 'userId',
       header: 'ID',
-      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.userId?.toString() }; },
+      cell: (row: DemoTableItem) => {
+        return { type: 'string', text: row?.userId?.toString() };
+      },
       headerAlignment: 'right',
       cellAlignment: 'right',
       width: '5em',
@@ -108,7 +108,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       resizable: true,
       header: 'First Name',
       headerAlignment: 'left',
-      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.firstName }; },
+      cell: (row: DemoTableItem) => {
+        return { type: 'string', text: row?.firstName };
+      },
       cellAlignment: 'left',
       width: '10em'
     },
@@ -117,7 +119,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       sortable: true,
       header: 'Last Name',
       headerAlignment: 'right',
-      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.lastName }; },
+      cell: (row: DemoTableItem) => {
+        return { type: 'string', text: row?.lastName };
+      },
       cellAlignment: 'right',
       width: '10em',
       footer: 'Filter: -',
@@ -127,7 +131,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       columnId: 'email',
       resizable: true,
       header: 'EMail',
-      cell: (row: DemoTableItem) => { return { type: 'mailtoLink', text: row?.email, url: `mailto:${row?.email}` }; },
+      cell: (row: DemoTableItem) => {
+        return { type: 'mailtoLink', text: row?.email, url: `mailto:${row?.email}` };
+      },
       width: '20em',
       tooltip: (row: DemoTableItem) => row?.email
     },
@@ -137,14 +143,21 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       resizable: false,
       header: 'Birthday',
       headerAlignment: 'center',
-      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' }) }; },
+      cell: (row: DemoTableItem) => {
+        return {
+          type: 'string',
+          text: row?.birthday?.toLocaleDateString(this.currentLocale, { dateStyle: 'medium' })
+        };
+      },
       cellAlignment: 'center',
       width: '8em'
     },
     {
       columnId: 'description',
       header: 'Description',
-      cell: (row: DemoTableItem) => { return { type: 'string', text: row?.description }; },
+      cell: (row: DemoTableItem) => {
+        return { type: 'string', text: row?.description };
+      },
       tooltip: (row: DemoTableItem) => row?.description,
       showAsSingleLine: true,
       footer: 'First visible row: -',
@@ -160,7 +173,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   ];
   protected withFooter = true;
-  protected displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'email', 'birthday', 'remoteAccess', 'description'];
+  protected displayedColumns: string[] = [
+    'userId',
+    'firstName',
+    'lastName',
+    'email',
+    'birthday',
+    'remoteAccess',
+    'description'
+  ];
   protected currentSorts: MatSortDefinition[] = [];
   protected readonly currentSorts$ = new BehaviorSubject<MatSortDefinition[]>([]);
   protected currentSelectionMode: RowSelectionType = 'none';
@@ -180,46 +201,54 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private formattedDatastoreLengths = 'filtered {0} / total {1}';
   private formattedFirstVisibleRow = 'First visible row: {0}';
 
-  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
     this.currentLocale = new Intl.NumberFormat().resolvedOptions().locale;
 
     // Register svg icons
     this.iconRegistry
       .addSvgIconLiteral('show_button_pane', this.sanitizer.bypassSecurityTrustHtml(ARROW_UPWARD))
-      .addSvgIconLiteral('hide_button_pane', this.sanitizer.bypassSecurityTrustHtml(ARROW_DOWNWARD));
+      .addSvgIconLiteral(
+        'hide_button_pane',
+        this.sanitizer.bypassSecurityTrustHtml(ARROW_DOWNWARD)
+      );
 
     this.headersTextFromColumnDefinitions();
   }
 
   ngAfterViewInit(): void {
     this.table.totalRowsChanged
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        delay(0)
-      )
-      .subscribe(numberOfRows => {
+      .pipe(takeUntil(this.unsubscribe$), delay(0))
+      .subscribe((numberOfRows) => {
         this.numberOfRows = numberOfRows.toString();
-        this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+        this.columnDefinitions[0].footer = this.formatString(
+          this.formattedDatastoreLengths,
+          this.numberOfFilteredRows.toString(),
+          this.numberOfRows.toString()
+        );
       });
 
     this.table.filteredRowsChanged
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        delay(0)
-      )
-      .subscribe(numberOfRows => {
+      .pipe(takeUntil(this.unsubscribe$), delay(0))
+      .subscribe((numberOfRows) => {
         this.numberOfFilteredRows = numberOfRows.toString();
-        this.columnDefinitions[0].footer = this.formatString(this.formattedDatastoreLengths, this.numberOfFilteredRows.toString(), this.numberOfRows.toString());
+        this.columnDefinitions[0].footer = this.formatString(
+          this.formattedDatastoreLengths,
+          this.numberOfFilteredRows.toString(),
+          this.numberOfRows.toString()
+        );
       });
 
     this.table.firstVisibleIndexChanged
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        delay(0)
-      )
-      .subscribe(firstVisibleRow => {
+      .pipe(takeUntil(this.unsubscribe$), delay(0))
+      .subscribe((firstVisibleRow) => {
         this.firstVisibleRow = firstVisibleRow.toString();
-        this.columnDefinitions[5].footer = this.formatString(this.formattedFirstVisibleRow, this.firstVisibleRow.toString());
+        this.columnDefinitions[5].footer = this.formatString(
+          this.formattedFirstVisibleRow,
+          this.firstVisibleRow.toString()
+        );
       });
   }
 
@@ -244,10 +273,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   protected onRowSelectionChange($event: DemoTableItem[]) {
     let result = '-';
     if ($event.length > 0) {
-      result = $event
-        .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId)
-        .map(row => row?.userId)
-        .join('; ') || '-';
+      result =
+        $event
+          .sort((a: DemoTableItem, b: DemoTableItem) => a.userId - b.userId)
+          .map((row) => row?.userId)
+          .join('; ') || '-';
     }
     this.selectedRowsAsString = result;
   }
@@ -273,15 +303,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * @param columnId - ID of column to be removed from sorting
    */
   protected removeSort(columnId: string): void {
-    const newSort = this.currentSorts.filter(sort => sort.columnId !== columnId);
+    const newSort = this.currentSorts.filter((sort) => sort.columnId !== columnId);
     this.table.sortDefinitions = newSort;
   }
 
   // Demo to show sorting by code
   protected onSortId() {
-    const newSort: MatSortDefinition[] = [
-      { columnId: 'userId', direction: 'asc' }
-    ];
+    const newSort: MatSortDefinition[] = [{ columnId: 'userId', direction: 'asc' }];
     this.table.sortDefinitions = newSort;
   }
   protected onSortLastNameFirstNameBirthday() {
@@ -307,15 +335,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayAsc() {
-    const newSort: MatSortDefinition[] = [
-      { columnId: 'birthday', direction: 'asc' }
-    ];
+    const newSort: MatSortDefinition[] = [{ columnId: 'birthday', direction: 'asc' }];
     this.table.sortDefinitions = newSort;
   }
   protected onSortBirthdayDesc() {
-    const newSort: MatSortDefinition[] = [
-      { columnId: 'birthday', direction: 'desc' }
-    ];
+    const newSort: MatSortDefinition[] = [{ columnId: 'birthday', direction: 'desc' }];
     this.table.sortDefinitions = newSort;
   }
   protected onClearSort() {
@@ -344,7 +368,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   // Demo of scrollToRów
   protected onScrollIntoView(rowId?: number) {
     // row.userId or rowId are used, as 'trackBy' uses 'userId' as reference
-    const rowToScrollTo = this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+    const rowToScrollTo = this.dataStore.getUnsortedData().find((row) => row.userId === rowId);
     if (rowToScrollTo) {
       this.table.scrollToRow(rowToScrollTo);
     }
@@ -352,13 +376,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // Demo to show filtering by code
   protected onFilterByValue() {
-    const currentFilter = [{ fieldName: 'lastName', value: 'Abbott' }] as FieldFilterDefinition<DemoTableItem>[];
+    const currentFilter = [
+      { fieldName: 'lastName', value: 'Abbott' }
+    ] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
   }
   protected onFilterByRange() {
-    const currentFilter = [{ fieldName: 'userId', valueFrom: 50, valueTo: 67 }] as FieldFilterDefinition<DemoTableItem>[];
+    const currentFilter = [
+      { fieldName: 'userId', valueFrom: 50, valueTo: 67 }
+    ] as FieldFilterDefinition<DemoTableItem>[];
     this.table.filterDefinitions = currentFilter;
     this.currentFilterAsString = this.filterDefinitionToString(currentFilter);
     this.columnDefinitions[2].footer = `Filter: ${this.currentFilterAsString}`;
@@ -375,52 +403,52 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     /* spell-checker: disable */
     const newRows = [
       {
-        'userId': 205,
-        'firstName': 'Gerty',
-        'lastName': 'Briiginshaw',
-        'email': 'gbriiginshaw0@nytimes.com',
-        'birthday': new Date('2023-11-21'),
-        'description': 'Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros.'
+        userId: 205,
+        firstName: 'Gerty',
+        lastName: 'Briiginshaw',
+        email: 'gbriiginshaw0@nytimes.com',
+        birthday: new Date('2023-11-21'),
+        description: 'Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros.'
       },
       {
-        'userId': 138,
-        'firstName': 'Susannah',
-        'lastName': 'Stellin',
-        'email': 'sstellin1@booking.com',
-        'birthday': new Date('2023-08-02'),
-        'description': 'Sed sagittis.'
+        userId: 138,
+        firstName: 'Susannah',
+        lastName: 'Stellin',
+        email: 'sstellin1@booking.com',
+        birthday: new Date('2023-08-02'),
+        description: 'Sed sagittis.'
       },
       {
-        'userId': 301,
-        'firstName': 'Buckie',
-        'lastName': 'Beardall',
-        'email': 'bbeardall2@tripod.com',
-        'birthday': new Date('2023-10-14'),
-        'description': 'Pellentesque ultrices mattis odio. Donec vitae nisi.'
+        userId: 301,
+        firstName: 'Buckie',
+        lastName: 'Beardall',
+        email: 'bbeardall2@tripod.com',
+        birthday: new Date('2023-10-14'),
+        description: 'Pellentesque ultrices mattis odio. Donec vitae nisi.'
       },
       {
-        'userId': 114,
-        'firstName': 'Winifred',
-        'lastName': 'Mabbott',
-        'email': 'wmabbott3@artisteer.com',
-        'birthday': new Date('2023-10-24'),
-        'description': 'Morbi non lectus.'
+        userId: 114,
+        firstName: 'Winifred',
+        lastName: 'Mabbott',
+        email: 'wmabbott3@artisteer.com',
+        birthday: new Date('2023-10-24'),
+        description: 'Morbi non lectus.'
       },
       {
-        'userId': 257,
-        'firstName': 'Tadd',
-        'lastName': 'Tindall',
-        'email': 'ttindall4@who.int',
-        'birthday': new Date('2023-11-22'),
-        'description': 'Pellentesque eget nunc.'
+        userId: 257,
+        firstName: 'Tadd',
+        lastName: 'Tindall',
+        email: 'ttindall4@who.int',
+        birthday: new Date('2023-11-22'),
+        description: 'Pellentesque eget nunc.'
       },
       {
-        'userId': 146,
-        'firstName': 'Debora',
-        'lastName': 'Lawry',
-        'email': 'dlawry5@tamu.edu',
-        'birthday': new Date('2023-05-23'),
-        'description': 'In hac habitasse platea dictumst.'
+        userId: 146,
+        firstName: 'Debora',
+        lastName: 'Lawry',
+        email: 'dlawry5@tamu.edu',
+        birthday: new Date('2023-05-23'),
+        description: 'In hac habitasse platea dictumst.'
       }
     ] as DemoTableItem[];
     /* spell-checker: enable */
@@ -452,7 +480,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * @returns row selected by the given userId
    */
   private selectSingleRowByUserId(rowId: number) {
-    return this.dataStore.getUnsortedData().find(row => row.userId === rowId);
+    return this.dataStore.getUnsortedData().find((row) => row.userId === rowId);
   }
 
   /**
@@ -462,8 +490,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    */
   private selectRowsByUserId(rowIds: number[]): DemoTableItem[] {
     let result: DemoTableItem[] = [];
-    if (rowIds && Array.isArray(rowIds) && (rowIds.length > 0)) {
-      result = this.dataStore.getUnsortedData().filter(row => rowIds.includes(row.userId));
+    if (rowIds && Array.isArray(rowIds) && rowIds.length > 0) {
+      result = this.dataStore.getUnsortedData().filter((row) => rowIds.includes(row.userId));
     }
     return result;
   }
@@ -509,9 +537,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * @param filterDefinition - array with filter definitions
    * @returns filter definition, formatted string
    */
-  private filterDefinitionToString(filterDefinition: FieldFilterDefinition<DemoTableItem>[]): string {
+  private filterDefinitionToString(
+    filterDefinition: FieldFilterDefinition<DemoTableItem>[]
+  ): string {
     let filterAsString = '-';
-    if (filterDefinition && Array.isArray(filterDefinition) && (filterDefinition.length > 0)) {
+    if (filterDefinition && Array.isArray(filterDefinition) && filterDefinition.length > 0) {
       const filter = filterDefinition[0];
       if (filter.value !== undefined) {
         filterAsString = `'${filter.fieldName}' = '${filter.value.toString()}' `;

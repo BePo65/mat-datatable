@@ -6,14 +6,12 @@ import { MatDatatableResizableDirective } from './datatable-resizable.directive'
 
 describe('MatResizableDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  let directiveElements: DebugElement[];  // the elements with the directive
+  let directiveElements: DebugElement[]; // the elements with the directive
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-    imports: [MatDatatableResizableDirective,
-        TestComponent]
-})
-    .createComponent(TestComponent);
+      imports: [MatDatatableResizableDirective, TestComponent]
+    }).createComponent(TestComponent);
     fixture.detectChanges(); // initial binding
 
     // all elements with an attached MatDatatableHeaderAlignDirective
@@ -64,27 +62,25 @@ describe('MatResizableDirective', () => {
 
 @Component({
   template: `
-<tr>
-  <th id="resizableDefault" class="mat-sort-header">
-    <div class="mat-sort-header-container">default header</div>
-  </th>
-  <th id="resizableTrue" class="mat-sort-header" [matResizable]="true">
-    <div class="mat-sort-header-container">resizable header</div>
-  </th>
-  <th id="resizableFalse" class="mat-sort-header" [matResizable]="false">
-    <div class="mat-sort-header-container">not resizable header</div>
-  </th>
-  <th id="resizableDefault" class="mat-sort-header" [matResizable]>
-    <div class="mat-sort-header-container">not resizable header</div>
-  </th>
-  <th id="resizableDefault" class="mat-sort-header" matResizable>
-    <div class="mat-sort-header-container">not resizable header</div>
-  </th>
-</tr>
+    <tr>
+      <th id="resizableDefault" class="mat-sort-header">
+        <div class="mat-sort-header-container">default header</div>
+      </th>
+      <th id="resizableTrue" class="mat-sort-header" [matResizable]="true">
+        <div class="mat-sort-header-container">resizable header</div>
+      </th>
+      <th id="resizableFalse" class="mat-sort-header" [matResizable]="false">
+        <div class="mat-sort-header-container">not resizable header</div>
+      </th>
+      <th id="resizableDefault" class="mat-sort-header" [matResizable]>
+        <div class="mat-sort-header-container">not resizable header</div>
+      </th>
+      <th id="resizableDefault" class="mat-sort-header" matResizable>
+        <div class="mat-sort-header-container">not resizable header</div>
+      </th>
+    </tr>
   `,
-    standalone: true,
-    imports: [
-      MatDatatableResizableDirective
-    ]
+  standalone: true,
+  imports: [MatDatatableResizableDirective]
 })
-class TestComponent { }
+class TestComponent {}

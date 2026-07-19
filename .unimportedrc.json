@@ -34,13 +34,6 @@
     "projects/mat-datatable-lib/src/directives/datatable-sort/wrapped-error-message.ts",
     "projects/mat-datatable-lib/src/lib/mocking-data/mock-data.simple.ts"
   ],
-  "ignoreUnused": [
-    "@angular/compiler",
-    "material-icons",
-    "roboto-fontface",
-    "tslib"
-  ],
-  "ignoreUnresolved": [
-    "mat-datatable"
-  ]
+  "ignoreUnused": ["@angular/compiler", "material-icons", "roboto-fontface", "tslib"],
+  "ignoreUnresolved": ["mat-datatable"]
 }

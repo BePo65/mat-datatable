@@ -1,11 +1,11 @@
 /* stylelint-disable block-no-empty */
 
-@use "sass:map";
-@use "@angular/material" as mat;
+@use 'sass:map';
+@use '@angular/material' as mat;
 
 @mixin color($config-or-theme) {
   $config: mat.get-color-config($config-or-theme);
-  $primary-palette: map.get($config, "primary");
+  $primary-palette: map.get($config, 'primary');
   $foreground: map.get($config, foreground);
   $background: map.get($config, background);
 
@@ -44,9 +44,11 @@
   }
 }
 
-@mixin typography($config-or-theme) {}
+@mixin typography($config-or-theme) {
+}
 
-@mixin density($config-or-theme) {}
+@mixin density($config-or-theme) {
+}
 
 @mixin theme($theme) {
   @include mat.private-check-duplicate-theme-styles($theme, 'mat-datatable') {

@@ -27,8 +27,7 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi())
   ]
-})
-  .catch(err => console.error(err));
+}).catch((err) => console.error(err));
 
 // TODO 'withInterceptorsFromDi' see following comment
 /**

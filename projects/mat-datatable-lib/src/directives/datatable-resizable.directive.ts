@@ -1,21 +1,15 @@
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  Directive,
-  ElementRef,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Renderer2
-} from '@angular/core';
+import { Directive, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
-    selector: '[matResizable]',
-    standalone: true
+  selector: '[matResizable]',
+  standalone: true
 })
 export class MatDatatableResizableDirective implements OnInit, OnDestroy {
   @Input()
-  get matResizable() { return this._matResizable; }
+  get matResizable() {
+    return this._matResizable;
+  }
   set matResizable(value: BooleanInput) {
     this._matResizable = coerceBooleanProperty(value);
   }
@@ -25,7 +19,7 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
   private startWidth!: number;
   private column: HTMLElement;
   private table!: HTMLElement;
-  private resizing= false;
+  private resizing = false;
 
   private unlistenMouseDown?: () => void;
   private unlistenMouseMove?: () => void;
@@ -34,7 +28,8 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
   constructor(
     private renderer: Renderer2,
     private el: ElementRef<HTMLElement>,
-    private ngZone: NgZone) {
+    private ngZone: NgZone
+  ) {
     this.column = this.el.nativeElement;
   }
 
@@ -47,7 +42,9 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
       const resizer = this.renderer.createElement('span') as HTMLElement;
       this.renderer.addClass(resizer, 'resize-holder');
       this.renderer.appendChild(this.column, resizer);
-      this.unlistenMouseDown = this.renderer.listen(resizer, 'mousedown', ($event: MouseEvent) =>  this.onMouseDown($event));
+      this.unlistenMouseDown = this.renderer.listen(resizer, 'mousedown', ($event: MouseEvent) =>
+        this.onMouseDown($event)
+      );
     }
   }
 
@@ -62,13 +59,17 @@ export class MatDatatableResizableDirective implements OnInit, OnDestroy {
     this.startWidth = this.column.offsetWidth;
 
     this.ngZone.runOutsideAngular(() => {
-      this.unlistenMouseMove = this.renderer.listen('document', 'mousemove', ($event: MouseEvent) => {
-        // Resizing with primary mouse button pressed
-        if (this.resizing && $event.buttons & 1) {
-          const width = this.startWidth + ($event.pageX - this.startX);
-          this.renderer.setStyle(this.column, 'width', `${width}px`);
+      this.unlistenMouseMove = this.renderer.listen(
+        'document',
+        'mousemove',
+        ($event: MouseEvent) => {
+          // Resizing with primary mouse button pressed
+          if (this.resizing && $event.buttons & 1) {
+            const width = this.startWidth + ($event.pageX - this.startX);
+            this.renderer.setStyle(this.column, 'width', `${width}px`);
+          }
         }
-      });
+      );
     });
 
     this.unlistenMouseUp = this.renderer.listen('document', 'mouseup', () => {

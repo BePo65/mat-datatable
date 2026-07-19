@@ -155,7 +155,8 @@ $_badge-structure-emitted: false !default;
   }
 }
 
-@mixin density($config-or-theme) {}
+@mixin density($config-or-theme) {
+}
 
 @mixin theme($theme) {
   @include mat.private-check-duplicate-theme-styles($theme, 'mat-multi-sort-badge') {

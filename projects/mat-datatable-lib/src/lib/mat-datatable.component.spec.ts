@@ -5,8 +5,19 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, Observable, of } from 'rxjs';
 
-import { MatDatatableHarness, MatHeaderRowHarness, MatFooterRowHarness, MatMultiSortHarness } from '../../testing/src';
-import { Page, RequestRowsRange, FieldSortDefinition, FieldFilterDefinition, DataStoreProvider } from '../interfaces/datastore-provider.interface';
+import {
+  MatDatatableHarness,
+  MatHeaderRowHarness,
+  MatFooterRowHarness,
+  MatMultiSortHarness
+} from '../../testing/src';
+import {
+  Page,
+  RequestRowsRange,
+  FieldSortDefinition,
+  FieldFilterDefinition,
+  DataStoreProvider
+} from '../interfaces/datastore-provider.interface';
 import { MatColumnDefinition } from '../interfaces/datatable-column-definition.interface';
 import { MatSortDefinition } from '../interfaces/datatable-sort-definition.interface';
 
@@ -18,7 +29,7 @@ describe('MatDatatableComponent', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
     let component: DatatableTestComponent;
-    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
+    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map((entry) => {
       const result: string[] = [];
       result.push(entry.position.toString());
       result.push(entry.name);
@@ -29,13 +40,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -103,7 +109,7 @@ describe('MatDatatableComponent', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
     let component: DatatableTestComponent;
-    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
+    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map((entry) => {
       const result: string[] = [];
       result.push(entry.position.toString());
       result.push(entry.name);
@@ -114,13 +120,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -329,10 +330,8 @@ describe('MatDatatableComponent', () => {
     it('should emit new sort order on change', () => {
       let currentSortDefinitions: MatSortDefinition[] | undefined;
       component.matDataTable.sortChange
-        .pipe(
-          first()
-        )
-        .subscribe((value: MatSortDefinition[]) => currentSortDefinitions = value);
+        .pipe(first())
+        .subscribe((value: MatSortDefinition[]) => (currentSortDefinitions = value));
 
       // change sort definitions
       const newSortDefinitions: MatSortDefinition[] = [
@@ -350,7 +349,7 @@ describe('MatDatatableComponent', () => {
     let fixture: ComponentFixture<DatatableTestComponent>;
     let loader: HarnessLoader;
     let component: DatatableTestComponent;
-    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map(entry => {
+    const singlePageDataAsStrings = SINGLE_PAGE_DATA.map((entry) => {
       const result: string[] = [];
       result.push(entry.position.toString());
       result.push(entry.name);
@@ -361,13 +360,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -382,7 +376,9 @@ describe('MatDatatableComponent', () => {
       const currentFilter = { fieldName: 'name', value: 'Helium' };
       component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
       fixture.detectChanges();
-      const expectedRows = singlePageDataAsStrings.filter(element => element[1] === currentFilter.value);
+      const expectedRows = singlePageDataAsStrings.filter(
+        (element) => element[1] === currentFilter.value
+      );
 
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
@@ -396,8 +392,11 @@ describe('MatDatatableComponent', () => {
       const currentFilter = { fieldName: 'position', valueFrom: 5, valueTo: 7 };
       component.currentFilters = [currentFilter] as FieldFilterDefinition<DatatableTestRow>[];
       fixture.detectChanges();
-      const expectedRows = singlePageDataAsStrings.filter(element => (parseInt(element[0]) >= currentFilter.valueFrom) &&
-        (parseInt(element[0]) <= currentFilter.valueTo));
+      const expectedRows = singlePageDataAsStrings.filter(
+        (element) =>
+          parseInt(element[0]) >= currentFilter.valueFrom &&
+          parseInt(element[0]) <= currentFilter.valueTo
+      );
 
       const table = await loader.getHarness(MatDatatableHarness);
       const rows = await table.getRows();
@@ -414,13 +413,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -447,13 +441,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -583,13 +572,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -622,13 +606,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -672,12 +651,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableDoubleTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableDoubleTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -724,13 +699,8 @@ describe('MatDatatableComponent', () => {
 
     beforeEach(waitForAsync(() => {
       void TestBed.configureTestingModule({
-        imports: [
-          DatatableEmptyTestComponent,
-          DatatableTestComponent
-        ],
-        providers: [
-          provideNoopAnimations()
-        ]
+        imports: [DatatableEmptyTestComponent, DatatableTestComponent],
+        providers: [provideNoopAnimations()]
       }).compileComponents();
     }));
 
@@ -836,7 +806,11 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     filters?: FieldFilterDefinition<TRow>[]
   ): Observable<number> {
     const selectedDataset = this.getRawDataSortedFiltered(sorts, filters);
-    return of(selectedDataset.findIndex(currentRow => this.trackBy(0, row) === this.trackBy(0, currentRow)));
+    return of(
+      selectedDataset.findIndex(
+        (currentRow) => this.trackBy(0, row) === this.trackBy(0, currentRow)
+      )
+    );
   }
 
   getRow(rowIndex: number, fromSortedRows = false) {
@@ -858,16 +832,15 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     let selectedDataset = structuredClone(this.unsortedData);
 
     // Filter data
-    if ((filters !== undefined) && Array.isArray(filters) && (filters.length > 0)) {
+    if (filters !== undefined && Array.isArray(filters) && filters.length > 0) {
       selectedDataset = selectedDataset.filter((row: TRow) => {
         return filters.reduce((isSelected: boolean, currentFilter: FieldFilterDefinition<TRow>) => {
           if (currentFilter.value !== undefined) {
             isSelected ||= row[currentFilter.fieldName] === currentFilter.value;
-          } else if ((currentFilter.valueFrom !== undefined) && (currentFilter.valueTo !== undefined)) {
-            isSelected ||= (
-              (row[currentFilter.fieldName] >= currentFilter.valueFrom) &&
-              (row[currentFilter.fieldName] <= currentFilter.valueTo)
-            );
+          } else if (currentFilter.valueFrom !== undefined && currentFilter.valueTo !== undefined) {
+            isSelected ||=
+              row[currentFilter.fieldName] >= currentFilter.valueFrom &&
+              row[currentFilter.fieldName] <= currentFilter.valueTo;
           }
           return isSelected;
         }, false);
@@ -875,9 +848,9 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     }
 
     // Sort data - only the first entry of the definitions is used
-    if ((sorts !== undefined) && Array.isArray(sorts)) {
+    if (sorts !== undefined && Array.isArray(sorts)) {
       this.currentSortingDefinitions = sorts;
-      if ((sorts.length > 0)) {
+      if (sorts.length > 0) {
         selectedDataset.sort(this.compareFn);
       }
     }
@@ -908,7 +881,7 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
     let result = 0;
     for (let i = 0; i < this.currentSortingDefinitions.length; i++) {
       const fieldName = this.currentSortingDefinitions[i].fieldName;
-      const isAsc = (this.currentSortingDefinitions[i].sortDirection === 'asc');
+      const isAsc = this.currentSortingDefinitions[i].sortDirection === 'asc';
       const valueA = a[fieldName] as string | number;
       const valueB = b[fieldName] as string | number;
       result = this.compare(valueA, valueB, isAsc);
@@ -927,7 +900,7 @@ class StaticTableDataStore<TRow> implements DataStoreProvider<TRow> {
    * @returns comparison result (0:a===b; -1:a<b; 1:a>b)
    */
   private compare(a: string | number, b: string | number, isAsc: boolean): number {
-    return (a === b ? 0 : (a < b ? -1 : 1)) * (isAsc ? 1 : -1);
+    return (a === b ? 0 : a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }
 
@@ -936,13 +909,15 @@ type DatatableTestRow = {
   name: string;
   weight: number;
   symbol: string;
-}
+};
 
 const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = [
   {
     columnId: 'position',
     header: 'No.',
-    cell: (row: DatatableTestRow) => { return { type: 'string', text: row?.position.toString() }; },
+    cell: (row: DatatableTestRow) => {
+      return { type: 'string', text: row?.position.toString() };
+    },
     headerAlignment: 'right',
     cellAlignment: 'right',
     width: '5em',
@@ -952,7 +927,9 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'name',
     header: 'Name',
-    cell: (row: DatatableTestRow) => { return { type: 'string', text: row.name }; },
+    cell: (row: DatatableTestRow) => {
+      return { type: 'string', text: row.name };
+    },
     headerAlignment: 'left',
     cellAlignment: 'left',
     width: '20em',
@@ -965,7 +942,9 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'weight',
     header: 'Weight',
-    cell: (row: DatatableTestRow) => { return { type: 'string', text: row.weight.toString() }; },
+    cell: (row: DatatableTestRow) => {
+      return { type: 'string', text: row.weight.toString() };
+    },
     headerAlignment: 'right',
     cellAlignment: 'right',
     width: '10em',
@@ -975,7 +954,9 @@ const datatableTestColumnDefinitions: MatColumnDefinition<DatatableTestRow>[] = 
   {
     columnId: 'symbol',
     header: 'Symbol',
-    cell: (row: DatatableTestRow) => { return { type: 'mailtoLink', text: row.symbol, url: `mailto:${row.symbol}` }; },
+    cell: (row: DatatableTestRow) => {
+      return { type: 'mailtoLink', text: row.symbol, url: `mailto:${row.symbol}` };
+    },
     headerAlignment: 'center',
     cellAlignment: 'center',
     tooltip: (row: DatatableTestRow) => `Hint: ${row.symbol}`,
@@ -987,27 +968,26 @@ const datatableTestData: DatatableTestRow[] = SINGLE_PAGE_DATA;
 
 @Component({
   template: `
-<div class="content-table">
-  <mat-datatable #testTable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [withFooter]="true"
-    [dataStoreProvider]="dataStore"
-    [trackBy]="trackBy"
-    (rowClick)="onRowClick($event)"
-    (rowSelectionChange)="onRowSelectionChange($event)"
-    (sortChange)="onSortChanged($event)"
-    >
-    No data to display.
-  </mat-datatable>
-</div>
+    <div class="content-table">
+      <mat-datatable
+        #testTable
+        [columnDefinitions]="columnDefinitions"
+        [displayedColumns]="displayedColumns"
+        [rowSelectionMode]="currentSelectionMode"
+        [withFooter]="true"
+        [dataStoreProvider]="dataStore"
+        [trackBy]="trackBy"
+        (rowClick)="onRowClick($event)"
+        (rowSelectionChange)="onRowSelectionChange($event)"
+        (sortChange)="onSortChanged($event)"
+      >
+        No data to display.
+      </mat-datatable>
+    </div>
   `,
   styles: ['.content-table { height: 400px; }'],
   standalone: true,
-  imports: [
-    MatDatatableComponent
-  ]
+  imports: [MatDatatableComponent]
 })
 class DatatableTestComponent {
   @ViewChild('testTable') matDataTable!: MatDatatableComponent<DatatableTestRow>;
@@ -1054,10 +1034,11 @@ class DatatableTestComponent {
   protected onRowSelectionChange($event: DatatableTestRow[]) {
     let result = '-';
     if ($event.length > 0) {
-      result = $event
-        .sort((a: DatatableTestRow, b: DatatableTestRow) => a.position - b.position)
-        .map(row => row.name)
-        .join('; ') || '-';
+      result =
+        $event
+          .sort((a: DatatableTestRow, b: DatatableTestRow) => a.position - b.position)
+          .map((row) => row.name)
+          .join('; ') || '-';
     }
     this.selectedRowsAsString = result;
   }
@@ -1065,26 +1046,24 @@ class DatatableTestComponent {
 
 @Component({
   template: `
-<div class="content-table">
-  <mat-datatable
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [rowSelectionMode]="currentSelectionMode"
-    [withFooter]="true"
-    [dataStoreProvider]="dataStore"
-    [trackBy]="trackBy"
-    (rowClick)="onRowClick($event)"
-    (sortChange)="onSortChanged($event)"
-    >
-    No data to display.
-  </mat-datatable>
-</div>
+    <div class="content-table">
+      <mat-datatable
+        [columnDefinitions]="columnDefinitions"
+        [displayedColumns]="displayedColumns"
+        [rowSelectionMode]="currentSelectionMode"
+        [withFooter]="true"
+        [dataStoreProvider]="dataStore"
+        [trackBy]="trackBy"
+        (rowClick)="onRowClick($event)"
+        (sortChange)="onSortChanged($event)"
+      >
+        No data to display.
+      </mat-datatable>
+    </div>
   `,
   styles: ['.content-table { height: 400px; }'],
   standalone: true,
-  imports: [
-    MatDatatableComponent
-  ]
+  imports: [MatDatatableComponent]
 })
 class DatatableEmptyTestComponent {
   dataStore = new StaticTableDataStore<DatatableTestRow>([] as DatatableTestRow[], this.trackBy);
@@ -1111,41 +1090,47 @@ class DatatableEmptyTestComponent {
 
 @Component({
   template: `
-<div class="content-table">
-  <mat-datatable #testTable1
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [withFooter]="true"
-    [dataStoreProvider]="dataStore1"
-    [trackBy]="trackBy"
-    (sortChange)="onSortChanged1($event)"
-    >
-    No data to display.
-  </mat-datatable>
-  <mat-datatable #testTable2
-    [columnDefinitions]="columnDefinitions"
-    [displayedColumns]="displayedColumns"
-    [withFooter]="true"
-    [dataStoreProvider]="dataStore2"
-    [trackBy]="trackBy"
-    (sortChange)="onSortChanged2($event)"
-    >
-    No data to display.
-  </mat-datatable>
-</div>
+    <div class="content-table">
+      <mat-datatable
+        #testTable1
+        [columnDefinitions]="columnDefinitions"
+        [displayedColumns]="displayedColumns"
+        [withFooter]="true"
+        [dataStoreProvider]="dataStore1"
+        [trackBy]="trackBy"
+        (sortChange)="onSortChanged1($event)"
+      >
+        No data to display.
+      </mat-datatable>
+      <mat-datatable
+        #testTable2
+        [columnDefinitions]="columnDefinitions"
+        [displayedColumns]="displayedColumns"
+        [withFooter]="true"
+        [dataStoreProvider]="dataStore2"
+        [trackBy]="trackBy"
+        (sortChange)="onSortChanged2($event)"
+      >
+        No data to display.
+      </mat-datatable>
+    </div>
   `,
   styles: ['.content-table { height: 400px; }'],
   standalone: true,
-  imports: [
-    MatDatatableComponent
-  ]
+  imports: [MatDatatableComponent]
 })
 class DatatableDoubleTestComponent {
   @ViewChild('testTable1') matDataTable1!: MatDatatableComponent<DatatableTestRow>;
   @ViewChild('testTable2') matDataTable2!: MatDatatableComponent<DatatableTestRow>;
 
-  dataStore1 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData), this.trackBy);
-  dataStore2 = new StaticTableDataStore<DatatableTestRow>(structuredClone(datatableTestData), this.trackBy);
+  dataStore1 = new StaticTableDataStore<DatatableTestRow>(
+    structuredClone(datatableTestData),
+    this.trackBy
+  );
+  dataStore2 = new StaticTableDataStore<DatatableTestRow>(
+    structuredClone(datatableTestData),
+    this.trackBy
+  );
   protected columnDefinitions = datatableTestColumnDefinitions;
   protected displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   protected currentSorts1: MatSortDefinition[] = [];

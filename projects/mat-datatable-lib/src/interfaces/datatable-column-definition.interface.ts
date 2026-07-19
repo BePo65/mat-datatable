@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 export type ColumnAlignmentType = 'left' | 'center' | 'right';
 
@@ -8,10 +8,24 @@ export type ColumnAlignmentType = 'left' | 'center' | 'right';
  */
 export type ColumnDisplayType = 'string' | 'mailtoLink' | 'image';
 // Using CellValueBase as base type to enforce discriminated field
-export interface CellValueBase { type: ColumnDisplayType }
-export interface CellValueString extends CellValueBase { type: 'string'; text: string }
-export interface CellValueMailTo extends CellValueBase { type: 'mailtoLink'; url: string, text: string }
-export interface CellValueImage extends CellValueBase { type: 'image'; url: string, altText: string, title?: string }
+export interface CellValueBase {
+  type: ColumnDisplayType;
+}
+export interface CellValueString extends CellValueBase {
+  type: 'string';
+  text: string;
+}
+export interface CellValueMailTo extends CellValueBase {
+  type: 'mailtoLink';
+  url: string;
+  text: string;
+}
+export interface CellValueImage extends CellValueBase {
+  type: 'image';
+  url: string;
+  altText: string;
+  title?: string;
+}
 
 export type CellContentValue = CellValueString | CellValueMailTo | CellValueImage;
 export type CellContentDefType<TRowData> = (element: TRowData) => CellContentValue;
@@ -39,7 +53,7 @@ export interface MatColumnDefinition<TRowData> {
   cell: CellContentDefType<TRowData>; // type of cell with values for content
   cellAlignment?: ColumnAlignmentType;
   width?: string; // e.g. '8em'
-  tooltip?: ((element: TRowData) => string);
+  tooltip?: (element: TRowData) => string;
   showAsSingleLine?: boolean;
   footer?: string;
   footerAlignment?: ColumnAlignmentType;
