@@ -31,7 +31,9 @@ updates:
       - dependency-name: '@cypress/webpack-preprocessor'
         versions: ['7.x']
       - dependency-name: '@types/node'
-        versions: ['21.x', '22.x', '23.x', '24.x', '25.x', '26.x']
+        versions: ['25.x', '26.x']
+      - dependency-name: 'jasmine-core'
+        versions: ['7.x']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
