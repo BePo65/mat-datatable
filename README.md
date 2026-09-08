@@ -1168,4 +1168,6 @@ As a consequence the package `eslint-plugin-cypress` cannot be updated to a vers
 
 `@types/node` cannot be updated to version >= 25, as this will break the tests.
 
+`jasmine-core` cannot be updated to v7.x, as this version does not run with karma and zone.js.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
