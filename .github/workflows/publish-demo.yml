@@ -1,15 +1,16 @@
-name: publish-demo-to-github-pages
+name: publish-src-to-github-pages
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
+
   workflow_dispatch:
 
 jobs:
-  publish:
+  # Build job
+  build:
     permissions:
-      contents: write # as we overwrite the target branch
-      pages: write
+      contents: write
 
     runs-on: ubuntu-24.04
 
@@ -17,27 +18,45 @@ jobs:
       - name: Check out
         uses: actions/checkout@v7.0.1
 
-      - name: Use Node v24
-        uses: actions/setup-node@v7.0.0
+      - name: Use Node V24
+        uses: actions/setup-node@v7
         with:
-          node-version: '24.x'
-          cache: 'npm'
+          node-version: "24.x"
+          cache: "npm"
 
-      - name: npm ci and npm run build files for ghpages
+      - name: npm ci and npm run build
         run: |
           npm ci
           npm run build:ghpages
 
-      - name: Publish current workdir (which contains generated content) to GitHub Pages
-        uses: rayluo/github-pages-overwriter@v1.3
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v5
         with:
-          # Optional. Default value "." means the root directory of your project will be published.
-          # You can use whatever directory your project uses, for example "wwwroot".
-          # Such a directory does *not* have to already exist in your repo,
-          # it could be an output directory created dynamically by your static website builder.
-          source-directory: ghpages
+          name: github-pages
+          path: ghpages/
 
-          # Optional. Default value "gh_pages".
-          # It specifies the temporary branch which hosts the static website.
-          # Each build will OVERWRITE this branch.
-          target-branch: gh_pages
+  # Deployment job
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+
+    runs-on: ubuntu-24.04
+
+    # Uses following settings for Github Pages:
+    #   Build and deployment > Source: GithubAction (with publish-src-to-github-pages workflow)
+    # and for Environments "github-pages":
+    #   Deployment branches and tags > "main"
+    steps:
+      - name: Publish current web page to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
+        with:
+          artifact_name: github-pages
