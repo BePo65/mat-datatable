@@ -4,7 +4,7 @@
 
 A simple data table with virtual scrolling using Angular Material.
 
-[![Version](https://img.shields.io/badge/version-17.3.0-blue.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-17.3.1-blue.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/CHANGELOG.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?cacheSeconds=86400)](https://github.com/BePo65/mat-datatable/blob/main/LICENSE)
 [![Angular version](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/core?color=red&label=Angular&logo=angular&logoColor=red)](https://angular.dev/overview)
 [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/bepo65/mat-datatable/@angular/material?color=red&label=Angular-Material&logo=angular&logoColor=red)](https://v17.material.angular.dev/components/categories)
@@ -1165,5 +1165,9 @@ As a consequence the package `eslint-plugin-cypress` cannot be updated to a vers
 `cypress` cannot be updated to v15.x as it no longer supports webpack v4.x (angular v18 will switch away from webpack).
 
 `@cypress/schematic` cannot be updated to v4.x, as this requires angular v18.x.
+
+`@types/node` cannot be updated to version >= 25, as this will break the tests.
+
+`jasmine-core` cannot be updated to v7.x, as this version does not run with karma and zone.js.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
