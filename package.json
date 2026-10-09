@@ -35,7 +35,9 @@
     "release": "commit-and-tag-version -i CHANGELOG.md --same-file --commit-all",
     "e2e": "npm run cypress:demo:run:e2e",
     "cypress:demo:open": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress open --project=projects/mat-datatable-demo\"",
-    "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\""
+    "cypress:demo:run:e2e": "start-server-and-test \"ng serve\" http://localhost:4200 \"cypress run --project=projects/mat-datatable-demo\"",
+    "prepare": "husky",
+    "ncu:test": "npm run test && npm run build && npm run e2e"
   },
   "private": false,
   "dependencies": {

@@ -6,6 +6,16 @@ on:
 
   workflow_dispatch:
 
+# Ensure only one deployment runs at a time.
+# We set 'cancel-in-progress: false' to let active deployments finish safely before starting a new one.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  # Avoid installing Git Hooks
+  HUSKY: 0
+
 jobs:
   # Build job
   build:
