@@ -1,0 +1,25 @@
+upgrade: true
+reject:
+  # This is an angular@17 project
+  - "@angular/*"
+  - "@angular-devkit/build-angular"
+  - "@angular-eslint/*"
+  - "ng-packagr"
+  # Angular@17.3 requires typescript >=5.2.0 <5.5.0
+  - "typescript"
+  # Angular@17.3 requires zone 0.14.x
+  - "zone.js"
+  # Angular@17 is not compatible with eslint flat config required by angular@17
+  - "eslint"
+  # jasmine-core@7 ff. is not compatible with zone and karma
+  - "jasmine-core"
+  # Cypress@15 ff. requires webpack@4 that is not compatible with angular@17
+  - "cypress"
+  - "@cypress/schematic"
+  - "@cypress/webpack-preprocessor"
+  - "eslint-plugin-cypress"
+  # @types/node@25 ff. break the tests
+  - "@types/node"
+doctor: true
+doctorInstall: npm install
+doctorTest: npm run ncu:test
