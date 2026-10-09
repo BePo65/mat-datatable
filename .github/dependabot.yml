@@ -9,31 +9,38 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: 'eslint'
-        versions: ['9.x', '10.x']
-      - dependency-name: 'eslint-plugin-cypress'
-        versions: ['4.x', '5.x', '6.x']
+        # Angular@17 is not compatible with eslint flat config
+        versions: ['>=9.0.0']
       - dependency-name: '@angular/*'
-        versions: ['18.x', '19.x', '20.x', '21.x', '22.x']
+        # This is an angular@17 project
+        versions: ['>=18.0.0']
       - dependency-name: '@angular-devkit/build-angular'
-        versions: ['18.x', '19.x', '20.x', '21.x', '22.x']
+        versions: ['>=18.0.0']
       - dependency-name: '@angular-eslint/*'
-        versions: ['18.x', '19.x', '20.x', '21.x', '22.x']
+        versions: ['>=18.0.0']
       - dependency-name: 'ng-packagr'
-        versions: ['18.x', '19.x', '20.x', '21.x', '22.x']
+        versions: ['>=18.0.0']
       - dependency-name: 'typescript'
-        versions: ['5.5.x', '5.6.x', '5.7.x', '5.8.x', '5.9.x', '6.x', '7.x']
-      - dependency-name: 'zone'
-        versions: ['0.15.x', '0.16.x']
-      - dependency-name: 'cypress'
-        versions: ['15.x']
-      - dependency-name: '@cypress/schematic'
-        versions: ['4.x', '5.x']
-      - dependency-name: '@cypress/webpack-preprocessor'
-        versions: ['7.x']
-      - dependency-name: '@types/node'
-        versions: ['25.x', '26.x']
+        # Angular@17.3 requires typescript >=5.2.0 <5.5.0
+        versions: ['>=5.5.0']
+      - dependency-name: 'zone.js'
+        # Angular@17.3 requires zone 0.14.x
+        versions: ['>=0.15.0']
       - dependency-name: 'jasmine-core'
-        versions: ['7.x']
+        # jasmine-core@7 ff. is not compatible with zone and karma required by angular@17
+        versions: ['>=7.0.0']
+      - dependency-name: 'cypress'
+        # Cypress@15 ff. requires webpack@4 that is not compatible with angular@17
+        versions: ['>=15.0.0']
+      - dependency-name: '@cypress/schematic'
+        versions: ['>=4.0.0']
+      - dependency-name: '@cypress/webpack-preprocessor'
+        versions: ['>=7.0.0']
+      - dependency-name: 'eslint-plugin-cypress'
+        versions: ['>=4.0.0']
+      - dependency-name: '@types/node'
+        # @types/node@25 ff. break the tests
+        versions: ['>=25.0.0']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
