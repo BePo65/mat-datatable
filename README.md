@@ -88,7 +88,7 @@ npm install mat-datatable
 
 ### Embed Mat-Datatable In Your Project
 
-Use the component as a standalone Angular component. Some properties of mat-datatable must be configured in the component class (for example in app.component.ts):
+Use the component as a standalone Angular component. Some properties of mat-datatable must be configured; e.g. the definition of the columns and the columns to be displayed (not all defined columns must be displayed):
 
 ```ts
 import { Component } from '@angular/core';
