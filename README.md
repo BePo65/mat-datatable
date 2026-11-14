@@ -88,7 +88,7 @@ npm install mat-datatable
 
 ### Embed Mat-Datatable In Your Project
 
-Use the component as a standalone Angular component. Some properties of mat-datatable must be configured in the component class (for example in app.component.ts):
+Use the component as a standalone Angular component. Some properties of mat-datatable must be configured; e.g. the definition of the columns and the columns to be displayed (not all defined columns must be displayed):
 
 ```ts
 import { Component } from '@angular/core';
@@ -1169,5 +1169,9 @@ As a consequence the package `eslint-plugin-cypress` cannot be updated to a vers
 `@types/node` cannot be updated to version >= 25, as this will break the tests.
 
 `jasmine-core` cannot be updated to v7.x, as this version does not run with karma and zone.js.
+
+## Other hints for contributors
+
+- Stylelint rule "value-no-invalid" is disabled, as currently (2026-11-14) it reports $-variables used for css styles in the scss files as (false) errors.
 
 <p align="right">(<a href="#top">back to top</a>)</p>

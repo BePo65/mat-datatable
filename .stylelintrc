@@ -1,6 +1,7 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-recommended-scss"],
   "rules": {
+    "value-no-invalid": null,
     "value-keyword-case": [
       "lower",
       {
