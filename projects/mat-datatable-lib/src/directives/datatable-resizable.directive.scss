@@ -13,7 +13,7 @@
    could be modified to add style definitions instead of a class
    to the span element.
 */
-/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown, selector-no-invalid */
 :host ::ng-deep .mat-datatable-header-cell .resize-holder {
   bottom: 0;
   cursor: col-resize;

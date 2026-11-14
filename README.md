@@ -1170,4 +1170,8 @@ As a consequence the package `eslint-plugin-cypress` cannot be updated to a vers
 
 `jasmine-core` cannot be updated to v7.x, as this version does not run with karma and zone.js.
 
+## Other hints for contributors
+
+- Stylelint rule "value-no-invalid" is disabled, as currently (2026-11-14) it reports $-variables used for css styles in the scss files as (false) errors.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
